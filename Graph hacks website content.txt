@@ -1,0 +1,2365 @@
+
+WeMakeDevs Logo
+Challenge
+Tracks
+Prizes
+Why graphs
+FalkorDB
+FAQ
+Graph Hacks: Give Your AI Agents Real Context, an online hackathon by WeMakeDevs and FalkorDB, Oct 15–18, 2026, with prizes worth $20,000
+Starts in 1 day, 14 hours
+
+Graph Hacks: Context for AI Agents
+Powered by FalkorDB
+
+Agents are only as good as the context they work with. Give yours a graph: connected data it can reason over, a memory it keeps between sessions, and a clear picture of how things relate. Build an agent that makes decisions you can trace.
+
+When
+Oct 15, 12:01 AM to Oct 18, 11:59 PM GMT+5:30
+Where
+Online, from anywhere
+Teams
+Solo or up to 4 people
+Prizes
+$20,000 in total
+5,997 registered
+
+Team code5H6V6C
+
+THE FINAL BOSS
+1 of 4 seats filled.
+
+Tharun Kumar (you)
+
+@tharunkumardeveloper
+
+Leader
+Invite by email
+them@example.com
+Submissions open Oct 15, 2026, 12:01 AM. You cannot change your team after you submit your project.
+
+Looking for a team, or stuck on a graph model? The FalkorDB Discord is open for the whole event.
+
+FalkorDB Discord
+Overview
+Schedule
+Rules
+Resources
+01 / The challenge
+
+Give your agent the context to act
+Build a working agent, or a group of agents, with FalkorDB as its context layer. The graph has to shape what the agent does, not sit on the side.
+
+The problem
+
+Agents see pieces, not the whole picture. They lose track of what happened in earlier sessions, miss how people, systems, and records relate, and can't explain why they made a choice.
+
+The shift
+
+Put the agent's context in a graph. Data, memory, and company knowledge become nodes and edges the agent can follow, so it works from real relationships instead of guessing.
+
+The brief
+
+Build an agent that acts on connected data, remembers what it learns, and can show how it got to each answer.
+
+Work the graph has to do
+
+Follow connections across data
+Remember across sessions
+Share state between agents
+Connect people, projects, and decisions
+Show the path behind an answer
+One agent problem
+Pick a task where the answer depends on how things connect, and build the agent that handles it.
+
+Solo or a team of four
+Enter on your own or with up to three others. Register once, either way.
+
+Open worldwide
+Free to enter, online from anywhere, and no graph database experience needed.
+
+Three tracks
+Agents that act on connected data, agent memory and coordination, or company brain. Enter the one your idea fits.
+
+02 / Tracks
+
+Three tracks
+Build for one, or for all three at once. Each track has its own prize.
+
+🕵️
+Track 01
+
+Agents That Act on Connected Data
+Build an agent that uses the graph to decide and act. It could investigate fraud, triage security findings, or work through a codebase.
+
+Key focus
+
+Multi-hop reasoning
+Graph queries and algorithms as agent tools
+Tool selection through MCP
+Actions based on what the graph shows
+Explainable results
+🤖
+Track 02
+
+Agent Memory and Coordination
+Build agents that remember across sessions and share state with each other. Memory should persist, update over time, and be available to every agent that needs it.
+
+Key focus
+
+Episodic, semantic, and procedural memory
+Persistent conversation history
+Shared state and handoffs between agents
+High-concurrency reads and writes
+Separate memory per user or tenant
+🧠
+Track 03
+
+Company Brain
+Build an agent that understands how a company works. Connect people, teams, projects, documents, and decisions in one graph, so the agent can answer questions and get work done across all of it.
+
+Key focus
+
+Knowledge from docs, tickets, and chats in one graph
+Who owns what, and who knows what
+Tracing decisions back to their source
+Keeping knowledge current as things change
+Answers with clear sources
+Prize pool
+
+$20,000
+
+One prize for each track, plus two side prizes. Every member of a winning team gets the prize.
+
+Agents That Act on Connected Data
+
+The iPhone 18 Pro, the prize for the Agents That Act on Connected Data track
+iPhone 18 Pro
+For the best agent that uses a graph to make decisions and take action.
+
+Agent Memory and Coordination
+
+The PS5 with GTA VI, the prize for the Agent Memory and Coordination track
+PS5 with GTA VI
+For the best agents that remember across sessions and share what they know.
+
+Company Brain
+
+The M6 Mac Mini, the prize for the Company Brain track
+M6 Mac Mini
+For the best agent that understands how a company works and gets work done.
+
+Side prize
+
+AirPods 5 awarded for the best blog post
+AirPods 5
+
+1 winner
+Best blog post
+Write a blog post about your project. The best post wins a pair of AirPods 5.
+
+Side prize
+
+The t-shirt shipped to every member of the top 50 teams
+T-shirt
+
+Top 50 projects
+Top 50 submissions
+Every member of the top 50 teams gets a t-shirt, shipped to their address.
+
+03 / Why graphs
+
+Agent questions are about connections
+The hard questions agents get asked don't live in one record. The answer depends on how several things relate.
+
+01
+Which accounts are linked to this flagged transaction?
+
+02
+What did this customer ask for last month, and was it resolved?
+
+03
+Who on the team has worked on this system before?
+
+04
+What breaks if this service goes down?
+
+A graph database stores those relationships directly, so the agent can follow them in one query instead of stitching records together on every step.
+
+04 / About the sponsor
+
+Powered by FalkorDB
+An open-source graph database built for AI agents.
+
+Traversals are fast enough to run on every step of an agent loop, and one instance can hold thousands of isolated graphs, so each user, agent, or tenant gets its own. Run it locally with Docker.
+
+docker pull falkordb/falkordb:latest
+Official clients
+
+Python
+Node.js
+Java
+Rust
+Go
+PHP
+C#
+Cypher
+
+who knows about this system
+
+MATCH (p:Person)-[:WORKED_ON]->(:Project)-[:USES]->(s:System {name: $system})
+RETURN p.name AS person, count(*) AS projects
+ORDER BY projects DESC
+LIMIT 5
+Context for AI agents
+A graph your agent can read and write on every step, and still find on the next session.
+
+Agent memory
+Multi-agent state
+Connected company knowledge
+Connect your agent stack
+Use FalkorDB through the framework or protocol you already build with.
+
+GraphRAG-SDK
+QueryWeaver
+MCP
+Graphiti
+Cognee
+LangChain
+LlamaIndex
+One graph per user or tenant
+Leverage multigraph topology to create isolated graphs in a single instance, without running separate deployments.
+
+Query with Cypher
+Create nodes and relationships, match patterns, follow paths, and return what your agent needs.
+
+Graph algorithms as agent tools
+Traversals your agent can call instead of writing them itself.
+
+Shortest path
+PageRank
+Centrality
+Connected components
+Community detection
+Explore the graph
+Use FalkorDB Browser to run queries, inspect the data model, and see how records connect.
+
+05 / FAQ
+
+Got questions?
+When does the hackathon run?
+Who can participate?
+Do I need graph database experience?
+Is FalkorDB mandatory?
+Can I enter more than one track?
+Where do I register?
+Can I use any programming language?
+Can I continue an existing project?
+Can I use coding assistants?
+Does the project need to be deployed?
+WeMakeDevs Logo
+Helping great developer tools reach the builders who will shape the future.
+
+Keep in touch
+
+Developers
+Hackathons
+Meetups
+Scholarships
+Event Calendar
+Feedback
+Businesses
+Partners
+Contact Us
+Company
+Blog
+Code of Conduct
+Privacy Policy
+Terms of Service
+© 2026 WeMakeDevs. All rights reserved.
+Cookie preferences
+llms.txt
+
+
+
+WeMakeDevs Logo
+Challenge
+Tracks
+Prizes
+Why graphs
+FalkorDB
+FAQ
+Graph Hacks: Give Your AI Agents Real Context, an online hackathon by WeMakeDevs and FalkorDB, Oct 15–18, 2026, with prizes worth $20,000
+Starts in 1 day, 14 hours
+
+Graph Hacks: Context for AI Agents
+Powered by FalkorDB
+
+Agents are only as good as the context they work with. Give yours a graph: connected data it can reason over, a memory it keeps between sessions, and a clear picture of how things relate. Build an agent that makes decisions you can trace.
+
+When
+Oct 15, 12:01 AM to Oct 18, 11:59 PM GMT+5:30
+Where
+Online, from anywhere
+Teams
+Solo or up to 4 people
+Prizes
+$20,000 in total
+5,997 registered
+
+Team code5H6V6C
+
+THE FINAL BOSS
+1 of 4 seats filled.
+
+Tharun Kumar (you)
+
+@tharunkumardeveloper
+
+Leader
+Invite by email
+them@example.com
+Submissions open Oct 15, 2026, 12:01 AM. You cannot change your team after you submit your project.
+
+Looking for a team, or stuck on a graph model? The FalkorDB Discord is open for the whole event.
+
+FalkorDB Discord
+Overview
+Schedule
+Rules
+Resources
+01 / The challenge
+
+Give your agent the context to act
+Build a working agent, or a group of agents, with FalkorDB as its context layer. The graph has to shape what the agent does, not sit on the side.
+
+The problem
+
+Agents see pieces, not the whole picture. They lose track of what happened in earlier sessions, miss how people, systems, and records relate, and can't explain why they made a choice.
+
+The shift
+
+Put the agent's context in a graph. Data, memory, and company knowledge become nodes and edges the agent can follow, so it works from real relationships instead of guessing.
+
+The brief
+
+Build an agent that acts on connected data, remembers what it learns, and can show how it got to each answer.
+
+Work the graph has to do
+
+Follow connections across data
+Remember across sessions
+Share state between agents
+Connect people, projects, and decisions
+Show the path behind an answer
+One agent problem
+Pick a task where the answer depends on how things connect, and build the agent that handles it.
+
+Solo or a team of four
+Enter on your own or with up to three others. Register once, either way.
+
+Open worldwide
+Free to enter, online from anywhere, and no graph database experience needed.
+
+Three tracks
+Agents that act on connected data, agent memory and coordination, or company brain. Enter the one your idea fits.
+
+02 / Tracks
+
+Three tracks
+Build for one, or for all three at once. Each track has its own prize.
+
+🕵️
+Track 01
+
+Agents That Act on Connected Data
+Build an agent that uses the graph to decide and act. It could investigate fraud, triage security findings, or work through a codebase.
+
+Key focus
+
+Multi-hop reasoning
+Graph queries and algorithms as agent tools
+Tool selection through MCP
+Actions based on what the graph shows
+Explainable results
+🤖
+Track 02
+
+Agent Memory and Coordination
+Build agents that remember across sessions and share state with each other. Memory should persist, update over time, and be available to every agent that needs it.
+
+Key focus
+
+Episodic, semantic, and procedural memory
+Persistent conversation history
+Shared state and handoffs between agents
+High-concurrency reads and writes
+Separate memory per user or tenant
+🧠
+Track 03
+
+Company Brain
+Build an agent that understands how a company works. Connect people, teams, projects, documents, and decisions in one graph, so the agent can answer questions and get work done across all of it.
+
+Key focus
+
+Knowledge from docs, tickets, and chats in one graph
+Who owns what, and who knows what
+Tracing decisions back to their source
+Keeping knowledge current as things change
+Answers with clear sources
+Prize pool
+
+$20,000
+
+One prize for each track, plus two side prizes. Every member of a winning team gets the prize.
+
+Agents That Act on Connected Data
+
+The iPhone 18 Pro, the prize for the Agents That Act on Connected Data track
+iPhone 18 Pro
+For the best agent that uses a graph to make decisions and take action.
+
+Agent Memory and Coordination
+
+The PS5 with GTA VI, the prize for the Agent Memory and Coordination track
+PS5 with GTA VI
+For the best agents that remember across sessions and share what they know.
+
+Company Brain
+
+The M6 Mac Mini, the prize for the Company Brain track
+M6 Mac Mini
+For the best agent that understands how a company works and gets work done.
+
+Side prize
+
+AirPods 5 awarded for the best blog post
+AirPods 5
+
+1 winner
+Best blog post
+Write a blog post about your project. The best post wins a pair of AirPods 5.
+
+Side prize
+
+The t-shirt shipped to every member of the top 50 teams
+T-shirt
+
+Top 50 projects
+Top 50 submissions
+Every member of the top 50 teams gets a t-shirt, shipped to their address.
+
+03 / Why graphs
+
+Agent questions are about connections
+The hard questions agents get asked don't live in one record. The answer depends on how several things relate.
+
+01
+Which accounts are linked to this flagged transaction?
+
+02
+What did this customer ask for last month, and was it resolved?
+
+03
+Who on the team has worked on this system before?
+
+04
+What breaks if this service goes down?
+
+A graph database stores those relationships directly, so the agent can follow them in one query instead of stitching records together on every step.
+
+04 / About the sponsor
+
+Powered by FalkorDB
+An open-source graph database built for AI agents.
+
+Traversals are fast enough to run on every step of an agent loop, and one instance can hold thousands of isolated graphs, so each user, agent, or tenant gets its own. Run it locally with Docker.
+
+docker pull falkordb/falkordb:latest
+Official clients
+
+Python
+Node.js
+Java
+Rust
+Go
+PHP
+C#
+Cypher
+
+who knows about this system
+
+MATCH (p:Person)-[:WORKED_ON]->(:Project)-[:USES]->(s:System {name: $system})
+RETURN p.name AS person, count(*) AS projects
+ORDER BY projects DESC
+LIMIT 5
+Context for AI agents
+A graph your agent can read and write on every step, and still find on the next session.
+
+Agent memory
+Multi-agent state
+Connected company knowledge
+Connect your agent stack
+Use FalkorDB through the framework or protocol you already build with.
+
+GraphRAG-SDK
+QueryWeaver
+MCP
+Graphiti
+Cognee
+LangChain
+LlamaIndex
+One graph per user or tenant
+Leverage multigraph topology to create isolated graphs in a single instance, without running separate deployments.
+
+Query with Cypher
+Create nodes and relationships, match patterns, follow paths, and return what your agent needs.
+
+Graph algorithms as agent tools
+Traversals your agent can call instead of writing them itself.
+
+Shortest path
+PageRank
+Centrality
+Connected components
+Community detection
+Explore the graph
+Use FalkorDB Browser to run queries, inspect the data model, and see how records connect.
+
+05 / FAQ
+
+Got questions?
+When does the hackathon run?
+Who can participate?
+Do I need graph database experience?
+Is FalkorDB mandatory?
+Can I enter more than one track?
+Where do I register?
+Can I use any programming language?
+Can I continue an existing project?
+Can I use coding assistants?
+Does the project need to be deployed?
+WeMakeDevs Logo
+Helping great developer tools reach the builders who will shape the future.
+
+Keep in touch
+
+Developers
+Hackathons
+Meetups
+Scholarships
+Event Calendar
+Feedback
+Businesses
+Partners
+Contact Us
+Company
+Blog
+Code of Conduct
+Privacy Policy
+Terms of Service
+© 2026 WeMakeDevs. All rights reserved.
+Cookie preferences
+llms.txt
+
+WeMakeDevs Logo
+Challenge
+Tracks
+Prizes
+Why graphs
+FalkorDB
+FAQ
+Graph Hacks: Give Your AI Agents Real Context, an online hackathon by WeMakeDevs and FalkorDB, Oct 15–18, 2026, with prizes worth $20,000
+Starts in 1 day, 14 hours
+
+Graph Hacks: Context for AI Agents
+Powered by FalkorDB
+
+Agents are only as good as the context they work with. Give yours a graph: connected data it can reason over, a memory it keeps between sessions, and a clear picture of how things relate. Build an agent that makes decisions you can trace.
+
+When
+Oct 15, 12:01 AM to Oct 18, 11:59 PM GMT+5:30
+Where
+Online, from anywhere
+Teams
+Solo or up to 4 people
+Prizes
+$20,000 in total
+5,997 registered
+
+Team code5H6V6C
+
+THE FINAL BOSS
+1 of 4 seats filled.
+
+Tharun Kumar (you)
+
+@tharunkumardeveloper
+
+Leader
+Invite by email
+them@example.com
+Submissions open Oct 15, 2026, 12:01 AM. You cannot change your team after you submit your project.
+
+Looking for a team, or stuck on a graph model? The FalkorDB Discord is open for the whole event.
+
+FalkorDB Discord
+Overview
+Schedule
+Rules
+Resources
+Schedule
+
+How the event runs
+The hackathon runs online from October 15, 12:01 AM IST to October 18, 11:59 PM IST. Registration is open right now, and it is the only checkpoint you can act on today.
+
+Open now
+
+Registration opens
+Register yourself and add your teammates any time before submissions close.
+
+Oct 15, 12:01 AM IST
+
+Hacking begins
+The event opens and submissions open with it. Start building, and keep registering your team until submissions close.
+
+Oct 18, 11:59 PM IST
+
+Submissions close
+Submit your repository, README, demo video, deployment, and project information before the deadline.
+
+Register now and you will not have to watch this page. The start and the deadline go out to everyone on the list.
+
+WeMakeDevs Logo
+Helping great developer tools reach the builders who will shape the future.
+
+Keep in touch
+
+Developers
+Hackathons
+Meetups
+Scholarships
+Event Calendar
+Feedback
+Businesses
+Partners
+Contact Us
+Company
+Blog
+Code of Conduct
+Privacy Policy
+Terms of Service
+© 2026 WeMakeDevs. All rights reserved.
+Cookie preferences
+llms.txt
+Schedule | Graph Hacks: Context for AI Agents | WeMakeDevs
+
+WeMakeDevs Logo
+Challenge
+Tracks
+Prizes
+Why graphs
+FalkorDB
+FAQ
+Graph Hacks: Give Your AI Agents Real Context, an online hackathon by WeMakeDevs and FalkorDB, Oct 15–18, 2026, with prizes worth $20,000
+Starts in 1 day, 14 hours
+
+Graph Hacks: Context for AI Agents
+Powered by FalkorDB
+
+Agents are only as good as the context they work with. Give yours a graph: connected data it can reason over, a memory it keeps between sessions, and a clear picture of how things relate. Build an agent that makes decisions you can trace.
+
+When
+Oct 15, 12:01 AM to Oct 18, 11:59 PM GMT+5:30
+Where
+Online, from anywhere
+Teams
+Solo or up to 4 people
+Prizes
+$20,000 in total
+5,997 registered
+
+Team code5H6V6C
+
+THE FINAL BOSS
+1 of 4 seats filled.
+
+Tharun Kumar (you)
+
+@tharunkumardeveloper
+
+Leader
+Invite by email
+them@example.com
+Submissions open Oct 15, 2026, 12:01 AM. You cannot change your team after you submit your project.
+
+Looking for a team, or stuck on a graph model? The FalkorDB Discord is open for the whole event.
+
+FalkorDB Discord
+Overview
+Schedule
+Rules
+Resources
+Rules
+
+Everything you're held to
+Read these before you start building. Registering for Graph Hacks means agreeing to all of them, along with the WeMakeDevs Code of Conduct.
+
+1.
+You can participate solo or in a team of up to 4 members. Each participant may only be part of one team.
+
+2.
+Required technology: FalkorDB must be the primary graph database in your project, and it must support a central part of what the product does.
+
+3.
+The graph has to do real work. A visualisation drawn on top of ordinary storage does not qualify: if the product still works once FalkorDB is taken out, the graph is decoration rather than the thing the product runs on.
+
+4.
+Run FalkorDB however suits you. Docker, a self-hosted instance, and FalkorDB Cloud are all accepted, and you may use any language, framework, frontend, or deployment platform alongside it.
+
+5.
+The challenge is open-ended within the three tracks: Agents That Act on Connected Data, Agent Memory and Coordination, and Company Brain. You may enter any or all of them, and you must name every track you are entering when you submit.
+
+6.
+Your project must use data you are allowed to use: public, synthetic, or your own. Do not load private, login-protected, paywalled, personal, or otherwise restricted information into your graph.
+
+7.
+The hackathon runs from October 15, 12:01 AM IST to October 18, 11:59 PM IST. Submissions close at the end of that window.
+
+8.
+The main coding and design work must begin after the hackathon starts. You may discuss ideas, create notes, sketch the graph model, or prepare diagrams beforehand.
+
+9.
+You may use frameworks, open-source libraries, public APIs, templates, third-party tools, and publicly available datasets and assets. The original work completed during the hackathon will be judged.
+
+10.
+Every submission must include:
+
+A public source-code repository
+A README with setup instructions and your graph data model
+The Cypher queries or graph algorithms the product depends on
+A demo video showing the working project
+A live deployment, or complete local setup instructions if it cannot be deployed
+The track you are entering
+11.
+AI coding assistants are allowed, but their use must be disclosed.
+
+12.
+Participants must understand the submitted code and be able to explain the graph model, the queries, the project architecture, and the technical decisions behind them.
+
+13.
+Projects that are entirely generated using AI without meaningful participant contribution, verification, or technical understanding may be rejected.
+
+14.
+The prize pool is worth $20,000. The best project in each track wins a prize: an iPhone 18 Pro for Agents That Act on Connected Data, a PS5 with GTA VI for Agent Memory and Coordination, and an M6 Mac Mini for Company Brain. Every member of a winning team gets the prize.
+
+15.
+Any intellectual property developed during the hackathon belongs to the participant or team that created it. Teams are encouraged to agree internally on ownership before submitting.
+
+16.
+Treat participants, organisers, sponsors, speakers, judges, and community members with respect.
+
+17.
+Harassment, discrimination, plagiarism, or attempts to manipulate the judging process will result in disqualification.
+
+18.
+Failure to follow these rules or the WeMakeDevs Code of Conduct may result in disqualification.
+
+Note: Graph Hacks is an independent developer hackathon organised by WeMakeDevs in collaboration with FalkorDB. These rules, the schedule, and the prize breakdown may be updated before the hackathon begins, and any change is announced through the WeMakeDevs and FalkorDB community channels.
+
+WeMakeDevs Logo
+Helping great developer tools reach the builders who will shape the future.
+
+Keep in touch
+
+Developers
+Hackathons
+Meetups
+Scholarships
+Event Calendar
+Feedback
+Businesses
+Partners
+Contact Us
+Company
+Blog
+Code of Conduct
+Privacy Policy
+Terms of Service
+© 2026 WeMakeDevs. All rights reserved.
+Cookie preferences
+llms.txt
+Rules | Graph Hacks: Context for AI Agents | WeMakeDevs
+
+WeMakeDevs Logo
+Challenge
+Tracks
+Prizes
+Why graphs
+FalkorDB
+FAQ
+Graph Hacks: Give Your AI Agents Real Context, an online hackathon by WeMakeDevs and FalkorDB, Oct 15–18, 2026, with prizes worth $20,000
+Starts in 1 day, 14 hours
+
+Graph Hacks: Context for AI Agents
+Powered by FalkorDB
+
+Agents are only as good as the context they work with. Give yours a graph: connected data it can reason over, a memory it keeps between sessions, and a clear picture of how things relate. Build an agent that makes decisions you can trace.
+
+When
+Oct 15, 12:01 AM to Oct 18, 11:59 PM GMT+5:30
+Where
+Online, from anywhere
+Teams
+Solo or up to 4 people
+Prizes
+$20,000 in total
+5,997 registered
+
+Team code5H6V6C
+
+THE FINAL BOSS
+1 of 4 seats filled.
+
+Tharun Kumar (you)
+
+@tharunkumardeveloper
+
+Leader
+Invite by email
+them@example.com
+Submissions open Oct 15, 2026, 12:01 AM. You cannot change your team after you submit your project.
+
+Looking for a team, or stuck on a graph model? The FalkorDB Discord is open for the whole event.
+
+FalkorDB Discord
+Overview
+Schedule
+Rules
+Resources
+Resources
+
+Everything you need to build
+No graph database experience is assumed. Start with the getting started guide, get FalkorDB running with Docker or Cloud, and keep the Cypher reference open while you build. Stuck on a query or a data model? The FalkorDB Discord is the fastest way to an answer, and it is where you find a team too.
+
+Start here
+Getting started with FalkorDB
+The first page to open
+Official documentation
+FalkorDB on GitHub
+GraphRAG SDK on GitHub
+Setup
+Run FalkorDB with Docker and Docker Compose
+FalkorDB Cloud
+No local setup
+FalkorDB Browser: create, query, and explore visually
+Querying and data
+The Cypher query language
+Client libraries for every supported language
+Graph algorithms
+Integrations
+Examples and support
+Community projects built on FalkorDB
+Videos
+Write effective Cypher queries
+Advanced graph algorithms in FalkorDB
+Graph and RAG talks
+Playlist
+FalkorDB Cloud setup
+Playlist
+WeMakeDevs Logo
+Helping great developer tools reach the builders who will shape the future.
+
+Keep in touch
+
+Developers
+Hackathons
+Meetups
+Scholarships
+Event Calendar
+Feedback
+Businesses
+Partners
+Contact Us
+Company
+Blog
+Code of Conduct
+Privacy Policy
+Terms of Service
+© 2026 WeMakeDevs. All rights reserved.
+Cookie preferences
+llms.txt
+Resources | Graph Hacks: Context for AI Agents | WeMakeDevs
+
+WeMakeDevs Logo
+Challenge
+Tracks
+Prizes
+Why graphs
+FalkorDB
+FAQ
+Graph Hacks: Give Your AI Agents Real Context, an online hackathon by WeMakeDevs and FalkorDB, Oct 15–18, 2026, with prizes worth $20,000
+Starts in 1 day, 14 hours
+
+Graph Hacks: Context for AI Agents
+Powered by FalkorDB
+
+Agents are only as good as the context they work with. Give yours a graph: connected data it can reason over, a memory it keeps between sessions, and a clear picture of how things relate. Build an agent that makes decisions you can trace.
+
+When
+Oct 15, 12:01 AM to Oct 18, 11:59 PM GMT+5:30
+Where
+Online, from anywhere
+Teams
+Solo or up to 4 people
+Prizes
+$20,000 in total
+5,997 registered
+
+Team code5H6V6C
+
+THE FINAL BOSS
+1 of 4 seats filled.
+
+Tharun Kumar (you)
+
+@tharunkumardeveloper
+
+Leader
+Invite by email
+them@example.com
+Submissions open Oct 15, 2026, 12:01 AM. You cannot change your team after you submit your project.
+
+Looking for a team, or stuck on a graph model? The FalkorDB Discord is open for the whole event.
+
+FalkorDB Discord
+Overview
+Schedule
+Rules
+Resources
+01 / The challenge
+
+Give your agent the context to act
+Build a working agent, or a group of agents, with FalkorDB as its context layer. The graph has to shape what the agent does, not sit on the side.
+
+The problem
+
+Agents see pieces, not the whole picture. They lose track of what happened in earlier sessions, miss how people, systems, and records relate, and can't explain why they made a choice.
+
+The shift
+
+Put the agent's context in a graph. Data, memory, and company knowledge become nodes and edges the agent can follow, so it works from real relationships instead of guessing.
+
+The brief
+
+Build an agent that acts on connected data, remembers what it learns, and can show how it got to each answer.
+
+Work the graph has to do
+
+Follow connections across data
+Remember across sessions
+Share state between agents
+Connect people, projects, and decisions
+Show the path behind an answer
+One agent problem
+Pick a task where the answer depends on how things connect, and build the agent that handles it.
+
+Solo or a team of four
+Enter on your own or with up to three others. Register once, either way.
+
+Open worldwide
+Free to enter, online from anywhere, and no graph database experience needed.
+
+Three tracks
+Agents that act on connected data, agent memory and coordination, or company brain. Enter the one your idea fits.
+
+02 / Tracks
+
+Three tracks
+Build for one, or for all three at once. Each track has its own prize.
+
+🕵️
+Track 01
+
+Agents That Act on Connected Data
+Build an agent that uses the graph to decide and act. It could investigate fraud, triage security findings, or work through a codebase.
+
+Key focus
+
+Multi-hop reasoning
+Graph queries and algorithms as agent tools
+Tool selection through MCP
+Actions based on what the graph shows
+Explainable results
+🤖
+Track 02
+
+Agent Memory and Coordination
+Build agents that remember across sessions and share state with each other. Memory should persist, update over time, and be available to every agent that needs it.
+
+Key focus
+
+Episodic, semantic, and procedural memory
+Persistent conversation history
+Shared state and handoffs between agents
+High-concurrency reads and writes
+Separate memory per user or tenant
+🧠
+Track 03
+
+Company Brain
+Build an agent that understands how a company works. Connect people, teams, projects, documents, and decisions in one graph, so the agent can answer questions and get work done across all of it.
+
+Key focus
+
+Knowledge from docs, tickets, and chats in one graph
+Who owns what, and who knows what
+Tracing decisions back to their source
+Keeping knowledge current as things change
+Answers with clear sources
+Prize pool
+
+$20,000
+
+One prize for each track, plus two side prizes. Every member of a winning team gets the prize.
+
+Agents That Act on Connected Data
+
+The iPhone 18 Pro, the prize for the Agents That Act on Connected Data track
+iPhone 18 Pro
+For the best agent that uses a graph to make decisions and take action.
+
+Agent Memory and Coordination
+
+The PS5 with GTA VI, the prize for the Agent Memory and Coordination track
+PS5 with GTA VI
+For the best agents that remember across sessions and share what they know.
+
+Company Brain
+
+The M6 Mac Mini, the prize for the Company Brain track
+M6 Mac Mini
+For the best agent that understands how a company works and gets work done.
+
+Side prize
+
+AirPods 5 awarded for the best blog post
+AirPods 5
+
+1 winner
+Best blog post
+Write a blog post about your project. The best post wins a pair of AirPods 5.
+
+Side prize
+
+The t-shirt shipped to every member of the top 50 teams
+T-shirt
+
+Top 50 projects
+Top 50 submissions
+Every member of the top 50 teams gets a t-shirt, shipped to their address.
+
+03 / Why graphs
+
+Agent questions are about connections
+The hard questions agents get asked don't live in one record. The answer depends on how several things relate.
+
+01
+Which accounts are linked to this flagged transaction?
+
+02
+What did this customer ask for last month, and was it resolved?
+
+03
+Who on the team has worked on this system before?
+
+04
+What breaks if this service goes down?
+
+A graph database stores those relationships directly, so the agent can follow them in one query instead of stitching records together on every step.
+
+04 / About the sponsor
+
+Powered by FalkorDB
+An open-source graph database built for AI agents.
+
+Traversals are fast enough to run on every step of an agent loop, and one instance can hold thousands of isolated graphs, so each user, agent, or tenant gets its own. Run it locally with Docker.
+
+docker pull falkordb/falkordb:latest
+Official clients
+
+Python
+Node.js
+Java
+Rust
+Go
+PHP
+C#
+Cypher
+
+who knows about this system
+
+MATCH (p:Person)-[:WORKED_ON]->(:Project)-[:USES]->(s:System {name: $system})
+RETURN p.name AS person, count(*) AS projects
+ORDER BY projects DESC
+LIMIT 5
+Context for AI agents
+A graph your agent can read and write on every step, and still find on the next session.
+
+Agent memory
+Multi-agent state
+Connected company knowledge
+Connect your agent stack
+Use FalkorDB through the framework or protocol you already build with.
+
+GraphRAG-SDK
+QueryWeaver
+MCP
+Graphiti
+Cognee
+LangChain
+LlamaIndex
+One graph per user or tenant
+Leverage multigraph topology to create isolated graphs in a single instance, without running separate deployments.
+
+Query with Cypher
+Create nodes and relationships, match patterns, follow paths, and return what your agent needs.
+
+Graph algorithms as agent tools
+Traversals your agent can call instead of writing them itself.
+
+Shortest path
+PageRank
+Centrality
+Connected components
+Community detection
+Explore the graph
+Use FalkorDB Browser to run queries, inspect the data model, and see how records connect.
+
+05 / FAQ
+
+Got questions?
+When does the hackathon run?
+Who can participate?
+Do I need graph database experience?
+Is FalkorDB mandatory?
+Can I enter more than one track?
+Where do I register?
+Can I use any programming language?
+Can I continue an existing project?
+Can I use coding assistants?
+Does the project need to be deployed?
+WeMakeDevs Logo
+Helping great developer tools reach the builders who will shape the future.
+
+Keep in touch
+
+Developers
+Hackathons
+Meetups
+Scholarships
+Event Calendar
+Feedback
+Businesses
+Partners
+Contact Us
+Company
+Blog
+Code of Conduct
+Privacy Policy
+Terms of Service
+© 2026 WeMakeDevs. All rights reserved.
+Cookie preferences
+llms.txt
+Graph Hacks: Context for AI Agents | WeMakeDevs
+
+WeMakeDevs Logo
+Challenge
+Tracks
+Prizes
+Why graphs
+FalkorDB
+FAQ
+Graph Hacks: Give Your AI Agents Real Context, an online hackathon by WeMakeDevs and FalkorDB, Oct 15–18, 2026, with prizes worth $20,000
+Starts in 1 day, 14 hours
+
+Graph Hacks: Context for AI Agents
+Powered by FalkorDB
+
+Agents are only as good as the context they work with. Give yours a graph: connected data it can reason over, a memory it keeps between sessions, and a clear picture of how things relate. Build an agent that makes decisions you can trace.
+
+When
+Oct 15, 12:01 AM to Oct 18, 11:59 PM GMT+5:30
+Where
+Online, from anywhere
+Teams
+Solo or up to 4 people
+Prizes
+$20,000 in total
+5,997 registered
+
+Team code5H6V6C
+
+THE FINAL BOSS
+1 of 4 seats filled.
+
+Tharun Kumar (you)
+
+@tharunkumardeveloper
+
+Leader
+Invite by email
+them@example.com
+Submissions open Oct 15, 2026, 12:01 AM. You cannot change your team after you submit your project.
+
+Looking for a team, or stuck on a graph model? The FalkorDB Discord is open for the whole event.
+
+FalkorDB Discord
+Overview
+Schedule
+Rules
+Resources
+Schedule
+
+How the event runs
+The hackathon runs online from October 15, 12:01 AM IST to October 18, 11:59 PM IST. Registration is open right now, and it is the only checkpoint you can act on today.
+
+Open now
+
+Registration opens
+Register yourself and add your teammates any time before submissions close.
+
+Oct 15, 12:01 AM IST
+
+Hacking begins
+The event opens and submissions open with it. Start building, and keep registering your team until submissions close.
+
+Oct 18, 11:59 PM IST
+
+Submissions close
+Submit your repository, README, demo video, deployment, and project information before the deadline.
+
+Register now and you will not have to watch this page. The start and the deadline go out to everyone on the list.
+
+WeMakeDevs Logo
+Helping great developer tools reach the builders who will shape the future.
+
+Keep in touch
+
+Developers
+Hackathons
+Meetups
+Scholarships
+Event Calendar
+Feedback
+Businesses
+Partners
+Contact Us
+Company
+Blog
+Code of Conduct
+Privacy Policy
+Terms of Service
+© 2026 WeMakeDevs. All rights reserved.
+Cookie preferences
+llms.txt
+Schedule | Graph Hacks: Context for AI Agents | WeMakeDevs
+
+WeMakeDevs Logo
+Challenge
+Tracks
+Prizes
+Why graphs
+FalkorDB
+FAQ
+Graph Hacks: Give Your AI Agents Real Context, an online hackathon by WeMakeDevs and FalkorDB, Oct 15–18, 2026, with prizes worth $20,000
+Starts in 1 day, 14 hours
+
+Graph Hacks: Context for AI Agents
+Powered by FalkorDB
+
+Agents are only as good as the context they work with. Give yours a graph: connected data it can reason over, a memory it keeps between sessions, and a clear picture of how things relate. Build an agent that makes decisions you can trace.
+
+When
+Oct 15, 12:01 AM to Oct 18, 11:59 PM GMT+5:30
+Where
+Online, from anywhere
+Teams
+Solo or up to 4 people
+Prizes
+$20,000 in total
+5,997 registered
+
+Team code5H6V6C
+
+THE FINAL BOSS
+1 of 4 seats filled.
+
+Tharun Kumar (you)
+
+@tharunkumardeveloper
+
+Leader
+Invite by email
+them@example.com
+Submissions open Oct 15, 2026, 12:01 AM. You cannot change your team after you submit your project.
+
+Looking for a team, or stuck on a graph model? The FalkorDB Discord is open for the whole event.
+
+FalkorDB Discord
+Overview
+Schedule
+Rules
+Resources
+Rules
+
+Everything you're held to
+Read these before you start building. Registering for Graph Hacks means agreeing to all of them, along with the WeMakeDevs Code of Conduct.
+
+1.
+You can participate solo or in a team of up to 4 members. Each participant may only be part of one team.
+
+2.
+Required technology: FalkorDB must be the primary graph database in your project, and it must support a central part of what the product does.
+
+3.
+The graph has to do real work. A visualisation drawn on top of ordinary storage does not qualify: if the product still works once FalkorDB is taken out, the graph is decoration rather than the thing the product runs on.
+
+4.
+Run FalkorDB however suits you. Docker, a self-hosted instance, and FalkorDB Cloud are all accepted, and you may use any language, framework, frontend, or deployment platform alongside it.
+
+5.
+The challenge is open-ended within the three tracks: Agents That Act on Connected Data, Agent Memory and Coordination, and Company Brain. You may enter any or all of them, and you must name every track you are entering when you submit.
+
+6.
+Your project must use data you are allowed to use: public, synthetic, or your own. Do not load private, login-protected, paywalled, personal, or otherwise restricted information into your graph.
+
+7.
+The hackathon runs from October 15, 12:01 AM IST to October 18, 11:59 PM IST. Submissions close at the end of that window.
+
+8.
+The main coding and design work must begin after the hackathon starts. You may discuss ideas, create notes, sketch the graph model, or prepare diagrams beforehand.
+
+9.
+You may use frameworks, open-source libraries, public APIs, templates, third-party tools, and publicly available datasets and assets. The original work completed during the hackathon will be judged.
+
+10.
+Every submission must include:
+
+A public source-code repository
+A README with setup instructions and your graph data model
+The Cypher queries or graph algorithms the product depends on
+A demo video showing the working project
+A live deployment, or complete local setup instructions if it cannot be deployed
+The track you are entering
+11.
+AI coding assistants are allowed, but their use must be disclosed.
+
+12.
+Participants must understand the submitted code and be able to explain the graph model, the queries, the project architecture, and the technical decisions behind them.
+
+13.
+Projects that are entirely generated using AI without meaningful participant contribution, verification, or technical understanding may be rejected.
+
+14.
+The prize pool is worth $20,000. The best project in each track wins a prize: an iPhone 18 Pro for Agents That Act on Connected Data, a PS5 with GTA VI for Agent Memory and Coordination, and an M6 Mac Mini for Company Brain. Every member of a winning team gets the prize.
+
+15.
+Any intellectual property developed during the hackathon belongs to the participant or team that created it. Teams are encouraged to agree internally on ownership before submitting.
+
+16.
+Treat participants, organisers, sponsors, speakers, judges, and community members with respect.
+
+17.
+Harassment, discrimination, plagiarism, or attempts to manipulate the judging process will result in disqualification.
+
+18.
+Failure to follow these rules or the WeMakeDevs Code of Conduct may result in disqualification.
+
+Note: Graph Hacks is an independent developer hackathon organised by WeMakeDevs in collaboration with FalkorDB. These rules, the schedule, and the prize breakdown may be updated before the hackathon begins, and any change is announced through the WeMakeDevs and FalkorDB community channels.
+
+WeMakeDevs Logo
+Helping great developer tools reach the builders who will shape the future.
+
+Keep in touch
+
+Developers
+Hackathons
+Meetups
+Scholarships
+Event Calendar
+Feedback
+Businesses
+Partners
+Contact Us
+Company
+Blog
+Code of Conduct
+Privacy Policy
+Terms of Service
+© 2026 WeMakeDevs. All rights reserved.
+Cookie preferences
+llms.txt
+Rules | Graph Hacks: Context for AI Agents | WeMakeDevs
+
+WeMakeDevs Logo
+Challenge
+Tracks
+Prizes
+Why graphs
+FalkorDB
+FAQ
+Graph Hacks: Give Your AI Agents Real Context, an online hackathon by WeMakeDevs and FalkorDB, Oct 15–18, 2026, with prizes worth $20,000
+Starts in 1 day, 14 hours
+
+Graph Hacks: Context for AI Agents
+Powered by FalkorDB
+
+Agents are only as good as the context they work with. Give yours a graph: connected data it can reason over, a memory it keeps between sessions, and a clear picture of how things relate. Build an agent that makes decisions you can trace.
+
+When
+Oct 15, 12:01 AM to Oct 18, 11:59 PM GMT+5:30
+Where
+Online, from anywhere
+Teams
+Solo or up to 4 people
+Prizes
+$20,000 in total
+5,997 registered
+
+Team code5H6V6C
+
+THE FINAL BOSS
+1 of 4 seats filled.
+
+Tharun Kumar (you)
+
+@tharunkumardeveloper
+
+Leader
+Invite by email
+them@example.com
+Submissions open Oct 15, 2026, 12:01 AM. You cannot change your team after you submit your project.
+
+Looking for a team, or stuck on a graph model? The FalkorDB Discord is open for the whole event.
+
+FalkorDB Discord
+Overview
+Schedule
+Rules
+Resources
+Resources
+
+Everything you need to build
+No graph database experience is assumed. Start with the getting started guide, get FalkorDB running with Docker or Cloud, and keep the Cypher reference open while you build. Stuck on a query or a data model? The FalkorDB Discord is the fastest way to an answer, and it is where you find a team too.
+
+Start here
+Getting started with FalkorDB
+The first page to open
+Official documentation
+FalkorDB on GitHub
+GraphRAG SDK on GitHub
+Setup
+Run FalkorDB with Docker and Docker Compose
+FalkorDB Cloud
+No local setup
+FalkorDB Browser: create, query, and explore visually
+Querying and data
+The Cypher query language
+Client libraries for every supported language
+Graph algorithms
+Integrations
+Examples and support
+Community projects built on FalkorDB
+Videos
+Write effective Cypher queries
+Advanced graph algorithms in FalkorDB
+Graph and RAG talks
+Playlist
+FalkorDB Cloud setup
+Playlist
+WeMakeDevs Logo
+Helping great developer tools reach the builders who will shape the future.
+
+Keep in touch
+
+Developers
+Hackathons
+Meetups
+Scholarships
+Event Calendar
+Feedback
+Businesses
+Partners
+Contact Us
+Company
+Blog
+Code of Conduct
+Privacy Policy
+Terms of Service
+© 2026 WeMakeDevs. All rights reserved.
+Cookie preferences
+llms.txt
+Resources | Graph Hacks: Context for AI Agents | WeMakeDevs
+
+WeMakeDevs Logo
+Challenge
+Tracks
+Prizes
+Why graphs
+FalkorDB
+FAQ
+Graph Hacks: Give Your AI Agents Real Context, an online hackathon by WeMakeDevs and FalkorDB, Oct 15–18, 2026, with prizes worth $20,000
+Starts in 1 day, 14 hours
+
+Graph Hacks: Context for AI Agents
+Powered by FalkorDB
+
+Agents are only as good as the context they work with. Give yours a graph: connected data it can reason over, a memory it keeps between sessions, and a clear picture of how things relate. Build an agent that makes decisions you can trace.
+
+When
+Oct 15, 12:01 AM to Oct 18, 11:59 PM GMT+5:30
+Where
+Online, from anywhere
+Teams
+Solo or up to 4 people
+Prizes
+$20,000 in total
+5,997 registered
+
+Team code5H6V6C
+
+THE FINAL BOSS
+1 of 4 seats filled.
+
+Tharun Kumar (you)
+
+@tharunkumardeveloper
+
+Leader
+Invite by email
+them@example.com
+Submissions open Oct 15, 2026, 12:01 AM. You cannot change your team after you submit your project.
+
+Looking for a team, or stuck on a graph model? The FalkorDB Discord is open for the whole event.
+
+FalkorDB Discord
+Overview
+Schedule
+Rules
+Resources
+01 / The challenge
+
+Give your agent the context to act
+Build a working agent, or a group of agents, with FalkorDB as its context layer. The graph has to shape what the agent does, not sit on the side.
+
+The problem
+
+Agents see pieces, not the whole picture. They lose track of what happened in earlier sessions, miss how people, systems, and records relate, and can't explain why they made a choice.
+
+The shift
+
+Put the agent's context in a graph. Data, memory, and company knowledge become nodes and edges the agent can follow, so it works from real relationships instead of guessing.
+
+The brief
+
+Build an agent that acts on connected data, remembers what it learns, and can show how it got to each answer.
+
+Work the graph has to do
+
+Follow connections across data
+Remember across sessions
+Share state between agents
+Connect people, projects, and decisions
+Show the path behind an answer
+One agent problem
+Pick a task where the answer depends on how things connect, and build the agent that handles it.
+
+Solo or a team of four
+Enter on your own or with up to three others. Register once, either way.
+
+Open worldwide
+Free to enter, online from anywhere, and no graph database experience needed.
+
+Three tracks
+Agents that act on connected data, agent memory and coordination, or company brain. Enter the one your idea fits.
+
+02 / Tracks
+
+Three tracks
+Build for one, or for all three at once. Each track has its own prize.
+
+🕵️
+Track 01
+
+Agents That Act on Connected Data
+Build an agent that uses the graph to decide and act. It could investigate fraud, triage security findings, or work through a codebase.
+
+Key focus
+
+Multi-hop reasoning
+Graph queries and algorithms as agent tools
+Tool selection through MCP
+Actions based on what the graph shows
+Explainable results
+🤖
+Track 02
+
+Agent Memory and Coordination
+Build agents that remember across sessions and share state with each other. Memory should persist, update over time, and be available to every agent that needs it.
+
+Key focus
+
+Episodic, semantic, and procedural memory
+Persistent conversation history
+Shared state and handoffs between agents
+High-concurrency reads and writes
+Separate memory per user or tenant
+🧠
+Track 03
+
+Company Brain
+Build an agent that understands how a company works. Connect people, teams, projects, documents, and decisions in one graph, so the agent can answer questions and get work done across all of it.
+
+Key focus
+
+Knowledge from docs, tickets, and chats in one graph
+Who owns what, and who knows what
+Tracing decisions back to their source
+Keeping knowledge current as things change
+Answers with clear sources
+Prize pool
+
+$20,000
+
+One prize for each track, plus two side prizes. Every member of a winning team gets the prize.
+
+Agents That Act on Connected Data
+
+The iPhone 18 Pro, the prize for the Agents That Act on Connected Data track
+iPhone 18 Pro
+For the best agent that uses a graph to make decisions and take action.
+
+Agent Memory and Coordination
+
+The PS5 with GTA VI, the prize for the Agent Memory and Coordination track
+PS5 with GTA VI
+For the best agents that remember across sessions and share what they know.
+
+Company Brain
+
+The M6 Mac Mini, the prize for the Company Brain track
+M6 Mac Mini
+For the best agent that understands how a company works and gets work done.
+
+Side prize
+
+AirPods 5 awarded for the best blog post
+AirPods 5
+
+1 winner
+Best blog post
+Write a blog post about your project. The best post wins a pair of AirPods 5.
+
+Side prize
+
+The t-shirt shipped to every member of the top 50 teams
+T-shirt
+
+Top 50 projects
+Top 50 submissions
+Every member of the top 50 teams gets a t-shirt, shipped to their address.
+
+03 / Why graphs
+
+Agent questions are about connections
+The hard questions agents get asked don't live in one record. The answer depends on how several things relate.
+
+01
+Which accounts are linked to this flagged transaction?
+
+02
+What did this customer ask for last month, and was it resolved?
+
+03
+Who on the team has worked on this system before?
+
+04
+What breaks if this service goes down?
+
+A graph database stores those relationships directly, so the agent can follow them in one query instead of stitching records together on every step.
+
+04 / About the sponsor
+
+Powered by FalkorDB
+An open-source graph database built for AI agents.
+
+Traversals are fast enough to run on every step of an agent loop, and one instance can hold thousands of isolated graphs, so each user, agent, or tenant gets its own. Run it locally with Docker.
+
+docker pull falkordb/falkordb:latest
+Official clients
+
+Python
+Node.js
+Java
+Rust
+Go
+PHP
+C#
+Cypher
+
+who knows about this system
+
+MATCH (p:Person)-[:WORKED_ON]->(:Project)-[:USES]->(s:System {name: $system})
+RETURN p.name AS person, count(*) AS projects
+ORDER BY projects DESC
+LIMIT 5
+Context for AI agents
+A graph your agent can read and write on every step, and still find on the next session.
+
+Agent memory
+Multi-agent state
+Connected company knowledge
+Connect your agent stack
+Use FalkorDB through the framework or protocol you already build with.
+
+GraphRAG-SDK
+QueryWeaver
+MCP
+Graphiti
+Cognee
+LangChain
+LlamaIndex
+One graph per user or tenant
+Leverage multigraph topology to create isolated graphs in a single instance, without running separate deployments.
+
+Query with Cypher
+Create nodes and relationships, match patterns, follow paths, and return what your agent needs.
+
+Graph algorithms as agent tools
+Traversals your agent can call instead of writing them itself.
+
+Shortest path
+PageRank
+Centrality
+Connected components
+Community detection
+Explore the graph
+Use FalkorDB Browser to run queries, inspect the data model, and see how records connect.
+
+05 / FAQ
+
+Got questions?
+When does the hackathon run?
+Who can participate?
+Do I need graph database experience?
+Is FalkorDB mandatory?
+Can I enter more than one track?
+Where do I register?
+Can I use any programming language?
+Can I continue an existing project?
+Can I use coding assistants?
+Does the project need to be deployed?
+WeMakeDevs Logo
+Helping great developer tools reach the builders who will shape the future.
+
+Keep in touch
+
+Developers
+Hackathons
+Meetups
+Scholarships
+Event Calendar
+Feedback
+Businesses
+Partners
+Contact Us
+Company
+Blog
+Code of Conduct
+Privacy Policy
+Terms of Service
+© 2026 WeMakeDevs. All rights reserved.
+Cookie preferences
+llms.txt
+Graph Hacks: Context for AI Agents | WeMakeDevs
+
+WeMakeDevs Logo
+Challenge
+Tracks
+Prizes
+Why graphs
+FalkorDB
+FAQ
+Graph Hacks: Give Your AI Agents Real Context, an online hackathon by WeMakeDevs and FalkorDB, Oct 15–18, 2026, with prizes worth $20,000
+Starts in 1 day, 14 hours
+
+Graph Hacks: Context for AI Agents
+Powered by FalkorDB
+
+Agents are only as good as the context they work with. Give yours a graph: connected data it can reason over, a memory it keeps between sessions, and a clear picture of how things relate. Build an agent that makes decisions you can trace.
+
+When
+Oct 15, 12:01 AM to Oct 18, 11:59 PM GMT+5:30
+Where
+Online, from anywhere
+Teams
+Solo or up to 4 people
+Prizes
+$20,000 in total
+5,997 registered
+
+Team code5H6V6C
+
+THE FINAL BOSS
+1 of 4 seats filled.
+
+Tharun Kumar (you)
+
+@tharunkumardeveloper
+
+Leader
+Invite by email
+them@example.com
+Submissions open Oct 15, 2026, 12:01 AM. You cannot change your team after you submit your project.
+
+Looking for a team, or stuck on a graph model? The FalkorDB Discord is open for the whole event.
+
+FalkorDB Discord
+Overview
+Schedule
+Rules
+Resources
+01 / The challenge
+
+Give your agent the context to act
+Build a working agent, or a group of agents, with FalkorDB as its context layer. The graph has to shape what the agent does, not sit on the side.
+
+The problem
+
+Agents see pieces, not the whole picture. They lose track of what happened in earlier sessions, miss how people, systems, and records relate, and can't explain why they made a choice.
+
+The shift
+
+Put the agent's context in a graph. Data, memory, and company knowledge become nodes and edges the agent can follow, so it works from real relationships instead of guessing.
+
+The brief
+
+Build an agent that acts on connected data, remembers what it learns, and can show how it got to each answer.
+
+Work the graph has to do
+
+Follow connections across data
+Remember across sessions
+Share state between agents
+Connect people, projects, and decisions
+Show the path behind an answer
+One agent problem
+Pick a task where the answer depends on how things connect, and build the agent that handles it.
+
+Solo or a team of four
+Enter on your own or with up to three others. Register once, either way.
+
+Open worldwide
+Free to enter, online from anywhere, and no graph database experience needed.
+
+Three tracks
+Agents that act on connected data, agent memory and coordination, or company brain. Enter the one your idea fits.
+
+02 / Tracks
+
+Three tracks
+Build for one, or for all three at once. Each track has its own prize.
+
+🕵️
+Track 01
+
+Agents That Act on Connected Data
+Build an agent that uses the graph to decide and act. It could investigate fraud, triage security findings, or work through a codebase.
+
+Key focus
+
+Multi-hop reasoning
+Graph queries and algorithms as agent tools
+Tool selection through MCP
+Actions based on what the graph shows
+Explainable results
+🤖
+Track 02
+
+Agent Memory and Coordination
+Build agents that remember across sessions and share state with each other. Memory should persist, update over time, and be available to every agent that needs it.
+
+Key focus
+
+Episodic, semantic, and procedural memory
+Persistent conversation history
+Shared state and handoffs between agents
+High-concurrency reads and writes
+Separate memory per user or tenant
+🧠
+Track 03
+
+Company Brain
+Build an agent that understands how a company works. Connect people, teams, projects, documents, and decisions in one graph, so the agent can answer questions and get work done across all of it.
+
+Key focus
+
+Knowledge from docs, tickets, and chats in one graph
+Who owns what, and who knows what
+Tracing decisions back to their source
+Keeping knowledge current as things change
+Answers with clear sources
+Prize pool
+
+$20,000
+
+One prize for each track, plus two side prizes. Every member of a winning team gets the prize.
+
+Agents That Act on Connected Data
+
+The iPhone 18 Pro, the prize for the Agents That Act on Connected Data track
+iPhone 18 Pro
+For the best agent that uses a graph to make decisions and take action.
+
+Agent Memory and Coordination
+
+The PS5 with GTA VI, the prize for the Agent Memory and Coordination track
+PS5 with GTA VI
+For the best agents that remember across sessions and share what they know.
+
+Company Brain
+
+The M6 Mac Mini, the prize for the Company Brain track
+M6 Mac Mini
+For the best agent that understands how a company works and gets work done.
+
+Side prize
+
+AirPods 5 awarded for the best blog post
+AirPods 5
+
+1 winner
+Best blog post
+Write a blog post about your project. The best post wins a pair of AirPods 5.
+
+Side prize
+
+The t-shirt shipped to every member of the top 50 teams
+T-shirt
+
+Top 50 projects
+Top 50 submissions
+Every member of the top 50 teams gets a t-shirt, shipped to their address.
+
+03 / Why graphs
+
+Agent questions are about connections
+The hard questions agents get asked don't live in one record. The answer depends on how several things relate.
+
+01
+Which accounts are linked to this flagged transaction?
+
+02
+What did this customer ask for last month, and was it resolved?
+
+03
+Who on the team has worked on this system before?
+
+04
+What breaks if this service goes down?
+
+A graph database stores those relationships directly, so the agent can follow them in one query instead of stitching records together on every step.
+
+04 / About the sponsor
+
+Powered by FalkorDB
+An open-source graph database built for AI agents.
+
+Traversals are fast enough to run on every step of an agent loop, and one instance can hold thousands of isolated graphs, so each user, agent, or tenant gets its own. Run it locally with Docker.
+
+docker pull falkordb/falkordb:latest
+Official clients
+
+Python
+Node.js
+Java
+Rust
+Go
+PHP
+C#
+Cypher
+
+who knows about this system
+
+MATCH (p:Person)-[:WORKED_ON]->(:Project)-[:USES]->(s:System {name: $system})
+RETURN p.name AS person, count(*) AS projects
+ORDER BY projects DESC
+LIMIT 5
+Context for AI agents
+A graph your agent can read and write on every step, and still find on the next session.
+
+Agent memory
+Multi-agent state
+Connected company knowledge
+Connect your agent stack
+Use FalkorDB through the framework or protocol you already build with.
+
+GraphRAG-SDK
+QueryWeaver
+MCP
+Graphiti
+Cognee
+LangChain
+LlamaIndex
+One graph per user or tenant
+Leverage multigraph topology to create isolated graphs in a single instance, without running separate deployments.
+
+Query with Cypher
+Create nodes and relationships, match patterns, follow paths, and return what your agent needs.
+
+Graph algorithms as agent tools
+Traversals your agent can call instead of writing them itself.
+
+Shortest path
+PageRank
+Centrality
+Connected components
+Community detection
+Explore the graph
+Use FalkorDB Browser to run queries, inspect the data model, and see how records connect.
+
+05 / FAQ
+
+Got questions?
+When does the hackathon run?
+Who can participate?
+Do I need graph database experience?
+Is FalkorDB mandatory?
+Can I enter more than one track?
+Where do I register?
+Can I use any programming language?
+Can I continue an existing project?
+Can I use coding assistants?
+Does the project need to be deployed?
+WeMakeDevs Logo
+Helping great developer tools reach the builders who will shape the future.
+
+Keep in touch
+
+Developers
+Hackathons
+Meetups
+Scholarships
+Event Calendar
+Feedback
+Businesses
+Partners
+Contact Us
+Company
+Blog
+Code of Conduct
+Privacy Policy
+Terms of Service
+© 2026 WeMakeDevs. All rights reserved.
+Cookie preferences
+llms.txt
+Graph Hacks: Context for AI Agents | WeMakeDevs
+
+WeMakeDevs Logo
+Challenge
+Tracks
+Prizes
+Why graphs
+FalkorDB
+FAQ
+Graph Hacks: Give Your AI Agents Real Context, an online hackathon by WeMakeDevs and FalkorDB, Oct 15–18, 2026, with prizes worth $20,000
+Starts in 1 day, 14 hours
+
+Graph Hacks: Context for AI Agents
+Powered by FalkorDB
+
+Agents are only as good as the context they work with. Give yours a graph: connected data it can reason over, a memory it keeps between sessions, and a clear picture of how things relate. Build an agent that makes decisions you can trace.
+
+When
+Oct 15, 12:01 AM to Oct 18, 11:59 PM GMT+5:30
+Where
+Online, from anywhere
+Teams
+Solo or up to 4 people
+Prizes
+$20,000 in total
+5,997 registered
+
+Team code5H6V6C
+
+THE FINAL BOSS
+1 of 4 seats filled.
+
+Tharun Kumar (you)
+
+@tharunkumardeveloper
+
+Leader
+Invite by email
+them@example.com
+Submissions open Oct 15, 2026, 12:01 AM. You cannot change your team after you submit your project.
+
+Looking for a team, or stuck on a graph model? The FalkorDB Discord is open for the whole event.
+
+FalkorDB Discord
+Overview
+Schedule
+Rules
+Resources
+01 / The challenge
+
+Give your agent the context to act
+Build a working agent, or a group of agents, with FalkorDB as its context layer. The graph has to shape what the agent does, not sit on the side.
+
+The problem
+
+Agents see pieces, not the whole picture. They lose track of what happened in earlier sessions, miss how people, systems, and records relate, and can't explain why they made a choice.
+
+The shift
+
+Put the agent's context in a graph. Data, memory, and company knowledge become nodes and edges the agent can follow, so it works from real relationships instead of guessing.
+
+The brief
+
+Build an agent that acts on connected data, remembers what it learns, and can show how it got to each answer.
+
+Work the graph has to do
+
+Follow connections across data
+Remember across sessions
+Share state between agents
+Connect people, projects, and decisions
+Show the path behind an answer
+One agent problem
+Pick a task where the answer depends on how things connect, and build the agent that handles it.
+
+Solo or a team of four
+Enter on your own or with up to three others. Register once, either way.
+
+Open worldwide
+Free to enter, online from anywhere, and no graph database experience needed.
+
+Three tracks
+Agents that act on connected data, agent memory and coordination, or company brain. Enter the one your idea fits.
+
+02 / Tracks
+
+Three tracks
+Build for one, or for all three at once. Each track has its own prize.
+
+🕵️
+Track 01
+
+Agents That Act on Connected Data
+Build an agent that uses the graph to decide and act. It could investigate fraud, triage security findings, or work through a codebase.
+
+Key focus
+
+Multi-hop reasoning
+Graph queries and algorithms as agent tools
+Tool selection through MCP
+Actions based on what the graph shows
+Explainable results
+🤖
+Track 02
+
+Agent Memory and Coordination
+Build agents that remember across sessions and share state with each other. Memory should persist, update over time, and be available to every agent that needs it.
+
+Key focus
+
+Episodic, semantic, and procedural memory
+Persistent conversation history
+Shared state and handoffs between agents
+High-concurrency reads and writes
+Separate memory per user or tenant
+🧠
+Track 03
+
+Company Brain
+Build an agent that understands how a company works. Connect people, teams, projects, documents, and decisions in one graph, so the agent can answer questions and get work done across all of it.
+
+Key focus
+
+Knowledge from docs, tickets, and chats in one graph
+Who owns what, and who knows what
+Tracing decisions back to their source
+Keeping knowledge current as things change
+Answers with clear sources
+Prize pool
+
+$20,000
+
+One prize for each track, plus two side prizes. Every member of a winning team gets the prize.
+
+Agents That Act on Connected Data
+
+The iPhone 18 Pro, the prize for the Agents That Act on Connected Data track
+iPhone 18 Pro
+For the best agent that uses a graph to make decisions and take action.
+
+Agent Memory and Coordination
+
+The PS5 with GTA VI, the prize for the Agent Memory and Coordination track
+PS5 with GTA VI
+For the best agents that remember across sessions and share what they know.
+
+Company Brain
+
+The M6 Mac Mini, the prize for the Company Brain track
+M6 Mac Mini
+For the best agent that understands how a company works and gets work done.
+
+Side prize
+
+AirPods 5 awarded for the best blog post
+AirPods 5
+
+1 winner
+Best blog post
+Write a blog post about your project. The best post wins a pair of AirPods 5.
+
+Side prize
+
+The t-shirt shipped to every member of the top 50 teams
+T-shirt
+
+Top 50 projects
+Top 50 submissions
+Every member of the top 50 teams gets a t-shirt, shipped to their address.
+
+03 / Why graphs
+
+Agent questions are about connections
+The hard questions agents get asked don't live in one record. The answer depends on how several things relate.
+
+01
+Which accounts are linked to this flagged transaction?
+
+02
+What did this customer ask for last month, and was it resolved?
+
+03
+Who on the team has worked on this system before?
+
+04
+What breaks if this service goes down?
+
+A graph database stores those relationships directly, so the agent can follow them in one query instead of stitching records together on every step.
+
+04 / About the sponsor
+
+Powered by FalkorDB
+An open-source graph database built for AI agents.
+
+Traversals are fast enough to run on every step of an agent loop, and one instance can hold thousands of isolated graphs, so each user, agent, or tenant gets its own. Run it locally with Docker.
+
+docker pull falkordb/falkordb:latest
+Official clients
+
+Python
+Node.js
+Java
+Rust
+Go
+PHP
+C#
+Cypher
+
+who knows about this system
+
+MATCH (p:Person)-[:WORKED_ON]->(:Project)-[:USES]->(s:System {name: $system})
+RETURN p.name AS person, count(*) AS projects
+ORDER BY projects DESC
+LIMIT 5
+Context for AI agents
+A graph your agent can read and write on every step, and still find on the next session.
+
+Agent memory
+Multi-agent state
+Connected company knowledge
+Connect your agent stack
+Use FalkorDB through the framework or protocol you already build with.
+
+GraphRAG-SDK
+QueryWeaver
+MCP
+Graphiti
+Cognee
+LangChain
+LlamaIndex
+One graph per user or tenant
+Leverage multigraph topology to create isolated graphs in a single instance, without running separate deployments.
+
+Query with Cypher
+Create nodes and relationships, match patterns, follow paths, and return what your agent needs.
+
+Graph algorithms as agent tools
+Traversals your agent can call instead of writing them itself.
+
+Shortest path
+PageRank
+Centrality
+Connected components
+Community detection
+Explore the graph
+Use FalkorDB Browser to run queries, inspect the data model, and see how records connect.
+
+05 / FAQ
+
+Got questions?
+When does the hackathon run?
+Who can participate?
+Do I need graph database experience?
+Is FalkorDB mandatory?
+Can I enter more than one track?
+Where do I register?
+Can I use any programming language?
+Can I continue an existing project?
+Can I use coding assistants?
+Does the project need to be deployed?
+WeMakeDevs Logo
+Helping great developer tools reach the builders who will shape the future.
+
+Keep in touch
+
+Developers
+Hackathons
+Meetups
+Scholarships
+Event Calendar
+Feedback
+Businesses
+Partners
+Contact Us
+Company
+Blog
+Code of Conduct
+Privacy Policy
+Terms of Service
+© 2026 WeMakeDevs. All rights reserved.
+Cookie preferences
+llms.txt
+Graph Hacks: Context for AI Agents | WeMakeDevs
+05 / FAQ
+
+Got questions?
+When does the hackathon run?
+From October 15, 12:01 AM IST to October 18, 11:59 PM IST. Submissions close at 11:59 PM IST on October 18.
+
+Who can participate?
+Do I need graph database experience?
+Is FalkorDB mandatory?
+Can I enter more than one track?
+Where do I register?
+Can I use any programming language?
+Can I continue an existing project?
+Can I use coding assistants?
+Does the project need to be deployed?
