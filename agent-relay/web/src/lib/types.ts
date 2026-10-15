@@ -187,4 +187,7 @@ export interface Schema { labels: { label: string; count: number }[]; relationsh
   indexes: { label: string; properties: string[]; types: Record<string, string[]>; entity: string; status: string }[] }
 export interface CompareSide { answer: string | null; unknown: boolean; conflict: boolean; evidence: string[]; ms: number }
 export interface Compare { question: string; graph: CompareSide; vector: CompareSide }
+export interface CaseFact { id: string; predicate: string; value: string; writer?: string }
+export interface CaseEvent { kind: 'say' | 'write' | 'handoff' | 'read'; who: string; to?: string; note?: string; text?: string; at: string | null; id: string; facts?: CaseFact[] }
+export interface CaseStory { ticket: string; customer: string; status: string; issues: string[]; events: CaseEvent[] }
 export interface LabManual { action: string; label: string; before: string[]; after: string[]; fixed: boolean }

@@ -690,6 +690,14 @@ def lab_reset(tenant: str):
     return {"ok": True}
 
 
+@app.get("/api/tenants/{tenant}/sharing/story")
+def sharing_story(tenant: str, ticket: str):
+    out = sharing.story(T(tenant), ticket)
+    if out is None:
+        raise HTTPException(404, f"no ticket {ticket}")
+    return out
+
+
 @app.get("/api/tenants/{tenant}/sharing/crossings")
 def sharing_crossings(tenant: str, reader: str | None = None, writer: str | None = None):
     return sharing.crossings(T(tenant), reader or None, writer or None)

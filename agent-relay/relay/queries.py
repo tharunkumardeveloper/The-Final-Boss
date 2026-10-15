@@ -769,3 +769,17 @@ RETURN a.agent_id, f.asserted_by, f.fact_id, f.subject, f.predicate, f.object_va
        coalesce(c.last, f.recorded_at) AS last
 ORDER BY last DESC LIMIT $n
 """
+
+CASE_EPISODES = """
+MATCH (ep:Episode {customer:$c})
+WHERE ep.recorded_at >= $from
+OPTIONAL MATCH (ep)-[:DERIVED]->(f:Fact)
+WITH ep, collect(CASE WHEN f IS NULL THEN NULL ELSE [f.fact_id, f.predicate, f.object_value] END) AS facts
+RETURN ep.episode_id, ep.speaker, ep.source_agent, ep.text, ep.recorded_at, facts
+ORDER BY ep.recorded_at LIMIT 80
+"""
+CASE_READS = """
+MATCH (a:Agent)-[c:CONSULTED]->(f:Fact)
+WHERE f.fact_id IN $fids AND a.agent_id <> f.asserted_by
+RETURN a.agent_id, f.fact_id, f.predicate, f.object_value, f.asserted_by, c.last, c.count
+"""

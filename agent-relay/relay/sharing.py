@@ -39,3 +39,49 @@ def crossings(tenant, reader=None, writer=None, n=40, log=None):
              "sentence": _sentence(s, p, o, R.subject_type(p), R.object_type(p)) + ".", "uses": int(c or 0),
              "last": events.iso(last) if last else None}
             for a, w, fid, s, p, o, c, last in rows]
+
+
+def story(tenant, ticket, log=None):
+    """One case as a timeline: what the customer said, which facts each agent wrote, the handoff, and which of
+    those facts another agent then read. Everything comes from graph edges (DERIVED, HANDED_OFF, CONSULTED)."""
+    from .agents import handoff_trail, tickets
+    from .memory import norm
+    t = norm(ticket)
+    info = next((x for x in tickets(tenant, log) if x["ticket"] == t), None)
+    if not info:
+        return None
+    trail = handoff_trail(tenant, t, log)
+    start = min([at for _, _, at, _, _ in trail if at] or [0]) - 15 * 60_000
+    rows = db.run(tenant, "case episodes", Q.CASE_EPISODES, {"c": info["customer"], "from": start}, log, ro=True)
+    events, fids = [], []
+    for eid, speaker, agent, text, at, facts in rows:
+        facts = [f for f in facts if f and f[1] not in ("awaiting",)]
+        fids += [f[0] for f in facts]
+        if speaker in ("customer", "agent", "resolver", "intake", "noc"):
+            who = "customer" if speaker == "customer" else ("resolver" if speaker == "resolver" or agent == "resolver" else
+                                                         "noc" if speaker == "noc" else "intake")
+            events.append({"kind": "say", "who": who, "text": text, "at": at, "id": eid})
+        if facts:
+            events.append({"kind": "write", "who": agent or "intake", "at": (at or 0) + 1, "id": f"w-{eid}",
+                           "facts": [{"id": f[0], "predicate": f[1], "value": f[2]} for f in facts]})
+    pickup = next((at for a, act, at, _, _ in trail if act and act.upper().startswith("PICKED")), None)
+    for agent, act, at, to, note in trail:
+        if act and act.upper().startswith("HANDED"):
+            events.append({"kind": "handoff", "who": agent, "to": to, "note": note, "at": at, "id": f"h-{at}"})
+    reads = db.run(tenant, "case reads", Q.CASE_READS, {"fids": fids}, log, ro=True) if fids else []
+    by_reader = {}
+    for reader, fid, pred, val, writer, last, n in reads:
+        at = last or pickup or 0
+        by_reader.setdefault((reader, at), []).append({"id": fid, "predicate": pred, "value": val, "writer": writer})
+    for (reader, at), facts in by_reader.items():
+        events.append({"kind": "read", "who": reader, "at": at + 2, "id": f"r-{reader}-{at}", "facts": facts})
+    order = {"say": 0, "write": 1, "handoff": 2, "read": 3}
+    events.sort(key=lambda e: ((e["at"] or 0) // 1000, order[e["kind"]], e["at"] or 0))
+    for e in events:
+        e["at"] = events_iso(e["at"])
+    return {"ticket": t.upper(), "customer": info["customer"], "status": info["status"], "issues": info["issues"],
+            "events": events}
+
+
+def events_iso(ms):
+    return events.iso(ms) if ms else None

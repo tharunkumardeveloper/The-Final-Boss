@@ -1,6 +1,6 @@
 import { keyHeaders, setKeys } from './keys'
 import { mockRequest } from './mock'
-import type { Compare, Crossing, LabManual, LabView, QueryResult, Schema, AskResponse, Benchmark, Card, ChatResponse, Clock, Community, Conversation, Customer, DbHealth, Expert, FailResult, FixResponse, Graph, HistoryRow, Isolation, Kb, Network, PickupResponse, Region, Sharing, SimStatus, SlowQuery, Snapshot, Stats, Ticket, UsagePayload } from './types'
+import type { CaseStory, Compare, Crossing, LabManual, LabView, QueryResult, Schema, AskResponse, Benchmark, Card, ChatResponse, Clock, Community, Conversation, Customer, DbHealth, Expert, FailResult, FixResponse, Graph, HistoryRow, Isolation, Kb, Network, PickupResponse, Region, Sharing, SimStatus, SlowQuery, Snapshot, Stats, Ticket, UsagePayload } from './types'
 
 export const MOCK = import.meta.env.VITE_MOCK === '1'
 export const API_URL = String(import.meta.env.VITE_API_URL || 'http://localhost:8000').replace(/\/$/, '')
@@ -101,6 +101,7 @@ export const api = {
   labTrouble: (tenant: string, customer: string) => post<{ fault: string; notice: string; customer: string }>(`${t(tenant)}/lab/trouble`, { customer }),
   labReset: (tenant: string) => post<{ ok: boolean }>(`${t(tenant)}/lab/reset`),
   summary: (tenant: string) => req<{ stats: Stats; tickets: Ticket[]; customers: Customer[] }>(`${t(tenant)}/summary`),
+  story: (tenant: string, ticket: string) => req<CaseStory>(`${t(tenant)}/sharing/story${q({ ticket })}`),
   crossings: (tenant: string, reader?: string, writer?: string) => req<Crossing[]>(`${t(tenant)}/sharing/crossings${q({ reader, writer })}`),
   sharing: (tenant: string) => req<Sharing>(`${t(tenant)}/sharing`),
   network: (tenant: string, country?: string) => req<Network>(`${t(tenant)}/network${q({ country })}`),

@@ -6,7 +6,8 @@ import { api } from '../lib/api'
 import { titleCase } from '../lib/format'
 import { useRelayStream } from '../lib/stream'
 import { useTenant } from '../lib/tenant'
-import type { Crossing, Expert, Sharing } from '../lib/types'
+import type { Crossing, Expert, RelayEvent, Sharing } from '../lib/types'
+import { HandoffReplay } from '../components/console/HandoffReplay'
 import { when } from '../lib/format'
 import { AnimatePresence, motion } from 'framer-motion'
 
@@ -126,7 +127,10 @@ export default function SharingPage() {
       setNote(`${titleCase(r.customer)} is telling ${BOT} about a problem. Watch the arrows: the resolver will use what intake writes down.`)
     } catch { setNote("Couldn't start one. Does the Network console have customers with a line?") } finally { setBusy(false) }
   }
+  const listeners = useRef(new Set<(e: RelayEvent) => void>())
+  const subscribe = useCallback((fn: (e: RelayEvent) => void) => { listeners.current.add(fn); return () => { listeners.current.delete(fn) } }, [])
   const status = useRelayStream(tenant, (e) => {
+    listeners.current.forEach((fn) => fn(e))
     if (e.type !== 'consulted') return
     const from = Object.keys(e.data.writers).find((w) => w !== e.data.agent)
     if (from) setPulse({ from, to: e.data.agent, at: Date.now() })
@@ -156,6 +160,7 @@ export default function SharingPage() {
         </div>
         {note && <p className="mt-4 rounded-xl bg-signal-tint px-4 py-2 text-sm text-signal-deep" role="status">{note}</p>}
         {error && <p className="mt-8 text-sm text-danger" role="alert">Couldn't load sharing data. Is the API running?</p>}
+        <HandoffReplay tenant={tenant} subscribe={subscribe} />
         {data && (
           <>
             <section className="mt-10 grid gap-4 md:grid-cols-3">
