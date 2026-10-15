@@ -14,11 +14,13 @@ _load = threading.Lock()  # lru_cache doesn't stop two threads loading the model
 def _model():
     with _load:
         from fastembed import TextEmbedding
-        return TextEmbedding(config.EMBED_MODEL, cache_dir=str(config.CACHE_DIR / "fastembed"))
+        # one thread: the free host has 0.1 CPU, and every extra ONNX thread keeps its own memory arena
+        return TextEmbedding(config.EMBED_MODEL, cache_dir=str(config.CACHE_DIR / "fastembed"), threads=1)
 
 
 def embed(texts):
-    return [v.tolist() for v in _model().embed(list(texts))]
+    # small batches: seeding a region's catalogue in one batch peaked at 618 MB, over the free host's 512 MB
+    return [v.tolist() for v in _model().embed(list(texts), batch_size=16)]
 
 
 def embed_one(text):
