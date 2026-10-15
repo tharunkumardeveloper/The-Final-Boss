@@ -176,7 +176,7 @@ export interface LabStep { i: number; kind: 'memory' | 'check' | 'think' | 'act'
 export interface LabProcedure { id: string; successes: number; failures: number; action?: string; steps?: string[]; rate?: number
   recency?: number; nearest_hops?: number | null; nearby?: number; places?: { at: string; hops: number; times: number }[]
   confident?: boolean; score?: number }
-export interface LabMessage { text: string; at: number; image?: { src: string; title: string; link?: string } | null }
+export interface LabMessage { text: string; at: number; me?: boolean; image?: { src: string; title: string; link?: string } | null }
 export interface LabRun { id: string; customer: string; name: string; ticket: string | null; said: string; symptoms: string[]
   started_at: number; ended_at?: number; status: 'running' | 'resolved' | 'unresolved' | 'handed over' | 'error'
   steps: LabStep[]; messages: LabMessage[]; actions: string[]; fault: string | null; technician?: string | null

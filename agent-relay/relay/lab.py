@@ -698,6 +698,12 @@ class Run:
         time.sleep(STEP_PAUSE)
         return s
 
+    def hear(self, text):
+        """The customer's reply, as it shows in their chat."""
+        msg = {"text": text, "at": _ms(), "me": True}
+        self.data["messages"].append(msg)
+        events.emit(self.tenant, "lab_step", {"run": self.id, "message": msg})
+
     def tell(self, text, image=None):
         """A plain-language message in the customer's own chat."""
         at = _ms()
@@ -789,6 +795,32 @@ def _match_complaint(tenant, customer, said):
     return out["fault"]
 
 
+_SIMULATED: set = set()  # (tenant, customer) whose complaint came from Break it: nobody is typing, so a simulated customer answers
+
+
+def _simulated_answer(run, kind):
+    """Break it has no human on the other end. The customer answers the resolver the way a real one would, through the
+    same path a chat takes (the reply is an episode, visit details are the customer's facts, on_chat wakes the run)."""
+    time.sleep(2.5)
+    t, c = run.tenant, run.customer
+    if kind == "details":
+        me = next((x for x in customers(t) if x["key"] == c), {})
+        n = int(hashlib.sha1(c.encode()).hexdigest(), 16)
+        address = ", ".join(x for x in (f"Flat {n % 40 + 2}", f"{n % 9 + 1} Cross Road", (me.get("area") or "").title(),
+                                         (me.get("city") or "").title()) if x)
+        phone = f"9{n % 10 ** 9:09d}"
+        text = f"{address}. My mobile is {phone}. Evening works for me."
+        memory.remember(t, agent="intake", session_id=run.chat_sid or network._session(c, _ms()), customer=c, at=_ms(),
+                        text=text, speaker="customer", facts=[(c, "address", address.lower()), (c, "phone", phone)])
+    else:
+        text = {"guided": "I checked the thin cable at the back of the box. It's clicked in and not bent.",
+                "confirm": "Yes, it's working now. Thanks!"}.get(kind, "Okay.")
+        memory.record_episode(t, agent="intake", session_id=run.chat_sid or network._session(c, _ms()), customer=c,
+                              text=text, at=_ms(), speaker="customer")
+    run.hear(text)
+    on_chat(t, c, text)
+
+
 def _wait_for(run, kind, what, timeout=300):
     """Pause the run until the customer answers in the chat (on_chat wakes it). Returns their reply, or None."""
     ev = threading.Event()
@@ -797,6 +829,8 @@ def _wait_for(run, kind, what, timeout=300):
         _awaiting[(run.tenant, run.customer)] = entry
     run.data["awaiting"] = kind
     run.step("wait", f"Waiting for {_first(run.customer)}", what, "pending")
+    if (run.tenant, run.customer) in _SIMULATED:
+        threading.Thread(target=_simulated_answer, args=(run, kind), daemon=True).start()
     ev.wait(timeout)
     if kind != "details":
         with _lock:
@@ -953,7 +987,7 @@ def investigate(run):
             run.data["technician"] = tech
             digits = re.sub(r"[^0-9]", "", visit["phone"] or "")
             run.tell(f"Booked. {(tech or 'Our technician').title()} will come {SLOT_LABEL[visit['slot']]} to "
-                     f"{visit['address']} and replace the damaged cable. They'll call you on the number ending "
+                     f"{visit['address'].title()} and replace the damaged cable. They'll call you on the number ending "
                      f"{digits[-4:]} before they arrive. You don't need to restart anything.")
         else:
             run.tell(_say("act", m, action=d["action"], tech=run.data.get("technician"), retry=len(tried) > 1))
@@ -1032,7 +1066,7 @@ def _healthy(run, m, network_issue):
         if visit:
             tech = experts.assign(run.tenant, run.ticket, m["olt"]["city"], _ms()) if run.ticket else None
             run.tell(f"Booked. {(tech or 'Our technician').title()} will come {SLOT_LABEL[visit['slot']]} to "
-                     f"{visit['address']}. They'll call you before they arrive.")
+                     f"{visit['address'].title()}. They'll call you before they arrive.")
             run.data["status"] = "handed over"
             return
     run.tell(f"Thanks, {first}. If it acts up again, tell me what you were doing when it happened and I'll dig in.")
@@ -1223,6 +1257,8 @@ def _remember_fix(run, before, after, tried):
 def _complain(tenant, customer, text):
     """The customer reports it the way a non-technical person would, through intake (a real chat turn)."""
     from .agents import Intake, open_ticket_for
+    with _lock:
+        _SIMULATED.add((tenant, norm(customer)))  # and answers the resolver's questions by itself
     at = _ms()
     sid = network._session(customer, at)
     try:
@@ -1286,6 +1322,8 @@ _NETTALK = re.compile(r"\b(internet|wifi|wi-fi|net|connection|router|box|light)\
 def _ask_confirmation(run):
     with _lock:
         _awaiting[(run.tenant, run.customer)] = {"run": run.id, "ticket": run.ticket, "kind": "confirm"}
+        if (run.tenant, run.customer) in _SIMULATED:
+            threading.Thread(target=_simulated_answer, args=(run, "confirm"), daemon=True).start()
     run.data["awaiting"] = True
     run.step("wait", f"Asked {_first(run.customer)} to confirm on their side",
              "The readings say it's fixed; the customer gets the final word.", "info")
@@ -1387,6 +1425,7 @@ def before_chat(tenant, customer, text):
     visit slot in this message counts before intake decides what to ask."""
     c = norm(customer)
     with _lock:
+        _SIMULATED.discard((tenant, c))  # a person is typing now (talk mode): they answer for themselves
         w = _awaiting.get((tenant, c))
         claimed_now = (tenant, c) in _busy or w is not None
     if w and w.get("kind") == "details" and (slot := _slot(text)):
