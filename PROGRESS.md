@@ -233,6 +233,22 @@ Known issue at the time (fixed in Phase 17): an unknown person could be answered
 | Resolver decides from the graph | Before the model, one path query ranks past procedures by smoothed success rate, recency and network distance (hops up the access tree to a shared exchange or hub). A confident, feasible match is taken; a wrong one is recorded as a failure |
 | Tests | `tests/test_recall.py`, `tests/test_procedural.py` (no LLM calls, own tenants, cleaned up) |
 
+### Phase 18: Fixes the evaluation found, six screens, and the judges' principles
+| Item | What changed |
+|---|---|
+| Seven root causes fixed | Each fix re-scored on its own before the next (fix log in section 6): the resolver's pickup returned before billing and the outage feed ran (no billing claims, no outages in memory); write-time typos created new cities; "navi mumbai" was shortened; the 2-hop caps cut arbitrarily instead of by distance; off-catalogue plans were dropped; an account request swallowed new faults; issue names read as people. `tests/test_write_resolution.py` |
+| Ablations | Without the two clocks Relay drops from 90% to 71%; without multi-hop expansion to 81% (same 63 questions, same model) |
+| Six screens | Customer · Memory (live and replay with a time bar, two clocks, answer paths) · Network (lab and region map as tabs) · Agent team · Tenants & isolation · Database / Benchmark. Usage moved out of the menu; every old address redirects |
+| Procedural memory on screen | Resolver steps decided from past procedures show the past path as chips, success rate, how near the past case was, and a "procedural memory" badge |
+| Four answer outcomes | Every answer is `path` (reached by traversal), `memory` (written in an earlier session, with when and by whom), `not_in_graph` (names known, nothing connects them that way) or `unknown_entity` (name not in the graph; stops after the name lookup, no fact query, no model call). Returned by `/ask` and MCP, shown as a chip |
+| Path with the answer | The hops come from the traversal that found the facts (each with since/until, learned date, writer), shown under every console answer; customers get a plain "How I know" line about their own facts only |
+| Tool catalogue | Seven typed, hand-written tools (`recall_customer`, `facts_at`, `claims`, `who_handled`, `affected_by` depth 1–4, `capacity` via maxFlow, `past_fixes`). Bad arguments are refused and unknown names return `unknown_entity` before the tool's query runs; every call is logged (tool, args, ms, rows, outcome) and shown above the raw Cypher. Same tools over MCP (14 in all) and `/api/tenants/{t}/tools` |
+| One-click contrasts | "Where does X live?" now vs as of a past date; "What plan is X on?" with both agents' claims, trust ranking and the Conflict node; "<hub> is down" at depth 1 vs depth 3 with a path per row. Entities picked from the live graph, read-only |
+| README | "How Relay follows the Graph Hacks principles": each principle mapped to file and screen, and where Relay goes further |
+| Tests | `tests/test_contract.py` (all four outcomes, hops, both clocks, argument checks, depth cap, grounding scope), extended `test_api`, `test_mcp` and web render tests |
+
+Known gaps: the new screens are checked by render tests and builds, not yet clicked through in a browser; the "now vs then" demo needs a customer who has moved; the network contrast is on the map tab only; "How I know" appears only when the reply repeats a fact's value.
+
 ## 3. Architecture
 
 ```
@@ -366,6 +382,9 @@ Differentiation and demo depth rise: a worldwide company with region graphs, ope
 
 ### Update after Phase 10
 Track coverage and demo quality rise: the intake agent follows a written spec, its questions and their answers are memory every agent can see, identity is a graph match, tickets carry the full handoff, and the chat shows the graph work as it happens. Model quota is now the main operational risk: planned replies need no model, but extraction does. Estimate: **≈ 8/10 now**.
+
+### Update after Phase 18
+The evaluation drove the work: seven root causes fixed, each measured, and the ablations show the graph features earn their keep (two clocks ≈ +19 points, multi-hop ≈ +9). The judges' published principles (answer shapes, path with the answer, a fixed tool catalogue with checked arguments, names resolved before reasoning) are now visible on screen. Still open: procedural questions (44%), a same-model before/after headline, determinism and LoCoMo runs, a browser click-through. Estimate: **≈ 9/10**.
 
 ### Update after Phase 17
 Evaluation rigor rises from 5 to about 8 (after the fix log and ablations): the scaled run is scored with intervals, paired tests, component metrics and a miss breakdown, and it lowered our own headline. It also exposed real weaknesses to fix next: typo entities (25%), abstention precision (52%), multi-hop (28%), and the billing pickup that kept disagreements out of the graph. Graph use rises: recall is two queries and the resolver's choice comes from a path query. Estimate: **≈ 8.5/10**, with the next gains in those four weaknesses rather than new features.
