@@ -56,24 +56,34 @@ const CREW: Record<string, { who: string; to: string }> = {
   dispatch_backbone_crew: { who: 'Backbone team', to: 'hub link' },
 }
 export interface Dispatch { action: string; customer: string; name: string; tech?: string | null; at: number; ms: number
-  verified?: LabStep; stage: 'enroute' | 'onsite' | 'done' | 'failed'; p: number }
+  arrive: number; verified?: LabStep; stage: 'enroute' | 'onsite' | 'done' | 'failed' }
+
+const EASE = [0.22, 1, 0.36, 1] as const
+/** Where the van is right now (0 at the depot, 1 on site), and how long it still drives: the motion runs on its own. */
+function drive(d: Dispatch) {
+  const left = Math.max(0, d.arrive - Date.now())
+  const travel = d.arrive - d.at
+  const done = travel > 0 ? 1 - left / travel : 1
+  return { from: 1 - (1 - done) ** 3, left: left / 1000 }  // ease out: it slows as it arrives
+}
 
 /** The run's latest field job, while it is out (and for a few seconds after the re-measurement, so the result is seen). */
 export function useDispatch(run?: LabRun): Dispatch | null {
-  const [, tick] = useState(0)
+  // No ticking: the van glides by itself (framer-motion), so the page only re-renders when the van arrives and when
+  // the result has been shown long enough. Re-rendering the whole page 10x a second was what made the lab stutter.
+  const [, force] = useState(0)
   const act = run ? [...run.steps].reverse().find((x) => x.kind === 'act' && String(x.data?.action ?? '') in CREW) : undefined
   const verified = act && run ? run.steps.find((x) => x.i > act.i && x.kind === 'verify') : undefined
   const ms = act ? Math.max(4, Number(act.data?.delayed) || 6) * 1000 : 0
-  const live = !!act && (!verified || Date.now() - verified.at < 12_000)
+  const arrive = act ? act.at + ms * 0.45 : 0
+  const until = verified ? verified.at + 12_000 : 0
   useEffect(() => {
-    if (!live) return
-    const id = setInterval(() => tick((n) => n + 1), 100)
-    return () => clearInterval(id)
-  }, [live])
-  if (!act || !run || !live) return null
-  const p = Math.min(1, (Date.now() - act.at) / ms)
-  const stage = verified ? (verified.status === 'ok' ? 'done' : 'failed') : p < 0.45 ? 'enroute' : 'onsite'
-  return { action: String(act.data.action), customer: run.customer, name: run.name, tech: run.technician, at: act.at, ms, verified, stage, p }
+    const ids = [arrive, until].filter((t) => t > Date.now()).map((t) => setTimeout(() => force((n) => n + 1), t - Date.now() + 30))
+    return () => ids.forEach(clearTimeout)
+  }, [arrive, until])
+  if (!act || !run || (until && Date.now() > until)) return null
+  const stage = verified ? (verified.status === 'ok' ? 'done' : 'failed') : Date.now() < arrive ? 'enroute' : 'onsite'
+  return { action: String(act.data.action), customer: run.customer, name: run.name, tech: run.technician, at: act.at, ms, arrive, verified, stage }
 }
 
 function Van({ x, y, color }: { x: number; y: number; color: string }) {
@@ -100,7 +110,7 @@ export function FieldDispatch({ d, view }: { d: Dispatch; view: NonNullable<LabV
       : `${view.pop.label.replace(' POP', '')} hub ↔ ${link?.label ?? 'core'}`
   const stages: [Dispatch['stage'] | 'sent', string][] = [['sent', 'Dispatched'], ['enroute', 'En route'], ['onsite', 'On site · repairing'], ['done', 'Verified by re-measuring']]
   const at = { sent: 0, enroute: 1, onsite: 2, done: 3, failed: 3 }[d.stage]
-  const van = d.stage === 'enroute' ? Math.min(1, d.p / 0.45) : 1
+  const go = drive(d)
   const tone = d.stage === 'failed' ? '#ff9b8f' : d.stage === 'done' ? 'rgb(var(--current))' : 'rgb(var(--conflict))'
   return (
     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={SPRING}
@@ -113,10 +123,11 @@ export function FieldDispatch({ d, view }: { d: Dispatch; view: NonNullable<LabV
       </div>
       <svg viewBox="0 0 600 34" className="mt-2 h-8 w-full" aria-hidden="true">
         <line x1="20" y1="22" x2="580" y2="22" stroke="rgb(255 255 255 / 0.15)" strokeWidth="4" strokeLinecap="round" />
-        <line x1="20" y1="22" x2={20 + 560 * van} y2="22" stroke={tone} strokeWidth="4" strokeLinecap="round" />
+        <motion.line x1="20" y1="22" y2="22" stroke={tone} strokeWidth="4" strokeLinecap="round"
+          initial={{ x2: 20 + 560 * go.from }} animate={{ x2: 580 }} transition={{ duration: go.left, ease: EASE }} />
         <text x="20" y="10" className="fill-white/50 text-[9px]">Depot · {view.pop.label.replace(' POP', '')}</text>
         <text x="580" y="10" textAnchor="end" className="fill-white/70 text-[9px]">{crew.to}</text>
-        <Van x={20 + 560 * van} y={20} color={tone} />
+        <motion.g initial={{ x: 560 * go.from }} animate={{ x: 560 }} transition={{ duration: go.left, ease: EASE }}><Van x={20} y={20} color={tone} /></motion.g>
       </svg>
       <ol className="mt-2 grid grid-cols-4 gap-1.5">
         {stages.map(([k, label], i) => (
@@ -195,11 +206,13 @@ export function Canvas({ view, focus, dispatch }: { view: NonNullable<LabView['n
     : `M${a.x} ${a.y} C${a.x} ${(a.y + b.y) / 2}, ${b.x} ${(a.y + b.y) / 2}, ${b.x} ${b.y}`
   const mid = (a: P, b: P) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 })
 
-  const Cut = ({ p }: { p: P }) => (
+  // Plain functions, not components defined in here: a component created inside render is a new type every render,
+  // so React would rebuild these elements ~10x a second (query glow, dispatch) and restart their CSS animations
+  const cut = (p: P) => (
     <g><circle cx={p.x} cy={p.y} r="11" fill="rgb(var(--danger) / 0.18)" className="lab-alarm" /><circle cx={p.x} cy={p.y} r="9" fill="rgb(var(--ink))" stroke={C.bad} strokeWidth="1.5" />
       <path d={`M${p.x - 3.5} ${p.y - 3.5}l7 7M${p.x + 3.5} ${p.y - 3.5}l-7 7`} stroke={C.bad} strokeWidth="2" strokeLinecap="round" /></g>
   )
-  const Wire = ({ a, b, state, width: w = 2 }: { a: P; b: P; state: 'up' | 'cut' | 'standby' | 'hot'; width?: number }) => {
+  const wire = (a: P, b: P, state: 'up' | 'cut' | 'standby' | 'hot', w = 2) => {
     const d = curve(a, b)
     const color = state === 'cut' ? C.bad : state === 'standby' ? C.idle : state === 'hot' ? C.warn : C.ok
     return (
@@ -218,16 +231,16 @@ export function Canvas({ view, focus, dispatch }: { view: NonNullable<LabView['n
           <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3.5" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
         </defs>
         {cores.map((l, i) => (
-          <g key={l.id}><Wire a={pos.pop} b={pos.core[i]} state={l.link === 'cut' ? 'cut' : !l.active ? 'standby' : 'up'} width={3} />
-            {l.link === 'cut' && <Cut p={mid(pos.pop, pos.core[i])} />}</g>
+          <g key={l.id}>{wire(pos.pop, pos.core[i], l.link === 'cut' ? 'cut' : !l.active ? 'standby' : 'up', 3)}
+            {l.link === 'cut' && cut(mid(pos.pop, pos.core[i]))}</g>
         ))}
         {view.olts.map((o) => {
           const hot = o.flow_gbps > 0 && o.free_peak_mbps < 300
-          return <Wire key={o.id} a={pos.olt[o.id]} b={pos.pop} state={o.flow_gbps <= 0 ? 'cut' : hot ? 'hot' : 'up'} width={hot ? 4 : 2.5} />
+          return <g key={o.id}>{wire(pos.olt[o.id], pos.pop, o.flow_gbps <= 0 ? 'cut' : hot ? 'hot' : 'up', hot ? 4 : 2.5)}</g>
         })}
         {view.splitters.map((s) => pos.olt[s.olt] && (
-          <g key={s.id}><Wire a={pos.spl[s.id]} b={pos.olt[s.olt]} state={s.feeder === 'cut' ? 'cut' : 'up'} />
-            {s.feeder === 'cut' && <Cut p={mid(pos.spl[s.id], pos.olt[s.olt])} />}</g>
+          <g key={s.id}>{wire(pos.spl[s.id], pos.olt[s.olt], s.feeder === 'cut' ? 'cut' : 'up')}
+            {s.feeder === 'cut' && cut(mid(pos.spl[s.id], pos.olt[s.olt]))}</g>
         ))}
         {blocks.map(({ s, homes }) => (
           <g key={`h-${s.id}`}>
@@ -287,16 +300,16 @@ export function Canvas({ view, focus, dispatch }: { view: NonNullable<LabView['n
               : pos.core[ci] ? mid(pos.pop, pos.core[ci]) : pos.pop
           if (!goal) return null
           const from = { x: pos.pop.x, y: pos.pop.y + 34 }
-          const t = dispatch.stage === 'enroute' ? Math.min(1, dispatch.p / 0.45) : 1
-          const e = 1 - (1 - t) ** 3  // ease out: the van slows as it arrives
-          const x = from.x + (goal.x - from.x) * e, y = from.y + (goal.y - from.y) * e
+          const go = drive(dispatch)
+          const at = { x: from.x + (goal.x - from.x) * go.from, y: from.y + (goal.y - from.y) * go.from }
           const tone = dispatch.stage === 'failed' ? C.bad : dispatch.stage === 'done' ? C.ok : C.warn
           return (
             <g pointerEvents="none">
               <line x1={from.x} y1={from.y} x2={goal.x} y2={goal.y} stroke={tone} strokeOpacity="0.35" strokeWidth="1.5" strokeDasharray="3 5" />
               {dispatch.stage === 'onsite' && <circle cx={goal.x} cy={goal.y} r="16" fill="none" stroke={tone} strokeWidth="2" className="lab-alarm" />}
               {dispatch.stage === 'done' && <g><circle cx={goal.x} cy={goal.y} r="13" fill={C.ok} /><path d={`M${goal.x - 5} ${goal.y}l3.5 3.5 6.5-7`} stroke="white" strokeWidth="2.2" fill="none" strokeLinecap="round" /></g>}
-              <Van x={x} y={y - 16} color={tone} />
+              <motion.g initial={{ x: at.x, y: at.y }} animate={{ x: goal.x, y: goal.y }} transition={{ duration: go.left, ease: EASE }}>
+                <Van x={0} y={-16} color={tone} /></motion.g>
             </g>
           )
         })()}

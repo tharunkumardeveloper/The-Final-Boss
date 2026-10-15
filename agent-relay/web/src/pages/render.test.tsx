@@ -110,7 +110,7 @@ describe('field dispatch', async () => {
     splitters: [{ id: 'spl-1', label: 'Cabinet 4', feeder: 'cut' as const, olt: 'olt-1' }],
     homes: [{ id: 'ont-1', splitter: 'spl-1', port: 3, customer: 'kevin', name: 'Kevin', rx: -30, box: 'b', account: 'active', wifi: 1, state: 'dark' as const }],
   }
-  const d = { action: 'dispatch_cable_crew', customer: 'kevin', name: 'Kevin', tech: 'ravi kumar', at: 0, ms: 8000, stage: 'onsite' as const, p: 0.6 }
+  const d = { action: 'dispatch_cable_crew', customer: 'kevin', name: 'Kevin', tech: 'ravi kumar', at: 0, ms: 8000, arrive: 3600, stage: 'onsite' as const }
   const text = (el: JSX.Element) => renderToString(el).replace(/<!-- -->/g, '')
   it('says who went where and how far along the job is', () => {
     const t = text(<FieldDispatch d={d} view={net} />)
