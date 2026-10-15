@@ -549,25 +549,32 @@ WITH n LIMIT 200 DETACH DELETE n RETURN count(*)
 """
 
 
+class CanaryIn(BaseModel):
+    token: str | None = None  # the tester's own secret word: no pre-recorded run could know it
+
+
 @app.post("/api/tenants/{tenant}/canary")
-def plant_canary(tenant: str):
+def plant_canary(tenant: str, body: CanaryIn | None = None):
     """Write a unique marker into this tenant's graph only: a customer 'canary <token>' with an address fact. No model call.
     Any canary left over from an earlier, interrupted test is swept first."""
     T(tenant)
+    token = ((body.token if body else None) or uuid.uuid4().hex[:6]).strip().lower()
+    if not re.fullmatch(r"[a-z0-9]{4,16}", token):
+        raise HTTPException(422, "the secret word must be 4-16 lowercase letters or digits")
     db.run(tenant, "canary: sweep old", CANARY_SWEEP)
-    token = uuid.uuid4().hex[:6]
     customer, value = f"canary {token}", f"{token} canary street"
     out = relay_memory.remember(tenant, agent="intake", session_id=f"canary-{token}", customer=customer, at=now_ms(tenant),
                           text=f"isolation audit: canary {token} planted", facts=[(customer, "address", value)])
-    return {"token": token, "customer": customer, "value": value, "graph": db.key(tenant),
-            "facts": [f.get("fact_id") for f in out.get("facts", []) if isinstance(f, dict)]}
+    found = db.run(tenant, "canary: read back", "MATCH (n:Entity) WHERE n.name_key CONTAINS $t RETURN n.name_key", {"t": token}, ro=True)
+    return {"token": token, "customer": customer, "value": value, "graph": db.key(tenant), "server_time": time.time(),
+            "facts": [f.get("fact_id") for f in out.get("facts", []) if isinstance(f, dict)], "read_back": [r[0] for r in found]}
 
 
 @app.delete("/api/tenants/{tenant}/canary/{token}")
 def remove_canary(tenant: str, token: str):
     """Delete the marker (its entity, fact, episode and session), then count what is left: should be 0."""
     T(tenant)
-    if not re.fullmatch(r"[0-9a-f]{6}", token):
+    if not re.fullmatch(r"[a-z0-9]{4,16}", token):
         raise HTTPException(400, "bad token")
     db.run(tenant, "canary: remove", CANARY_SWEEP)
     left = db.run(tenant, "canary: count left", "MATCH (n:Entity) WHERE n.name_key CONTAINS $t RETURN count(n)", {"t": token}, ro=True)

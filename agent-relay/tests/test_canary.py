@@ -23,6 +23,14 @@ if __name__ == "__main__":
         assert main.remove_canary(A, tok)["left"] == 0
         for label, prop in [("Fact", "triple_key"), ("Episode", "session_id"), ("Session", "session_id")]:
             assert db.run(A, "t", f"MATCH (n:{label}) WHERE toString(n.{prop}) CONTAINS $t RETURN count(n)", {"t": tok}, ro=True)[0][0] == 0, label
+        own = main.plant_canary(A, main.CanaryIn(token="mysecret42"))  # the tester's own word
+        assert own["token"] == "mysecret42" and "canary mysecret42" in own["read_back"]
+        assert main.remove_canary(A, "mysecret42")["left"] == 0
+        try:
+            main.plant_canary(A, main.CanaryIn(token="no spaces!"))
+            raise AssertionError("a bad word must be refused")
+        except main.HTTPException as e:
+            assert e.status_code == 422
         print("test_canary: all checks passed")
     finally:
         for t in (A, B):

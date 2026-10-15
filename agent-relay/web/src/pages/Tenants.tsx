@@ -13,8 +13,8 @@ import type { Region } from '../lib/types'
    The victim's own column must find it (proof the probes can see), every other column must come back empty. */
 
 type Cell = { state: 'idle' | 'run' | 'found' | 'clean' | 'leak' | 'miss'; got?: string }
-type Stage = 'idle' | 'plant' | 'listen' | 'hunt' | 'clean' | 'done'
-interface Canary { token: string; customer: string; value: string; graph: string }
+type Stage = 'idle' | 'plant' | 'listen' | 'verify' | 'hunt' | 'clean' | 'done'
+interface Canary { token: string; customer: string; value: string; graph: string; facts?: string[]; read_back?: string[] }
 
 const CHECKS = [
   { id: 'stream', label: 'Its live stream carried the write', own: 'heard it', other: 'heard nothing' },
@@ -24,13 +24,23 @@ const CHECKS = [
 ] as const
 type Check = (typeof CHECKS)[number]['id']
 
-async function call(path: string, key?: string, body?: unknown, method?: string) {
+export interface Receipt { n: number; at: string; what: string; method: string; url: string; key: string; status: number | string; ms: number; body: string; curl: string }
+let sink: ((r: Receipt) => void) | null = null
+let seq = 0
+const quote = (x: string) => `'${x.replace(/'/g, `'\\''`)}'`
+
+async function call(path: string, key?: string, body?: unknown, method?: string, what = '') {
+  const m = method ?? (body === undefined ? 'GET' : 'POST'), t0 = performance.now()
   const r = await fetch(API_URL + path, {
-    method: method ?? (body === undefined ? 'GET' : 'POST'), body: body === undefined ? undefined : JSON.stringify(body),
+    method: m, body: body === undefined ? undefined : JSON.stringify(body),
     headers: { 'Content-Type': 'application/json', ...(key ? { 'X-Tenant-Key': key } : {}) },
   })
+  const text = await r.text()
   let json: unknown = null
-  try { json = await r.json() } catch { /* empty */ }
+  try { json = JSON.parse(text) } catch { /* empty */ }
+  sink?.({ n: ++seq, at: new Date().toISOString().slice(11, 23), what, method: m, url: API_URL + path, key: key ? `${key.slice(0, 6)}…` : 'none',
+    status: r.status, ms: Math.round(performance.now() - t0), body: text.slice(0, 400),
+    curl: `curl -s -X ${m} ${quote(API_URL + path)}${key ? ` -H ${quote(`X-Tenant-Key: ${key}`)}` : ''}${body === undefined ? '' : ` -H 'Content-Type: application/json' -d ${quote(JSON.stringify(body))}`}` })
   return { status: r.status, json }
 }
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms))
@@ -121,6 +131,13 @@ export default function TenantsPage() {
   const [flying, setFlying] = useState<{ from: string; to: string; ok: boolean; id: number } | null>(null)
   const [left, setLeft] = useState<number | null>(null)
   const sockets = useRef<WebSocket[]>([])
+  const [word, setWord] = useState('')
+  const [pause, setPause] = useState(true)
+  const resume = useRef<() => void>()
+  const [log, setLog] = useState<Receipt[]>([])
+  const [side, setSide] = useState<'verify' | 'receipts'>('verify')
+  useEffect(() => { sink = (r) => setLog((l) => [...l, r]); return () => { sink = null } }, [])
+  const wordOk = !word || /^[a-z0-9]{4,16}$/.test(word)
 
   useEffect(() => {
     api.regions().then((rs) => {
@@ -136,7 +153,7 @@ export default function TenantsPage() {
 
   const run = async () => {
     if (!regions?.length || !victim) return
-    setCells({}); setExtra([]); setLeft(null); setCanary(null); setError(undefined)
+    setCells({}); setExtra([]); setLeft(null); setCanary(null); setError(undefined); setLog([]); seq = 0
     const all = regions.map((r) => r.tenant)
     all.forEach((t) => CHECKS.forEach((c) => set(t, c.id, { state: 'idle' })))
 
@@ -154,13 +171,22 @@ export default function TenantsPage() {
 
     // 2. plant the canary in the victim's graph only
     setStage('plant')
-    const p = await call(`/api/tenants/${encodeURIComponent(victim)}/canary`, keyFor(victim), {})
+    const p = await call(`/api/tenants/${encodeURIComponent(victim)}/canary`, keyFor(victim), word ? { token: word } : {}, undefined, `plant the canary in ${victim}`)
     if (p.status !== 200) { setError(`Couldn't plant the canary (${p.status}).`); setStage('idle'); return }
     const c = p.json as Canary
     const token = c.token
     setCanary(c)
     await wait(2500)  // let the write's events reach every listening stream
     sockets.current.forEach((s) => s.close())
+    for (const t of all) {  // the stream's own receipt: how many frames it got, and the first one naming the canary
+      const hit = got[t].find((m) => m.includes(token))
+      sink?.({ n: ++seq, at: new Date().toISOString().slice(11, 23), what: `${t}'s live stream during the write`, method: 'WS', url: `${WS_URL}/ws/${t}`,
+        key: `${keyFor(t).slice(0, 6)}…`, status: `${got[t].length} frames`, ms: 0, body: hit ? hit.slice(0, 400) : `no frame mentions ${token}`, curl: `websocat '${WS_URL}/ws/${t}?key=${keyFor(t)}'` })
+    }
+    if (pause) {  // stop here, so the tester can look in FalkorDB Browser before anything else runs
+      setStage('verify'); setSide('verify')
+      await new Promise<void>((done) => { resume.current = done })
+    }
     for (const t of all) {
       const own = t === victim, n = got[t].filter((m) => m.includes(token)).length
       set(t, 'stream', { state: own ? (n > 0 ? 'found' : 'miss') : n > 0 ? 'leak' : 'clean', got: `${n} event${n === 1 ? '' : 's'} mentioning ${token}` })
@@ -171,18 +197,18 @@ export default function TenantsPage() {
     for (const t of all) {
       const own = t === victim, key = keyFor(t), T = encodeURIComponent(t)
       set(t, 'tool', { state: 'run' })
-      const tool = await call(`/api/tenants/${T}/tools/recall_customer`, key, { name: c.customer })
+      const tool = await call(`/api/tenants/${T}/tools/recall_customer`, key, { name: c.customer }, undefined, `${t}'s agent tool looks up ${c.customer}`)
       const outcome = (tool.json as { outcome?: string; rows?: number })?.outcome, rows = (tool.json as { rows?: number })?.rows ?? 0
       set(t, 'tool', { state: own ? (outcome === 'memory' && rows > 0 ? 'found' : 'miss') : outcome === 'unknown_entity' || rows === 0 ? 'clean' : 'leak',
         got: `${tool.status} · ${outcome ?? '?'} · ${rows} rows` })
 
       set(t, 'cypher', { state: 'run' })
-      const q = await call(`/api/tenants/${T}/query`, key, { query: `MATCH (n:Entity) WHERE n.name_key CONTAINS '${token}' RETURN n.name_key` })
+      const q = await call(`/api/tenants/${T}/query`, key, { query: `MATCH (n:Entity) WHERE n.name_key CONTAINS '${token}' RETURN n.name_key` }, undefined, `Cypher on ${t}'s own graph`)
       const count = (q.json as { count?: number })?.count ?? -1
       set(t, 'cypher', { state: own ? (count > 0 ? 'found' : 'miss') : count === 0 ? 'clean' : 'leak', got: `${q.status} · ${count} row${count === 1 ? '' : 's'} in ${regions.find((r) => r.tenant === t)?.graph}` })
 
       set(t, 'wall', { state: 'run' })
-      const w = await call(`/api/tenants/${encodeURIComponent(victim)}/query`, key, { query: `MATCH (n:Entity) WHERE n.name_key CONTAINS '${token}' RETURN n.name_key` })
+      const w = await call(`/api/tenants/${encodeURIComponent(victim)}/query`, key, { query: `MATCH (n:Entity) WHERE n.name_key CONTAINS '${token}' RETURN n.name_key` }, undefined, `${t}'s key on ${victim}'s graph`)
       if (!own) { setFlying({ from: t, to: victim, ok: w.status === 403, id: Date.now() }); await wait(900) }
       set(t, 'wall', { state: own ? (w.status === 200 ? 'found' : 'miss') : w.status === 403 ? 'clean' : 'leak', got: `${w.status}${w.status === 200 ? ` · ${(w.json as { count?: number })?.count ?? 0} rows` : ''}` })
     }
@@ -190,8 +216,8 @@ export default function TenantsPage() {
 
     // the doors a stranger would try: no key, a forged key
     const V = encodeURIComponent(victim), attacker = all.find((t) => t !== victim) ?? victim
-    const nokey = await call(`/api/tenants/${V}/customers`)
-    const forged = await call(`/api/tenants/${V}/customers`, forge(keyFor(attacker)))
+    const nokey = await call(`/api/tenants/${V}/customers`, undefined, undefined, undefined, `no key on ${victim}`)
+    const forged = await call(`/api/tenants/${V}/customers`, forge(keyFor(attacker)), undefined, undefined, `forged key on ${victim}`)
     setExtra([
       { id: 'nokey', label: `No key at all on ${victim}`, expect: '401', got: String(nokey.status), ok: nokey.status === 401 },
       { id: 'forged', label: `A forged key (one character of ${attacker}'s changed)`, expect: '403', got: String(forged.status), ok: forged.status === 403 },
@@ -199,7 +225,7 @@ export default function TenantsPage() {
 
     // 4. remove it, and prove it's gone
     setStage('clean')
-    const d = await call(`/api/tenants/${V}/canary/${token}`, keyFor(victim), undefined, 'DELETE')
+    const d = await call(`/api/tenants/${V}/canary/${token}`, keyFor(victim), undefined, 'DELETE', `remove the canary from ${victim}`)
     setLeft((d.json as { left?: number })?.left ?? -1)
     setCanary(null)
     setStage('done')
@@ -210,122 +236,144 @@ export default function TenantsPage() {
   const misses = values.filter((x) => x.state === 'miss').length
   const checked = values.filter((x) => ['found', 'clean', 'leak', 'miss'].includes(x.state)).length + extra.filter((x) => x.got).length
   const vName = regions?.find((r) => r.tenant === victim)?.name ?? victim
-  const STEPS: [Stage, string][] = [['listen', 'Every region listens'], ['plant', `Plant in ${vName}`], ['hunt', 'Every region hunts'], ['clean', 'Remove it'], ['done', 'Verdict']]
-  const order: Stage[] = ['idle', 'listen', 'plant', 'hunt', 'clean', 'done']
+  const STEPS: [Stage, string][] = [['listen', 'Every region listens'], ['plant', `Plant in ${vName}`], ['verify', 'You check it'], ['hunt', 'Every region hunts'], ['clean', 'Remove it'], ['done', 'Verdict']]
+  const order: Stage[] = ['idle', 'listen', 'plant', 'verify', 'hunt', 'clean', 'done']
+  const browserQuery = (tok: string) => `MATCH (n:Entity) WHERE n.name_key CONTAINS '${tok}' RETURN n.name_key, labels(n)`
+  const copy = (x: string) => { try { navigator.clipboard.writeText(x) } catch { /* no clipboard */ } }
 
   return (
-    <div className="flex min-h-[100dvh] flex-col">
+    <div className="flex min-h-[100dvh] flex-col xl:h-[100dvh]">
       <header className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
         <Link to="/console"><Wordmark sub="Tenants & isolation" /></Link>
         <ConsoleNav />
       </header>
-      <main className="mx-auto w-full max-w-[1500px] flex-1 px-4 pb-10 sm:px-6">
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <div className="max-w-3xl">
-            <p className="eyebrow">Data residency · one graph per regional desk</p>
-            <h1 className="mt-1 font-display text-2xl font-semibold tracking-[-0.01em] sm:text-3xl">Plant a secret in one region. Try to find it from every other.</h1>
-            <p className="mt-1 text-sm text-ink-2">
-              A European customer's memory must never show up at another desk. The canary test proves it with real requests from your
-              browser: a unique marker goes into one region's graph, then every region hunts for it through every path it has.
-              The victim's own column has to find it, or the test proves nothing.
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-ink-3">Victim: click a region, or</span>
-            <select className="field !w-auto !py-1.5 text-sm" value={victim} disabled={busy} onChange={(e) => setVictim(e.target.value)} aria-label="Victim region">
-              {regions?.map((r) => <option key={r.tenant} value={r.tenant}>{r.name} · {r.graph}</option>)}
-            </select>
-            <button className="btn-primary !py-2" disabled={busy || !regions?.length} onClick={run}>{busy ? 'Running…' : stage === 'done' ? 'Run it again' : 'Run the canary test'}</button>
-          </div>
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 px-4 pb-2 sm:px-6">
+        <h1 className="font-display text-xl font-semibold tracking-[-0.01em]" title="A European customer's memory must never show up at another desk. A unique marker goes into one region's graph; every region hunts for it through every path it has. The victim's own column must find it, or the test proves nothing.">
+          Plant a secret in one region. Try to find it from every other.</h1>
+        <div className="ml-auto flex flex-wrap items-center gap-2">
+          <label className="flex items-center gap-1.5 text-xs text-ink-3">Your secret word
+            <input className={`field !w-36 !py-1.5 font-mono text-xs ${wordOk ? '' : 'ring-2 ring-danger'}`} value={word} disabled={busy} placeholder="random if empty"
+              onChange={(e) => setWord(e.target.value.toLowerCase())} aria-invalid={!wordOk} title="4 to 16 letters or digits. A recording could never know it." />
+          </label>
+          <label className="flex items-center gap-1.5 text-xs text-ink-2">
+            <input type="checkbox" checked={pause} disabled={busy} onChange={(e) => setPause(e.target.checked)} className="accent-[rgb(var(--signal))]" />Pause so I can check</label>
+          <select className="field !w-auto !py-1.5 text-xs" value={victim} disabled={busy} onChange={(e) => setVictim(e.target.value)} aria-label="Victim region">
+            {regions?.map((r) => <option key={r.tenant} value={r.tenant}>Victim: {r.name}</option>)}
+          </select>
+          <button className="btn-primary !py-1.5 text-sm" disabled={busy || !regions?.length || !wordOk} onClick={run}>{busy ? 'Running…' : stage === 'done' ? 'Run it again' : 'Run the canary test'}</button>
         </div>
-        {error && <p className="mt-3 rounded-xl bg-danger-tint px-4 py-2 text-sm text-danger" role="alert">{error}</p>}
+      </div>
+      <ol className="grid gap-1.5 px-4 pb-3 sm:grid-cols-6 sm:px-6" aria-label="Test stages">
+        {STEPS.map(([k, label], i) => {
+          const now = order.indexOf(stage), me = order.indexOf(k), skipped = k === 'verify' && !pause && stage !== 'idle'
+          return (
+            <li key={k} className={`rounded-lg px-2.5 py-1.5 text-[11px] ${skipped ? 'bg-surface text-ink-3/60 line-through hairline' : me === now && busy ? 'bg-ink text-paper' : me < now || stage === 'done' ? 'bg-current-tint text-ink' : 'bg-surface text-ink-3 hairline'}`}>
+              <span className="font-semibold">{i + 1}. {label}</span>
+            </li>
+          )
+        })}
+      </ol>
+      {error && <p className="mx-4 mb-2 rounded-xl bg-danger-tint px-4 py-2 text-sm text-danger sm:mx-6" role="alert">{error}</p>}
 
-        <ol className="mt-4 grid gap-1.5 sm:grid-cols-5" aria-label="Test stages">
-          {STEPS.map(([k, label], i) => {
-            const now = order.indexOf(stage), me = order.indexOf(k)
-            return (
-              <li key={k} className={`rounded-xl px-3 py-2 text-xs ${me === now && busy ? 'bg-ink text-paper' : me < now || stage === 'done' ? 'bg-current-tint text-ink' : 'bg-surface text-ink-3 hairline'}`}>
-                <span className="font-semibold">{i + 1}. {label}</span>
-              </li>
-            )
-          })}
-        </ol>
-
-        <div className="mt-4 grid gap-4 xl:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]">
-          <section aria-label="The instance">
+      <main className="grid min-h-0 flex-1 gap-4 px-4 pb-4 sm:px-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+        <section className="flex min-h-0 flex-col gap-3" aria-label="The instance and the verdict">
+          <div className="min-h-0 shrink">
             {regions ? <Instance regions={regions} victim={victim} setVictim={setVictim} canary={canary} flying={flying} locked={busy} />
               : <p className="rounded-2xl bg-sunk/50 p-10 text-center text-sm text-ink-3">Loading the region graphs…</p>}
-            {canary && (
-              <p className="mt-2 rounded-xl bg-[#E5B53A]/15 px-3 py-2 text-xs text-ink">
-                Planted in <code className="font-mono">{canary.graph}</code> only: customer <strong>{canary.customer}</strong>, address <strong>{canary.value}</strong>.
+          </div>
+          <div className="rounded-2xl bg-surface p-3 hairline">
+            <div className={`flex flex-wrap items-center gap-2 rounded-xl px-3 py-2 ${stage !== 'done' ? 'bg-sunk/60' : leaks || misses ? 'bg-danger-tint' : 'bg-current-tint'}`}>
+              <p className="font-display text-base font-semibold">
+                {stage === 'idle' ? 'Not run yet' : stage === 'verify' ? 'Paused: check it yourself →' : stage !== 'done' ? `${checked} checks so far…`
+                  : leaks ? `${leaks} leak${leaks > 1 ? 's' : ''} found` : misses ? `${misses} control${misses > 1 ? 's' : ''} failed: the test couldn't see the canary`
+                    : `${checked} checks · 0 leaks · found only in ${vName}`}
               </p>
-            )}
-          </section>
-
-          <section className="rounded-[1.75rem] bg-surface p-4 hairline" aria-label="Verdict">
-            <div className={`flex flex-wrap items-center gap-2 rounded-2xl px-4 py-3 ${stage !== 'done' ? 'bg-sunk/60' : leaks || misses ? 'bg-danger-tint' : 'bg-current-tint'}`}>
-              <p className="font-display text-lg font-semibold">
-                {stage === 'idle' ? 'Not run yet'
-                  : stage !== 'done' ? `${checked} checks so far…`
-                    : leaks ? `${leaks} leak${leaks > 1 ? 's' : ''} found`
-                      : misses ? `${misses} control${misses > 1 ? 's' : ''} failed: the test couldn't see the canary`
-                        : `${checked} checks · 0 leaks · the canary was found only in ${vName}`}
-              </p>
-              {left !== null && <span className="chip bg-surface text-ink-2 hairline">canary removed · {left} left</span>}
+              {left !== null && <span className="chip bg-surface text-ink-2 hairline">removed · {left} left</span>}
+              {extra.map((x) => <span key={x.id} className={`chip ${x.ok ? 'bg-surface text-ink-2 hairline' : 'bg-danger text-white'}`} title={x.label}>{x.id === 'nokey' ? 'no key' : 'forged key'} → {x.got}</span>)}
             </div>
             {regions && (
-              <div className="mt-3 overflow-x-auto">
+              <div className="mt-2 overflow-x-auto">
                 <table className="w-full border-separate border-spacing-1 text-xs">
-                  <thead>
-                    <tr>
-                      <th className="text-left font-medium text-ink-3">Check</th>
-                      {regions.map((r) => (
-                        <th key={r.tenant} className={`px-1 text-center font-semibold ${r.tenant === victim ? 'text-[#B88A12]' : 'text-ink-2'}`}>
-                          {r.name}{r.tenant === victim && <span className="block text-[9.5px] font-normal">victim · control</span>}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
+                  <thead><tr>
+                    <th className="text-left font-medium text-ink-3">Check</th>
+                    {regions.map((r) => <th key={r.tenant} className={`px-1 text-center text-[11px] font-semibold ${r.tenant === victim ? 'text-[#B88A12]' : 'text-ink-2'}`}>{r.name}{r.tenant === victim && <span className="block text-[9px] font-normal">victim · control</span>}</th>)}
+                  </tr></thead>
                   <tbody>
                     {CHECKS.map((c) => (
                       <tr key={c.id}>
-                        <td className="pr-2 text-ink-2">{c.label}</td>
+                        <td className="pr-2 text-[11px] text-ink-2">{c.label}</td>
                         {regions.map((r) => {
                           const cell = cells[`${r.tenant}:${c.id}`] ?? { state: 'idle' }, own = r.tenant === victim
                           const tone = { idle: 'bg-sunk/50 text-ink-3', run: 'bg-sunk text-ink-2 animate-breathe', found: 'bg-[#E5B53A] text-ink', clean: 'bg-current text-white', leak: 'bg-danger text-white', miss: 'bg-danger-tint text-danger' }[cell.state]
-                          const word = { idle: '·', run: '…', found: c.own, clean: c.other, leak: 'LEAK', miss: 'control failed' }[cell.state]
-                          return (
-                            <td key={r.tenant} title={cell.got ? `${own ? 'control' : 'probe'}: ${cell.got}` : undefined}
-                              className={`h-9 min-w-[76px] rounded-lg px-1 text-center text-[10.5px] font-semibold transition-colors duration-500 ${tone}`}>{word}</td>
-                          )
+                          const say = { idle: '·', run: '…', found: c.own, clean: c.other, leak: 'LEAK', miss: 'control failed' }[cell.state]
+                          return <td key={r.tenant} title={cell.got ? `${own ? 'control' : 'probe'}: ${cell.got}` : undefined}
+                            className={`h-8 min-w-[70px] rounded-md px-1 text-center text-[10px] font-semibold transition-colors duration-500 ${tone}`}>{say}</td>
                         })}
                       </tr>
                     ))}
                   </tbody>
                 </table>
-                <p className="mt-2 text-[10.5px] text-ink-3">Gold: the victim's own access finds the canary (proves each probe can see it). Green: another region found nothing or was refused. Hover any cell for the real response.</p>
+                <p className="mt-1 text-[10px] text-ink-3">Gold: the victim's own access finds it (each probe can see). Green: found nothing or refused. Hover a cell for the response.</p>
               </div>
             )}
-            {extra.length > 0 && (
-              <ul className="mt-3 space-y-1">
-                {extra.map((x) => (
-                  <li key={x.id} className="flex items-center gap-2 rounded-xl bg-paper/70 px-3 py-1.5 text-xs">
-                    <span className={`h-2 w-2 rounded-full ${x.ok ? 'bg-current' : 'bg-danger'}`} />
-                    <span className="min-w-0 flex-1">{x.label}</span>
-                    <span className="font-mono text-ink-3">expected {x.expect} · got {x.got}</span>
+          </div>
+        </section>
+
+        <aside className="flex min-h-[520px] flex-col rounded-[1.75rem] bg-surface p-4 hairline xl:min-h-0" aria-label="Proof">
+          <div className="flex shrink-0 items-center justify-between gap-2">
+            <div role="tablist" aria-label="Proof" className="inline-flex rounded-full bg-sunk/70 p-0.5">
+              {([['verify', 'Check it yourself'], ['receipts', `Receipts${log.length ? ` · ${log.length}` : ''}`]] as const).map(([k, label]) => (
+                <button key={k} role="tab" aria-selected={side === k} onClick={() => setSide(k)}
+                  className={`rounded-full px-3 py-1 text-[11.5px] ${side === k ? 'bg-ink font-medium text-paper' : 'text-ink-2'}`}>{label}</button>
+              ))}
+            </div>
+            {stage === 'verify' && <button className="btn-primary !py-1.5 text-xs" onClick={() => resume.current?.()}>I've checked · continue the hunt</button>}
+          </div>
+          <div className="scroll-thin mt-3 min-h-0 flex-1 overflow-y-auto pr-1" role="tabpanel">
+            {side === 'verify' ? (
+              <div className="space-y-3 text-[12.5px] text-ink-2">
+                <p><strong className="text-ink">Don't trust this page: check it where the data lives.</strong> These are the ways to prove it's real without relying on our UI.</p>
+                <ol className="space-y-2.5">
+                  <li className="rounded-xl bg-paper/70 p-3 hairline"><p className="font-semibold text-ink">1 · Use a word only you know</p>
+                    <p className="mt-0.5">Type your own secret word above. A pre-recorded animation can't know a word you made up a second ago.</p></li>
+                  <li className={`rounded-xl p-3 hairline ${stage === 'verify' ? 'bg-[#E5B53A]/15 ring-2 ring-[#E5B53A]' : 'bg-paper/70'}`}>
+                    <p className="font-semibold text-ink">2 · Look in FalkorDB Browser while it's paused</p>
+                    <p className="mt-0.5">Open FalkorDB Browser (the database's own tool: FalkorDB Cloud console → Browser, or localhost:3000), connect to the same instance, pick each graph and run:</p>
+                    <div className="mt-1.5 flex items-start gap-2">
+                      <code className="min-w-0 flex-1 break-all rounded-lg bg-ink px-2 py-1.5 font-mono text-[11px] text-paper">{browserQuery(canary?.token ?? word ?? '<word>')}</code>
+                      <button className="btn-ghost !px-2 !py-1 text-[11px] hairline" onClick={() => copy(browserQuery(canary?.token ?? word))}>Copy</button>
+                    </div>
+                    <p className="mt-1.5">It should return rows in <code className="font-mono text-[11px]">{regions?.find((r) => r.tenant === victim)?.graph ?? 'the victim'}</code> and nothing in {regions?.filter((r) => r.tenant !== victim).map((r) => r.graph).join(', ')}.</p>
+                    {canary && <p className="mt-1.5 text-[11.5px]">Server receipt for the write: fact <code className="font-mono">{canary.facts?.join(', ')}</code>, read back from <code className="font-mono">{canary.graph}</code> as {canary.read_back?.map((x) => <code key={x} className="mr-1 font-mono">{x}</code>)}</p>}
+                  </li>
+                  <li className="rounded-xl bg-paper/70 p-3 hairline"><p className="font-semibold text-ink">3 · Re-run any request yourself</p>
+                    <p className="mt-0.5">Every request this page made is in <button className="font-semibold text-signal-deep underline" onClick={() => setSide('receipts')}>Receipts</button>, with the server's answer and a <em>Copy as curl</em> button. Paste it in a terminal and you get the same 403, 401 or 0 rows. They also show in your browser's DevTools → Network tab.</p></li>
+                  <li className="rounded-xl bg-paper/70 p-3 hairline"><p className="font-semibold text-ink">4 · Make it fail on purpose</p>
+                    <p className="mt-0.5">The victim's column is the control: if the probes were fake or blind it couldn't turn gold, and the verdict says "control failed" instead of passing.</p></li>
+                </ol>
+                <details className="text-[11px] text-ink-3"><summary className="cursor-pointer">How the isolation works, and its limits</summary>
+                  <p className="mt-1">Each region is a separate FalkorDB graph; a query names exactly one, and Cypher has no syntax to reach another. Every tenant request and live stream needs that tenant's key (an HMAC of its name, checked in constant time, never stored). Limit: this cloud plan has no per-tenant database users, so the API holds one database login, and the demo server hands its own web app every key so you can switch regions (<code className="font-mono">RELAY_DEMO_KEYS=0</code> turns that off).</p></details>
+              </div>
+            ) : (
+              <ol className="space-y-1.5">
+                {log.map((r) => (
+                  <li key={r.n} className="rounded-xl bg-paper/70 p-2.5 hairline">
+                    <div className="flex flex-wrap items-center gap-1.5 text-[11px]">
+                      <span className="font-mono text-ink-3">#{r.n} {r.at}</span>
+                      <span className={`chip !py-0 font-mono ${String(r.status).startsWith('2') ? 'bg-current-tint text-current' : String(r.status).startsWith('4') ? 'bg-danger-tint text-danger' : 'bg-sunk text-ink-2'}`}>{r.method} {r.status}</span>
+                      <span className="min-w-0 flex-1 truncate font-medium text-ink">{r.what}</span>
+                      {r.ms > 0 && <span className="text-ink-3 num">{r.ms} ms</span>}
+                      <button className="btn-ghost !px-2 !py-0.5 text-[10.5px] hairline" onClick={() => copy(r.curl)}>Copy as curl</button>
+                    </div>
+                    <p className="mt-1 truncate font-mono text-[10.5px] text-ink-3" title={r.url}>{r.url} · key {r.key}</p>
+                    <pre className="mt-1 max-h-24 overflow-auto whitespace-pre-wrap break-all rounded-lg bg-sunk/60 px-2 py-1 font-mono text-[10.5px] text-ink-2">{r.body || '(empty body)'}</pre>
                   </li>
                 ))}
-              </ul>
+                {!log.length && <li className="rounded-xl bg-sunk/50 p-4 text-sm text-ink-3">Run the test: every request it makes lands here with the server's real answer.</li>}
+              </ol>
             )}
-            <details className="mt-3 text-[11px] text-ink-3">
-              <summary className="cursor-pointer">How the isolation works, and its limits</summary>
-              <p className="mt-1">Each region is a separate FalkorDB graph; a query names exactly one, and Cypher has no syntax to reach another.
-                Every tenant request and live stream needs that tenant's key (an HMAC of its name, checked in constant time, never stored).
-                Limit: this cloud plan has no per-tenant database users, so the API holds one database login, and the demo server hands its own
-                web app every key so you can switch regions (<code className="font-mono">RELAY_DEMO_KEYS=0</code> turns that off).</p>
-            </details>
-          </section>
-        </div>
+          </div>
+        </aside>
       </main>
     </div>
   )
