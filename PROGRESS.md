@@ -6,7 +6,7 @@ Companion to `PLAN.md` (the plan). This file is the record: what was done, what 
 
 ## 1. The product in one paragraph
 
-**Relay** is shared graph memory for teams of AI agents, built on FalkorDB. It is demoed on **Ping Me Later**, a fictional Indian fiber ISP ("We'll fix it before you have to.") whose AI support desk has an **intake** agent (talks to customers, opens tickets) and a **resolver** agent (works tickets with billing, outage and diagnostic tools). They never message each other: everything one knows, the other finds in the graph. Relay remembers across sessions, tracks how facts change on two clocks, keeps disagreements between agents instead of overwriting them, retires facts that stop being true, and returns the graph path behind every answer.
+**Relay** is shared graph memory for teams of AI agents, built on FalkorDB. It is demoed on **WiFight**, a fictional fiber ISP ("Fiber fast. Game hard. Binge harder.") whose AI support desk has an **intake** agent (**Mr.Fix-It**) (talks to customers, opens tickets) and a **resolver** agent (works tickets on a network model held in the graph, and proves each fix by measuring again). They never message each other: everything one knows, the other finds in the graph. Relay remembers across sessions, tracks how facts change on two clocks, keeps disagreements between agents instead of overwriting them, retires facts that stop being true, and returns the graph path behind every answer.
 
 ## 2. What we did, in order
 
@@ -70,7 +70,7 @@ A Python package `relay/`: write path (extraction → entity/alias resolution �
 | "I no longer live in Chennai" didn't change the graph | Extraction only accepted facts true *now*; a bare "no longer" produced nothing | An `ended` flag in extraction, plus a `RETIRE` query: the fact closes both clocks, keeps its history, loses its live edge and links the episode that ended it; a `fact_retired` event updates the graph live |
 | Chat had no history or context | No conversation endpoint; the portal started fresh | `GET /conversation` (all sessions, both sides, summaries); the portal persists the session id and shows earlier sessions |
 | Portal didn't update in real time | The portal didn't listen to events | The portal now opens the tenant WebSocket and updates "What we remembered" live; the console shows portal messages |
-| No view of API limits | — | A usage ledger: requests and tokens per model per day vs limits, live Groq rate-limit headers, exhausted flags (the router skips exhausted models), editable limits and per-job routes, and a `/console/usage` page with a header indicator |
+| No view of API limits | — | A usage ledger: requests and tokens per model vs each provider's limits, live Groq rate-limit headers, exhausted flags (the router skips exhausted models), editable limits and per-job routes, and a `/console/usage` page with a header indicator |
 | Rahul/Priya cities missing from the benchmark | "We're based in Mumbai" ("we") wasn't treated as the customer | A prompt rule: "we / our home / our family" from the customer = the customer |
 | The "NimbusNet" brand was still in the prompt | Leftover | Renamed to Ping Me Later |
 | Backdated dates lost after the prompt change | The longer prompt weakened the date rule | Worked examples in the prompt; the API test catches this regression |
@@ -170,7 +170,7 @@ Not done to the letter: the spec confirms a contradiction *before* updating; Rel
 | Chatbot revamp | No name box: Kavya asks in chat, the name is found inside a normal message ("Hi, I'm Adit and my wifi drops" → Adit, the rest is sent on), highlighted, and "Not right? Change it" fixes it. A question asked before the name is held and answered after. The last chat on this device is cached (`localStorage`) and shown with "Continue as". No double greeting (`greeted` flag) |
 | Memory panel | "Everything I remember about you" (every agent, every session) and "What changed" (no longer lives in Mumbai); each row's **How I know** opens the source message, who wrote it and both clocks; competing claims are shown as a disagreement on the preferred one |
 
-### Phase 14: locked.in and Mr.Lowkey
+### Phase 14: First rebrand (since replaced by WiFight, Phase 16)
 | Item | What changed |
 |---|---|
 | Brand | Ping Me Later / Kavya became **locked.in** ("Fiber fast. Game hard. Binge harder.") and **Mr.Lowkey** ("Chill. I've got this."). One file, `agent-relay/brand.json`, names them; backend and web both read it, catalogue text uses `{company}`. Internal ids (`pml` tenants, the `intake` agent, PML Hub router keys) are unchanged |
@@ -202,6 +202,26 @@ Not done to the letter: the spec confirms a contradiction *before* updating; Rel
 | **Tenant isolation, enforced** | Every `/api/tenants/{t}/…` request and the live stream need that tenant's key (HMAC of the tenant name, constant-time check, nothing stored); missing key 401, wrong key 403, stream closed 4403; the cross-tenant customer lookup needs an operator key. An **Isolation audit** page (`/console/isolation`) attacks tenant B with tenant A's key from the browser and shows every real response (13/13 checks pass over HTTP and WebSocket). Limit, stated on the page: no per-tenant database users on this cloud plan; the demo server hands its own web app every key (`RELAY_DEMO_KEYS=0` stops it) |
 
 Known issues: uvicorn `--reload` hangs on this Windows setup (restart the API by hand after backend edits); FalkorDB Cloud times out now and then from this network; the new screens were driven through the API but not screenshot-checked by us (the browser extension couldn't capture pages).
+
+### Phase 16: Deployed, WiFight, and the graph made visible
+| Item | What changed |
+|---|---|
+| Deployed | API on Render (free, Singapore, blueprint `render.yaml` at the repo root, `RELAY_TENANT_SECRET` generated by Render), web on Vercel, a fresh FalkorDB Cloud instance. CORS locked to the web origin |
+| Render crash loop | Out of memory on 512 MB: fastembed now runs with one thread and batch 16 (peak 618 MB → 340 MB measured) |
+| Brand | **WiFight** / **Mr.Fix-It** ("Relax. I'll fix it."), still from `brand.json` only; logo, mark and favicon from the brand files; the animated Mr.Fix-It avatar framed so the drill stays inside the circle |
+| Visitor's country | `/api/locate` from the browser's time zone and language (zone.tab + tzdata, legacy names like `Asia/Calcutta` included); the chat uses it as a fallback place; country picker with flags |
+| Composer | Text area (Enter sends, Shift+Enter new line), no suggestion chips |
+| One voice at a time | When the resolver owns the case (working, guided step, visit details, "is it working?"), intake still takes notes but only the resolver answers; each reply says who spoke |
+| Stream security | A wrong tenant key is refused at the WebSocket handshake, before accept |
+| Live chats always use the lab | The resolver's network lab is on for every live chat (only scripted simulator stories are excluded), which fixed a ticket that never closed |
+| **Watch a handoff** (Agent team) | One real case replayed from the graph in lanes: customer, Mr.Fix-It, shared memory, resolver. Facts written (`DERIVED`), the handoff (`HANDED_OFF`), and facts another agent then read (`CONSULTED`) |
+| **Isolation, drawn** | Both tenants' graphs drawn from their own-key queries with a wall between them; each attack flies as a packet and stops at the wall (or would cross it, if it leaked) |
+| **Cypher drawer, grouped** | Queries grouped into moments of work (bursts with the same action) with purpose chips; raw list on a toggle |
+| **Network as a map** | Every hub at its city's real latitude/longitude, exchanges ringed around their hub, backbone arcs with moving flow, failures in red |
+| **Lab as one path** | A four-step strip (break it → customer complains → resolver works → verified and graded) driven by the live fault and run; faults as a compact grid with one detail card; manual fixes folded into Operator tools |
+| **Graph access, live** | Every live Cypher event now carries the graph keys it started from (its parameters) and the keys it came back with (its rows, including Node/Edge objects). The memory graph, the customer's own graph, the network map and the lab line light up exactly those nodes and edges as each query runs (blue: read, green: write), with a dot running along each edge walked, and a ticker naming the query and how many nodes/edges it touched. The screens' own page loads are filtered out so only agent work glows |
+
+Known issue: an unknown person ("where does Kevin live?" before Kevin is in the graph) can be answered from the vector seeds of someone else; it should say it doesn't know.
 
 ## 3. Architecture
 
@@ -261,7 +281,7 @@ uvicorn api.main:app --port 8000           # API
 cd web && npm install && npm run dev       # web (VITE_API_URL=http://localhost:8000), or npm run dev:mock
 ```
 
-Last full run (2026-10-14): 16 of 18 backend checks pass, the web app builds and its 14 tests pass. `test_profile` could not run (every model out of quota) and `test_transcript` failed on a test expectation that was then corrected; both need a rerun once the Gemini quota resets (12:30 IST).
+Last full run: 16 of 18 backend checks passed. `test_profile` could not run (every model out of quota) and `test_transcript` failed on a test expectation that was then corrected; both need a rerun once model quota is back. The web app builds and its 18 tests pass.
 
 ## 6. Results so far
 
@@ -301,23 +321,26 @@ Differentiation and demo depth rise: a worldwide company with region graphs, ope
 ### Update after Phase 10
 Track coverage and demo quality rise: the intake agent follows a written spec, its questions and their answers are memory every agent can see, identity is a graph match, tickets carry the full handoff, and the chat shows the graph work as it happens. Model quota is now the main operational risk: planned replies need no model, but extraction does. Estimate: **≈ 8/10 now**.
 
+### Update after Phase 16
+Deployment and security move most: the app is live on Render and Vercel, every tenant request and stream needs that tenant's key, and the isolation audit is drawn. Demo quality rises with the handoff replay, the network map and live graph access. Still open: the scaled evaluation, the video, the unknown-person fallback. Estimate: **≈ 8.5/10 now**.
+
 ### Update after Phase 15
 Track coverage and differentiation rise most: the resolver now acts on a network model and proves its fixes by measuring again, can be wrong (and is graded), and a human customer closes the loop. Agent coordination is visible (one voice, claimed cases, consulted facts). Still open: deployment, API auth, scaled evaluation, video. Estimate: **≈ 8.5/10 now**.
 
 ## 8. What's missing, in priority order
 
 1. **Finish the evaluation**: the scaled Relay vs B1 comparison, component metrics, abstention P/R, LoCoMo QA and out-of-distribution extraction. Run it as a plain background script (no agent cost), spread across models. Until then, the strongest claim rests on 74 questions.
-2. **Deploy it** (Render + Vercel). The real-browser pass is done (Phase 11); the canvas animation still needs a human look.
-3. **Protect the API**: an admin token for reset, sim control, usage edits and route edits; read-only for everyone else; rate limiting on `/chat`.
+2. **Unknown-person fallback**: when entity linking finds no one, answer "I don't know" instead of falling back to vector seeds.
+3. **Protect the API further**: tenant keys are enforced (Phase 15); still missing are rate limiting on `/chat` and an operator-only key for reset and route edits on the public demo.
 4. **Demo video (3 min) and blog post.**
 5. **Speed up writes and linking:**
    - writes: batch the episode and facts into fewer round trips, and cache embeddings;
    - linking: replace the per-question scan of every name with a full-text index;
    - fix the 2.2 s first-call warm-up.
 6. **Human-in-the-loop for conflicts:** a "confirm value" action in the console. It turns trust ranking into a learning signal, so trust becomes dynamic instead of fixed per agent.
-7. **Retirement scope:** today a customer's "no longer" only retires facts the same agent recorded. Decide whether the customer's word should also retire a tool's claim (likely yes for personal facts).
+7. **Retirement scope:** currently a customer's "no longer" only retires facts the same agent recorded. Decide whether the customer's word should also retire a tool's claim (likely yes for personal facts).
 8. **Memory growth:** a retention or compaction policy for old episodes; the free tier caps out around 15–75K nodes.
-9. **Persist usage counters** (today they reset when Render redeploys); seed them from Groq headers.
+9. **Persist usage counters** (they reset when Render redeploys); seed them from Groq headers.
 10. **Richer procedural memory:** ordered fix steps (`NEXT` edges) learned from resolved tickets, not just "fix resolves issue".
 11. **Screenshots in the README** (text and numbers were refreshed in Phase 9).
 12. **Reply guard gaps**: delivery times, discounts and device counts stated without a plan name are not checked.

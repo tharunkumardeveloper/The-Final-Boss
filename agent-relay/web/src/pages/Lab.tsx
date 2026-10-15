@@ -11,6 +11,7 @@ import { api } from '../lib/api'
 import { BOT } from '../lib/brand'
 import { useRelayStream } from '../lib/stream'
 import { useTenant } from '../lib/tenant'
+import { touchOf, useTouchTick } from '../lib/touch'
 import type { Customer, LabHome, LabManual, LabMessage, LabOlt, LabPreset, LabRun, LabStep, LabView, RelayEvent } from '../lib/types'
 
 const SPRING = { type: 'spring', stiffness: 380, damping: 32 } as const
@@ -48,6 +49,7 @@ function PresetIcon({ name, className = 'h-5 w-5' }: { name: string; className?:
 export function Canvas({ view, focus }: { view: NonNullable<LabView['network']>; focus: string | null }) {
   const box = useRef<HTMLDivElement>(null)
   const [width, setWidth] = useState(720)
+  useTouchTick()
   useEffect(() => {
     const el = box.current
     if (!el) return
@@ -188,6 +190,14 @@ export function Canvas({ view, focus }: { view: NonNullable<LabView['network']>;
           const p = pos.spl[s.id]
           return <path key={`s-${s.id}`} d={`M${p.x} ${p.y - 11} l11 11 l-11 11 l-11 -11z`} fill="rgb(var(--ink))" stroke={s.feeder === 'cut' ? C.bad : C.ok} strokeWidth="2">
             <title>{s.label}</title></path>
+        })}
+        {/* what live Cypher just read: the resolver measuring this line, node by node */}
+        {[...cores.map((l, i) => [pos.core[i], l.id] as const), [pos.pop, view.pop.id] as const,
+          ...view.olts.map((o) => [pos.olt[o.id], o.id] as const), ...view.splitters.map((x) => [pos.spl[x.id], x.id] as const),
+          ...view.homes.map((h) => [pos.home[h.id], h.id, h.customer, h.box, h.account] as const)].map(([p, ...keys]) => {
+          const t = p && touchOf(...keys)
+          return t && <circle key={`t-${keys[0]}`} cx={p.x} cy={p.y} r={14 + (1 - t.glow) * 14} fill="none" stroke={t.write ? 'rgb(134 239 172)' : 'rgb(125 211 252)'}
+            strokeOpacity={t.glow} strokeWidth={2.5} pointerEvents="none" />
         })}
       </svg>
     </div>

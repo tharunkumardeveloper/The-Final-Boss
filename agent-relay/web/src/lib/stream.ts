@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { keyFor } from './keys'
 import { MOCK, WS_URL, loadKeys } from './api'
 import { subscribeMock } from './mock'
+import { recordTouch } from './touch'
 import type { RelayEvent } from './types'
 
 export type StreamStatus = 'connecting' | 'live' | 'reconnecting'
@@ -17,7 +18,7 @@ export function useRelayStream(tenant: string, onEvent: (e: RelayEvent) => void,
   useEffect(() => {
     if (MOCK) {
       setStatus('live')
-      return subscribeMock((e) => handler.current(e))
+      return subscribeMock((e) => { recordTouch(e); handler.current(e) })
     }
     let ws: WebSocket | null = null
     let closed = false
@@ -32,7 +33,7 @@ export function useRelayStream(tenant: string, onEvent: (e: RelayEvent) => void,
         setStatus('live')
       }
       ws.onmessage = (m) => {
-        try { handler.current(JSON.parse(m.data) as RelayEvent) } catch { /* ignore malformed frames */ }
+        try { const e = JSON.parse(m.data) as RelayEvent; recordTouch(e); handler.current(e) } catch { /* ignore malformed frames */ }
       }
       ws.onclose = (ev) => {
         if (closed) return

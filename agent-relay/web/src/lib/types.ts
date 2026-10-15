@@ -146,7 +146,7 @@ export type RelayEvent =
   | Ev<'answer', { question: string; answer: string; cited_ids: string[]; conflict: boolean; unknown: boolean }>
   | Ev<'clock', { sim_time: string }>
   | Ev<'sim_status', { running: boolean; speed?: number; skipped?: number | boolean }>
-  | Ev<'cypher', { name: string; ms: number; rows: number; query?: string }>
+  | Ev<'cypher', { name: string; ms: number; rows: number; query?: string; write?: boolean; seek?: string[]; found?: string[] }>
   | Ev<'kavya_step', { customer: string; step: string }>
   | Ev<'lab_step', { run: string; step?: LabStep; message?: LabMessage }>
   | Ev<'lab_state', { why: string; fault?: string; blind?: boolean }>

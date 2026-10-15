@@ -33,8 +33,29 @@ def run(tenant, name, query, params=None, log=None, ro=False):
                     "params": {k: v for k, v in params.items() if not k.endswith("vec") and k != "mentions"},
                     "rows": len(rows), "ms": ms})
     if events.listening(tenant):  # live Cypher drawer
-        events.emit(tenant, "cypher", {"name": name, "ms": ms, "rows": len(rows), "query": query.strip()[:2000]})
+        events.emit(tenant, "cypher", {"name": name, "ms": ms, "rows": len(rows), "query": query.strip()[:2000],
+                                       "write": writes(query), "seek": touched(params.values()), "found": touched(rows[:200])})
     return rows
+
+
+_IDS = ("name_key", "fact_id", "id", "ticket_id", "name")
+
+
+def touched(values, out=None, depth=0):
+    """The graph keys a query started from (its params) or came back with (its rows): entity keys, fact ids,
+    network ids, plus the keys of any Node/Edge objects. The web app lights these up on the graph it draws."""
+    out = set() if out is None else out
+    for v in values:
+        if len(out) >= 60:
+            break
+        if isinstance(v, str):
+            if 0 < len(v) <= 64 and not v.isdigit():
+                out.add(v.lower())
+        elif isinstance(v, (list, tuple)) and depth < 3:
+            touched(v, out, depth + 1)
+        elif hasattr(v, "properties"):  # falkordb Node / Edge
+            touched([v.properties.get(k) for k in _IDS if isinstance(v.properties.get(k), str)], out, depth + 1)
+    return sorted(out)
 
 
 _WRITES = re.compile(r"\b(CREATE|MERGE|SET|DELETE|REMOVE|DETACH|DROP|LOAD\s+CSV)\b|db\.idx|GRAPH\.", re.I)

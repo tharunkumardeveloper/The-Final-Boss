@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import ForceGraph2D, { type ForceGraphMethods } from 'react-force-graph-2d'
 import { label as display, predicateLabel } from '../../lib/format'
 import type { GraphState } from '../../lib/graph'
+import { recentTouches, touchOf, useTouchTick } from '../../lib/touch'
 
 // Canvas colours (mirrors the CSS tokens; canvas can't read CSS variables cheaply per frame).
 export const KIND_COLOR: Record<string, string> = {
@@ -10,11 +11,47 @@ export const KIND_COLOR: Record<string, string> = {
 }
 const INK = '#0F1B2D', SIGNAL = '#14A39A', AMBER = '#C47F0E', OLD = '#9AA5B4', EDGE = '#C3CBD6'
 const FRESH_MS = 2600
+const READ = '47,143,201', WRITE = '62,142,94' // a query reading / writing this node or edge, right now
 
 type N = { id: string; kind: string; label: string; salience?: number; born?: number; appear?: number; x?: number; y?: number }
 const FADE_MS = 700
 type L = { id: string; source: string | N; target: string | N; label: string; active: boolean; conflict?: boolean; born?: number; faded?: number }
 const idOf = (v: string | N) => (typeof v === 'string' ? v : v.id)
+const nodeTouch = (n: N) => touchOf(n.id.replace(/^e:/, ''), n.label)
+const linkTouch = (l: L, s: N, t: N) => {
+  const own = touchOf(l.id.replace(/^f:/, ''))
+  if (own) return own
+  const a = nodeTouch(s), b = nodeTouch(t)  // both ends used by the query: it walked this edge
+  return a && b ? (a.glow < b.glow ? a : b) : null
+}
+
+/** The last few queries and how many of the nodes/edges drawn here each one touched. */
+function AccessTicker({ store }: { store: GraphState }) {
+  useTouchTick()
+  const labels = new Map([...store.nodes.values()].map((n) => [n.label?.toLowerCase(), n.id]))
+  const items = recentTouches().map((t) => {
+    const keys = new Set([...t.seek, ...t.found])
+    let nodes = 0, edges = 0
+    for (const k of keys) {
+      if (store.nodes.has(`e:${k}`) || labels.has(k)) nodes++
+      else if (store.edges.has(`f:${k}`)) edges++
+    }
+    return { ...t, nodes, edges }
+  }).filter((t) => t.nodes + t.edges > 0).slice(0, 4)
+  if (!items.length) return null
+  return (
+    <ul className="pointer-events-none absolute bottom-3 left-3 space-y-1" aria-live="polite" aria-label="Queries touching this graph">
+      {items.map((t) => (
+        <li key={t.id} className="flex items-center gap-2 rounded-full bg-surface/90 px-3 py-1 text-[11px] shadow-soft hairline">
+          <span className="h-2 w-2 rounded-full" style={{ background: `rgb(${t.write ? WRITE : READ})` }} />
+          <span className="font-medium">{t.write ? 'wrote' : 'read'}</span>
+          <span className="font-mono text-ink-2">{t.name}</span>
+          <span className="text-ink-3 num">{t.nodes} node{t.nodes === 1 ? '' : 's'}{t.edges ? ` · ${t.edges} edge${t.edges === 1 ? '' : 's'}` : ''}</span>
+        </li>
+      ))}
+    </ul>
+  )
+}
 
 interface Props {
   store: GraphState
@@ -23,9 +60,10 @@ interface Props {
   selected?: string | null
   focusId?: string | null
   onSelect: (id: string | null) => void
+  ticker?: boolean
 }
 
-export function MemoryGraph({ store, version, highlight, selected, focusId, onSelect }: Props) {
+export function MemoryGraph({ store, version, highlight, selected, focusId, onSelect, ticker = true }: Props) {
   const box = useRef<HTMLDivElement>(null)
   const fg = useRef<ForceGraphMethods<N, L>>()
   const [size, setSize] = useState({ w: 600, h: 400 })
@@ -102,6 +140,13 @@ export function MemoryGraph({ store, version, highlight, selected, focusId, onSe
             ctx.beginPath(); ctx.arc(x, y, r + 3 + t * 10, 0, 2 * Math.PI)
             ctx.strokeStyle = `rgba(20,163,154,${0.55 * (1 - t)})`; ctx.lineWidth = 2 / scale; ctx.stroke()
           }
+          const tc = reduced ? null : nodeTouch(n)
+          if (tc) {  // a live query just used this node: halo while it fades
+            ctx.globalAlpha = fade
+            ctx.beginPath(); ctx.arc(x, y, r + 4 + (1 - tc.glow) * 8, 0, 2 * Math.PI)
+            ctx.fillStyle = `rgba(${tc.write ? WRITE : READ},${0.28 * tc.glow})`; ctx.fill()
+            ctx.strokeStyle = `rgba(${tc.write ? WRITE : READ},${0.9 * tc.glow})`; ctx.lineWidth = 2 / scale; ctx.stroke()
+          }
           ctx.beginPath(); ctx.arc(x, y, r, 0, 2 * Math.PI)
           ctx.fillStyle = KIND_COLOR[n.kind] ?? '#7A8799'; ctx.fill()
           if (n.kind === 'customer') { ctx.beginPath(); ctx.arc(x, y, r * 0.38, 0, 2 * Math.PI); ctx.fillStyle = SIGNAL; ctx.fill() }
@@ -109,7 +154,7 @@ export function MemoryGraph({ store, version, highlight, selected, focusId, onSe
             ctx.beginPath(); ctx.arc(x, y, r + 2.5, 0, 2 * Math.PI)
             ctx.strokeStyle = n.id === selected ? INK : SIGNAL; ctx.lineWidth = 1.6 / scale; ctx.stroke()
           }
-          if (scale > 0.9 || n.kind === 'customer' || n.id === selected || n.id === focusId || (lit && highlight!.has(n.id))) {
+          if (scale > 0.9 || tc || n.kind === 'customer' || n.id === selected || n.id === focusId || (lit && highlight!.has(n.id))) {
             const fs = Math.max(10.5 / scale, 2.4)
             ctx.font = `${n.kind === 'customer' ? 600 : 500} ${fs}px "Instrument Sans", sans-serif`
             ctx.textAlign = 'center'; ctx.textBaseline = 'top'
@@ -135,6 +180,15 @@ export function MemoryGraph({ store, version, highlight, selected, focusId, onSe
           ctx.lineWidth = (on ? 2.4 : l.conflict ? 1.8 : 1.1) / scale
           ctx.setLineDash(l.active ? [] : [4 / scale, 3 / scale])
           ctx.beginPath(); ctx.moveTo(s.x!, s.y!); ctx.lineTo(t.x!, t.y!); ctx.stroke()
+          const lt = reduced ? null : linkTouch(l, s, t)
+          if (lt) {  // a query walked this edge: a bright stroke and a dot running along it
+            ctx.setLineDash([]); ctx.globalAlpha = fade
+            ctx.strokeStyle = `rgba(${lt.write ? WRITE : READ},${lt.glow})`; ctx.lineWidth = 2.6 / scale
+            ctx.beginPath(); ctx.moveTo(s.x!, s.y!); ctx.lineTo(t.x!, t.y!); ctx.stroke()
+            const p = 1 - lt.glow
+            ctx.beginPath(); ctx.arc(s.x! + (t.x! - s.x!) * p, s.y! + (t.y! - s.y!) * p, 2.6 / scale, 0, 2 * Math.PI)
+            ctx.fillStyle = `rgb(${lt.write ? WRITE : READ})`; ctx.fill()
+          }
           if (l.id === selected) { ctx.strokeStyle = INK; ctx.lineWidth = 2 / scale; ctx.stroke() }
           if (scale > 1.5 || on || l.id === selected) {
             const fs = Math.max(9 / scale, 2)
@@ -146,6 +200,7 @@ export function MemoryGraph({ store, version, highlight, selected, focusId, onSe
           ctx.restore()
         }}
       />
+      {ticker && <AccessTicker store={store} />}
     </div>
   )
 }

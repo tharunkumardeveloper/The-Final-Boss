@@ -5,6 +5,7 @@ import { api } from '../lib/api'
 import { titleCase } from '../lib/format'
 import { useRelayStream } from '../lib/stream'
 import { useTenant } from '../lib/tenant'
+import { touchOf, useTouchTick } from '../lib/touch'
 import type { FailResult, NetNode, Network } from '../lib/types'
 
 const W = 900, H = 820, PAD = 70
@@ -38,6 +39,7 @@ function layout(nodes: NetNode[]) {
 export default function NetworkPage() {
   const { tenant } = useTenant()
   const [net, setNet] = useState<Network>()
+  useTouchTick()
   const [sel, setSel] = useState<string>()
   const [result, setResult] = useState<FailResult & { action: 'fail' | 'restore' }>()
   const [busy, setBusy] = useState(false)
@@ -115,12 +117,14 @@ export default function NetworkPage() {
                   const core = dst?.kind === 'backbone'
                   const down = src?.status === 'down' || dst?.status === 'down'
                   const hot = onPath.has(e.source) && onPath.has(e.target)
+                  const ta = touchOf(e.source), tb = touchOf(e.target), walked = ta && tb ? Math.min(ta.glow, tb.glow) : 0
                   const d = core ? `M${a.x} ${a.y} Q${(a.x + b.x) / 2} ${Math.min(a.y, b.y) - 40} ${b.x} ${b.y}` : `M${a.x} ${a.y} L${b.x} ${b.y}`
                   const color = down ? 'rgb(var(--danger))' : hot ? 'rgb(var(--conflict))' : core ? 'rgb(var(--signal))' : 'rgb(255 255 255 / 0.18)'
                   return (
                     <g key={e.id}>
                       <path d={d} fill="none" stroke={color} strokeOpacity={core ? 0.25 : 1} strokeWidth={core ? 5 : 1} />
                       {core && <path d={d} fill="none" stroke={color} strokeWidth={1.6} className={down ? '' : 'lab-flow'} strokeDasharray={down ? '5 5' : undefined} />}
+                      {walked > 0 && <path d={d} fill="none" stroke="rgb(125 211 252)" strokeOpacity={walked} strokeWidth={3} />}
                     </g>
                   )
                 })}
@@ -135,6 +139,7 @@ export default function NetworkPage() {
                     <g key={n.id} role="button" tabIndex={0} aria-label={`${n.label}, ${n.status}`} className="cursor-pointer outline-none"
                       onClick={() => setSel(n.id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setSel(n.id) }}>
                       {down && <circle cx={p.x} cy={p.y} r={r + 6} fill="rgb(var(--danger) / 0.5)" className="lab-alarm" />}
+                      {(() => { const t = touchOf(n.id, n.label); return t && <circle cx={p.x} cy={p.y} r={r + 4 + (1 - t.glow) * 10} fill="rgb(125 211 252 / 0.25)" stroke="rgb(125 211 252)" strokeOpacity={t.glow} fillOpacity={t.glow} strokeWidth={2} /> })()}
                       {n.kind === 'backbone'
                         ? <rect x={p.x - r} y={p.y - r} width={2 * r} height={2 * r} rx={5} transform={`rotate(45 ${p.x} ${p.y})`} fill="rgb(var(--ink))" stroke={color} strokeWidth={2} filter="url(#net-glow)" />
                         : <circle cx={p.x} cy={p.y} r={r} fill={n.kind === 'pop' ? 'rgb(var(--ink))' : color} stroke={n.kind === 'pop' ? color : 'none'} strokeWidth={2} filter={n.kind === 'pop' ? 'url(#net-glow)' : undefined} />}
@@ -146,7 +151,7 @@ export default function NetworkPage() {
                   )
                 })}
               </svg>
-              <p className="px-2 pb-1 text-[11px] text-white/55">Diamonds: backbone cores. Circles: city hubs, at their real position, sized by customers and how critical they are (number: customers). Small dots: area exchanges. Red: down. Amber: an affected customer's path. Click any node, then simulate a failure.</p>
+              <p className="px-2 pb-1 text-[11px] text-white/55">Diamonds: backbone cores. Circles: city hubs, at their real position, sized by customers and how critical they are (number: customers). Small dots: area exchanges. Red: down. Amber: an affected customer's path. Light blue: a node or link a live Cypher query just read. Click any node, then simulate a failure.</p>
               {plan && <p className="px-2 pb-1 text-[11px] text-ink-3 num">Cable plan (<code className="font-mono">algo.MSF</code> over cable km): {plan.links} of {plan.all_links} links, {Math.round(plan.km).toLocaleString()} of {Math.round(plan.all_km).toLocaleString()} km, still connect every node; the rest is redundancy.</p>}
             </div>
             <aside className="space-y-4">

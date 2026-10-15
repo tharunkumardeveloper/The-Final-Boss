@@ -80,7 +80,7 @@ export default function MyGraph({ tenant, who, subscribe }: { tenant: string; wh
       </div>
       <div className="relative mx-4 mt-4 min-h-[300px] flex-1 overflow-hidden rounded-2xl bg-paper/70">
         {edges.length
-          ? <MemoryGraph store={mode === 'live' ? live.current : replay.current} version={version} selected={selected} focusId={who ? `e:${who}` : null} onSelect={setSelected} />
+          ? <MemoryGraph store={mode === 'live' ? live.current : replay.current} version={version} selected={selected} focusId={who ? `e:${who}` : null} onSelect={setSelected} ticker={false} />
           : <p className="px-8 pt-32 text-center text-sm text-ink-3">{who ? 'Nothing yet. Tell us about yourself and watch it fill in.' : 'Say hi in the chat. Everything you tell us lands here, as a graph that grows while you talk.'}</p>}
       </div>
       <div className="px-5 pb-4 pt-3">
