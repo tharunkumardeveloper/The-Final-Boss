@@ -312,5 +312,9 @@ def view(tenant, country=None, log=None):
         used = {x for e in edges for x in (e["source"], e["target"])}
         nodes = [n for n in nodes if n["id"] in keep and (n["kind"] != "backbone" or n["id"] in used)]
     region = kb.region_of(tenant)
+    where = {c["key"]: c for c in kb.cities(region)}  # the map: every node sits at its city's coordinates
+    for n in nodes:
+        c = where.get(n["city"])
+        n["lat"], n["lon"] = (c["lat"], c["lon"]) if c else (None, None)
     return {"nodes": nodes, "edges": edges, "region": region,
             "countries": [{"iso": i, "name": kb.country_name(i)} for i in kb.world()["regions"][region]["countries"]]}

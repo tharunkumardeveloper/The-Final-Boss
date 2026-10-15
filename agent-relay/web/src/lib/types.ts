@@ -122,7 +122,7 @@ export interface Benchmark {
 // ---- WebSocket events
 interface Ev<T extends string, D> { type: T; sim_time?: string | null; wall?: number; data: D }
 export type Speaker = 'customer' | 'intake' | 'resolver' | 'noc' | 'action' | `tool:${string}` | `mcp:${string}`
-export interface NetNode { id: string; kind: 'backbone' | 'pop' | 'olt'; label: string; city: string; area?: string | null; status: 'up' | 'down'; betweenness: number; customers: number; harmonic?: number }
+export interface NetNode { id: string; kind: 'backbone' | 'pop' | 'olt'; label: string; city: string; area?: string | null; status: 'up' | 'down'; betweenness: number; customers: number; harmonic?: number; lat?: number | null; lon?: number | null }
 export interface Network { nodes: NetNode[]; edges: { id: string; source: string; target: string; kind: string }[]; region?: string; countries?: { iso: string; name: string }[] }
 export interface FailResult { node: string; label?: string; affected: { customer: string; area?: string | null; path: string[] }[]; tickets?: string[]; notified: string[] }
 export type FactEventData = { fact_id: string; subject: string; predicate: string; object: string; agent: string; episode_id?: string }

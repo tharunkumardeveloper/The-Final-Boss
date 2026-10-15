@@ -7,27 +7,32 @@ import { useRelayStream } from '../lib/stream'
 import { useTenant } from '../lib/tenant'
 import type { FailResult, NetNode, Network } from '../lib/types'
 
-const ROW = { backbone: 60, pop: 190, olt: 330 } as const
-const OLT_GAP = 46
-const PAD = 60
+const W = 900, H = 820, PAD = 70
 
-/** Readable layout: cores on top, one POP per city, that city's OLTs underneath; each city's column is as wide
- *  as its OLTs need, so the SVG grows with the country instead of overlapping. */
+/** The map: each node at its city's latitude/longitude (equirectangular, longitude squeezed by the mean latitude);
+ *  area exchanges sit on a small ring around their city hub, backbones just off their city so both stay visible. */
 function layout(nodes: NetNode[]) {
+  const placed = nodes.filter((n) => n.lat != null && n.lon != null)
   const pos: Record<string, { x: number; y: number }> = {}
-  let x = PAD
-  for (const pop of nodes.filter((n) => n.kind === 'pop')) {
-    const olts = nodes.filter((n) => n.kind === 'olt' && n.city === pop.city)
-    const w = Math.max(150, olts.length * OLT_GAP)
-    const cx = x + w / 2
-    pos[pop.id] = { x: cx, y: ROW.pop }
-    olts.forEach((o, j) => { pos[o.id] = { x: cx + (j - (olts.length - 1) / 2) * OLT_GAP, y: ROW.olt } })
-    x += w + 24
+  if (!placed.length) return { pos, W, H }
+  const lats = placed.map((n) => n.lat!), lons = placed.map((n) => n.lon!)
+  const k = Math.cos(((Math.min(...lats) + Math.max(...lats)) / 2) * Math.PI / 180)
+  const spanX = (Math.max(...lons) - Math.min(...lons)) * k || 1, spanY = Math.max(...lats) - Math.min(...lats) || 1
+  const scale = Math.min((W - 2 * PAD) / spanX, (H - 2 * PAD) / spanY)
+  const ox = (W - spanX * scale) / 2, oy = (H - spanY * scale) / 2
+  const at = (n: NetNode) => ({ x: ox + (n.lon! - Math.min(...lons)) * k * scale, y: oy + (Math.max(...lats) - n.lat!) * scale })
+  for (const n of placed) {
+    if (n.kind === 'pop') pos[n.id] = at(n)
+    if (n.kind === 'backbone') { const p = at(n); pos[n.id] = { x: p.x - 34, y: p.y - 34 } }
   }
-  const W = Math.max(1080, x + PAD)
-  const cores = nodes.filter((n) => n.kind === 'backbone')
-  cores.forEach((b, i) => { pos[b.id] = { x: W * (i + 1) / (cores.length + 1), y: ROW.backbone } })
-  return { pos, W }
+  for (const pop of placed.filter((n) => n.kind === 'pop')) {
+    const olts = placed.filter((n) => n.kind === 'olt' && n.city === pop.city)
+    olts.forEach((o, j) => {
+      const t = (j / Math.max(1, olts.length)) * Math.PI * 2, r = 20 + (olts.length > 8 ? 8 : 0)
+      pos[o.id] = { x: pos[pop.id].x + Math.cos(t) * r, y: pos[pop.id].y + Math.sin(t) * r }
+    })
+  }
+  return { pos, W, H }
 }
 
 export default function NetworkPage() {
@@ -49,7 +54,7 @@ export default function NetworkPage() {
   useEffect(() => { load() }, [load])
   const status = useRelayStream(tenant, (e) => { if (e.type === 'outage_detected' || e.type === 'outage_resolved') load() }, load)
 
-  const { pos, W } = useMemo(() => layout(net?.nodes ?? []), [net])
+  const { pos } = useMemo(() => layout(net?.nodes ?? []), [net])
   const maxB = Math.max(1e-9, ...(net?.nodes ?? []).map((n) => n.betweenness))
   const node = net?.nodes.find((n) => n.id === sel)
   const [cap, setCap] = useState<{ node: string; gbps: number }>()
@@ -98,35 +103,50 @@ export default function NetworkPage() {
         {error && <p className="mt-6 text-sm text-danger" role="alert">{error}</p>}
         {net && (
           <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_320px]">
-            <div className="overflow-x-auto rounded-2xl bg-surface p-3 hairline">
-              <svg viewBox={`0 0 ${W} 450`} style={{ minWidth: Math.max(720, W * 0.75) }} className="w-full" role="img" aria-label="Network topology">
+            <div className="lab-grid overflow-hidden rounded-[1.75rem] bg-ink p-3 text-white shadow-lift">
+              <svg viewBox={`0 0 ${W} ${H}`} className="mx-auto block h-auto w-full max-w-[860px]" role="img" aria-label="Network map">
+                <defs>
+                  <filter id="net-glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="4" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
+                </defs>
                 {net.edges.map((e) => {
                   const a = pos[e.source], b = pos[e.target]
                   if (!a || !b) return null
+                  const src = net.nodes.find((n) => n.id === e.source), dst = net.nodes.find((n) => n.id === e.target)
+                  const core = dst?.kind === 'backbone'
+                  const down = src?.status === 'down' || dst?.status === 'down'
                   const hot = onPath.has(e.source) && onPath.has(e.target)
-                  return <line key={e.id} x1={a.x} y1={a.y} x2={b.x} y2={b.y} strokeWidth={hot ? 3 : 1.5}
-                    className={hot ? 'stroke-danger' : 'stroke-ink/20'} />
+                  const d = core ? `M${a.x} ${a.y} Q${(a.x + b.x) / 2} ${Math.min(a.y, b.y) - 40} ${b.x} ${b.y}` : `M${a.x} ${a.y} L${b.x} ${b.y}`
+                  const color = down ? 'rgb(var(--danger))' : hot ? 'rgb(var(--conflict))' : core ? 'rgb(var(--signal))' : 'rgb(255 255 255 / 0.18)'
+                  return (
+                    <g key={e.id}>
+                      <path d={d} fill="none" stroke={color} strokeOpacity={core ? 0.25 : 1} strokeWidth={core ? 5 : 1} />
+                      {core && <path d={d} fill="none" stroke={color} strokeWidth={1.6} className={down ? '' : 'lab-flow'} strokeDasharray={down ? '5 5' : undefined} />}
+                    </g>
+                  )
                 })}
                 {net.nodes.map((n) => {
                   const p = pos[n.id]
                   if (!p) return null
-                  const r = (n.kind === 'olt' ? 9 : 14) + 12 * Math.sqrt(n.betweenness / maxB)
-                  const down = n.status === 'down'
+                  const down = n.status === 'down', path = onPath.has(n.id), chosen = sel === n.id
+                  const people = n.kind === 'pop' ? net.nodes.filter((o) => o.kind === 'olt' && o.city === n.city).reduce((t, o) => t + o.customers, 0) : n.customers
+                  const color = down ? 'rgb(var(--danger))' : path ? 'rgb(var(--conflict))' : n.kind === 'olt' && n.customers > 0 ? 'rgb(var(--signal))' : n.kind === 'olt' ? 'rgb(255 255 255 / 0.35)' : 'rgb(var(--signal))'
+                  const r = n.kind === 'olt' ? 3.2 : n.kind === 'pop' ? 9 + 6 * Math.sqrt(n.betweenness / maxB) + Math.min(6, people * 1.5) : 13
                   return (
                     <g key={n.id} role="button" tabIndex={0} aria-label={`${n.label}, ${n.status}`} className="cursor-pointer outline-none"
                       onClick={() => setSel(n.id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setSel(n.id) }}>
-                      <circle cx={p.x} cy={p.y} r={r} strokeWidth={sel === n.id ? 3 : 1.5}
-                        className={`${down ? 'fill-danger-tint stroke-danger' : onPath.has(n.id) ? 'fill-conflict-tint stroke-conflict' : 'fill-paper stroke-ink/30'} ${sel === n.id ? '!stroke-signal-deep' : ''}`} />
-                      {n.customers > 0 && <text x={p.x} y={p.y + 4} textAnchor="middle" className="fill-ink text-[11px] font-semibold num">{n.customers}</text>}
-                      <text x={p.x} y={p.y + r + 14} textAnchor={n.kind === 'olt' ? 'start' : 'middle'} className="fill-ink-2 text-[11px]"
-                        transform={n.kind === 'olt' ? `rotate(40 ${p.x} ${p.y + r + 14})` : undefined}>
-                        {n.kind === 'olt' ? titleCase(n.area ?? n.label) : n.label}
-                      </text>
+                      {down && <circle cx={p.x} cy={p.y} r={r + 6} fill="rgb(var(--danger) / 0.5)" className="lab-alarm" />}
+                      {n.kind === 'backbone'
+                        ? <rect x={p.x - r} y={p.y - r} width={2 * r} height={2 * r} rx={5} transform={`rotate(45 ${p.x} ${p.y})`} fill="rgb(var(--ink))" stroke={color} strokeWidth={2} filter="url(#net-glow)" />
+                        : <circle cx={p.x} cy={p.y} r={r} fill={n.kind === 'pop' ? 'rgb(var(--ink))' : color} stroke={n.kind === 'pop' ? color : 'none'} strokeWidth={2} filter={n.kind === 'pop' ? 'url(#net-glow)' : undefined} />}
+                      {chosen && <circle cx={p.x} cy={p.y} r={r + 5} fill="none" stroke="white" strokeWidth={1.5} />}
+                      {n.kind === 'pop' && people > 0 && <text x={p.x} y={p.y + 3.5} textAnchor="middle" className="fill-white text-[10px] font-semibold num">{people}</text>}
+                      {n.kind !== 'olt' && <text x={p.x} y={p.y + r + 13} textAnchor="middle" className={`text-[11px] ${n.kind === 'backbone' ? 'fill-white font-semibold' : 'fill-white/75'}`}>{n.kind === 'backbone' ? n.label : n.label.replace(' POP', '')}</text>}
+                      <title>{`${n.label} · ${n.status}${people ? ` · ${people} customers` : ''}`}</title>
                     </g>
                   )
                 })}
               </svg>
-              <p className="px-2 pb-1 text-[11px] text-ink-3">Numbers inside nodes: customers connected. Red: down. Amber: on an affected customer's path.</p>
+              <p className="px-2 pb-1 text-[11px] text-white/55">Diamonds: backbone cores. Circles: city hubs, at their real position, sized by customers and how critical they are (number: customers). Small dots: area exchanges. Red: down. Amber: an affected customer's path. Click any node, then simulate a failure.</p>
               {plan && <p className="px-2 pb-1 text-[11px] text-ink-3 num">Cable plan (<code className="font-mono">algo.MSF</code> over cable km): {plan.links} of {plan.all_links} links, {Math.round(plan.km).toLocaleString()} of {Math.round(plan.all_km).toLocaleString()} km, still connect every node; the rest is redundancy.</p>}
             </div>
             <aside className="space-y-4">
