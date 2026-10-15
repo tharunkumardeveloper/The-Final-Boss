@@ -423,11 +423,37 @@ def _zone_countries():
     return out
 
 
+def _read_tz(name):
+    for path in (f"/usr/share/zoneinfo/{name}",):
+        try:
+            return open(path, encoding="utf-8").read()
+        except OSError:
+            pass
+    try:
+        import importlib.resources as res
+        return res.files("tzdata").joinpath(f"zoneinfo/{name}").read_text(encoding="utf-8")
+    except Exception:
+        return ""
+
+
+@lru_cache
+def _tz_aliases():
+    """Old timezone names browsers still report ("Asia/Calcutta") -> today's name ("Asia/Kolkata"), from tzdata.zi."""
+    out = {}
+    for line in _read_tz("tzdata.zi").splitlines():
+        parts = line.split()
+        if len(parts) == 3 and parts[0] == "L":
+            out[parts[2]] = parts[1]
+    return out
+
+
 def locate_visitor(tz=None, lang=None):
     """Where a visitor probably is, from the browser's timezone (then its language region). No IP lookup."""
     w = world()
-    iso = _zone_countries().get(tz or "")
-    if iso not in w["countries"] and lang and "-" in lang:
+    zones = _zone_countries()
+    tz = _tz_aliases().get(tz or "", tz or "")
+    iso = zones.get(tz)
+    if iso is None and lang and "-" in lang:  # the language only when the timezone says nothing ("en-US" is everywhere)
         iso = lang.split("-")[-1].upper()
     if iso not in w["countries"]:
         return None

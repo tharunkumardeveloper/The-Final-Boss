@@ -75,12 +75,12 @@ export default function Portal() {
   // First visit: start on the desk and country the visitor is browsing from (timezone, then language; no IP lookup).
   // A region or country picked by hand is remembered and wins from then on.
   useEffect(() => {
-    try { if (localStorage.getItem('wifight.place')) return } catch { return }
+    try { if (localStorage.getItem('wifight.place.v2')) return } catch { return }
     api.locate(Intl.DateTimeFormat().resolvedOptions().timeZone, navigator.language).then((r) => {
       if (!r.country || !r.tenant) return
       if (r.tenant !== tenant) setTenant(r.tenant)
       setCountry(r.country)
-      try { localStorage.setItem('wifight.place', 'auto') } catch { /* private mode */ }
+      try { localStorage.setItem('wifight.place.v2', 'auto') } catch { /* private mode */ }
     }).catch(() => {})
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { api.regions().then(setRegions).catch(() => {}) }, [])
@@ -145,7 +145,7 @@ export default function Portal() {
                 {regions.map((r) => <option key={r.code} value={r.tenant}>{r.name}</option>)}
               </select>
               {kb && kb.countries.length > 1 && (
-                <select aria-label="Country" className="bg-transparent outline-none" value={kb.country} onChange={(e) => { setCountry(e.target.value); try { localStorage.setItem('wifight.place', 'picked') } catch { /* private */ } }}>
+                <select aria-label="Country" className="bg-transparent outline-none" value={kb.country} onChange={(e) => { setCountry(e.target.value); try { localStorage.setItem('wifight.place.v2', 'picked') } catch { /* private */ } }}>
                   {kb.countries.map((c) => <option key={c.iso} value={c.iso}>{c.name}</option>)}
                 </select>
               )}
