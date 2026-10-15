@@ -39,7 +39,7 @@ export function useRelayStream(tenant: string, onEvent: (e: RelayEvent) => void,
         setStatus('reconnecting')
         attempt++
         const again = () => { timer = setTimeout(open, Math.min(10_000, 500 * 2 ** attempt)) }
-        if (ev.code === 4403) loadKeys().then(again)  // refused: maybe a tenant created since start; fetch its key
+        if (ev.code === 4403 || ev.code === 1006) loadKeys().then(again)  // refused: maybe a tenant created since start
         else again()
       }
     }

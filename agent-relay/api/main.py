@@ -911,10 +911,10 @@ def benchmark():
 
 @app.websocket("/ws/{tenant}")
 async def ws(websocket: WebSocket, tenant: str):
-    await websocket.accept()
-    if tenancy.check(tenant, websocket.query_params.get("key")):  # someone else's live stream: refused
-        await websocket.close(code=4403, reason=f"that key doesn't open tenant '{tenant}'")
+    if tenancy.check(tenant, websocket.query_params.get("key")):  # someone else's live stream: refused at the handshake
+        await websocket.close(code=4403)  # before accept this is an HTTP 403, which every proxy passes on
         return
+    await websocket.accept()
     loop = asyncio.get_running_loop()
     queue: asyncio.Queue = asyncio.Queue(maxsize=2000)
 

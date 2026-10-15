@@ -671,9 +671,12 @@ class Run:
         events.emit(self.tenant, "lab_step", {"run": self.id, "message": msg})
 
 
+SCRIPTED: set = set()  # tenants whose scripted demo story is loading right now (it uses the old fixed tools)
+
+
 def lab_on(tenant):
-    """Is the street-level network (cabinets and boxes) built in this graph? The scripted story runs without it."""
-    return bool(_q(tenant, "lab built", "MATCH (s:Splitter) RETURN 1 LIMIT 1", ro=True))
+    """Live chats always diagnose on the network graph (built on demand); only the scripted story doesn't."""
+    return tenant not in SCRIPTED
 
 
 def has_line(tenant, customer):

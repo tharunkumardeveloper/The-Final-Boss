@@ -241,6 +241,15 @@ def status(tenant):
 
 def load_story(tenant, log=None):
     """Deterministic demo storyline through the real agents (LLM replies, cached)."""
+    from . import lab
+    lab.SCRIPTED.add(tenant)
+    try:
+        return _story(tenant, log)
+    finally:
+        lab.SCRIPTED.discard(tenant)
+
+
+def _story(tenant, log=None):
     tools.WORLDS[tenant] = WORLD
     intake, resolver = agents.Intake(), agents.Resolver()
     say = lambda c, s, at, text: intake.handle(tenant, customer=c, session_id=s, text=text, at=at, reply_llm=True, log=log)

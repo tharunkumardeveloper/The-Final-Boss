@@ -27,7 +27,9 @@ function wsAttempt(tenant: string, key: string): Promise<string> {
     let got = false
     const stop = setTimeout(() => { if (!got) { got = true; ws.close(); done('stayed open') } }, 4000)
     ws.onmessage = () => { if (!got) { got = true; clearTimeout(stop); ws.close(); done('received events') } }
-    ws.onclose = (e) => { if (!got) { got = true; clearTimeout(stop); done(`closed ${e.code}`) } }
+    let opened = false
+    ws.onopen = () => { opened = true }
+    ws.onclose = (e) => { if (!got) { got = true; clearTimeout(stop); done(opened ? `closed ${e.code}` : 'refused at handshake') } }
   })
 }
 
@@ -63,8 +65,8 @@ export default function IsolationPage() {
         go: async () => { const r = await call(`/api/tenants/${B}/history?subject=${encodeURIComponent(name)}`, A); return { got: String(r.status), verdict: r.status === 403 ? 'blocked' : 'leaked' } } },
       { id: 'cypher', what: `Run Cypher on ${victim}'s graph with ${attacker}'s key`, how: `POST /api/tenants/${victim}/query  MATCH (c:Customer) RETURN c`, expect: '403',
         go: async () => { const r = await call(`/api/tenants/${B}/query`, A, { query: 'MATCH (c:Customer) RETURN c.name' }); return { got: String(r.status), verdict: r.status === 403 ? 'blocked' : 'leaked' } } },
-      { id: 'stream', what: `Listen to ${victim}'s live chats with ${attacker}'s key`, how: `WS /ws/${victim}?key=…`, expect: 'closed 4403',
-        go: async () => { const got = await wsAttempt(victim, A); return { got, verdict: got === 'closed 4403' ? 'blocked' : 'leaked' } } },
+      { id: 'stream', what: `Listen to ${victim}'s live chats with ${attacker}'s key`, how: `WS /ws/${victim}?key=…`, expect: 'refused',
+        go: async () => { const got = await wsAttempt(victim, A); return { got, verdict: got === 'closed 4403' || got === 'refused at handshake' ? 'blocked' : 'leaked' } } },
       { id: 'nokey', what: `Read ${victim}'s customers with no key at all`, how: `GET /api/tenants/${victim}/customers`, expect: '401',
         go: async () => { const r = await call(`/api/tenants/${B}/customers`); return { got: String(r.status), verdict: r.status === 401 ? 'blocked' : 'leaked' } } },
       { id: 'forged', what: `Forge a key (edit one character of ${attacker}'s)`, how: `GET /api/tenants/${victim}/customers`, expect: '403',
