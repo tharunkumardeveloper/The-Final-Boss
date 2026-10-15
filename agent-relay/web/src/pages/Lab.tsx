@@ -1,0 +1,681 @@
+import { AnimatePresence, motion } from 'framer-motion'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
+import { Wordmark } from '../components/Brand'
+import { MemoryPanel } from '../components/portal/MemoryPanel'
+import { SupportDesk } from '../components/portal/SupportChat'
+import type { Chip } from '../lib/chips'
+import { GuideCard, splitGuides } from '../components/Guides'
+import { Check, Database, Pulse, Sparkle, Warning } from '../components/Icons'
+import { api } from '../lib/api'
+import { useRelayStream } from '../lib/stream'
+import { useTenant } from '../lib/tenant'
+import type { Customer, LabHome, LabManual, LabMessage, LabOlt, LabPreset, LabRun, LabStep, LabView, RelayEvent } from '../lib/types'
+
+const SPRING = { type: 'spring', stiffness: 380, damping: 32 } as const
+const C = { ok: 'rgb(var(--signal))', bad: 'rgb(var(--danger))', warn: 'rgb(var(--conflict))', idle: 'rgb(255 255 255 / 0.22)', frozen: '#8fa2ff' }
+const HOME_COLOR: Record<LabHome['state'], string> = {
+  ok: C.ok, dark: C.bad, flapping: C.warn, frozen: C.frozen, paused: '#c49bff', offline: C.bad, slow: C.warn, wifi: C.warn,
+}
+const HOME_WORD: Record<LabHome['state'], string> = {
+  ok: 'online', dark: 'no light', flapping: 'weak light', frozen: 'box frozen', paused: 'account paused', offline: 'no route', slow: 'slow at night', wifi: 'Wi-Fi interference',
+}
+const ACTIONS: [string, string][] = [
+  ['remote_reboot', 'Restart the box remotely'], ['change_wifi_channel', 'Move Wi-Fi to a quieter channel'],
+  ['dispatch_technician_home', 'Send a technician to the home'], ['dispatch_cable_crew', 'Send the cable crew to the cabinet'],
+  ['reroute_standby', 'Switch the hub to its standby link'], ['dispatch_backbone_crew', 'Send the backbone team'],
+  ['upgrade_uplink', 'Add capacity to the area uplink'], ['send_payment_link', 'Send a payment link'],
+]
+const WHAT: Record<string, string> = { light: 'light at the box', box: 'the box', account: 'the account', route: 'route to the internet', evening: 'evening speed', wifi: 'Wi-Fi' }
+
+function PresetIcon({ name, className = 'h-5 w-5' }: { name: string; className?: string }) {
+  const p = {
+    box: <><rect x="4" y="7" width="16" height="10" rx="2" /><path d="M8 12h.01M12 12h.01M16 12h.01" /></>,
+    wifi: <><path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0" /><path d="M12 19.5h.01" /></>,
+    cable: <><path d="M4 18c4 0 4-12 8-12s4 12 8 12" /><circle cx="4" cy="18" r="1.5" /><circle cx="20" cy="18" r="1.5" /></>,
+    scissors: <><circle cx="6" cy="7" r="2.5" /><circle cx="6" cy="17" r="2.5" /><path d="M8 8.5 20 17M8 15.5 20 7" /></>,
+    route: <><circle cx="5" cy="18" r="2" /><circle cx="19" cy="6" r="2" /><path d="M7 18h6a3 3 0 0 0 0-6h-2a3 3 0 0 1 0-6h6" /></>,
+    gauge: <><path d="M4 16a8 8 0 1 1 16 0" /><path d="m12 16 4-5" /></>,
+    card: <><rect x="3" y="6" width="18" height="12" rx="2" /><path d="M3 10h18M7 15h3" /></>,
+  }[name]
+  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden>{p}</svg>
+}
+
+// ---------------------------------------------------------------- the network canvas
+
+/** The network as the container allows: left to right when there's room, top to bottom when narrow. Never cut. */
+export function Canvas({ view, focus }: { view: NonNullable<LabView['network']>; focus: string | null }) {
+  const box = useRef<HTMLDivElement>(null)
+  const [width, setWidth] = useState(720)
+  useEffect(() => {
+    const el = box.current
+    if (!el) return
+    const ro = new ResizeObserver(([e]) => setWidth(Math.max(300, Math.floor(e.contentRect.width))))
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+  const W = Math.min(width, 860)  // wider than this, the network turns into one long thin strip
+  const wide = W >= 620
+  const STEP = 30, HOME = 14
+  const blocks = view.splitters.map((s) => ({ s, homes: view.homes.filter((h) => h.splitter === s.id) }))
+  const cores = view.links
+
+  // ---- positions
+  type P = { x: number; y: number }
+  const pos: { core: P[]; pop: P; olt: Record<string, P>; spl: Record<string, P>; home: Record<string, P>; label: Record<string, P> } =
+    { core: [], pop: { x: 0, y: 0 }, olt: {}, spl: {}, home: {}, label: {} }
+  let H: number
+  if (wide) {
+    const X = { core: W * 0.08, pop: W * 0.27, olt: W * 0.46, spl: W * 0.62, home: W * 0.68 }
+    const cols = Math.max(3, Math.floor((W - X.home - 24) / STEP))
+    let y = 26
+    for (const b of blocks) {
+      const rows = Math.ceil(b.homes.length / cols)
+      const h = rows * STEP + 30
+      pos.label[b.s.id] = { x: X.home, y: y + 10 }
+      b.homes.forEach((hm, i) => { pos.home[hm.id] = { x: X.home + 10 + (i % cols) * STEP, y: y + 32 + Math.floor(i / cols) * STEP } })
+      pos.spl[b.s.id] = { x: X.spl, y: y + h / 2 + 6 }
+      y += h + 26
+    }
+    H = Math.max(240, y)
+    pos.pop = { x: X.pop, y: H / 2 }
+    cores.forEach((_, i) => { pos.core[i] = { x: X.core, y: H / 2 + (i - (cores.length - 1) / 2) * 110 } })
+    for (const o of view.olts) {
+      const ys = view.splitters.filter((s) => s.olt === o.id).map((s) => pos.spl[s.id].y)
+      pos.olt[o.id] = { x: X.olt, y: ys.length ? (Math.min(...ys) + Math.max(...ys)) / 2 : H / 2 }
+    }
+  } else {
+    const cols = Math.max(4, Math.floor((W - 30) / STEP))
+    cores.forEach((_, i) => { pos.core[i] = { x: W * (i + 1) / (cores.length + 1), y: 34 } })
+    pos.pop = { x: W / 2, y: 132 }
+    view.olts.forEach((o, i) => { pos.olt[o.id] = { x: W * (i + 1) / (view.olts.length + 1), y: 236 } })
+    let y = 318
+    for (const b of blocks) {
+      pos.spl[b.s.id] = { x: pos.olt[b.s.olt]?.x ?? W / 2, y }
+      pos.label[b.s.id] = { x: 16, y: y + 34 }
+      const rows = Math.ceil(b.homes.length / cols)
+      const left = (W - (Math.min(cols, b.homes.length) - 1) * STEP) / 2
+      b.homes.forEach((hm, i) => { pos.home[hm.id] = { x: left + (i % cols) * STEP, y: y + 58 + Math.floor(i / cols) * STEP } })
+      y += 58 + rows * STEP + 30
+    }
+    H = y
+  }
+  const curve = (a: P, b: P) => wide
+    ? `M${a.x} ${a.y} C${(a.x + b.x) / 2} ${a.y}, ${(a.x + b.x) / 2} ${b.y}, ${b.x} ${b.y}`
+    : `M${a.x} ${a.y} C${a.x} ${(a.y + b.y) / 2}, ${b.x} ${(a.y + b.y) / 2}, ${b.x} ${b.y}`
+  const mid = (a: P, b: P) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 })
+
+  const Cut = ({ p }: { p: P }) => (
+    <g><circle cx={p.x} cy={p.y} r="11" fill="rgb(var(--danger) / 0.18)" className="lab-alarm" /><circle cx={p.x} cy={p.y} r="9" fill="rgb(var(--ink))" stroke={C.bad} strokeWidth="1.5" />
+      <path d={`M${p.x - 3.5} ${p.y - 3.5}l7 7M${p.x + 3.5} ${p.y - 3.5}l-7 7`} stroke={C.bad} strokeWidth="2" strokeLinecap="round" /></g>
+  )
+  const Wire = ({ a, b, state, width: w = 2 }: { a: P; b: P; state: 'up' | 'cut' | 'standby' | 'hot'; width?: number }) => {
+    const d = curve(a, b)
+    const color = state === 'cut' ? C.bad : state === 'standby' ? C.idle : state === 'hot' ? C.warn : C.ok
+    return (
+      <g>
+        <path d={d} fill="none" stroke={color} strokeOpacity={state === 'standby' ? 1 : 0.25} strokeWidth={w + 3} strokeDasharray={state === 'standby' ? '2 6' : undefined} />
+        {state !== 'standby' && state !== 'cut' && <path d={d} fill="none" stroke={color} strokeWidth={w} className={state === 'hot' ? 'lab-flow-slow' : 'lab-flow'} />}
+        {state === 'cut' && <path d={d} fill="none" stroke={color} strokeWidth={w} strokeDasharray="5 5" />}
+      </g>
+    )
+  }
+
+  return (
+    <div ref={box} className="w-full">
+      <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} className="mx-auto block max-w-full" role="img" aria-label={`Network for ${view.pop.label}`}>
+        <defs>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3.5" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
+        </defs>
+        {cores.map((l, i) => (
+          <g key={l.id}><Wire a={pos.pop} b={pos.core[i]} state={l.link === 'cut' ? 'cut' : !l.active ? 'standby' : 'up'} width={3} />
+            {l.link === 'cut' && <Cut p={mid(pos.pop, pos.core[i])} />}</g>
+        ))}
+        {view.olts.map((o) => {
+          const hot = o.flow_gbps > 0 && o.free_peak_mbps < 300
+          return <Wire key={o.id} a={pos.olt[o.id]} b={pos.pop} state={o.flow_gbps <= 0 ? 'cut' : hot ? 'hot' : 'up'} width={hot ? 4 : 2.5} />
+        })}
+        {view.splitters.map((s) => pos.olt[s.olt] && (
+          <g key={s.id}><Wire a={pos.spl[s.id]} b={pos.olt[s.olt]} state={s.feeder === 'cut' ? 'cut' : 'up'} />
+            {s.feeder === 'cut' && <Cut p={mid(pos.spl[s.id], pos.olt[s.olt])} />}</g>
+        ))}
+        {blocks.map(({ s, homes }) => (
+          <g key={`h-${s.id}`}>
+            <text x={pos.label[s.id].x} y={pos.label[s.id].y} className="fill-white/50 text-[10px] uppercase tracking-[0.14em]">{s.label}</text>
+            {homes.map((h) => {
+              const p = pos.home[h.id], color = HOME_COLOR[h.state], me = !!h.customer && h.customer === focus, bad = h.state !== 'ok'
+              const sz = me ? 18 : HOME
+              return (
+                <g key={h.id}>
+                  <path d={curve(pos.spl[s.id], p)} fill="none" stroke={h.state === 'dark' || h.state === 'flapping' ? C.bad : 'rgb(255 255 255 / 0.08)'} strokeWidth="1" />
+                  {bad && <circle cx={p.x} cy={p.y} r="8" fill={color} opacity="0.5" className="lab-alarm" />}
+                  <rect x={p.x - sz / 2} y={p.y - sz / 2} width={sz} height={sz} rx="4" fill={color} fillOpacity={bad ? 0.95 : 0.85}
+                    stroke={me ? 'white' : 'none'} strokeWidth="2" filter={bad ? 'url(#glow)' : undefined}>
+                    <title>{`${h.name} · port ${h.port} · ${HOME_WORD[h.state]}${h.rx != null ? ` · ${h.rx} dBm` : ''}`}</title>
+                  </rect>
+                  {h.customer && <text x={p.x} y={p.y + (me ? 22 : 19)} textAnchor="middle" className={`text-[9.5px] font-semibold ${me ? 'fill-white' : 'fill-white/70'}`}>{h.name.split(' ')[0]}</text>}
+                </g>
+              )
+            })}
+          </g>
+        ))}
+        {cores.map((l, i) => (
+          <g key={`c-${l.id}`}>
+            <circle cx={pos.core[i].x} cy={pos.core[i].y} r="20" fill="rgb(var(--ink))" stroke={l.status === 'up' ? C.ok : C.bad} strokeWidth="2" filter="url(#glow)" />
+            <text x={pos.core[i].x} y={pos.core[i].y + 4} textAnchor="middle" className="fill-white text-[9.5px] font-semibold">CORE</text>
+            <text x={pos.core[i].x} y={pos.core[i].y + 34} textAnchor="middle" className="fill-white/70 text-[10.5px]">
+              {l.label.replace('Core ', '')} · {l.link === 'cut' ? 'cut' : l.active ? l.role : 'standby'}</text>
+          </g>
+        ))}
+        <g>
+          <circle cx={pos.pop.x} cy={pos.pop.y} r="25" fill="rgb(var(--ink))" stroke={C.ok} strokeWidth="2.5" filter="url(#glow)" />
+          <text x={pos.pop.x} y={pos.pop.y + 4} textAnchor="middle" className="fill-white text-[11px] font-semibold">HUB</text>
+          <text x={pos.pop.x} y={pos.pop.y + 40} textAnchor="middle" className="fill-white/80 text-[11px]">{view.pop.label.replace(' POP', '')} hub</text>
+        </g>
+        {view.olts.map((o) => {
+          const p = pos.olt[o.id]
+          return (
+            <g key={`o-${o.id}`}>
+              <rect x={p.x - 28} y={p.y - 15} width="56" height="30" rx="9" fill="rgb(var(--ink))" stroke={o.status !== 'up' ? C.bad : o.free_peak_mbps < 300 && o.flow_gbps > 0 ? C.warn : C.ok} strokeWidth="2" />
+              <text x={p.x} y={p.y + 4} textAnchor="middle" className="fill-white text-[9.5px] font-semibold">EXCH</text>
+              <text x={p.x} y={p.y + 29} textAnchor="middle" className="fill-white/70 text-[10.5px]">{o.label.replace(' OLT', '')}</text>
+              <text x={p.x} y={p.y + 42} textAnchor="middle" className="fill-white/40 text-[9.5px] num">{o.uplink_gbps} Gbps uplink</text>
+            </g>
+          )
+        })}
+        {view.splitters.map((s) => {
+          const p = pos.spl[s.id]
+          return <path key={`s-${s.id}`} d={`M${p.x} ${p.y - 11} l11 11 l-11 11 l-11 -11z`} fill="rgb(var(--ink))" stroke={s.feeder === 'cut' ? C.bad : C.ok} strokeWidth="2">
+            <title>{s.label}</title></path>
+        })}
+      </svg>
+    </div>
+  )
+}
+
+function EveningChart({ o }: { o: LabOlt }) {
+  const hot = o.free_peak_mbps < 300
+  return (
+    <div className="rounded-xl bg-white/[0.04] p-3">
+      <div className="flex items-baseline justify-between gap-2 text-[11px]">
+        <span className="font-medium text-white/80">{o.label.replace(' OLT', '')} exchange · load through the day</span>
+        <span className={`num ${o.flow_gbps <= 0 ? 'text-danger' : hot ? 'text-conflict' : 'text-signal'}`}>
+          {o.flow_gbps <= 0 ? 'no route' : `${o.free_peak_mbps.toLocaleString()} Mbps free at 9 pm`}
+        </span>
+      </div>
+      <div className="relative mt-2 flex h-14 items-end gap-[3px]">
+        <div className="pointer-events-none absolute inset-x-0 top-0 border-t border-dashed border-white/25" />
+        <span className="pointer-events-none absolute right-0 -top-3.5 text-[9px] text-white/35">full</span>
+        {o.curve.map((u, h) => (
+          <motion.div key={h} title={`${h}:00 · ${Math.round(u * 100)}% used`} initial={false} animate={{ height: `${Math.max(4, u * 100)}%` }} transition={SPRING}
+            className="flex-1 rounded-t-sm" style={{ background: u >= 0.95 ? C.bad : u >= 0.8 ? C.warn : C.ok, opacity: h === 21 ? 1 : 0.65 }} />
+        ))}
+      </div>
+      <div className="mt-1 flex justify-between text-[9px] text-white/35 num"><span>00</span><span>06</span><span>12</span><span>18</span><span>21</span><span>23</span></div>
+    </div>
+  )
+}
+
+// ---------------------------------------------------------------- the resolver trace
+
+const KIND: Record<LabStep['kind'], { label: string; icon: JSX.Element }> = {
+  memory: { label: 'Shared memory', icon: <Database className="h-3.5 w-3.5" /> },
+  check: { label: 'Measure', icon: <Pulse className="h-3.5 w-3.5" /> },
+  think: { label: 'Reason', icon: <Sparkle className="h-3.5 w-3.5" /> },
+  act: { label: 'Act', icon: <PresetIcon name="route" className="h-3.5 w-3.5" /> },
+  wait: { label: 'Field job', icon: <Pulse className="h-3.5 w-3.5" /> },
+  verify: { label: 'Verify', icon: <Check className="h-3.5 w-3.5" /> },
+}
+const TONE: Record<LabStep['status'], string> = {
+  ok: 'bg-current-tint text-current', bad: 'bg-danger-tint text-danger', info: 'bg-signal-tint text-signal-deep', pending: 'bg-conflict-tint text-conflict',
+}
+
+function Step({ s, live }: { s: LabStep; live: boolean }) {
+  const [open, setOpen] = useState(false)
+  const pending = s.status === 'pending' && live
+  const more = s.cypher.length > 0 || s.data.facts || s.data.hypotheses || s.data.curve
+  return (
+    <motion.li layout initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={SPRING} className="relative pl-9">
+      <span className={`absolute left-0 top-0.5 flex h-6 w-6 items-center justify-center rounded-full ${TONE[s.status]} ${pending ? 'animate-breathe' : ''}`}>{KIND[s.kind].icon}</span>
+      <button type="button" disabled={!more} onClick={() => setOpen((o) => !o)} className="block w-full text-left disabled:cursor-default">
+        <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-ink-3">{KIND[s.kind].label}{s.kind === 'think' && s.data.by ? ` · ${s.data.by === 'rules' ? 'rule engine' : s.data.by.split('/').pop()}` : ''}</p>
+        <p className="text-sm font-medium leading-snug text-ink">{s.title}</p>
+        {s.detail && <p className="mt-0.5 text-xs leading-relaxed text-ink-2">{s.detail}</p>}
+        {s.kind === 'think' && s.data.by && s.data.by !== 'rules' && (
+          <p className={`mt-1 text-[11px] ${s.data.agrees ? 'text-current' : 'text-conflict'}`}>{s.data.agrees ? 'Rule engine agrees' : `Rule engine would say: ${String(s.data.rules?.cause).replace(/_/g, ' ')}`}</p>
+        )}
+        {more && <p className="mt-1 text-[11px] font-medium text-signal-deep">{open ? 'Hide details' : s.cypher.length ? `Show the ${s.cypher.length > 1 ? 'queries' : 'query'}` : 'Show details'}</p>}
+      </button>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
+            <div className="mt-2 space-y-2">
+              {s.data.facts && <ul className="space-y-1">{(s.data.facts as { id: string; text: string; by: string }[]).map((f) => (
+                <li key={f.id} className="flex items-baseline justify-between gap-2 rounded-lg bg-sunk/70 px-2.5 py-1.5 text-xs"><span className="text-ink">{f.text}</span><span className="shrink-0 text-[10px] text-ink-3">by {f.by}</span></li>))}</ul>}
+              {s.data.hypotheses && <ul className="space-y-1">{(s.data.hypotheses as { label: string; likely: boolean; evidence: string }[]).map((h) => (
+                <li key={h.label} className={`flex items-baseline justify-between gap-2 rounded-lg px-2.5 py-1.5 text-xs ${h.likely ? 'bg-danger-tint text-ink' : 'bg-sunk/60 text-ink-3'}`}>
+                  <span className={h.likely ? 'font-medium' : 'line-through decoration-ink-3/40'}>{h.label}</span><span className="text-[10.5px]">{h.evidence}</span></li>))}</ul>}
+              {s.cypher.map((q, i) => (
+                <div key={i} className="rounded-lg bg-ink p-2.5"><p className="flex justify-between text-[10px] text-white/50"><span>{q.name}</span><span className="num">{q.ms} ms · {q.rows} rows</span></p>
+                  <pre className="scroll-thin mt-1 max-h-40 overflow-auto whitespace-pre-wrap font-mono text-[10.5px] leading-relaxed text-white/85">{q.query}</pre></div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.li>
+  )
+}
+
+export function Trace({ run }: { run?: LabRun }) {
+  const box = useRef<HTMLDivElement>(null)
+  useEffect(() => { const el = box.current; if (el) el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' }) }, [run?.steps.length])
+  if (!run) return <p className="rounded-2xl bg-sunk/60 p-4 text-sm text-ink-2">Break something on the left. The customer will complain the way a real person would, intake hands the ticket over, and the resolver's work shows up here, step by step.</p>
+  const live = run.status === 'running'
+  return (
+    <div>
+      <div className="flex flex-wrap items-center gap-2">
+        <h3 className="font-display text-lg font-semibold">{run.name}</h3>
+        {run.ticket && <span className="chip bg-sunk font-mono text-ink-2">{run.ticket}</span>}
+        <span className={`chip ${live ? 'bg-conflict-tint text-conflict' : run.status === 'resolved' ? 'bg-current-tint text-current' : 'bg-danger-tint text-danger'}`}>
+          {live && <i className="h-1.5 w-1.5 rounded-full bg-conflict animate-breathe" />}{live ? 'working' : run.status}</span>
+      </div>
+      {run.said && <p className="mt-1 text-xs text-ink-3">Said: <span className="italic text-ink-2">“{run.said}”</span>{run.symptoms.length > 0 && <> · heard: {run.symptoms.join(', ')}</>}</p>}
+      <div ref={box} className="scroll-thin mt-4 max-h-[540px] overflow-y-auto pr-1">
+        <ol className="relative space-y-4 before:absolute before:left-3 before:top-2 before:h-[calc(100%-1rem)] before:w-px before:bg-line/10">
+          {run.steps.map((s) => <Step key={s.i} s={s} live={live && s.i === run.steps.length - 1} />)}
+          {live && <li className="pl-9 text-xs text-ink-3 animate-breathe">Working…</li>}
+        </ol>
+        {run.verdict && (
+          <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} transition={SPRING}
+            className={`mt-5 rounded-2xl p-4 ${run.verdict.correct && run.verdict.fixed ? 'bg-current-tint' : 'bg-danger-tint'}`}>
+            <p className="eyebrow">Graded against the hidden truth</p>
+            <div className="mt-2 grid grid-cols-2 gap-3 text-sm">
+              <div><p className="text-[11px] text-ink-3">What was really broken</p><p className="font-medium">{run.verdict.truth_label}</p></div>
+              <div><p className="text-[11px] text-ink-3">What the resolver concluded</p><p className="font-medium capitalize">{(run.verdict.said ?? '—').replace(/_/g, ' ')}</p></div>
+            </div>
+            <p className="mt-3 flex flex-wrap gap-2 text-xs">
+              <span className={`chip ${run.verdict.correct ? 'bg-current text-white' : 'bg-danger text-white'}`}>{run.verdict.correct ? 'Right diagnosis' : 'Wrong diagnosis'}</span>
+              <span className={`chip ${run.verdict.fixed ? 'bg-current text-white' : 'bg-danger text-white'}`}>{run.verdict.fixed ? 'Fixed, proven by re-measuring' : 'Not fixed'}</span>
+              <span className="chip bg-surface text-ink-2">{run.actions.length} action{run.actions.length === 1 ? '' : 's'}</span>
+            </p>
+          </motion.div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+export function Phone({ run }: { run?: LabRun }) {
+  const msgs: (LabMessage & { me?: boolean })[] = run ? [...(run.said ? [{ text: run.said, at: run.started_at - 1, me: true }] : []), ...run.messages] : []
+  const box = useRef<HTMLDivElement>(null)
+  useEffect(() => { const el = box.current; if (el) el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' }) }, [msgs.length])
+  return (
+    <div className="mx-auto w-full max-w-[340px] rounded-[2.2rem] bg-ink p-2.5 shadow-lift">
+      <div className="rounded-[1.8rem] bg-paper">
+        <div className="flex items-center gap-2 border-b border-line/[0.06] px-4 py-3">
+          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-ink text-[10px] font-semibold text-paper">RS</span>
+          <div><p className="text-xs font-semibold">Support · resolver</p><p className="text-[10px] text-ink-3">{run ? `chatting with ${run.name.split(' ')[0]}` : 'what the customer sees'}</p></div>
+        </div>
+        <div ref={box} className="scroll-thin h-[300px] space-y-2 overflow-y-auto px-3 py-3">
+          {!msgs.length && <p className="pt-24 text-center text-xs text-ink-3">Messages to the customer appear here, in plain words.</p>}
+          {msgs.map((m, i) => (
+            <motion.div key={`${m.at}-${i}`} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={SPRING} className={`flex ${m.me ? 'justify-end' : 'justify-start'}`}>
+              <div className={`max-w-[85%] rounded-2xl px-3 py-2 text-[12.5px] leading-snug ${m.me ? 'rounded-br-md bg-ink text-paper' : 'rounded-bl-md bg-signal-tint text-ink'}`}>
+                {splitGuides(m.text).text}
+                {splitGuides(m.text).guides.map((g) => <div key={g} className="mt-2"><GuideCard id={g} compact /></div>)}
+                {m.image?.src && <figure className="mt-2 overflow-hidden rounded-xl bg-surface"><img src={m.image.src} alt={m.image.title} className="h-28 w-full object-cover" loading="lazy" />
+                  <figcaption className="px-2 py-1 text-[10px] text-ink-3">Picture: {m.image.title} (Wikipedia)</figcaption></figure>}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ---------------------------------------------------------------- the page
+
+/** Lab state plus live runs, kept current from the event stream. One socket; other parts of the page can subscribe. */
+export function useLab(tenant: string, focus?: string | null) {
+  const [view, setView] = useState<LabView>()
+  const [runs, setRuns] = useState<Record<string, LabRun>>({})
+  const [picked, setPicked] = useState<string>()
+  const [error, setError] = useState<string>()
+  const timer = useRef<ReturnType<typeof setTimeout>>()
+  const listeners = useRef(new Set<(e: RelayEvent) => void>())
+  const subscribe = useCallback((fn: (e: RelayEvent) => void) => { listeners.current.add(fn); return () => { listeners.current.delete(fn) } }, [])
+
+  const load = useCallback(async () => {
+    try {
+      const v = await api.lab(tenant, focus ?? undefined)
+      setView(v); setError(undefined)
+      setRuns((rs) => {
+        const next = { ...rs }
+        for (const r of v.runs) if (!next[r.id] || next[r.id].steps.length <= r.steps.length) next[r.id] = r
+        return next
+      })
+    } catch { setError("Couldn't load the lab. Is the API running?") }
+  }, [tenant, focus])
+  useEffect(() => { load() }, [load])
+  const soon = useCallback(() => { clearTimeout(timer.current); timer.current = setTimeout(load, 350) }, [load])
+  useEffect(() => () => clearTimeout(timer.current), [])
+
+  const status = useRelayStream(tenant, (e) => {
+    listeners.current.forEach((fn) => fn(e))
+    if (e.type === 'lab_step') {
+      const { run, step, message } = e.data
+      setRuns((rs) => {
+        const r = rs[run]
+        if (!r) { soon(); return rs }
+        if (step && r.steps.some((x) => x.i === step.i)) return rs
+        return { ...rs, [run]: { ...r, steps: step ? [...r.steps, step] : r.steps, messages: message ? [...r.messages, message] : r.messages } }
+      })
+      if (step && (step.kind === 'act' || step.kind === 'verify' || step.kind === 'wait')) soon()
+    } else if (e.type === 'lab_run') {
+      if (e.data.status === 'running') setPicked(e.data.run)
+      soon()
+    } else if (e.type === 'lab_state') soon()
+    else if (e.type === 'fact_created' && ['lives_in', 'address'].includes(e.data.predicate)) soon()  // a new line in the network
+  }, load)
+
+  const ordered = useMemo(() => Object.values(runs).sort((a, b) => b.started_at - a.started_at), [runs])
+  const run = picked && runs[picked] ? runs[picked] : ordered[0]
+  return { view, runs, setRuns, ordered, run, picked, setPicked, load, status, error, setError, subscribe }
+}
+
+export default function LabPage() {
+  const { tenant } = useTenant()
+  const [focus, setFocus] = useState<string>()
+  const { view, setRuns, ordered, run, setPicked, load, status, error, setError, subscribe } = useLab(tenant, focus)
+  const [busy, setBusy] = useState<string>()
+  const [waiting, setWaiting] = useState<string>()
+  const [manual, setManual] = useState<{ action: string; result?: LabManual; busy?: boolean }>({ action: ACTIONS[0][0] })
+  useEffect(() => { if (!focus && view?.focus) setFocus(view.focus) }, [focus, view?.focus])
+  useEffect(() => subscribe((e) => { if (e.type === 'lab_run' && e.data.status === 'running') setWaiting(undefined) }), [subscribe])
+  // talk mode: you chat as a customer here, and watch your line, what's extracted and the resolver at the same time
+  const [params, setParams] = useSearchParams()
+  const talk = params.get('talk') === '1'
+  const setTalk = (on: boolean) => setParams(on ? { talk: '1' } : {}, { replace: false })
+  const [chips, setChips] = useState<Chip[]>([])
+  const [people, setPeople] = useState<Customer[]>([])
+  const [breakKey, setBreakKey] = useState('random')
+  const onWho = useCallback((w: string | null) => { if (w) setFocus(w) }, [])
+  const refreshPeople = useCallback(() => { api.customers(tenant).then(setPeople).catch(() => {}) }, [tenant])
+  useEffect(() => { if (talk) refreshPeople() }, [talk, refreshPeople])
+  useEffect(() => subscribe((e) => { if (e.type === 'fact_created' && e.data.predicate === 'lives_in') refreshPeople() }), [subscribe, refreshPeople])
+
+  const custs = view?.customers ?? []
+  const me = custs.find((c) => c.key === focus)
+  const s = view?.score
+
+  const inject = async (p: LabPreset | 'random') => {
+    const key = p === 'random' ? 'random' : p.key
+    setBusy(key); setError(undefined)
+    try {
+      const r = await api.labInject(tenant, { preset: key, customer: p === 'random' ? undefined : focus, blind: p === 'random' })
+      setWaiting(r.customer); setFocus(r.customer)
+      await load()
+    } catch (e) { setError(e instanceof Error ? e.message.replace(/^.*"detail":"?|"?}$/g, '') : 'That did not go through.') } finally { setBusy(undefined) }
+  }
+  const heal = async () => {
+    setBusy('heal')
+    try { await api.labReset(tenant); setRuns({}); setPicked(undefined); setManual({ action: manual.action }); await load() }
+    catch { setError("Couldn't reset the lab. Is the API running?") } finally { setBusy(undefined) }
+  }
+  const investigate = async () => { if (!focus) return; setBusy('investigate'); try { await api.labInvestigate(tenant, focus) } catch { setError('The resolver is already on this customer.') } finally { setBusy(undefined) } }
+  const tryFix = async () => {
+    if (!focus) return
+    setManual((m) => ({ ...m, busy: true, result: undefined }))
+    try { const r = await api.labAction(tenant, manual.action, focus); setManual((m) => ({ ...m, busy: false, result: r })); load() } catch { setManual((m) => ({ ...m, busy: false })) }
+  }
+
+  const tiles: [string, string | number, string?][] = [
+    ['Faults injected', s?.injected ?? '–'], ['Right diagnosis', s ? `${s.correct}/${s.investigated}` : '–', 'text-current'],
+    ['Fixed & proven', s ? `${s.fixed}/${s.investigated}` : '–', 'text-current'], ['First-try fixes', s?.first_try ?? '–'],
+    ['Avg time to fix', s?.avg_seconds != null ? `${s.avg_seconds}s` : '–'],
+  ]
+
+  if (talk) {
+    const mine = view?.focus === focus ? view : undefined
+    const talkRun = ordered.find((r) => r.customer === focus)
+    const fits = view?.presets.filter((p) => !!focus && p.customers.includes(focus)) ?? []
+    return (
+      <div className="flex min-h-[100dvh] flex-col xl:h-[100dvh]">
+        <header className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
+          <div className="flex items-center gap-4">
+            <Link to="/console"><Wordmark sub="Network console · talking" /></Link>
+            <span className={`chip ${status === 'live' ? 'bg-current-tint text-current' : 'bg-conflict-tint text-conflict'}`}>
+              <i className={`h-1.5 w-1.5 rounded-full ${status === 'live' ? 'bg-current animate-breathe' : 'bg-conflict'}`} />{status === 'live' ? 'Live' : 'Reconnecting'} · mem:{tenant}</span>
+            {s && s.investigated > 0 && <span className="chip bg-surface !py-1 text-ink-2 hairline num">right {s.correct}/{s.investigated} · fixed & proven {s.fixed}/{s.investigated}</span>}
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            {focus && mine && (
+              <div className="flex items-center gap-1 rounded-full bg-surface p-1 hairline">
+                <label htmlFor="talk-break" className="sr-only">Fault</label>
+                <select id="talk-break" className="rounded-full bg-transparent px-2 py-1 text-xs text-ink-2 outline-none" value={breakKey} onChange={(e) => setBreakKey(e.target.value)}>
+                  <option value="random">Hidden random fault</option>
+                  {fits.map((p) => <option key={p.key} value={p.key}>{p.title}</option>)}
+                </select>
+                <button className="btn !bg-danger !px-3 !py-1 text-xs text-white hover:!bg-danger/90" disabled={!!busy}
+                  onClick={async () => {
+                    setBusy('talk-break'); setError(undefined)
+                    try {
+                      if (breakKey === 'random') await api.labTrouble(tenant, focus)
+                      else await api.labInject(tenant, { preset: breakKey, customer: focus, complain: false })
+                      await load()
+                    } catch (e) { setError(e instanceof Error ? e.message.replace(/^.*"detail":"?|"?}$/g, '') : 'That did not go through.') } finally { setBusy(undefined) }
+                  }}>{busy === 'talk-break' ? 'Breaking…' : `Break ${me?.name.split(' ')[0] ?? ''}'s line`}</button>
+              </div>
+            )}
+            <button className="btn-ghost !py-1.5 text-xs hairline" disabled={!!busy} onClick={heal}>Heal all</button>
+            <button className="btn-primary !py-1.5 text-xs" onClick={() => setTalk(false)}>Close chat</button>
+          </div>
+        </header>
+        {error && <p className="mx-4 mb-2 rounded-xl bg-danger-tint px-4 py-2 text-sm text-danger sm:mx-6" role="alert">{error}</p>}
+        <main className="grid flex-1 grid-cols-1 gap-4 px-4 pb-4 sm:px-6 xl:min-h-0 xl:grid-cols-[380px_minmax(0,1fr)_minmax(0,1.1fr)]">
+          <section aria-label="Chat" className="h-[720px] min-h-0 xl:h-auto">
+            <SupportDesk tenant={tenant} customers={people} subscribe={subscribe} onWho={onWho} onChips={setChips} side="none" />
+          </section>
+          <section aria-label="What was learned and what the resolver is doing" className="scroll-thin flex min-h-0 flex-col gap-4 xl:overflow-y-auto xl:pr-1">
+            <div className="h-[460px] shrink-0">
+              <MemoryPanel who={focus ?? null} customer={people.find((c) => c.key === focus)} chips={chips} tenant={tenant} />
+            </div>
+            <div className="rounded-[1.75rem] bg-surface p-5 hairline">
+              <p className="eyebrow mb-3">Resolver at work{talkRun ? '' : ' · waiting for a problem'}</p>
+              <Trace run={talkRun} />
+            </div>
+          </section>
+          <section aria-label="Network" className="scroll-thin min-h-0 xl:overflow-y-auto">
+            <div className="lab-grid overflow-hidden rounded-[1.5rem] bg-ink p-3 text-white shadow-lift">
+              <div className="flex flex-wrap items-center justify-between gap-2 px-1">
+                <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-white/45">{mine?.network ? `Live network · ${mine.network.pop.label}` : 'Live network'}</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {view?.faults.filter((f) => f.active && f.customer === focus).map((f) => (
+                    <span key={f.id} className={`chip ${f.mitigated ? 'bg-conflict/20 text-conflict' : 'bg-danger/20 text-[#ff9b8f]'}`}><Warning className="h-3 w-3" />{f.title ?? 'Hidden fault'}</span>
+                  ))}
+                </div>
+              </div>
+              <div className="mt-2">
+                {mine?.network ? <Canvas view={mine.network} focus={focus ?? null} />
+                  : <p className="py-14 text-center text-sm text-white/45">Say hi in the chat and tell it where you live. Your line shows up here.</p>}
+              </div>
+              <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 px-1 text-[10.5px] text-white/55">
+                {(['ok', 'dark', 'flapping', 'frozen', 'paused', 'slow'] as LabHome['state'][]).map((k) => (
+                  <span key={k} className="inline-flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-[3px]" style={{ background: HOME_COLOR[k] }} />{HOME_WORD[k]}</span>
+                ))}
+              </div>
+              {mine?.network?.olts.map((o) => <div key={o.id} className="mt-3"><EveningChart o={o} /></div>)}
+            </div>
+          </section>
+        </main>
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-[100dvh]">
+      <header className="mx-auto flex max-w-[1400px] items-center justify-between px-4 py-5 sm:px-6">
+        <Link to="/console"><Wordmark sub="Network console" /></Link>
+        <div className="flex items-center gap-2">
+          <span className={`chip ${status === 'live' ? 'bg-current-tint text-current' : 'bg-conflict-tint text-conflict'}`}>
+            <i className={`h-1.5 w-1.5 rounded-full ${status === 'live' ? 'bg-current animate-breathe' : 'bg-conflict'}`} />{status === 'live' ? 'Live' : 'Reconnecting'} · mem:{tenant}</span>
+          <button className="btn-primary !py-1.5 text-sm" onClick={() => setTalk(true)}>Talk as a customer</button>
+          <Link to="/console/graph" className="btn-ghost hidden text-sm sm:inline-flex">Memory graph</Link>
+          <Link to="/console/network" className="btn-ghost hidden text-sm sm:inline-flex">Network ops</Link>
+          <Link to="/console" className="btn-ghost text-sm">Console</Link>
+        </div>
+      </header>
+
+      <main className="mx-auto max-w-[1400px] px-4 pb-20 sm:px-6">
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <div className="max-w-2xl">
+            <p className="eyebrow">Resolver agent · diagnose, act, verify</p>
+            <h1 className="mt-1 font-display text-4xl font-semibold tracking-[-0.02em] sm:text-5xl">Break the network. Watch it get fixed.</h1>
+            <p className="mt-3 text-sm leading-relaxed text-ink-2">
+              The last mile lives in FalkorDB: core, city hub, area exchange, street cabinet, every home's box. Inject a fault and the
+              truth goes into a separate graph the resolver can't read. It reads what intake learned, measures the network with Cypher and
+              <code className="mx-1 font-mono text-xs">algo.maxFlow</code>, picks an action, and only calls it fixed when the readings prove it.
+            </p>
+          </div>
+          <dl className="grid w-full grid-cols-2 gap-2 sm:w-auto sm:grid-cols-5">
+            {tiles.map(([k, v, cls]) => (
+              <div key={k} className="rounded-2xl bg-surface px-4 py-3 hairline">
+                <dd className={`font-display text-2xl font-semibold num ${cls ?? ''}`}>{v}</dd><dt className="text-[11px] text-ink-3">{k}</dt>
+              </div>
+            ))}
+          </dl>
+        </div>
+        {error && <p className="mt-4 rounded-xl bg-danger-tint px-4 py-2 text-sm text-danger" role="alert">{error}</p>}
+
+        <div className="mt-8 grid gap-6 xl:grid-cols-[320px_minmax(0,1fr)_380px]">
+          {/* faults */}
+          <section aria-label="Faults" className="space-y-4">
+            <div className="rounded-2xl bg-surface p-4 hairline">
+              <p className="eyebrow">Customer</p>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {custs.map((c) => (
+                  <button key={c.key} onClick={() => { setFocus(c.key); setManual((m) => ({ action: m.action })) }}
+                    className={`rounded-full px-3 py-1.5 text-xs font-medium transition duration-300 ease-spring ${c.key === focus ? 'bg-ink text-paper' : 'bg-sunk/70 text-ink-2 hover:bg-sunk'}`}>
+                    {c.name.split(' ')[0]} <span className="opacity-60">· {c.city}</span>
+                  </button>
+                ))}
+              </div>
+              {me && <p className="mt-2 text-[11px] text-ink-3">{me.area} · {me.pop_label} · {me.uplinks > 1 ? 'hub has a backup link' : 'hub has no backup link'}</p>}
+              <div className="mt-3 flex gap-2">
+                <button className="btn-primary flex-1 !py-2 text-xs" disabled={!!busy} onClick={() => inject('random')}>
+                  <Sparkle className="h-4 w-4" />{busy === 'random' ? 'Breaking…' : 'Blind test'}
+                </button>
+                <button className="btn-ghost !py-2 text-xs hairline" disabled={!!busy} onClick={heal}>{busy === 'heal' ? 'Healing…' : 'Heal all'}</button>
+              </div>
+              <p className="mt-2 text-[11px] text-ink-3">Blind test breaks something random. Even the console hides what it was until the resolver is graded.</p>
+            </div>
+            <ul className="space-y-2">
+              {view?.presets.map((p) => {
+                const fits = !!focus && p.customers.includes(focus)
+                return (
+                  <li key={p.key} className={`group rounded-2xl bg-surface p-4 hairline transition duration-300 ease-spring ${fits ? 'hover:shadow-soft' : 'opacity-60'}`}>
+                    <div className="flex items-start gap-3">
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-sunk text-ink"><PresetIcon name={p.icon} /></span>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between gap-2">
+                          <h3 className="text-sm font-semibold">{p.title}</h3>
+                          <span className="chip bg-sunk text-[10px] text-ink-3">{p.layer}</span>
+                        </div>
+                        <p className="mt-1 text-xs leading-relaxed text-ink-2">{p.blurb}</p>
+                        <p className="mt-1.5 text-xs italic text-ink-3">“{p.says}”</p>
+                        <div className="mt-2.5 flex items-center justify-between gap-2">
+                          <span className="text-[10.5px] text-ink-3">Right fix: {p.action.toLowerCase()}</span>
+                          <button className="btn !bg-danger !px-3 !py-1 text-xs text-white hover:!bg-danger/90" disabled={!fits || !!busy} onClick={() => inject(p)}
+                            title={fits ? `Break it for ${me?.name}` : 'Pick a customer whose hub fits this fault'}>
+                            {busy === p.key ? 'Breaking…' : 'Break it'}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                )
+              })}
+            </ul>
+          </section>
+
+          {/* network */}
+          <section aria-label="Network" className="min-w-0 space-y-4">
+            <div className="lab-grid overflow-hidden rounded-[1.75rem] bg-ink p-4 text-white shadow-lift">
+              <div className="flex flex-wrap items-center justify-between gap-2 px-1">
+                <div>
+                  <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-white/45">Live network · {view?.network?.pop.label ?? '…'}</p>
+                  <p className="text-sm text-white/80">Core → city hub → area exchange → street cabinet → homes</p>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {view?.faults.filter((f) => f.active).map((f) => (
+                    <span key={f.id} className={`chip ${f.mitigated ? 'bg-conflict/20 text-conflict' : 'bg-danger/20 text-[#ff9b8f]'}`}>
+                      <Warning className="h-3 w-3" />{f.title ?? 'Hidden fault'}{f.mitigated ? ' · on backup' : ''}</span>
+                  ))}
+                  {waiting && <span className="chip bg-white/10 text-white/80 animate-breathe">{waiting.split(' ')[0]} is telling intake…</span>}
+                </div>
+              </div>
+              <div className="scroll-thin mt-3 overflow-x-auto">
+                {view?.network ? <Canvas view={view.network} focus={focus ?? null} /> : <p className="py-24 text-center text-sm text-white/50">{view && !custs.length ? 'No customer has a line yet. Chat as a customer with a city first.' : 'Loading the network…'}</p>}
+              </div>
+              <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 px-1 text-[10.5px] text-white/55">
+                {(['ok', 'dark', 'flapping', 'frozen', 'paused', 'slow'] as LabHome['state'][]).map((k) => (
+                  <span key={k} className="inline-flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-[3px]" style={{ background: HOME_COLOR[k] }} />{HOME_WORD[k]}</span>
+                ))}
+                <span className="inline-flex items-center gap-1.5"><i className="h-0.5 w-4 border-t-2 border-dotted border-white/40" />standby link</span>
+              </div>
+              {view?.network?.olts.map((o) => <div key={o.id} className="mt-3"><EveningChart o={o} /></div>)}
+            </div>
+
+            <div className="rounded-2xl bg-surface p-4 hairline">
+              <div className="flex flex-wrap items-end justify-between gap-3">
+                <div>
+                  <p className="eyebrow">Try a fix yourself</p>
+                  <p className="mt-1 text-xs text-ink-2">Same network, same check. A wrong fix stays broken, and the readings show it.</p>
+                </div>
+                <button className="btn-ghost !py-1.5 text-xs hairline" disabled={!focus || busy === 'investigate'} onClick={investigate}>Ask the resolver to check {me?.name.split(' ')[0] ?? ''}</button>
+              </div>
+              <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+                <label htmlFor="lab-action" className="sr-only">Action</label>
+                <select id="lab-action" className="field !py-2 text-sm" value={manual.action} onChange={(e) => setManual({ action: e.target.value })}>
+                  {ACTIONS.map(([k, l]) => <option key={k} value={k}>{l}</option>)}
+                </select>
+                <button className="btn-primary shrink-0 !py-2 text-sm" disabled={!focus || manual.busy} onClick={tryFix}>{manual.busy ? 'Working…' : `Apply to ${me?.name.split(' ')[0] ?? '…'}`}</button>
+              </div>
+              <AnimatePresence>
+                {manual.result && (
+                  <motion.p initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                    className={`mt-3 rounded-xl px-3 py-2 text-sm ${manual.result.fixed ? 'bg-current-tint text-current' : manual.result.before.length ? 'bg-danger-tint text-danger' : 'bg-sunk text-ink-2'}`}>
+                    {manual.result.fixed ? `${manual.result.label}: fixed. Every reading is healthy now.`
+                      : manual.result.before.length ? `${manual.result.label}: didn't fix it. Still failing: ${manual.result.after.map((x) => WHAT[x] ?? x).join(', ')}.`
+                        : `${manual.result.label}: nothing was broken for this customer.`}
+                  </motion.p>
+                )}
+              </AnimatePresence>
+            </div>
+          </section>
+
+          {/* resolver */}
+          <section aria-label="Resolver" className="space-y-4">
+            <div className="rounded-2xl bg-surface p-5 hairline">
+              <div className="mb-3 flex items-center justify-between gap-2">
+                <p className="eyebrow">Resolver at work</p>
+                {ordered.length > 1 && (
+                  <select aria-label="Pick a run" className="rounded-full bg-sunk px-2 py-1 text-[11px] text-ink-2 outline-none" value={run?.id ?? ''} onChange={(e) => setPicked(e.target.value)}>
+                    {ordered.map((r) => <option key={r.id} value={r.id}>{r.name.split(' ')[0]} · {r.status}</option>)}
+                  </select>
+                )}
+              </div>
+              <Trace run={run} />
+            </div>
+            <div>
+              <p className="eyebrow mb-2 text-center">What {run ? run.name.split(' ')[0] : 'the customer'} sees</p>
+              <Phone run={run} />
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  )
+}
