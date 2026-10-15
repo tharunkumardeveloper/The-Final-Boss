@@ -29,6 +29,17 @@ def test_api():
     a = c.post(f"/api/tenants/{T}/ask", json={"question": "Where does Alice Rao live and which plan is she on?"}).json()
     assert "pune" in a["values"] and a["conflict"] and a["path"]["nodes"], a
     assert any(n["id"].startswith("ep:") for n in a["path"]["nodes"]) and any(n["id"] == "a:intake" for n in a["path"]["nodes"])
+    assert a["outcome"] in ("memory", "path") and a["paths"] and a["learned"][0]["by"], a
+
+    # the tool catalogue over HTTP: typed args, names checked first, every call recorded
+    cl = c.post(f"/api/tenants/{T}/tools/claims", json={"name": "alice rao", "predicate": "on_plan"}).json()
+    assert cl["extra"]["disputed"] and cl["result"][0]["preferred"] and cl["paths"], cl
+    assert c.post(f"/api/tenants/{T}/tools/recall_customer", json={"name": "zed quinlan"}).json()["outcome"] == "unknown_entity"
+    assert c.post(f"/api/tenants/{T}/tools/affected_by", json={"node": "x", "depth": 7}).status_code == 422
+    assert c.post(f"/api/tenants/{T}/tools/run_cypher", json={}).status_code == 404
+    tl = c.get(f"/api/tenants/{T}/tools").json()
+    assert {t["name"] for t in tl["tools"]} >= {"facts_at", "claims", "affected_by"} and tl["calls"][0]["tool"] == "recall_customer"
+    assert set(c.get(f"/api/tenants/{T}/demos").json()) == {"clock", "conflict", "exchange"}
 
     # live graph + readable cards
     g = c.get(f"/api/tenants/{T}/graph").json()

@@ -4,6 +4,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { Wordmark } from '../components/Brand'
 import { ConsoleNav } from '../components/console/ConsoleNav'
 import { NetworkMap } from '../components/console/NetworkMap'
+import { ShowMe } from '../components/console/ShowMe'
 import { MemoryPanel } from '../components/portal/MemoryPanel'
 import { SupportDesk } from '../components/portal/SupportChat'
 import type { Chip } from '../lib/chips'
@@ -608,6 +609,7 @@ export default function LabPage() {
       {map ? (
         <main className="mx-auto max-w-[1400px] px-4 pb-20 sm:px-6" role="tabpanel">
           {error && <p className="mb-4 rounded-xl bg-danger-tint px-4 py-2 text-sm text-danger" role="alert">{error}</p>}
+          <div className="mb-4 max-w-3xl"><ShowMe tenant={tenant} kind="network" /></div>
           <NetworkMap tenant={tenant} subscribe={subscribe} onHub={openHub} hubCustomers={(city) => inCity(city).length} />
         </main>
       ) : (

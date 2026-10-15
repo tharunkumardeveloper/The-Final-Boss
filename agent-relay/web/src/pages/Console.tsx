@@ -129,7 +129,7 @@ export default function Console() {
         </aside>
       </div>
 
-      <CypherDrawer open={cypherOpen} onClose={() => setCypherOpen(false)} entries={c.cypher} tenant={tenant} />
+      <CypherDrawer open={cypherOpen} onClose={() => setCypherOpen(false)} entries={c.cypher} tenant={tenant} calls={c.calls} />
     </div>
   )
 }

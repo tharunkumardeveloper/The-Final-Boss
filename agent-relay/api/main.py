@@ -8,11 +8,11 @@ import threading
 import time
 from datetime import datetime
 
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi import Body, FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, field_validator
 
-from relay import agents, cards, config, db, events, experts, images, kb, lab, network, orders, tenancy, queries as Q, registry as R, retrieve, sharing, sim, usage
+from relay import agents, cards, config, db, events, experts, images, kb, lab, network, orders, tenancy, queries as Q, registry as R, retrieve, sharing, sim, tools_catalog, usage
 from relay.memory import norm, to_ms
 
 app = FastAPI(title="Relay API", description=f"Shared graph memory for {config.BRAND['company']}'s AI support desk")
@@ -348,8 +348,18 @@ def chat(tenant: str, body: ChatIn):
     return {"reply": out["reply"], "speaker": speaker, "session_id": sid, "learned": fact_changes(out["facts"]) + retired,
             "episode_id": out["episode_id"], "reply_episode_id": out.get("reply_episode_id"), "orders": out.get("orders", []),
             "ticket_opened": out["ticket_opened"].upper() if out["ticket_opened"] else None, "cypher": log,
+            "how": _how(tenant, body.customer, out["reply"], at),
             "images": shown}
 
+
+
+def _how(tenant, customer, reply, at):
+    """"How I know": the customer's own earlier facts the reply rests on (empty when it rests on none)."""
+    try:
+        return retrieve.grounding(tenant, customer, reply, at)
+    except Exception as e:  # a missing footnote must never cost the customer their reply
+        print(f"grounding: {e}")
+        return []
 
 
 @app.get("/api/tenants/{tenant}/orders")
@@ -833,9 +843,39 @@ def ask(tenant: str, body: AskIn):
     a = retrieve.ask(tenant, body.question, agent=body.agent, log=log)
     # The graph knows about a dispute even when the answer model forgets to say so.
     disputed = any(f.get("conflict") and f["fact_id"] in a["cited_ids"] for f in a["recall"]["facts"])
+    tools_catalog.record(tenant, {"tool": "ask", "args": {"question": body.question}, "ms": round(sum(q["ms"] for q in log), 1),
+                                  "rows": len(a["cited_ids"]), "outcome": a["outcome"], "queries": [q["name"] for q in log],
+                                  "at": int(time.time() * 1000)})
     return {"answer": a["answer"], "values": a["values"], "conflict": a["conflict"] or disputed, "unknown": a["unknown"],
             "cited_ids": a["cited_ids"], "path": cards.path_graph(tenant, a["cited_ids"], log),
+            "outcome": a["outcome"], "paths": a["paths"], "learned": a["learned"], "note": a["note"],
             "lines": a["recall"]["lines"], "cypher": log}
+
+
+@app.get("/api/tenants/{tenant}/tools")
+def tools_list(tenant: str):
+    """The fixed tool catalogue (name, typed args, what it does) and this tenant's recent calls."""
+    T(tenant)
+    return {"tools": tools_catalog.catalogue(), "calls": tools_catalog.recent(tenant)}
+
+
+@app.post("/api/tenants/{tenant}/tools/{name}")
+def tools_call(tenant: str, name: str, args: dict = Body(default={})):
+    T(tenant)
+    if name not in tools_catalog.TOOLS:
+        raise HTTPException(404, f"unknown tool {name!r}; the catalogue is {sorted(tools_catalog.TOOLS)}")
+    log = []
+    try:
+        out = tools_catalog.call(tenant, name, args, log)
+    except tools_catalog.BadArg as e:
+        raise HTTPException(422, str(e))
+    return out | {"cypher": log}
+
+
+@app.get("/api/tenants/{tenant}/demos")
+def demos(tenant: str):
+    """Real entities from this tenant for the one-click contrasts (read-only; empty where the graph has none)."""
+    return tools_catalog.demo_picks(T(tenant))
 
 
 @app.get("/api/tenants/{tenant}/clock")

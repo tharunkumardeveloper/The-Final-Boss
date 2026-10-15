@@ -6,7 +6,7 @@ from datetime import date as _date
 from mcp.server.mcpserver import MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
 
-from relay import agents, config, db, memory, queries as Q, registry, retrieve
+from relay import agents, config, db, memory, queries as Q, registry, retrieve, tools_catalog
 
 server = MCPServer(
     "relay-memory",
@@ -83,10 +83,12 @@ def recall(tenant: str, question: str) -> dict:
 @server.tool()
 def ask(tenant: str, question: str) -> dict:
     """Answer a question from shared memory only. Returns the answer, bare values, the fact ids it cites,
-    whether two agents' claims conflict, and unknown=true when memory does not contain the answer."""
+    whether two agents' claims conflict, unknown=true when memory does not contain the answer, and the answer
+    contract: outcome (path | memory | not_in_graph | unknown_entity), paths (the hops behind the answer) and
+    learned (when each cited fact went on file and which agent wrote it)."""
     log = []
     a = retrieve.ask(_tenant(tenant), question, log=log)
-    return {k: a[k] for k in ("answer", "values", "cited_ids", "conflict", "unknown")} | {
+    return {k: a[k] for k in ("answer", "values", "cited_ids", "conflict", "unknown", "outcome", "paths", "learned", "note")} | {
         "cypher_ms": round(sum(q["ms"] for q in log), 1)}
 
 
@@ -118,6 +120,63 @@ def handoff(tenant: str, ticket: str, from_agent: str, to_agent: str, note: str 
                     speaker="agent", text=f"{from_agent} handed {ticket} to {to_agent}: {note}",
                     facts=[(ticket, "assigned_to", to_agent)])
     return {"ticket": ticket, "trail": [list(r) for r in agents.handoff_trail(tenant, ticket)]}
+
+
+# ---------------------------------------------------------------- the fixed tool catalogue (relay/tools_catalog.py)
+# Typed, hand-written queries. Names are resolved against the graph first: an unknown one returns
+# outcome=unknown_entity and the tool's query never runs.
+
+def _call(tenant, tool, **args):
+    try:
+        out = tools_catalog.call(_tenant(tenant), tool, args)
+    except tools_catalog.BadArg as e:
+        raise ToolError(str(e))
+    return {k: out[k] for k in ("outcome", "rows", "ms", "result", "paths", "extra", "note")}
+
+
+@server.tool()
+def recall_customer(tenant: str, name: str) -> dict:
+    """Everything memory holds about one customer: their facts, their tickets' facts, outages in their city."""
+    return _call(tenant, "recall_customer", name=name)
+
+
+@server.tool()
+def facts_at(tenant: str, name: str, at: str) -> dict:
+    """Two clocks: what was true of a customer at `at` (ISO date or "now"), with who wrote each fact, and what the
+    system had on file then."""
+    return _call(tenant, "facts_at", name=name, at=at)
+
+
+@server.tool()
+def claims(tenant: str, name: str, predicate: str) -> dict:
+    """Every active claim for a customer + predicate (e.g. on_plan), ranked by writer trust then recency, with the
+    Conflict node when agents disagree."""
+    return _call(tenant, "claims", name=name, predicate=predicate)
+
+
+@server.tool()
+def who_handled(tenant: str, ticket: str) -> dict:
+    """A ticket's owner, customer and the trail of agents that picked it up or handed it off."""
+    return _call(tenant, "who_handled", ticket=ticket)
+
+
+@server.tool()
+def affected_by(tenant: str, node: str, depth: int = 2) -> dict:
+    """Blast radius of a network node (node_id, e.g. pop-mumbai): everything below it within depth 1..4 hops,
+    each row with its path."""
+    return _call(tenant, "affected_by", node=node, depth=depth)
+
+
+@server.tool()
+def capacity(tenant: str, node: str) -> dict:
+    """Gbps that can still reach the backbone from a network node through working equipment (algo.maxFlow)."""
+    return _call(tenant, "capacity", node=node)
+
+
+@server.tool()
+def past_fixes(tenant: str, symptoms: str) -> dict:
+    """What fixed this issue before (an issue name from memory): fixes with counts, and procedures as step paths."""
+    return _call(tenant, "past_fixes", symptoms=symptoms)
 
 
 if __name__ == "__main__":

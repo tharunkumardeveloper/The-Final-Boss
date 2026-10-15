@@ -24,7 +24,8 @@ async def main():
                                    env=dict(os.environ))
     async with Client(params, read_timeout_seconds=300) as c:
         names = {t.name for t in (await c.list_tools()).tools}
-        assert {"remember", "remember_fact", "recall", "ask", "explain", "tickets", "handoff"} <= names, names
+        assert {"remember", "remember_fact", "recall", "ask", "explain", "tickets", "handoff", "recall_customer", "facts_at",
+                "claims", "who_handled", "affected_by", "capacity", "past_fixes"} <= names, names
 
         await c.call_tool("remember_fact", {"tenant": T, "agent": "intake", "subject": "bob mehta",
                                             "predicate": "lives_in", "object": "chennai", "date": "2026-09-01"})
@@ -42,6 +43,14 @@ async def main():
 
         ex = data(await c.call_tool("explain", {"tenant": T, "fact_ids": a["cited_ids"]}))
         assert "intake" in ex["nodes"] and any(e[2] == "SUPERSEDES" for e in ex["edges"]), ex
+        assert a["outcome"] == "memory" and a["paths"][0][0]["rel"] == "LIVES_IN", a
+
+        # the catalogue: typed tools, names checked against the graph first
+        at = data(await c.call_tool("facts_at", {"tenant": T, "name": "bob mehta", "at": "2026-09-10"}))
+        assert [x["object"] for x in at["result"] if x["predicate"] == "lives_in"] == ["chennai"], at
+        nobody = data(await c.call_tool("recall_customer", {"tenant": T, "name": "zed quinlan"}))
+        assert nobody["outcome"] == "unknown_entity" and not nobody["result"], nobody
+        assert (await c.call_tool("affected_by", {"tenant": T, "node": "pop-x", "depth": 9})).is_error
         print("tools:", sorted(names))
         print("ask ->", a)
 

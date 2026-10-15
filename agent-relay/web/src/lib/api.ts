@@ -1,6 +1,6 @@
 import { keyHeaders, setKeys } from './keys'
 import { mockRequest } from './mock'
-import type { CaseStory, Compare, Crossing, LabManual, LabView, QueryResult, Schema, AskResponse, Benchmark, Card, ChatResponse, Clock, Community, Conversation, Customer, DbHealth, Expert, FailResult, FixResponse, Graph, HistoryRow, Isolation, Kb, Network, PickupResponse, Region, Sharing, SimStatus, SlowQuery, Snapshot, Stats, Ticket, UsagePayload } from './types'
+import type { CaseStory, Compare, Crossing, LabManual, LabView, QueryResult, Schema, AskResponse, Benchmark, Card, ChatResponse, Clock, Community, Conversation, Customer, DbHealth, DemoPicks, ToolResult, Expert, FailResult, FixResponse, Graph, HistoryRow, Isolation, Kb, Network, PickupResponse, Region, Sharing, SimStatus, SlowQuery, Snapshot, Stats, Ticket, UsagePayload } from './types'
 
 export const MOCK = import.meta.env.VITE_MOCK === '1'
 export const API_URL = String(import.meta.env.VITE_API_URL || 'http://localhost:8000').replace(/\/$/, '')
@@ -68,6 +68,8 @@ export const api = {
   pickup: (tenant: string, ticket: string) => post<PickupResponse>(`${t(tenant)}/tickets/${encodeURIComponent(ticket)}/pickup`),
   fix: (tenant: string, ticket: string, fix: string, worked: boolean) =>
     post<FixResponse>(`${t(tenant)}/tickets/${encodeURIComponent(ticket)}/fix`, { fix, worked }),
+  tool: (tenant: string, name: string, args: Record<string, string | number>) => post<ToolResult>(`${t(tenant)}/tools/${encodeURIComponent(name)}`, args),
+  demos: (tenant: string) => req<DemoPicks>(`${t(tenant)}/demos`),
   ask: (tenant: string, question: string) => post<AskResponse>(`${t(tenant)}/ask`, { question, agent: 'resolver' }),
   clock: (tenant: string, subject: string, at: string) => req<Clock>(`${t(tenant)}/clock${q({ subject, at })}`),
   history: (tenant: string, subject: string) => req<HistoryRow[]>(`${t(tenant)}/history${q({ subject })}`),

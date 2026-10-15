@@ -127,6 +127,26 @@ Contradiction handling needs two statements about the same thing to use the same
 
 **Coordination**: tickets, `HANDED_OFF`/`PICKED_UP` edges and facts are the shared state. Every time an agent uses a fact it records `CONSULTED`, so the Sharing page can show writes vs uses, reuse from other agents and live knowledge flows.
 
+## How Relay follows the Graph Hacks principles
+
+| Principle | Where Relay does it (file · screen) |
+|---|---|
+| **(a) Four answer shapes, as a contract** | `retrieve.contract()` in [`relay/retrieve.py`](relay/retrieve.py) gives every answer exactly one `outcome`: **`path`** (a cited fact was reached through other facts, e.g. customer → `LIVES_IN` → city ← `AFFECTS` ← outage), **`memory`** (a one-hop fact about the asked entity, written by an agent in an earlier session; `learned` says when it went on file and who wrote it), **`not_in_graph`** (the names resolve but no fact of the asked kind connects them: "not modelled", which is not "nothing"), **`unknown_entity`** (a name the graph doesn't hold: abstain after name lookup, no fact query, no model call). Screen: the outcome chip on Memory → Ask resolver; the same vocabulary on every tool call. |
+| **(b) Return the path with the answer** | `paths` comes from the expansion that found the cited facts (recall's parent map over the `-[:LIVES_IN\|AFFECTS\|...*1..2]-` traversal), not from a second "explain" pass. Each hop carries `valid_from`, `valid_to`, `recorded_at` and the writing agent. Screen: "The path this answer came from" under each answer; in the customer chat, a one-line "How I know" under replies that restate that customer's own earlier facts (only theirs, no tool output, no Cypher). |
+| **(c) Fixed tool catalogue; the model never writes Cypher** | [`relay/tools_catalog.py`](relay/tools_catalog.py): `recall_customer(name)`, `facts_at(name, at)`, `claims(name, predicate)`, `who_handled(ticket)`, `affected_by(node, depth≤4)`, `capacity(node)` (`algo.maxFlow`), `past_fixes(symptoms)`. Each is hand-written parameterised Cypher in [`relay/queries.py`](relay/queries.py) with typed args; malformed args (depth 9, an unknown predicate, an extra `cypher` arg) are refused before any query. The same functions back the MCP server ([`mcp_server.py`](mcp_server.py), 14 tools) and `POST /api/tenants/{t}/tools/{name}`. Every call is recorded (tool, args, ms, rows, outcome) and streamed as `catalog_call`. Screen: Cypher drawer → "Tool calls" above the raw queries. |
+| **(d) Resolve names against the database first** | Questions: one `UNION` linking query (exact keys, unique first names, full-text typo match, vector seeds) before any expansion; tools: `RESOLVE_ENTITY` / `RESOLVE_NODE`, and a typo resolves only when every typed word is a near miss of one customer's name ("alise rao" is Alice Rao, "kevin zzz" is unknown). |
+| **(e) Reply checked against the result** | The reply guard in [`relay/converse.py`](relay/converse.py) (`catalogue_problems`): plan names, prices and speeds must appear in what the graph returned; one corrected retry, then a factual fallback. |
+| **(f) The same question twice, shallow vs deep** | Memory screen → "Show me": *Where does X live?* now vs as of an earlier date (two clocks, the hops for each), and *What plan is X on?* with both agents' claims, writers, trust ranking and the `Conflict` node. Network screen (map view) → "*Hub* is down: who is affected?" at depth 1 vs depth 3, with the path for every row. Entities are picked from the current tenant at runtime (`GET /demos`, read-only); an empty graph shows a neutral empty state. |
+| **Multigraph tenancy** | One FalkorDB graph per tenant/region (`mem:<tenant>`, [`relay/tenancy.py`](relay/tenancy.py)); every tool and query takes the tenant and runs on that graph only. Screen: Tenants. |
+| **Memory as nodes** | Episodes, facts, sessions, agents, conflicts, procedures and steps are nodes with typed edges (`DERIVED`, `WROTE`, `SUPERSEDES`, `BETWEEN`, `FIRST`/`NEXT`), so provenance is a traversal. Screen: Memory graph and inspector. |
+
+**Where Relay goes further**
+- **Two clocks**: world time (`valid_from/valid_to`) and system time (`recorded_at/expired_at`) on every fact; `facts_at` answers both "what was true then" and "what we had on file then", which diverge when someone tells us late.
+- **Trust-ranked disagreement**: conflicting claims from different agents are both kept, ranked by agent trust then recency, and recorded as a `Conflict` node instead of last-write-wins.
+- **Procedures as paths**: what fixed a line is stored as `(:Procedure)-[:FIRST]->(:ProcStep)-[:NEXT]->…`, scored by successes and failures; `past_fixes` returns them as paths.
+- **Measured, not assumed**: Relay 91% vs a vector store 50% on 160 questions, with ablations (the two clocks are worth about 19 points, multi-hop about 9) and a fix log; see `PROGRESS.md` section 6 and `eval/`.
+- Tests: `python -m tests.test_contract` covers each outcome shape, path hops, arg validation (an unknown name runs no tool query, checked from the query log) and the depth cap, without LLM calls.
+
 ## Key Cypher
 
 All queries are in [`relay/queries.py`](relay/queries.py), [`relay/network.py`](relay/network.py), [`relay/kb.py`](relay/kb.py) and [`relay/experts.py`](relay/experts.py).
@@ -389,7 +409,7 @@ give each tenant its own key (`python -c "from relay.tenancy import key_for; pri
 
 ### Use Relay from any AI client (MCP)
 
-`mcp_server.py` exposes `remember`, `remember_fact`, `recall`, `ask`, `explain`, `tickets` and `handoff`, so Claude Desktop, Claude Code or any MCP client becomes another agent on the same memory:
+`mcp_server.py` exposes `remember`, `remember_fact`, `recall`, `ask`, `explain`, `tickets` and `handoff`, plus the typed tool catalogue (`recall_customer`, `facts_at`, `claims`, `who_handled`, `affected_by`, `capacity`, `past_fixes`), so Claude Desktop, Claude Code or any MCP client becomes another agent on the same memory:
 
 ```json
 {"mcpServers": {"relay-memory": {"command": "python", "args": ["/path/to/agent-relay/mcp_server.py"]}}}

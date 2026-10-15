@@ -802,3 +802,78 @@ MATCH (a:Agent)-[c:CONSULTED]->(f:Fact)
 WHERE f.fact_id IN $fids AND a.agent_id <> f.asserted_by
 RETURN a.agent_id, f.fact_id, f.predicate, f.object_value, f.asserted_by, c.last, c.count
 """
+
+# ---------------------------------------------------------------- the tool catalogue (relay/tools_catalog.py)
+
+# Name resolution before any tool query: is this name a node in the graph, and what kind?
+RESOLVE_ENTITY = "MATCH (e:Entity {name_key:$k}) RETURN e.name_key, e.type LIMIT 1"
+RESOLVE_NODE = """
+MATCH (n:NetNode {node_id:$k}) RETURN n.node_id AS id, 'NetNode' AS label, coalesce(n.label, n.node_id) AS name
+UNION
+MATCH (n:LastMile {node_id:$k}) RETURN n.node_id AS id, 'LastMile' AS label, coalesce(n.label, n.node_id) AS name
+"""
+
+# World clock at $t with each fact's writers and dates: "where did she live on 5 September, by whose account".
+FACTS_AT = """
+MATCH (f:Fact)-[:ABOUT {role:'subject'}]->(:Entity {name_key:$s})
+WHERE f.valid_from <= $t AND (f.valid_to IS NULL OR f.valid_to > $t)
+MATCH (f)<-[:DERIVED]-(:Episode)<-[:WROTE]-(a:Agent)
+RETURN f.fact_id, f.subject, f.predicate, f.object_value, f.active, f.valid_from, f.valid_to, f.recorded_at,
+       collect(DISTINCT a.agent_id), max(a.trust)
+ORDER BY f.predicate, f.valid_from
+"""
+
+# Every active claim of one subject+predicate with its writers and trust, and the Conflict node between them.
+CLAIMS = """
+MATCH (f:Fact {predicate:$p, active:true})-[:ABOUT {role:'subject'}]->(:Entity {name_key:$s})
+MATCH (f)<-[:DERIVED]-(ep:Episode)<-[:WROTE]-(a:Agent)
+WITH f, max(a.trust) AS support, max(ep.recorded_at) AS last_seen, collect(DISTINCT a.agent_id) AS agents
+OPTIONAL MATCH (c:Conflict)-[:BETWEEN]->(f)
+RETURN f.fact_id, f.object_value, f.asserted_by, support, last_seen, agents, f.valid_from, f.recorded_at,
+       c.conflict_id, c.status, c.resolution_policy, c.preferred
+ORDER BY support DESC, last_seen DESC
+"""
+
+
+# Blast radius: everything that hangs below a network node within $depth hops (customers, boxes, cabinets, exchanges),
+# with the path that connects each one. The label comes from RESOLVE_NODE (NetNode or LastMile), never from input.
+def affected_by(label, depth):
+    return f"""
+MATCH p = (x)-[:CONNECTED_VIA|HAS_ONT|DROP|PON|UPLINK*1..{int(depth)}]->(n:{label} {{node_id:$n}})
+WITH x, p ORDER BY length(p)
+WITH x, collect(p)[0] AS p
+RETURN coalesce(x.node_id, x.name_key), coalesce(x.type, labels(x)[-1]), length(p),
+       [y IN nodes(p) | coalesce(y.label, y.name, y.node_id, y.name_key)], [r IN relationships(p) | type(r)]
+ORDER BY length(p), coalesce(x.node_id, x.name_key) LIMIT 300
+"""
+
+
+# Procedures (ordered ProcStep paths) that resolved this issue before.
+PROCEDURES_FOR = """
+MATCH (p:Procedure)-[:RESOLVES]->(:Entity {name_key:$issue})
+MATCH chain = (p)-[:FIRST]->(:ProcStep)-[:NEXT*0..]->(last:ProcStep) WHERE NOT (last)-[:NEXT]->()
+RETURN p.id, [n IN nodes(chain) WHERE n:ProcStep | n.action], p.successes, p.failures, p.last_used
+ORDER BY p.successes DESC LIMIT 10
+"""
+
+# Runtime picks for the one-click demos (read-only): a subject whose fact changed, a disputed claim, a busy exchange.
+DEMO_CHANGED = """
+MATCH (old:Fact {active:false})-[:ABOUT {role:'subject'}]->(c:Entity {type:'customer'})
+WHERE old.valid_to IS NOT NULL AND old.predicate <> 'awaiting'
+MATCH (new:Fact {predicate:old.predicate, active:true})-[:ABOUT {role:'subject'}]->(c)
+RETURN c.name_key, old.predicate, old.object_value, old.valid_from, new.object_value, new.valid_from
+ORDER BY CASE old.predicate WHEN 'lives_in' THEN 0 ELSE 1 END, new.valid_from DESC LIMIT 1
+"""
+DEMO_KNOWN = """
+MATCH (f:Fact {predicate:'lives_in', active:true})-[:ABOUT {role:'subject'}]->(c:Entity {type:'customer'})
+RETURN c.name_key, f.object_value, f.valid_from ORDER BY f.valid_from ASC LIMIT 1
+"""
+DEMO_CONFLICT = """
+MATCH (c:Conflict) WHERE size(c.claims) > 1
+RETURN c.subject, c.predicate ORDER BY CASE c.status WHEN 'open' THEN 0 ELSE 1 END, c.detected_at DESC LIMIT 1
+"""
+DEMO_EXCHANGE = """
+MATCH (c:Entity {type:'customer'})-[:CONNECTED_VIA|HAS_ONT|DROP|PON|UPLINK*1..4]->(p:Pop)
+WITH p, count(DISTINCT c) AS n ORDER BY n DESC, p.node_id LIMIT 1
+RETURN p.node_id, coalesce(p.label, p.node_id), n
+"""

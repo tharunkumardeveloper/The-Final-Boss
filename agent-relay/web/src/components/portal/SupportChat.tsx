@@ -5,7 +5,8 @@ import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { api } from '../../lib/api'
 import { fromEvent, fromLearned, launch, settle, type Chip } from '../../lib/chips'
 import { speakerName, ticketLabel, titleCase, when } from '../../lib/format'
-import type { ConversationSession, Customer, RelayEvent, ChatImages } from '../../lib/types'
+import type { ConversationSession, Customer, RelayEvent, ChatImages, Hop } from '../../lib/types'
+import { shortDate } from '../Hops'
 import { Close, Send, Ticket as TicketIcon } from '../Icons'
 import { KavyaAvatar, SPRING, Typing } from './Kavya'
 import { MemoryChip, MemoryPanel } from './MemoryPanel'
@@ -13,7 +14,7 @@ import { TicketsPanel } from './TicketsPanel'
 
 // `local` lines (our echo / the POST reply) get confirmed by the socket's copy; `ep` is the episode id.
 interface Line { id: string; ep?: string; speaker: string; text: string; at?: string; pending?: boolean; local?: boolean
-  mark?: string; rename?: boolean; images?: ChatImages }
+  mark?: string; rename?: boolean; images?: ChatImages; how?: Hop[] }
 export type Subscribe = (fn: (e: RelayEvent) => void) => () => void
 
 const FLY_MS = 1200
@@ -75,6 +76,21 @@ export function saysMore(input: string, name: string): boolean {
   return rest.length >= 2
 }
 
+/** "How I know": the customer's own earlier facts a reply rests on, in plain words (no tool output, no Cypher). */
+export function HowIKnow({ hops }: { hops: Hop[] }) {
+  const VERB: Record<string, string> = { LIVES_IN: 'live in', ON_PLAN: 'are on', HAS_ROUTER: 'have a', OWNS_DEVICE: 'own a', PREFERS_CHANNEL: 'prefer', REPORTED_ISSUE: 'reported' }
+  const verb = (rel: string) => VERB[rel] ?? `told us your ${rel.toLowerCase().replace(/^has_/, '').replace(/_/g, ' ')} is`
+  const who = (by?: string[]) => (by ?? []).map((a) => (a === 'intake' ? BOT : a === 'resolver' ? 'our resolver' : a)).join(' and ')
+  return (
+    <p className="mt-1 px-1 text-[11px] text-ink-3" aria-label="How I know">
+      How I know: {hops.map((h, i) => (
+        <span key={i}>{i > 0 && '; '}you {verb(h.rel)} <span className="text-ink-2">{titleCase(h.to)}</span>
+          {h.learned && <> · on file since {shortDate(h.learned)}</>}{h.by?.length ? <> · noted by {who(h.by)}</> : null}</span>
+      ))}
+    </p>
+  )
+}
+
 function Bubble({ l, customer, flying, onRename }: { l: Line; customer: string; flying: Chip[]; onRename?: () => void }) {
   const mine = l.speaker === 'customer'
   const kavya = l.speaker === 'intake'
@@ -114,6 +130,7 @@ function Bubble({ l, customer, flying, onRename }: { l: Line; customer: string; 
             ))}
           </div>
         )}
+        {l.how && <HowIKnow hops={l.how} />}
         {flying.length > 0 && (
           <div className="mt-2 flex flex-wrap gap-1.5 px-1">{flying.map((c) => <MemoryChip key={c.key} c={c} />)}</div>
         )}
@@ -310,7 +327,8 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
           : [...done, { id: replyId, ep: r.reply_episode_id ?? undefined, speaker: r.speaker ?? 'intake', text: r.reply,
             at: new Date().toISOString(), local: !r.reply_episode_id }]
         const pics = r.images?.images.length ? r.images : undefined
-        return pics ? next.map((l) => (l.id === replyId || l.ep === replyId ? { ...l, images: pics } : l)) : next
+        const how = r.how?.length ? r.how : undefined
+        return pics || how ? next.map((l) => (l.id === replyId || l.ep === replyId ? { ...l, images: pics ?? l.images, how } : l)) : next
       })
       if (r.ticket_opened) setToast((t) => t ?? { ticket: r.ticket_opened! })
       // Chips ride on Kavya's reply, then fly into the memory panel.

@@ -515,6 +515,7 @@ export async function mockRequest(path: string, init?: RequestInit): Promise<unk
   if (url.pathname === '/api/tenants') return delay(init?.method === 'POST' ? { name: body.name } : ['pml'])
   switch (true) {
     case sub === 'stats': return delay(stats())
+    case sub === 'demos': return delay({ clock: null, conflict: null, exchange: null })
     case sub === 'customers': return delay(customers())
     case sub === 'graph': return delay(snapshot(url.searchParams.get('focus')?.toLowerCase(), Number(url.searchParams.get('depth')) || 2))
     case sub.startsWith('card/'): return delay(card(sub.slice(5)))

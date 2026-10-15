@@ -2,7 +2,9 @@ import { useState, type FormEvent } from 'react'
 import { api } from '../../lib/api'
 import { titleCase } from '../../lib/format'
 import type { AskResponse, CypherEntry, Graph } from '../../lib/types'
+import { Hops, OutcomeChip, shortDate } from '../Hops'
 import { Send, Sparkle } from '../Icons'
+import { ShowMe } from './ShowMe'
 
 const SUGGEST = ['Which plan is Alice Rao on?', 'Where does Alice Rao live?', 'Which outage might affect Alice Rao?', 'What fix should we try for evening wifi drops?']
 
@@ -56,6 +58,7 @@ export function AskPanel({ tenant, onAnswer, logCypher }: {
           {SUGGEST.map((s) => <button key={s} onClick={() => ask(undefined, s)} className="rounded-full bg-sunk px-3 py-1 text-xs text-ink-2 transition duration-300 ease-spring hover:bg-signal-tint hover:text-signal-deep">{s}</button>)}
         </div>
       )}
+      {!res && !busy && <ShowMe tenant={tenant} />}
       {busy && <p className="mt-4 text-sm text-ink-3 animate-breathe">Following the graph…</p>}
       {error && <p className="mt-4 text-sm text-danger" role="alert">{error}</p>}
       {res && !busy && (
@@ -65,9 +68,20 @@ export function AskPanel({ tenant, onAnswer, logCypher }: {
           <div className="mt-3 flex flex-wrap items-center gap-1.5">
             {res.values.map((v) => <span key={v} className="chip bg-ink text-paper">{titleCase(v)}</span>)}
             {res.conflict && <span className="chip-updated">Agents disagree</span>}
-            {res.unknown && <span className="chip bg-sunk text-ink-2">Not in memory, so no guess</span>}
-            {!res.unknown && !res.conflict && <span className="chip-new">Grounded in {res.cited_ids.length} fact{res.cited_ids.length === 1 ? '' : 's'}</span>}
+            {res.outcome ? <OutcomeChip outcome={res.outcome} /> : res.unknown && <span className="chip bg-sunk text-ink-2">Not in memory, so no guess</span>}
           </div>
+          {res.note && <p className="mt-2 text-xs text-ink-3">{res.note}</p>}
+          {res.paths && res.paths.length > 0 && (
+            <section className="mt-4" aria-label="Answer path">
+              <h4 className="eyebrow">The path this answer came from</h4>
+              <div className="mt-2 space-y-2">
+                {res.paths.map((p, i) => <div key={i} className="rounded-xl bg-signal-tint/40 px-3 py-2"><Hops hops={p} /></div>)}
+              </div>
+              {res.outcome === 'memory' && res.learned?.map((l) => (
+                <p key={l.fact_id} className="mt-1.5 text-[11px] text-ink-3">learned {shortDate(l.at)} by <span className="font-medium text-ink-2">{l.by.join(', ')}</span></p>
+              ))}
+            </section>
+          )}
           {chains(res.path).length > 0 && (
             <section className="mt-5">
               <h4 className="eyebrow flex items-center gap-1.5"><Sparkle className="h-3.5 w-3.5" /> Why it thinks so</h4>

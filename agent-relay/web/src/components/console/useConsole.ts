@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { api } from '../../lib/api'
 import { applyEvent, emptyGraph, loadGraph, relevantToFocus, speakerCustomer } from '../../lib/graph'
 import { useRelayStream } from '../../lib/stream'
-import type { CypherEntry, Customer, RelayEvent, SimStatus, Stats, Ticket, Usage, UsagePayload } from '../../lib/types'
+import type { CypherEntry, Customer, RelayEvent, SimStatus, Stats, Ticket, ToolCall, Usage, UsagePayload } from '../../lib/types'
 
 export type LoggedCypher = CypherEntry & { action: string; at: number }
 const FEED_TYPES = new Set(['message', 'tool_call', 'handoff', 'ticket_opened', 'ticket_status', 'fact_superseded', 'fact_retired', 'conflict', 'answer', 'pickup'])
@@ -58,6 +58,7 @@ export function useConsole(tenant: string) {
   const [sim, setSim] = useState<SimStatus>({ running: false })
   const [simTime, setSimTime] = useState<string>()
   const [cypher, setCypher] = useState<LoggedCypher[]>([])
+  const [calls, setCalls] = useState<ToolCall[]>([])
   const [error, setError] = useState<string>()
   const [usage, setUsage] = useState<UsagePayload>()
   const pending = useRef<ReturnType<typeof setTimeout>>()
@@ -110,6 +111,7 @@ export function useConsole(tenant: string) {
     if (e.type === 'sim_status') setSim((s) => ({ ...s, ...e.data }))
     if (e.type === 'cypher') setCypher((c) => [{ name: e.data.name, ms: e.data.ms, rows: e.data.rows, query: e.data.query ?? '', params: {}, action: 'live', at: Date.now() }, ...c].slice(0, 80))
     if (e.type === 'usage') setUsage((p) => mergeUsage(p, e.data))
+    if (e.type === 'catalog_call') { setCalls((c) => [e.data, ...c].slice(0, 40)); return }
     // Throttle snapshot refetches: one per burst of events.
     if (e.type !== 'cypher' && e.type !== 'clock' && e.type !== 'usage') {
       clearTimeout(pending.current)
@@ -117,7 +119,7 @@ export function useConsole(tenant: string) {
     }
   }, () => refreshAll())
 
-  return { store: store.current, version, feed, stats, tickets, customers, sim, setSim, simTime, cypher, logCypher, status, error, usage,
+  return { store: store.current, version, feed, stats, tickets, customers, sim, setSim, simTime, cypher, calls, logCypher, status, error, usage,
     view, setView, following,
     refreshAll, refreshLists, clearFeed: () => setFeed([]) }
 }

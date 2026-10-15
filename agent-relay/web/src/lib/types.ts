@@ -83,6 +83,7 @@ export interface ChatResponse {
   reply: string; speaker?: string; session_id: string; learned: FactChange[]; ticket_opened?: string | null; cypher: CypherEntry[]
   episode_id?: string; reply_episode_id?: string | null
   images?: ChatImages | null  // games or streaming came up: pictures for the reply bubble
+  how?: Hop[]  // "how I know": this customer's own earlier facts the reply rests on
 }
 export interface ChatImages { query: string; images: { src: string; title: string; link?: string | null }[] }
 export interface PickupResponse {
@@ -91,9 +92,23 @@ export interface PickupResponse {
   cypher: CypherEntry[]
 }
 export interface FixResponse { learned: FactChange[]; cypher: CypherEntry[] }
+/** One hop of an answer's path: subject -REL-> object, with both clocks' dates and who wrote it (relay/retrieve.py hop). */
+export interface Hop { from: string; rel: string; to: string; fact_id?: string; active?: boolean; since?: string | null; until?: string | null; learned?: string | null; by?: string[] }
+/** The answer contract: exactly one shape per answer (relay/retrieve.py OUTCOMES). */
+export type Outcome = 'path' | 'memory' | 'not_in_graph' | 'unknown_entity'
+export interface Learned { fact_id: string; fact: string; at: string | null; by: string[]; since: string | null }
 export interface AskResponse {
   answer: string; values: string[]; conflict: boolean; unknown: boolean; cited_ids: string[]
   path: Graph; lines: string[]; cypher: CypherEntry[]
+  outcome?: Outcome; paths?: Hop[][]; learned?: Learned[]; note?: string
+}
+/** One call of the fixed tool catalogue (relay/tools_catalog.py), as recorded and streamed. */
+export interface ToolCall { tool: string; args: Record<string, unknown>; ms: number; rows: number; outcome: Outcome; queries: string[]; at: number }
+export interface ToolResult extends ToolCall { result: any[]; paths: Hop[][]; extra: Record<string, any>; note?: string | null; cypher: CypherEntry[] }
+export interface DemoPicks {
+  clock: { name: string; predicate: string; question: string; before: string; old: string | null; new: string; changed: boolean } | null
+  conflict: { name: string; predicate: string; question: string } | null
+  exchange: { node: string; label: string; customers: number } | null
 }
 export interface ClockRow { predicate: string; value: string; fact_id: string }
 export interface Clock { world: ClockRow[]; belief: ClockRow[] }
@@ -143,6 +158,7 @@ export type RelayEvent =
   | Ev<'pickup', { ticket: string; agent: string }>
   | Ev<'ticket_status', { ticket: string; status: string }>
   | Ev<'tool_call', { tool: string; customer?: string; output: string }>
+  | Ev<'catalog_call', ToolCall>
   | Ev<'answer', { question: string; answer: string; cited_ids: string[]; conflict: boolean; unknown: boolean }>
   | Ev<'clock', { sim_time: string }>
   | Ev<'sim_status', { running: boolean; speed?: number; skipped?: number | boolean }>

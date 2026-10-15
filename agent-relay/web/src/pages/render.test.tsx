@@ -62,3 +62,41 @@ describe('pages render', () => {
     expect(html).toContain('spl-1 ×2')
   })
 })
+
+describe('answer contract and tools', async () => {
+  const { Hops, OutcomeChip, OUTCOME } = await import('../components/Hops')
+  const { ToolCalls } = await import('../components/console/CypherDrawer')
+  const { HowIKnow } = await import('../components/portal/SupportChat')
+  const { ShowMe } = await import('../components/console/ShowMe')
+  const text = (el: JSX.Element) => renderToString(el).replace(/<!-- -->/g, '')
+  it('every outcome has a chip', () => {
+    for (const o of ['path', 'memory', 'not_in_graph', 'unknown_entity'] as const) {
+      expect(renderToString(<OutcomeChip outcome={o} />)).toContain(OUTCOME[o].label)
+    }
+    expect(OUTCOME.unknown_entity.label).toContain('no query ran')
+  })
+  it('hops show the path with dates and writers', () => {
+    const html = text(<Hops hops={[{ from: 'alice rao', rel: 'LIVES_IN', to: 'mumbai', since: '2026-09-03', by: ['intake'] },
+      { from: 'fibre cut', rel: 'AFFECTS', to: 'mumbai' }]} />)
+    expect(html).toContain('Alice Rao')
+    expect(html).toContain('LIVES_IN')
+    expect(html).toContain('since 3 Sept')
+    expect(html).toContain('by intake')
+    expect(html).toContain('AFFECTS')
+  })
+  it('tool calls table and the customer how-I-know line', () => {
+    const t = text(<ToolCalls calls={[{ tool: 'affected_by', args: { node: 'pop-mumbai', depth: 3 }, ms: 12.5, rows: 33, outcome: 'path', queries: [], at: 0 }]} />)
+    expect(t).toContain('affected_by')
+    expect(t).toContain('depth=3')
+    expect(t).toContain('Answered with a path')
+    const h = text(<HowIKnow hops={[{ from: 'alice rao', rel: 'LIVES_IN', to: 'mumbai', learned: '2026-09-01', by: ['intake'] }]} />)
+    expect(h).toContain('you live in')
+    expect(h).not.toContain('LIVES_IN')
+    expect(h).not.toContain('MATCH')
+  })
+  it('show me card renders before picks load', () => {
+    const wrap = (el: JSX.Element) => renderToString(<TenantProvider><MemoryRouter>{el}</MemoryRouter></TenantProvider>)
+    expect(wrap(<ShowMe tenant="pml" />)).toContain('Show me')
+    expect(wrap(<ShowMe tenant="pml" kind="network" />)).toContain('Looking for real examples')
+  })
+})

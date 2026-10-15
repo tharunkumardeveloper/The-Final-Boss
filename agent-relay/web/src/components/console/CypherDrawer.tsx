@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { api } from '../../lib/api'
 import { Close, Database } from '../Icons'
+import type { ToolCall } from '../../lib/types'
+import { OutcomeChip } from '../Hops'
 import type { LoggedCypher } from './useConsole'
 
 const WRITES = /\b(CREATE|MERGE|SET|DELETE|REMOVE|DETACH|DROP)\b/i
@@ -96,7 +98,31 @@ function Burst({ g, tenant }: { g: Group; tenant: string }) {
   )
 }
 
-export function CypherDrawer({ open, onClose, entries, tenant }: { open: boolean; onClose: () => void; entries: LoggedCypher[]; tenant: string }) {
+/** Calls of the fixed tool catalogue: the model picks a tool and typed args, never Cypher. */
+export function ToolCalls({ calls }: { calls: ToolCall[] }) {
+  if (!calls.length) return null
+  return (
+    <section aria-label="Tool calls" className="rounded-2xl bg-signal-tint/40 p-3">
+      <h3 className="eyebrow">Tool calls · fixed catalogue, typed args, names checked first</h3>
+      <table className="mt-2 w-full text-left text-[11px]">
+        <thead className="text-ink-3"><tr><th className="font-normal">tool</th><th className="font-normal">args</th><th className="text-right font-normal">ms</th><th className="text-right font-normal">rows</th><th className="pl-2 font-normal">outcome</th></tr></thead>
+        <tbody>
+          {calls.slice(0, 20).map((c, i) => (
+            <tr key={i} className="align-top">
+              <td className="py-1 pr-2 font-mono font-semibold text-ink">{c.tool}</td>
+              <td className="max-w-[12rem] truncate py-1 pr-2 font-mono text-ink-2" title={JSON.stringify(c.args)}>{Object.entries(c.args).map(([k, v]) => `${k}=${v}`).join(', ')}</td>
+              <td className="py-1 text-right num text-ink-2">{c.ms}</td>
+              <td className="py-1 text-right num text-ink-2">{c.rows}</td>
+              <td className="py-1 pl-2"><OutcomeChip outcome={c.outcome} /></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+  )
+}
+
+export function CypherDrawer({ open, onClose, entries, tenant, calls = [] }: { open: boolean; onClose: () => void; entries: LoggedCypher[]; tenant: string; calls?: ToolCall[] }) {
   const [raw, setRaw] = useState(false)
   const groups = group(entries)
   const close = useRef<HTMLButtonElement>(null)
@@ -126,6 +152,7 @@ export function CypherDrawer({ open, onClose, entries, tenant }: { open: boolean
           <button ref={close} className="btn-ghost h-9 w-9 !p-0" onClick={onClose} aria-label="Close"><Close /></button>
         </header>
         <div className="scroll-thin flex-1 space-y-3 overflow-y-auto px-5 py-4">
+          <ToolCalls calls={calls} />
           {entries.length === 0 && <p className="text-sm text-ink-3">Run an action (ask, chat, pick up a ticket) and its queries appear here.</p>}
           {raw ? entries.map((e, i) => <Query key={i} e={e} tenant={tenant} />) : groups.map((g) => <Burst key={g.key} g={g} tenant={tenant} />)}
         </div>

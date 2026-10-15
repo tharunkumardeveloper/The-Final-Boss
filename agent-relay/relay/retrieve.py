@@ -230,7 +230,7 @@ def recall(tenant, question, *, mode="full", k=8, log=None):
     ln = _link(tenant, question, qvec, k, log)
     linked, vrows = ln["linked"], ln["vector"]
     if ln["unknown"] and not ln["person"]:
-        return {"seeds": [], "facts": [], "lines": [], "unknown": ln["unknown"]}
+        return {"seeds": [], "facts": [], "lines": [], "unknown": ln["unknown"], "linked": [], "dist": {}, "parent": {}}
     if linked:
         extra = [key for key, typ, _ in vrows if typ != "customer" and key not in linked][:3]
         seeds, dist = linked + extra, {s: 0 for s in linked} | {s: 1 for s in extra}
@@ -243,13 +243,17 @@ def recall(tenant, question, *, mode="full", k=8, log=None):
     if cfg["temporal"]:
         _annotate_conflicts(facts)
     # Rank by hops from the linked entities, then by how well the predicate fits the question.
+    # parent: the fact (and the entity on its near side) that first reached each entity: the answer's path back
+    parent = {}
     changed = True
     while changed:
         changed = False
         for f in facts:
             for a, b in ((f["subject"], f["object"]), (f["object"], f["subject"])):
                 if a in dist and dist.get(b, 99) > dist[a] + 1:
-                    dist[b], changed = dist[a] + 1, True
+                    dist[b], parent[b], changed = dist[a] + 1, (f, a), True
+                elif a in dist and dist[b] == dist[a] + 1 and b not in parent and (a in parent or dist[a] == 0):
+                    parent[b] = (f, a)  # a vector seed the traversal also reaches: keep the traversal's path
     q = np.array(qvec) / np.linalg.norm(qvec)
     pv = _predicate_vecs()
     # Importance (Generative Agents): PageRank salience from consolidation, a light nudge within a hop tier.
@@ -258,7 +262,8 @@ def recall(tenant, question, *, mode="full", k=8, log=None):
                               -(float(_pvec(f["predicate"]) @ q) + SALIENCE_WEIGHT * (f["salience"] or 0) / top),
                               not f["active"], f["recorded_at"]))
     facts = facts[:MAX_LINES]
-    return {"seeds": seeds, "facts": facts, "lines": [fmt(f, cfg["temporal"]) for f in facts], "unknown": ln["unknown"]}
+    return {"seeds": seeds, "facts": facts, "lines": [fmt(f, cfg["temporal"]) for f in facts], "unknown": ln["unknown"],
+            "linked": linked, "dist": dist, "parent": parent}
 
 
 def customer_context(tenant, customer, log=None):
@@ -282,6 +287,73 @@ def customer_facts(tenant, customer, log=None):
     return keep[:40]
 
 
+# The answer contract: every answer comes back as exactly one of four shapes.
+#   path           the answer needed a multi-hop traversal: a cited fact was reached through other facts (Alice ->
+#                  LIVES_IN -> Mumbai <- AFFECTS <- outage). `paths` holds the hops, in the order recall walked them.
+#   memory         the answer is a fact written about the asked entity itself, in an earlier session, by an agent:
+#                  one hop, with `learned` saying when it went on file and who wrote it.
+#   not_in_graph   the question named entities the graph holds (or none at all), but no fact of the asked kind
+#                  connects them: "not modelled", which is not the same as "nothing is true".
+#   unknown_entity the question names someone the graph doesn't hold: abstained after name lookup, no fact query ran.
+OUTCOMES = ("path", "memory", "not_in_graph", "unknown_entity")
+
+
+def hop(f):
+    """One fact as one hop of a path: subject -REL-> object, with both clocks' dates and its writers."""
+    return {"from": f["subject"], "rel": R.rel_type(f["predicate"]) if f["predicate"] in R.PREDICATES or R.is_open(f["predicate"])
+            else f["predicate"].upper(),
+            "to": f["object"], "fact_id": f["fact_id"], "active": f["active"], "since": to_date(f["valid_from"]),
+            "until": to_date(f["valid_to"]), "learned": to_date(f["recorded_at"]), "by": f["agents"]}
+
+
+def fact_path(r, f):
+    """The hops from a linked entity to fact f, rebuilt from the expansion that reached it (recall's parent map)."""
+    dist, parent = r.get("dist", {}), r.get("parent", {})
+    # the endpoint nearer a linked entity; a vector seed (no parent) only when no traversal reached the fact
+    n = min((f["subject"], f["object"]), key=lambda e: (dist.get(e, 99) > 0 and e not in parent, dist.get(e, 99)))
+    hops = [hop(f)]
+    while n in parent and dist.get(n, 0) > 0 and len(hops) < 6:
+        pf, n = parent[n]
+        hops.insert(0, hop(pf))
+    return hops
+
+
+def contract(r, a):
+    """-> {outcome, paths, learned, note} for an answer `a` over recall result `r` (see OUTCOMES)."""
+    if r["unknown"] and not r["facts"]:
+        who = ", ".join(r["unknown"])
+        return {"outcome": "unknown_entity", "paths": [], "learned": [],
+                "note": f"No fact query ran: {who} is not in the graph."}
+    cited = [f for f in r["facts"] if f["fact_id"] in a["cited_ids"]]
+    if a.get("unknown") or not cited:
+        linked = r.get("linked") or []
+        note = (f"{', '.join(linked)} {'is' if len(linked) == 1 else 'are'} in the graph, but nothing connects "
+                f"{'it' if len(linked) == 1 else 'them'} the way the question assumes." if linked
+                else "Nothing in the graph matches what the question asks about.")
+        return {"outcome": "not_in_graph", "paths": [], "learned": [], "note": note}
+    paths = [fact_path(r, f) for f in cited]
+    learned = [{"fact_id": f["fact_id"], "fact": f"{f['subject']} {f['predicate']} {f['object']}",
+                "at": to_date(f["recorded_at"]), "by": f["agents"], "since": to_date(f["valid_from"])} for f in cited]
+    multi = any(len(p) > 1 for p in paths)
+    return {"outcome": "path" if multi else "memory", "paths": paths, "learned": learned,
+            "note": "Reached by traversal: the hops are below." if multi else
+                    f"From memory: on file since {learned[0]['at']}, written by {', '.join(learned[0]['by'])}."}
+
+
+def grounding(tenant, customer, reply, before, log=None):
+    """The customer's own facts (from earlier turns) that a reply states back to them, as one-hop paths: the
+    "how I know" line under a reply. Only facts whose subject is this customer, never anyone else's;
+    only facts on file before this turn, so what they just said is not dressed up as memory."""
+    text = " " + re.sub(r"[^a-z0-9]+", " ", str(reply).lower()) + " "
+    out = []
+    for f in customer_facts(tenant, customer, log):
+        if (f["active"] and f["predicate"] not in ("awaiting", "has_ticket") and (f["recorded_at"] or 0) < before
+                and f["subject"] == norm(customer)
+                and f" {re.sub(r'[^a-z0-9]+', ' ', str(f['object']).lower()).strip()} " in text):
+            out.append(f)
+    return [hop(f) for f in out[:3]]
+
+
 def ask(tenant, question, *, mode="full", agent=None, log=None):
     """agent: who is asking; when given, the facts the answer cites are recorded as CONSULTED by that agent.
     (The benchmark leaves it None so measuring never writes to the graph it measures.)"""
@@ -294,10 +366,11 @@ def ask(tenant, question, *, mode="full", agent=None, log=None):
         a = llm.answer(question, r["lines"])
     known = {f["fact_id"] for f in r["facts"]}
     a = {**a, "cited_ids": [i for i in a["cited_ids"] if i in known], "recall": r}
+    a |= contract(r, a)
     if agent:
         from . import sharing  # lazy: sharing -> memory -> ... keeps import order simple
         sharing.consult(tenant, agent, a["cited_ids"], log=log)
-    events.emit(tenant, "answer", {k: a[k] for k in ("answer", "cited_ids", "conflict", "unknown")} | {"question": question})
+    events.emit(tenant, "answer", {k: a[k] for k in ("answer", "cited_ids", "conflict", "unknown", "outcome")} | {"question": question})
     return a
 
 
