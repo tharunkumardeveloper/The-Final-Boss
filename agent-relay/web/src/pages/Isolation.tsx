@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Wordmark } from '../components/Brand'
 import { Check, Warning } from '../components/Icons'
+import { Boundary, type Shot } from '../components/console/Boundary'
 import { API_URL, WS_URL } from '../lib/api'
 import { keyFor, knownTenants } from '../lib/keys'
 
@@ -43,6 +44,7 @@ export default function IsolationPage() {
   const [inject, setInject] = useState(false)
   const [probes, setProbes] = useState<Probe[]>([])
   const [busy, setBusy] = useState(false)
+  const [shot, setShot] = useState<Shot>()
 
   useEffect(() => {
     if (!victim) return
@@ -94,6 +96,8 @@ export default function IsolationPage() {
       let out: { got: string; verdict: Verdict; note?: string }
       try { out = await p.go() } catch { out = { got: 'network error', verdict: 'skipped' } }
       setProbes((ps) => ps.map((x) => (x.id === p.id ? { ...x, ...out, note: out.note ?? x.note } : x)))
+      setShot({ id: `${p.id}-${Date.now()}`, kind: p.id === 'control' ? 'control' : p.id === 'own' || p.id === 'inject' ? 'own' : 'cross', verdict: out.verdict, got: out.got })
+      await new Promise((r) => setTimeout(r, 1100))  // let each packet land before the next one flies
     }
     setBusy(false)
   }
@@ -140,6 +144,8 @@ export default function IsolationPage() {
           </button>
           {attacker === victim && <p className="w-full text-xs text-conflict">Pick two different tenants.</p>}
         </section>
+
+        <div className="mt-6"><Boundary attacker={attacker} victim={victim} shot={shot} /></div>
 
         {probes.length > 0 && (
           <section className="mt-6 overflow-hidden rounded-2xl bg-surface hairline">
