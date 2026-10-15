@@ -13,10 +13,14 @@ def tickets(tenant, log=None):
 
 
 def open_ticket_for(tenant, customer, log=None):
-    for t in tickets(tenant, log):
-        if t["customer"] == norm(customer) and t["status"] != "resolved":
-            return t["ticket"]
-    return None
+    """The customer's open ticket; a fault ticket before an open account request (invoice, pause...)."""
+    mine = [t for t in tickets(tenant, log) if t["customer"] == norm(customer) and t["status"] != "resolved"]
+    mine.sort(key=lambda t: _request_only(t["issues"]))
+    return mine[0]["ticket"] if mine else None
+
+
+def _request_only(issues):
+    return bool(issues) and all(i.replace(" ", "_") in R.SERVICE_REQUESTS for i in issues)
 
 
 def next_ticket_id(tenant, log=None):
@@ -72,9 +76,14 @@ class Intake:
         intake.step(tenant, customer, "Noting what you just told me", at)
         asked = next((tx for sp, tx, _, _ in reversed(converse.session_turns(tenant, session_id, log))
                       if sp == "agent" and "?" in tx), None)
+        # an open invoice/pause request isn't the context for a new fault: details then wait for the fault's own ticket
+        request = ticket and _request_only(next((t["issues"] for t in tickets(tenant, log) if t["ticket"] == ticket), []))
         res = memory.ingest_turn(tenant, agent=self.id, session_id=session_id, customer=customer, text=text,
-                                 at=at, ticket=ticket, log=log, tolerate_outage=reply_llm, asked=asked)
+                                 at=at, ticket=None if request else ticket, log=log, tolerate_outage=reply_llm,
+                                 asked=asked)
         new = lambda p: [f["triple"][2] for f in res["facts"] if f["triple"][1] == p and f["status"] == "new"]
+        if request and new("reported_issue"):
+            ticket = None  # ...and the fault opens a ticket of its own
         from . import kb, network
         for place in new("lives_in"):  # a locality we don't list ("Pattabiram"): the city they named gets them a line
             if not kb.resolve_place(place) and (city := kb.resolve_place(text)):
@@ -175,11 +184,6 @@ class Resolver:
         memory.remember(tenant, agent=self.id, session_id=sid, customer=customer, at=at,
                         text=f"resolver picked up {ticket.upper()}", facts=[(ticket, "has_status", "in progress")],
                         log=log)
-        from . import lab  # lazy: lab imports network, which imports this module
-        if lab.lab_on(tenant) and lab.has_line(tenant, customer):  # diagnose, act and verify on the network graph
-            rid = lab.start(tenant, customer, ticket=ticket, chat_sid=chat_session_id, picked=True)
-            return {"ticket": ticket, "customer": customer, "observations": [], "suggestions": [], "technician": None,
-                    "lab_run": rid}
         observations = []
 
         def observe(tool, text, facts):
@@ -188,6 +192,7 @@ class Resolver:
             events.emit(tenant, "tool_call", {"tool": tool, "customer": customer, "output": text}, at_ms)
             observations.append(text)
 
+        # back-office feeds (billing, outages) are read on every path: the lab below diagnoses the network only
         plan = tools.billing_plan(customer, tenant)
         if plan:
             observe("billing", f"Billing system: {customer} is on plan {plan}", [(customer, "on_plan", plan)])
@@ -195,16 +200,21 @@ class Resolver:
         if city:  # the resolver knows where the customer lives because intake wrote it down
             sharing.consult(tenant, self.id, [city[0][0]], at=at, log=log)
         city = city[0][1] if city else None
-        from . import experts, kb  # lazy: experts imports memory
-        place = kb.resolve_place(city) if city else None
-        home = place["city"] if place else None
-        technician = experts.assign(tenant, ticket, home, at, log)
         for outage in tools.outages_in(city, tenant, at_ms) if city else []:
             observe("outage", f"Outage feed: {outage} affects {city}", [(outage, "affects", city)])
             db.run(tenant, "outage state", Q.OUTAGE_STATE, {"o": outage, "active": True, "at": at_ms,
                                                             "at_dt": memory.dt(at_ms), "eta": None, "eta_dt": None}, log)
         if city:
             sweep_outages(tenant, at, city=city, log=log)
+        from . import lab  # lazy: lab imports network, which imports this module
+        if lab.lab_on(tenant) and lab.has_line(tenant, customer):  # diagnose, act and verify on the network graph
+            rid = lab.start(tenant, customer, ticket=ticket, chat_sid=chat_session_id, picked=True)
+            return {"ticket": ticket, "customer": customer, "observations": observations, "suggestions": [],
+                    "technician": None, "lab_run": rid}
+        from . import experts, kb  # lazy: experts imports memory
+        place = kb.resolve_place(city) if city else None
+        home = place["city"] if place else None
+        technician = experts.assign(tenant, ticket, home, at, log)
         diag = tools.diagnostic(customer, tenant)
         if diag:
             observe("diagnostic", f"Router diagnostic for {customer}: {diag}", [(customer, "reported_issue", diag)])

@@ -220,6 +220,11 @@ def write_md(m):
         L += ["## Small set (74 questions, earlier run)", "",
               f"Relay {p(s['relay'])}; B1 {p(s['b1'])}; head-to-head Relay {p(s['head_to_head_relay'])} vs B1 {p(s['head_to_head_b1'])}. "
               f"Exact McNemar p ≤ {s['mcnemar_p_worst_case']:.1g} for any pairing consistent with these counts. {s['note']}.", ""]
+    if m.get("fix_log"):  # one engine fix at a time, each re-scored on the metric it should move
+        L += ["## Fix log", "", "| # | Fix | Metric | Before | After | n | Graph / answers |", "|---|---|---|---|---|---|---|"]
+        L += [f"| {r['id']} | {r['fix']} | {r['metric']} | {r['before']} | {r['after']} | {r['n']} | {r['state']} |"
+              for r in m["fix_log"]] + [""]
+    L += m.get("notes", [])
     L += ["## Provenance", "", "```", json.dumps(m["git"], indent=1), "```"]
     (HERE / "components.md").write_text("\n".join(L) + "\n", encoding="utf-8")
 

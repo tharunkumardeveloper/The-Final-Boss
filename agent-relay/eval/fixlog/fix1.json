@@ -1,0 +1,1131 @@
+{
+ "systems": {
+  "FULL": {
+   "rows": [
+    {
+     "i": 72,
+     "question_id": "q072",
+     "system_name": "FULL",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Esha Iyer on, and is it disputed?",
+     "gold": [
+      "basic 50"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 100"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Esha Iyer is on the fiber 100 plan, and it is not disputed.",
+     "cited_ids": [
+      "f-8da39a3f"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 1570.2,
+     "context_lines": 30
+    },
+    {
+     "i": 73,
+     "question_id": "q073",
+     "system_name": "FULL",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Dev Malhotra on, and is it disputed?",
+     "gold": [
+      "fiber 1000"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 1000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Dev Malhotra is on the fiber 1000 plan, and it is not disputed.",
+     "cited_ids": [
+      "f-9f561646"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 277.0,
+     "context_lines": 30
+    },
+    {
+     "i": 74,
+     "question_id": "q074",
+     "system_name": "FULL",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Lata Joshi on, and is it disputed?",
+     "gold": [
+      "fiber 300"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 300"
+     ],
+     "conflict": true,
+     "unknown": false,
+     "answer": "fiber 300",
+     "cited_ids": [
+      "f-a4aa65e4",
+      "f-45771247"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 257.9,
+     "context_lines": 30
+    },
+    {
+     "i": 75,
+     "question_id": "q075",
+     "system_name": "FULL",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Hari Kumar on, and is it disputed?",
+     "gold": [
+      "fiber 300"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 300"
+     ],
+     "conflict": true,
+     "unknown": false,
+     "answer": "Hari Kumar is on the fiber 300 plan. This is disputed, as there is a conflicting record indicating he is on the fiber 100 plan.",
+     "cited_ids": [
+      "f-bbc23d29",
+      "f-8d0f9237"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 213.8,
+     "context_lines": 30
+    },
+    {
+     "i": 76,
+     "question_id": "q076",
+     "system_name": "FULL",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Gaurav Chawla on, and is it disputed?",
+     "gold": [
+      "fiber 100"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 100"
+     ],
+     "conflict": true,
+     "unknown": false,
+     "answer": "Gaurav Chawla is on the fiber 100 plan, and yes, it is disputed (conflicting records exist).",
+     "cited_ids": [
+      "f-acfcfdf8",
+      "f-2ba08712"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 246.0,
+     "context_lines": 30
+    },
+    {
+     "i": 77,
+     "question_id": "q077",
+     "system_name": "FULL",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Jaya Reddy on, and is it disputed?",
+     "gold": [
+      "fiber 1000"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 1000"
+     ],
+     "conflict": true,
+     "unknown": false,
+     "answer": "Jaya Reddy is on the fiber 1000 plan, and yes, it is disputed (there is a conflicting record for basic 50).",
+     "cited_ids": [
+      "f-42843d5f",
+      "f-d32ff603"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 232.0,
+     "context_lines": 30
+    },
+    {
+     "i": 78,
+     "question_id": "q078",
+     "system_name": "FULL",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Sanjay Patil on, and is it disputed?",
+     "gold": [
+      "fiber 1000"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 1000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Sanjay Patil is on the fiber 1000 plan, and it is not disputed.",
+     "cited_ids": [
+      "f-12f6ebea"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 215.7,
+     "context_lines": 30
+    },
+    {
+     "i": 79,
+     "question_id": "q079",
+     "system_name": "FULL",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Eshan Ghosh on, and is it disputed?",
+     "gold": [
+      "fiber 100"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 100"
+     ],
+     "conflict": true,
+     "unknown": false,
+     "answer": "fiber 100",
+     "cited_ids": [
+      "f-55149949",
+      "f-3d72de07"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 198.2,
+     "context_lines": 30
+    },
+    {
+     "i": 80,
+     "question_id": "q080",
+     "system_name": "FULL",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Rahul Shah on, and is it disputed?",
+     "gold": [
+      "fiber 1000"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 1000"
+     ],
+     "conflict": true,
+     "unknown": false,
+     "answer": "Rahul Shah is on the fiber 1000 plan, and yes, it is disputed (conflicting records exist).",
+     "cited_ids": [
+      "f-622d52fd",
+      "f-a3d7deef"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 223.4,
+     "context_lines": 30
+    },
+    {
+     "i": 81,
+     "question_id": "q081",
+     "system_name": "FULL",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Ritu Saxena on, and is it disputed?",
+     "gold": [
+      "fiber 300"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 300"
+     ],
+     "conflict": true,
+     "unknown": false,
+     "answer": "Ritu Saxena is on the fiber 300 plan, and yes, it is disputed (there is a conflicting record for fiber 1000).",
+     "cited_ids": [
+      "f-89c84927",
+      "f-b17c54aa"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 196.5,
+     "context_lines": 30
+    },
+    {
+     "i": 82,
+     "question_id": "q082",
+     "system_name": "FULL",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Fatima Sheikh on, and is it disputed?",
+     "gold": [
+      "fiber 300"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 300"
+     ],
+     "conflict": true,
+     "unknown": false,
+     "answer": "Fatima Sheikh is on the fiber 300 plan, and yes, it is disputed (there is a conflicting record for fiber 1000).",
+     "cited_ids": [
+      "f-bfe1df24",
+      "f-e672e23e"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 192.2,
+     "context_lines": 30
+    },
+    {
+     "i": 83,
+     "question_id": "q083",
+     "system_name": "FULL",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Pooja Bhat on, and is it disputed?",
+     "gold": [
+      "fiber 300"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 300"
+     ],
+     "conflict": true,
+     "unknown": false,
+     "answer": "fiber 300 (disputed; a conflicting record lists fiber 100)",
+     "cited_ids": [
+      "f-8e42937e",
+      "f-6c7ea56f"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 180.2,
+     "context_lines": 30
+    },
+    {
+     "i": 84,
+     "question_id": "q084",
+     "system_name": "FULL",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Priya Naik on, and is it disputed?",
+     "gold": [
+      "fiber 100"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 100"
+     ],
+     "conflict": true,
+     "unknown": false,
+     "answer": "Priya Naik is on the fiber 100 plan, and yes, it is disputed (conflicting records exist).",
+     "cited_ids": [
+      "f-e1947957",
+      "f-a9ef98a0"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 173.6,
+     "context_lines": 30
+    },
+    {
+     "i": 85,
+     "question_id": "q085",
+     "system_name": "FULL",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Neha Kapoor on, and is it disputed?",
+     "gold": [
+      "basic 50"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 300"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fiber 300",
+     "cited_ids": [
+      "f-a682c17d"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 191.7,
+     "context_lines": 30
+    },
+    {
+     "i": 86,
+     "question_id": "q086",
+     "system_name": "FULL",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Kabir Singh on, and is it disputed?",
+     "gold": [
+      "basic 50"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 100"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Kabir Singh is on the fiber 100 plan, and it is not disputed.",
+     "cited_ids": [
+      "f-a221ee6e"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 264.0,
+     "context_lines": 30
+    },
+    {
+     "i": 87,
+     "question_id": "q087",
+     "system_name": "FULL",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Gita Pillai on, and is it disputed?",
+     "gold": [
+      "fiber 1000"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 1000"
+     ],
+     "conflict": true,
+     "unknown": false,
+     "answer": "Gita Pillai is on the fiber 1000 plan. Yes, the plan is disputed (conflicting records exist).",
+     "cited_ids": [
+      "f-b3705c58",
+      "f-dd661234"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 187.6,
+     "context_lines": 30
+    }
+   ],
+   "n_target": 16,
+   "pending": [],
+   "summary": {
+    "overall": {
+     "n": 16,
+     "accuracy": 0.6875,
+     "ci95": [
+      0.444,
+      0.8584
+     ],
+     "evidence_recall": 0.8125
+    },
+    "by_type": {
+     "disagreement": {
+      "n": 16,
+      "accuracy": 0.6875,
+      "ci95": [
+       0.444,
+       0.8584
+      ],
+      "evidence_recall": 0.8125
+     }
+    },
+    "by_model": {
+     "groq2:qwen/qwen3.8-27b": {
+      "n": 3,
+      "accuracy": 0.6667,
+      "ci95": [
+       0.2077,
+       0.9385
+      ],
+      "evidence_recall": 0.6667
+     },
+     "groq3:qwen/qwen3.8-27b": {
+      "n": 4,
+      "accuracy": 0.75,
+      "ci95": [
+       0.3006,
+       0.9544
+      ],
+      "evidence_recall": 0.75
+     },
+     "groq4:qwen/qwen3.8-27b": {
+      "n": 3,
+      "accuracy": 0.3333,
+      "ci95": [
+       0.0615,
+       0.7923
+      ],
+      "evidence_recall": 1.0
+     },
+     "groq5:qwen/qwen3.8-27b": {
+      "n": 3,
+      "accuracy": 1.0,
+      "ci95": [
+       0.4385,
+       1.0
+      ],
+      "evidence_recall": 1.0
+     },
+     "qwen/qwen3.8-27b": {
+      "n": 3,
+      "accuracy": 0.6667,
+      "ci95": [
+       0.2077,
+       0.9385
+      ],
+      "evidence_recall": 0.6667
+     }
+    },
+    "collision_questions": {
+     "n": 0,
+     "accuracy": null,
+     "ci95": null,
+     "evidence_recall": null
+    },
+    "abstention": {
+     "precision": null,
+     "recall": null,
+     "hallucinations": 0,
+     "false_refusals": 0,
+     "should_refuse": 0
+    },
+    "retrieval_ms": {
+     "p50": 214.8,
+     "p95": 1570.2
+    },
+    "avg_context_lines": 30.0
+   }
+  },
+  "B1": {
+   "rows": [
+    {
+     "i": 72,
+     "question_id": "q072",
+     "system_name": "B1",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Esha Iyer on, and is it disputed?",
+     "gold": [
+      "basic 50"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 100",
+      "basic 50"
+     ],
+     "conflict": true,
+     "unknown": false,
+     "answer": "Esha Iyer is on the Fiber 100 plan, and there is no indication that this is disputed.",
+     "cited_ids": [
+      "ep-82867dc6",
+      "ep-2e602136"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 57.7,
+     "context_lines": 10
+    },
+    {
+     "i": 73,
+     "question_id": "q073",
+     "system_name": "B1",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Dev Malhotra on, and is it disputed?",
+     "gold": [
+      "fiber 1000"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 1000",
+      "no"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Fiber 1000; no dispute is recorded.",
+     "cited_ids": [
+      "ep-1fab0dc6",
+      "ep-6c7c677e"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 47.8,
+     "context_lines": 10
+    },
+    {
+     "i": 74,
+     "question_id": "q074",
+     "system_name": "B1",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Lata Joshi on, and is it disputed?",
+     "gold": [
+      "fiber 300"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "basic 50",
+      "fiber 300"
+     ],
+     "conflict": true,
+     "unknown": false,
+     "answer": "Lata Joshi is on the Basic 50 plan. There is no indication in the memory that this plan is disputed.",
+     "cited_ids": [
+      "ep-c0c76a9b",
+      "ep-58a7ca1d"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 71.6,
+     "context_lines": 10
+    },
+    {
+     "i": 75,
+     "question_id": "q075",
+     "system_name": "B1",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Hari Kumar on, and is it disputed?",
+     "gold": [
+      "fiber 300"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 100",
+      "fiber 300"
+     ],
+     "conflict": true,
+     "unknown": false,
+     "answer": "Hari Kumar is on the Fiber 100 plan, and there is no indication that this is disputed.",
+     "cited_ids": [
+      "ep-e3e7067b",
+      "ep-08afdf04"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 53.0,
+     "context_lines": 10
+    },
+    {
+     "i": 76,
+     "question_id": "q076",
+     "system_name": "B1",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Gaurav Chawla on, and is it disputed?",
+     "gold": [
+      "fiber 100"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "basic 50"
+     ],
+     "conflict": true,
+     "unknown": false,
+     "answer": "basic 50, not disputed",
+     "cited_ids": [
+      "ep-c6d9a5cd",
+      "ep-8aaa5324"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 54.2,
+     "context_lines": 10
+    },
+    {
+     "i": 77,
+     "question_id": "q077",
+     "system_name": "B1",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Jaya Reddy on, and is it disputed?",
+     "gold": [
+      "fiber 1000"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "basic 50"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Jaya Reddy is on the basic 50 plan, and there is no indication that it is disputed.",
+     "cited_ids": [
+      "ep-e2c72fa7",
+      "ep-491b09ef"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 51.7,
+     "context_lines": 10
+    },
+    {
+     "i": 78,
+     "question_id": "q078",
+     "system_name": "B1",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Sanjay Patil on, and is it disputed?",
+     "gold": [
+      "fiber 1000"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 1000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Fiber 1000; no dispute is recorded.",
+     "cited_ids": [
+      "ep-48951cae",
+      "ep-23664259"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 46.2,
+     "context_lines": 10
+    },
+    {
+     "i": 79,
+     "question_id": "q079",
+     "system_name": "B1",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Eshan Ghosh on, and is it disputed?",
+     "gold": [
+      "fiber 100"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 1000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Eshan Ghosh is on the Fiber 1000 plan, and there is no indication that it is disputed.",
+     "cited_ids": [
+      "ep-dae94dc4"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 58.7,
+     "context_lines": 10
+    },
+    {
+     "i": 80,
+     "question_id": "q080",
+     "system_name": "B1",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Rahul Shah on, and is it disputed?",
+     "gold": [
+      "fiber 1000"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "basic 50"
+     ],
+     "conflict": true,
+     "unknown": false,
+     "answer": "Rahul Shah is on the Basic 50 plan, and it is not disputed.",
+     "cited_ids": [
+      "ep-04eadcfe",
+      "ep-a2cd3ae6"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 46.6,
+     "context_lines": 10
+    },
+    {
+     "i": 81,
+     "question_id": "q081",
+     "system_name": "B1",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Ritu Saxena on, and is it disputed?",
+     "gold": [
+      "fiber 300"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 1000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Ritu Saxena is on the Fiber 1000 plan. This is not disputed; the most recent billing records (2026-10-03 and 2026-10-05 context) confirm Fiber 1000, overriding the earlier self-reported Fiber 300 from 2026-09-06.",
+     "cited_ids": [
+      "ep-9d9a505e",
+      "ep-cb607c2b",
+      "ep-c386e717"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 47.0,
+     "context_lines": 10
+    },
+    {
+     "i": 82,
+     "question_id": "q082",
+     "system_name": "B1",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Fatima Sheikh on, and is it disputed?",
+     "gold": [
+      "fiber 300"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 1000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Fiber 1000 (not disputed)",
+     "cited_ids": [
+      "ep-fa9a31ba",
+      "ep-49434897"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 67.2,
+     "context_lines": 10
+    },
+    {
+     "i": 83,
+     "question_id": "q083",
+     "system_name": "B1",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Pooja Bhat on, and is it disputed?",
+     "gold": [
+      "fiber 300"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 100"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Pooja Bhat is on the fiber 100 plan. There is no indication in the provided records that this plan is disputed.",
+     "cited_ids": [
+      "ep-dd902529",
+      "ep-f832d298"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 54.4,
+     "context_lines": 10
+    },
+    {
+     "i": 84,
+     "question_id": "q084",
+     "system_name": "B1",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Priya Naik on, and is it disputed?",
+     "gold": [
+      "fiber 100"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 300"
+     ],
+     "conflict": true,
+     "unknown": false,
+     "answer": "Priya Naik is on the Fiber 300 plan, and it is not disputed.",
+     "cited_ids": [
+      "ep-26b62fdd",
+      "ep-119b0703"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 48.3,
+     "context_lines": 10
+    },
+    {
+     "i": 85,
+     "question_id": "q085",
+     "system_name": "B1",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Neha Kapoor on, and is it disputed?",
+     "gold": [
+      "basic 50"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 300"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Neha Kapoor is on the Fiber 300 plan. There is no indication in the provided memory that this plan is disputed.",
+     "cited_ids": [
+      "ep-e00c9c26"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 54.2,
+     "context_lines": 10
+    },
+    {
+     "i": 86,
+     "question_id": "q086",
+     "system_name": "B1",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Kabir Singh on, and is it disputed?",
+     "gold": [
+      "basic 50"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 100",
+      "basic 50"
+     ],
+     "conflict": true,
+     "unknown": false,
+     "answer": "Kabir Singh is on the Fiber 100 plan. There is no indication in the records that this is disputed.",
+     "cited_ids": [
+      "ep-e3db75fc",
+      "ep-8bd5764a"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 49.1,
+     "context_lines": 10
+    },
+    {
+     "i": 87,
+     "question_id": "q087",
+     "system_name": "B1",
+     "run_id": "run-20261015-150842",
+     "type": "disagreement",
+     "question": "Which plan is Gita Pillai on, and is it disputed?",
+     "gold": [
+      "fiber 1000"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 100",
+      "fiber 1000"
+     ],
+     "conflict": true,
+     "unknown": false,
+     "answer": "Gita Pillai is on the Fiber 100 plan, and this is disputed because she previously stated her plan is Fiber 1000.",
+     "cited_ids": [
+      "ep-bcc63711",
+      "ep-b4ba01b1"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 56.2,
+     "context_lines": 10
+    }
+   ],
+   "n_target": 16,
+   "pending": [],
+   "summary": {
+    "overall": {
+     "n": 16,
+     "accuracy": 0.0625,
+     "ci95": [
+      0.0111,
+      0.2833
+     ],
+     "evidence_recall": 0.875
+    },
+    "by_type": {
+     "disagreement": {
+      "n": 16,
+      "accuracy": 0.0625,
+      "ci95": [
+       0.0111,
+       0.2833
+      ],
+      "evidence_recall": 0.875
+     }
+    },
+    "by_model": {
+     "groq2:qwen/qwen3.8-27b": {
+      "n": 3,
+      "accuracy": 0.0,
+      "ci95": [
+       0.0,
+       0.5615
+      ],
+      "evidence_recall": 1.0
+     },
+     "groq3:qwen/qwen3.8-27b": {
+      "n": 4,
+      "accuracy": 0.25,
+      "ci95": [
+       0.0456,
+       0.6994
+      ],
+      "evidence_recall": 0.75
+     },
+     "groq4:qwen/qwen3.8-27b": {
+      "n": 3,
+      "accuracy": 0.0,
+      "ci95": [
+       0.0,
+       0.5615
+      ],
+      "evidence_recall": 0.6667
+     },
+     "groq5:qwen/qwen3.8-27b": {
+      "n": 3,
+      "accuracy": 0.0,
+      "ci95": [
+       0.0,
+       0.5615
+      ],
+      "evidence_recall": 1.0
+     },
+     "qwen/qwen3.8-27b": {
+      "n": 3,
+      "accuracy": 0.0,
+      "ci95": [
+       0.0,
+       0.5615
+      ],
+      "evidence_recall": 1.0
+     }
+    },
+    "collision_questions": {
+     "n": 0,
+     "accuracy": null,
+     "ci95": null,
+     "evidence_recall": null
+    },
+    "abstention": {
+     "precision": null,
+     "recall": null,
+     "hallucinations": 0,
+     "false_refusals": 0,
+     "should_refuse": 0
+    },
+    "retrieval_ms": {
+     "p50": 53.6,
+     "p95": 71.6
+    },
+    "avg_context_lines": 10.0
+   }
+  }
+ },
+ "git": {
+  "head": "46a46f166d35ffd5111118689901609c992081c3",
+  "dirty": " M relay/agents.py\n M relay/config.py\n M relay/kb.py\n M relay/memory.py\n M relay/queries.py\n",
+  "at": "2026-10-15 15:08:03",
+  "models": [
+   "qwen/qwen3.8-27b",
+   "groq2:qwen/qwen3.8-27b",
+   "groq3:qwen/qwen3.8-27b",
+   "groq4:qwen/qwen3.8-27b",
+   "groq5:qwen/qwen3.8-27b"
+  ]
+ },
+ "run_id": "run-20261015-150842"
+}

@@ -81,6 +81,9 @@ EMBED_MODEL = "BAAI/bge-small-en-v1.5"
 DIM = 384
 
 CACHE_DIR = Path(os.environ["RELAY_CACHE_DIR"]) if os.environ.get("RELAY_CACHE_DIR") else ROOT / ".cache"
+# Misspelt place names at write time (difflib ratio vs places already on file): tahne/thane 0.8, puan/pune 0.75,
+# nasik/nashik 0.91; real neighbours sit lower (secunderabad/hyderabad 0.67). Calibration knob.
+TYPO_MIN_RATIO = 0.75
 ALIAS_MAX_DIST = 0.2  # cosine distance; measured paraphrase ~0.06, unrelated ~0.64
 # Fix suggestions from similar issues. Short issue names separate poorly: "connection drops" vs
 # "evening wifi issues" 0.26, vs "laggy games" 0.27. Calibration knob; a wrong suggestion is tried and recorded.

@@ -158,6 +158,15 @@ LIMIT $limit
 """
 
 ENTITY_EXISTS = "MATCH (e:Entity {name_key:$k}) RETURN e.type LIMIT 1"
+TOPIC_WORDS = """
+MATCH (e:Entity) WHERE e.type IN ['issue', 'fix', 'playbook', 'guide', 'faq', 'service', 'outage', 'reason', 'topic']
+RETURN e.name_key
+"""
+OBJECTS_OF = "MATCH (:Fact {predicate:$p})-[:ABOUT {role:'object'}]->(o:Entity) RETURN DISTINCT o.name_key"
+ADD_ALIAS = """
+MATCH (e:Entity {name_key:$k})
+SET e.aliases = CASE WHEN $a IN coalesce(e.aliases, []) THEN e.aliases ELSE coalesce(e.aliases, []) + [$a] END
+"""
 
 ALIAS_CANDIDATES = """
 CALL db.idx.vector.queryNodes('Entity', 'embedding', 5, vecf32($vec)) YIELD node, score
@@ -218,16 +227,23 @@ _EXPAND = {
 
 
 def retrieve_facts(hops):
-    expand = _EXPAND.get(hops) or (
-        f"OPTIONAL MATCH (seed)-[:{REL}*1..{int(hops)}]-(n:Entity)\n"
-        "WITH collect(DISTINCT seed) + collect(DISTINCT n) AS ns")
-    return f"""
-MATCH (seed:Entity) WHERE seed.name_key IN $seeds
-{expand}
+    if hops in _EXPAND:
+        expand = f"""{_EXPAND[hops]}
 UNWIND ns AS n
 WITH DISTINCT n LIMIT $max_entities
 MATCH (f:Fact)-[:ABOUT]->(n)
-WITH DISTINCT f LIMIT $max_facts
+WITH DISTINCT f LIMIT $max_facts"""
+    else:  # the caps cut the farthest entities and facts first: a hub one hop out must not crowd out a 2-hop path
+        expand = f"""OPTIONAL MATCH p = (seed)-[:{REL}*1..{int(hops)}]-(n:Entity)
+WITH collect({{n: seed, d: 0}}) + collect({{n: n, d: length(p)}}) AS ns
+UNWIND ns AS x
+WITH x.n AS n, min(x.d) AS d WHERE n IS NOT NULL
+WITH n, d ORDER BY d LIMIT $max_entities
+MATCH (f:Fact)-[:ABOUT]->(n)
+WITH f, min(d) AS d ORDER BY d LIMIT $max_facts"""
+    return f"""
+MATCH (seed:Entity) WHERE seed.name_key IN $seeds
+{expand}
 MATCH (f)<-[:DERIVED]-(ep:Episode)<-[:WROTE]-(a:Agent)
 WITH f, max(a.trust) AS support, max(ep.recorded_at) AS last_seen, collect(DISTINCT a.agent_id) AS agents
 OPTIONAL MATCH (f)-[:ABOUT]->(x:Entity)

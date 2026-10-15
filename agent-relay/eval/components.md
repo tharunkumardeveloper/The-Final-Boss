@@ -33,6 +33,82 @@ Source: {'report': 'eval/load_report_bench.json', 'graph': 'pml-bench', 'snapsho
 
 Extraction misses by predicate: {'on_plan': '11/52', 'lives_in': '6/66'}
 
+## Components: fix1
+
+Source: {'report': 'eval/load_report_fix1.json', 'graph': 'pml-bench', 'commit': '46a46f166d35ffd5111118689901609c992081c3', 'relay_retrieve_dirty': False, 'relay_dirty': ['M relay/agents.py', ' M relay/config.py', ' M relay/kb.py', ' M relay/memory.py', ' M relay/queries.py']}
+
+- Extraction recall: 94.4% (289/306) [91%–96%]; extra facts 104, load errors 7
+- Predicate normalisation (extracted fact with the planted value carries the planted predicate): 100.0% (257/257) [99%–100%]
+- Entity resolution, issue paraphrases (32 mentions, 6 gold clusters -> 10 entities): pairwise precision 1.0, recall 0.75 (76 gold pairs)
+- Typos mapped to the existing entity: 25.0% (2/8) [7%–59%]
+- Name collisions kept apart (both customers hold exactly their own current city): 50.0% (2/4) [15%–85%]
+
+| Contradiction case | Correct [CI] | Excluding extraction misses |
+|---|---|---|
+| change | 71.8% (28/39) [56%–83%] | 28/38 |
+| multi | 100.0% (16/16) [81%–100%] | 16/16 |
+| unchanged | 57.1% (8/14) [33%–79%] | 8/14 |
+| cross_agent | 68.8% (11/16) [44%–86%] | 11/11 |
+| **all** | 74.1% (63/85) [64%–82%] | 79.8% (63/79) [70%–87%] |
+
+Extraction misses by predicate: {'on_plan': '11/52', 'lives_in': '6/66'}
+
+## Components: fix2
+
+Source: {'report': 'eval/load_report_fix2.json', 'graph': 'pml-bench', 'commit': '46a46f166d35ffd5111118689901609c992081c3', 'relay_retrieve_dirty': False, 'relay_dirty': ['M relay/agents.py', ' M relay/config.py', ' M relay/kb.py', ' M relay/memory.py', ' M relay/queries.py']}
+
+- Extraction recall: 96.4% (295/306) [94%–98%]; extra facts 106, load errors 7
+- Predicate normalisation (extracted fact with the planted value carries the planted predicate): 100.0% (263/263) [99%–100%]
+- Entity resolution, issue paraphrases (32 mentions, 6 gold clusters -> 10 entities): pairwise precision 1.0, recall 0.75 (76 gold pairs)
+- Typos mapped to the existing entity: 100.0% (8/8) [68%–100%]
+- Name collisions kept apart (both customers hold exactly their own current city): 100.0% (4/4) [51%–100%]
+
+| Contradiction case | Correct [CI] | Excluding extraction misses |
+|---|---|---|
+| change | 82.0% (32/39) [67%–91%] | 32/38 |
+| multi | 100.0% (16/16) [81%–100%] | 16/16 |
+| unchanged | 100.0% (14/14) [78%–100%] | 14/14 |
+| cross_agent | 68.8% (11/16) [44%–86%] | 11/11 |
+| **all** | 85.9% (73/85) [77%–92%] | 92.4% (73/79) [84%–96%] |
+
+Extraction misses by predicate: {'on_plan': '11/52'}
+
+## Components: fix5
+
+Source: {'report': 'eval/load_report_fix5.json', 'graph': 'pml-bench', 'commit': '46a46f166d35ffd5111118689901609c992081c3', 'relay_retrieve_dirty': False, 'relay_dirty': ['M relay/agents.py', ' M relay/config.py', ' M relay/kb.py', ' M relay/memory.py', ' M relay/queries.py']}
+
+- Extraction recall: 100.0% (306/306) [99%–100%]; extra facts 100, load errors 7
+- Predicate normalisation (extracted fact with the planted value carries the planted predicate): 100.0% (274/274) [99%–100%]
+- Entity resolution, issue paraphrases (32 mentions, 6 gold clusters -> 10 entities): pairwise precision 1.0, recall 0.75 (76 gold pairs)
+- Typos mapped to the existing entity: 100.0% (8/8) [68%–100%]
+- Name collisions kept apart (both customers hold exactly their own current city): 100.0% (4/4) [51%–100%]
+
+| Contradiction case | Correct [CI] | Excluding extraction misses |
+|---|---|---|
+| change | 92.3% (36/39) [80%–97%] | 36/39 |
+| multi | 100.0% (16/16) [81%–100%] | 16/16 |
+| unchanged | 100.0% (14/14) [78%–100%] | 14/14 |
+| cross_agent | 87.5% (14/16) [64%–96%] | 14/14 |
+| **all** | 94.1% (80/85) [87%–97%] | 96.4% (80/83) [90%–99%] |
+
+## Components: fix6
+
+Source: {'report': 'eval/load_report_fix6.json', 'graph': 'pml-bench', 'commit': '46a46f166d35ffd5111118689901609c992081c3', 'relay_retrieve_dirty': False, 'relay_dirty': ['M relay/agents.py', ' M relay/config.py', ' M relay/kb.py', ' M relay/memory.py', ' M relay/queries.py', ' M relay/registry.py']}
+
+- Extraction recall: 100.0% (306/306) [99%–100%]; extra facts 97, load errors 0
+- Predicate normalisation (extracted fact with the planted value carries the planted predicate): 100.0% (274/274) [99%–100%]
+- Entity resolution, issue paraphrases (32 mentions, 6 gold clusters -> 10 entities): pairwise precision 1.0, recall 0.75 (76 gold pairs)
+- Typos mapped to the existing entity: 100.0% (8/8) [68%–100%]
+- Name collisions kept apart (both customers hold exactly their own current city): 100.0% (4/4) [51%–100%]
+
+| Contradiction case | Correct [CI] | Excluding extraction misses |
+|---|---|---|
+| change | 92.3% (36/39) [80%–97%] | 36/39 |
+| multi | 100.0% (16/16) [81%–100%] | 16/16 |
+| unchanged | 100.0% (14/14) [78%–100%] | 14/14 |
+| cross_agent | 100.0% (16/16) [81%–100%] | 16/16 |
+| **all** | 96.5% (82/85) [90%–99%] | 96.5% (82/85) [90%–99%] |
+
 ## Benchmark: scaled-160
 
 Tenant `pml-bench`, 40 customers, 556 customer turns, 160 questions, run `run-20261015-140300`. Provenance: git archive of HEAD fe9abb5 (relay/ clean, incl. retrieve.py) + eval/bench_shim.py; graph mem:pml-bench reloaded 2026-10-15 13:44-13:58 IST; answers 2026-10-15
@@ -63,25 +139,84 @@ Why misses happen: retrieval: gold value not in context -> refused: 21; retrieva
 
 By answer model (all API keys pooled): openai/gpt-oss-120b 25.0% (4/16) [10%–50%]; qwen/qwen3.8-27b 58.3% (84/144) [50%–66%]
 
+## Benchmark: final-160
+
+Tenant `pml-bench`, 40 customers, 556 customer turns, 160 questions, run `run-20261015-161615`. Provenance: None
+
+Head-to-head on 160 questions: Relay 90.6% (145/160) [85%–94%] vs B1 50.0% (80/160) [42%–58%]; difference +40.6%, paired bootstrap 95% CI [+31.2%, +50.0%]; Relay-only correct 75, B1-only 10, exact McNemar p = 1.9e-13
+
+| Type | n | Relay | B1 | Δ [bootstrap CI] |
+|---|---|---|---|---|
+| belief_time | 18 | 94.4% (17/18) [74%–99%] | 38.9% (7/18) [20%–61%] | +56% [+33%, +78%] |
+| completeness | 18 | 100.0% (18/18) [82%–100%] | 33.3% (6/18) [16%–56%] | +67% [+44%, +89%] |
+| current | 18 | 100.0% (18/18) [82%–100%] | 44.4% (8/18) [25%–66%] | +56% [+33%, +78%] |
+| disagreement | 16 | 100.0% (16/16) [81%–100%] | 6.2% (1/16) [1%–28%] | +94% [+81%, +100%] |
+| handoff | 18 | 100.0% (18/18) [82%–100%] | 66.7% (12/18) [44%–84%] | +33% [+11%, +56%] |
+| multi_hop | 18 | 100.0% (18/18) [82%–100%] | 27.8% (5/18) [12%–51%] | +72% [+50%, +94%] |
+| procedural | 18 | 44.4% (8/18) [25%–66%] | 50.0% (9/18) [29%–71%] | -6% [-44%, +33%] |
+| unknown | 18 | 88.9% (16/18) [67%–97%] | 88.9% (16/18) [67%–97%] | +0% [-22%, +22%] |
+| world_time | 18 | 88.9% (16/18) [67%–97%] | 88.9% (16/18) [67%–97%] | +0% [-17%, +17%] |
+
+**FULL**: accuracy 90.6% (145/160) [85%–94%]. Abstention (18 should-refuse): precision 88.9% (16/18) [67%–97%], recall 88.9% (16/18) [67%–97%].
+
+Why misses happen: gold in context, wrong/incomplete value chosen: 8; retrieval: gold value not in context -> wrong answer: 3; retrieval: gold value not in context -> refused: 2; answered a should-refuse question (hallucination): 2
+
+By answer model (all API keys pooled): gemini-3.5-flash-lite 90.6% (145/160) [85%–94%]
+
+**B1**: accuracy 50.0% (80/160) [42%–58%]. Abstention (18 should-refuse): precision 28.6% (16/56) [18%–41%], recall 88.9% (16/18) [67%–97%].
+
+Why misses happen: gold in context but model refused: 23; retrieval: gold value not in context -> wrong answer: 21; retrieval: gold value not in context -> refused: 17; gold in context, conflict not flagged: 9; gold in context, wrong/incomplete value chosen: 8; answered a should-refuse question (hallucination): 2
+
+By answer model (all API keys pooled): gemini-3.5-flash-lite 50.0% (80/160) [42%–58%]
+
 ## Small set (74 questions, earlier run)
 
 Relay 93.2% (69/74) [85%–97%]; B1 43.5% (20/46) [30%–58%]; head-to-head Relay 91.3% (42/46) [80%–97%] vs B1 43.5% (20/46) [30%–58%]. Exact McNemar p ≤ 6e-05 for any pairing consistent with these counts. aggregates from README/PROGRESS; per-question rows not kept, so no bootstrap.
+
+## Fix log
+
+| # | Fix | Metric | Before | After | n | Graph / answers |
+|---|---|---|---|---|---|---|
+| 1 | Resolver.pick_up reads billing before the lab branch (lab path returned before any tool ran) | disagreement, answers (FULL / B1) | 0/16 / 0/16 | 11/16 / 1/16 | 16 | reload fix1; qwen3.8-27b, Groq keys 1-5; eval/fixlog/fix1.json |
+| 1 | (same) | contradiction cross_agent (zero-LLM) | 0/16 | 11/16 | 16 | reload fix1; 5 misses = customer plan claim never stored (fix 5) |
+| 2 | Write-time typo resolution vs places on file (difflib >= 0.75, digits equal, alias recorded); a city matched inside a longer name keeps the longer name | typos mapped to existing entity | 2/8 | 8/8 | 8 | reload fix2 |
+| 2 | (same) | name collisions kept apart (navi mumbai) | 2/4 | 4/4 | 4 | reload fix2 |
+| 2 | (same) | contradiction unchanged / change | 8/14 / 28/39 | 14/14 / 32/39 | 14 / 39 | reload fix2 (Tier 3 item 6 needed no separate fix: the guard was right, the typo was the cause) |
+| 3 | Resolver.pick_up reads the outage feed before the lab branch (0 `affects` facts in the graph) | multi_hop gold in context (zero-LLM) | 7/18 | 15/18 | 18 | reload fix3 |
+| 3 | (same) | multi_hop answers (FULL) | 5/18 | 15/18 | 18 | reload fix3, old expansion patched in; qwen3.8-27b, Groq keys 1-5 then 3-5; eval/fixlog/fix3.json |
+| 4 | 2-hop recall caps (max_entities/max_facts) cut by hop distance, not arbitrarily | multi_hop gold in context / answers | 15/18 / 15/18 | 18/18 / 18/18 | 18 | same graph as 3; other types' evidence unchanged; p50 156 -> 158 ms; eval/fixlog/fix4.json |
+| 5 | on_plan keeps an off-catalogue plan the customer is on ('basic 50'); purchase predicates still need the catalogue | extraction recall (planted facts stored) | 295/306 | 306/306 | 306 | reload fix5; every 'basic 50' claim (11 turns) had been dropped at write time |
+| 5 | (same) | belief_time / disagreement gold in context | 15/18 / 13/16 | 18/18 / 16/16 | 18 / 16 | reload fix5 (belief_time misses were this, not a two-clock bug) |
+| 5 | (same) | belief_time / world_time / disagreement answers | 14/18 / 16/18 / 11/16 | 9/9 / 17/18 / 4/5 (partial) | 9 / 18 / 5 | qwen3.8-27b, Groq keys 3-5 then 4 only; qwen daily cap hit; eval/fixlog/fix5.json |
+| 5 | (same) | contradiction cross_agent / change | 11/16 / 32/39 | 14/16 / 36/39 | 16 / 39 | reload fix5 |
+| 6 | An open account request (invoice, pause...) is not the context for a new fault: the fault opens its own ticket | load errors (ticket never opened) | 7 | 0 | 634 | reload fix6b |
+| 6 | (same) | cross_agent / current gold in context | 14/16 / 17/18 | 16/16 / 18/18 | 16 / 18 | reload fix6b |
+| 7 | Unknown-person heuristic: words of the tenant's issue/fix/playbook names are vocabulary ('for slow speeds') | answerable questions emptied by the heuristic | 2 (q128, q129) | 0 | 160 | graph fix6b; 'Kevin' probes still refused 4/4; of the 11 false refusals at baseline, 0 came from the heuristic |
+| final | all of the above | 160-question head-to-head (Relay / B1) | 68.8% / 55.0% (qwen) | 90.6% / 50.0% (gemini-3.5-flash-lite) | 160 | reload fix6b, working tree on 46a46f1; answer model differs from baseline (Groq daily caps), same model for both systems |
+
+## Methodology and caveats (read before quoting)
+
+- **Answer models.** Fixes 1, 3, 4, 5 were scored on qwen3.8-27b (Groq keys 1-5); qwen and gpt-oss-120b then hit their daily caps on every key, so the final 160-question run uses gemini-3.5-flash-lite for both systems. The final headline is not same-model comparable with the 68.8% baseline; the paired comparison inside each run is. B1 moved 55.0% -> 50.0% across the model change.
+- **Graph.** Each write-path fix was measured on a fresh reload of `mem:pml-bench` from `data/scenario.json` (extraction answers cached, so the extracted text is identical across reloads; lab runs during the load call an LLM and are not cached). Reload times and git state per reload: `eval/reload_state.txt`. Load reports: `eval/load_report_fix*.json`.
+- **bench_shim removed.** `relay/retrieve.py` `_pvec` now embeds open predicates; all runs here use `python -m eval.run_eval` directly.
+- **Fix 3/4 attribution:** the fix-3 row ran with the pre-fix-4 expansion patched in (scratch `oldexp.py`), on the same graph as fix 4.
+- **Not fixed:** procedural 8/18 (gold fix not in context for 'which fix has worked before for X'); 8 remaining Relay misses are generation (gold in context, wrong value chosen), so retrieval is no longer the top miss bucket.
+- All data synthetic from our own templates and question generator (in-distribution).
 
 ## Provenance
 
 ```
 {
- "snapshot": "git archive of HEAD fe9abb5 (clean relay/), run outside the working tree"
+ "commit": "46a46f166d35ffd5111118689901609c992081c3",
+ "relay_retrieve_dirty": true,
+ "relay_dirty": [
+  "M relay/agents.py",
+  " M relay/config.py",
+  " M relay/kb.py",
+  " M relay/memory.py",
+  " M relay/queries.py",
+  " M relay/registry.py",
+  " M relay/retrieve.py"
+ ]
 }
 ```
-
-## Methodology and caveats (read before quoting)
-
-- **Benchmark graph state.** After the FalkorDB instance swap `mem:pml-bench` held only the catalogue/network (433 Entity, 133 NetNode, 467 Step, no Episode/Fact). The LLM cache had 0 hits for the current extraction prompt (5/556), so it was reloaded from `data/scenario.json` on 2026-10-15 with real extraction calls (router mix of Groq models). Report: `eval/load_report_bench.json`. `data/load_report.json` (the earlier reload) was left untouched.
-- **Engine bug found (not fixed):** at fe9abb5 `retrieve.recall` raises `KeyError: 'open:<attribute>'` for any fact with an open predicate, because `_predicate_vecs()` only embeds registry predicates. On the reloaded graph that crashed 155/160 questions; the dirty working copy of retrieve.py crashed the same way. The scored run uses `eval/bench_shim.py`, which embeds unknown predicates on first use (eval-side only).
-- **Disagreement questions are invalid on this load.** The resolver wrote no `on_plan` facts (resolver facts: has_status, resolves, tried_fix, one reported_issue), and all 29 successful pick-ups returned empty observations, so the planted billing-vs-customer disagreements never entered the graph. Both systems score 0/16; `cross_agent` contradiction = 0/16, all flagged as plant misses. Excluding the 16 disagreement questions: Relay 110/144 = 76.4% vs B1 88/144 = 61.1%.
-- **Typos are stored verbatim** ("still in Tahne" -> entity `tahne`), which supersedes the correct city: 6/8 typo turns fail, and most `unchanged` and several `change` contradiction failures come from this. Name collisions are kept apart as entities in 4/4 pairs (no cross-contaminated facts); the 2/4 score is "navi mumbai" being extracted as "mumbai".
-- **Answer models:** per question both systems use the same pinned model; 16 questions on gpt-oss-120b, 144 on qwen3.8-27b (120b hit its Groq limit). Temperature 0, but no determinism re-runs were done (variance phase not run).
-- **Not run (need LLM calls, not attempted in this pass):** k-sensitivity (B1_k20/k50), ablations (A1/A2/B0), determinism re-runs, OOD extraction, LoCoMo QA. Resume any with `python -m eval.bench_shim --tenant pml-bench --phases ksweep,ablations,variance` (from a clean checkout; do not reload the tenant, or the answer cache misses).
-- **74-question small set:** per-question rows were overwritten, so only aggregate Wilson CIs and a worst-case McNemar bound are given.
-- All data synthetic from our own templates and question generator (in-distribution).

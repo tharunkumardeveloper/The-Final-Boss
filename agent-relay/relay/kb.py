@@ -78,8 +78,9 @@ def resolve_place(text):
     for phrase, (region, iso, city, area) in _place_index():
         if len(phrase) >= 3 and f" {phrase} " in t:
             if area:  # an area is the most specific answer; take the longest one
-                return {"region": region, "country": iso, "city": city, "area": area, "key": area}
-            found = found or {"region": region, "country": iso, "city": city, "area": None, "key": city}
+                return {"region": region, "country": iso, "city": city, "area": area, "key": area, "phrase": phrase}
+            found = found or {"region": region, "country": iso, "city": city, "area": None, "key": city,
+                              "phrase": phrase}
     return found
 
 

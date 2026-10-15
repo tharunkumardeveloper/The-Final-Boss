@@ -2,3 +2,84 @@ Thu Oct 15 13:44:31 IST 2026
 fe9abb5d0ff3368974212c4d41364ad2c355a80b
  M relay/lab.py
 ?? relay/procedural.py
+
+[fix1] start 2026-10-15 15:00:42 HEAD a2b4108b731c0678894d6d56cade665b365b4696
+ M relay/agents.py
+[fix1] done 15:07:18 summary {"turns": 556, "planted": 306, "recovered": 289, "missed": 17, "extra_facts": 104, "dropped": 13}
+
+[fix2] start 2026-10-15 15:10:00 HEAD 46a46f166d35ffd5111118689901609c992081c3
+ M eval/components.json
+ M eval/components.md
+ M eval/reload_state.txt
+ M relay/agents.py
+ M relay/config.py
+ M relay/kb.py
+ M relay/memory.py
+ M relay/queries.py
+?? eval/fixlog/
+?? eval/load_report_fix1.json
+[fix2] done 15:16:17 summary {"turns": 556, "planted": 306, "recovered": 295, "missed": 11, "extra_facts": 106, "dropped": 13}
+
+[fix3] start 2026-10-15 15:17:51 HEAD 46a46f166d35ffd5111118689901609c992081c3
+ M eval/components.json
+ M eval/components.md
+ M eval/reload_state.txt
+ M relay/agents.py
+ M relay/config.py
+ M relay/kb.py
+ M relay/memory.py
+ M relay/queries.py
+?? eval/fixlog/
+?? eval/load_report_fix1.json
+?? eval/load_report_fix2.json
+[fix3] done 15:24:11 summary {"turns": 556, "planted": 306, "recovered": 295, "missed": 11, "extra_facts": 101, "dropped": 16}
+
+[fix5] start 2026-10-15 15:32:41 HEAD 46a46f166d35ffd5111118689901609c992081c3
+ M eval/components.json
+ M eval/components.md
+ M eval/reload_state.txt
+ M relay/agents.py
+ M relay/config.py
+ M relay/kb.py
+ M relay/memory.py
+ M relay/queries.py
+?? eval/fixlog/
+?? eval/load_report_fix1.json
+?? eval/load_report_fix2.json
+?? eval/load_report_fix3.json
+[fix5] done 15:39:01 summary {"turns": 556, "planted": 306, "recovered": 306, "missed": 0, "extra_facts": 100, "dropped": 2}
+
+[fix6] start 2026-10-15 15:48:40 HEAD 46a46f166d35ffd5111118689901609c992081c3
+ M eval/components.json
+ M eval/components.md
+ M eval/reload_state.txt
+ M relay/agents.py
+ M relay/config.py
+ M relay/kb.py
+ M relay/memory.py
+ M relay/queries.py
+ M relay/registry.py
+?? eval/fixlog/
+?? eval/load_report_fix1.json
+?? eval/load_report_fix2.json
+?? eval/load_report_fix3.json
+?? eval/load_report_fix5.json
+[fix6] done 15:55:44 summary {"turns": 556, "planted": 306, "recovered": 306, "missed": 0, "extra_facts": 102, "dropped": 3}
+
+[fix6b] start 2026-10-15 15:58:58 HEAD 46a46f166d35ffd5111118689901609c992081c3
+ M eval/components.json
+ M eval/components.md
+ M eval/reload_state.txt
+ M relay/agents.py
+ M relay/config.py
+ M relay/kb.py
+ M relay/memory.py
+ M relay/queries.py
+ M relay/registry.py
+?? eval/fixlog/
+?? eval/load_report_fix1.json
+?? eval/load_report_fix2.json
+?? eval/load_report_fix3.json
+?? eval/load_report_fix5.json
+?? eval/load_report_fix6.json
+[fix6b] done 16:05:39 summary {"turns": 556, "planted": 306, "recovered": 306, "missed": 0, "extra_facts": 97, "dropped": 2}

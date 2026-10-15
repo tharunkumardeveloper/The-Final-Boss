@@ -1,0 +1,662 @@
+{
+ "systems": {
+  "FULL": {
+   "rows": [
+    {
+     "i": 106,
+     "question_id": "q106",
+     "system_name": "FULL",
+     "run_id": "run-20261015-152728",
+     "type": "multi_hop",
+     "question": "Which outage might be affecting Ritu Saxena?",
+     "gold": [
+      "flooded junction box in andheri"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "The memory does not contain any information about outages affecting Ritu Saxena.",
+     "cited_ids": [],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 2912.2,
+     "context_lines": 30
+    },
+    {
+     "i": 107,
+     "question_id": "q107",
+     "system_name": "FULL",
+     "run_id": "run-20261015-152728",
+     "type": "multi_hop",
+     "question": "Which outage might be affecting Qasim Ali?",
+     "gold": [
+      "substation failure in gachibowli"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "substation failure in gachibowli"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "substation failure in gachibowli",
+     "cited_ids": [
+      "f-6786dec2",
+      "f-e6cf6880"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 216.9,
+     "context_lines": 30
+    },
+    {
+     "i": 108,
+     "question_id": "q108",
+     "system_name": "FULL",
+     "run_id": "run-20261015-152728",
+     "type": "multi_hop",
+     "question": "Which outage might be affecting Neha Kapoor?",
+     "gold": [
+      "road works cut in chinchwad"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "flooded junction box in andheri"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "flooded junction box in andheri",
+     "cited_ids": [
+      "f-2ed8a96b",
+      "f-0035b12a"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 244.0,
+     "context_lines": 30
+    },
+    {
+     "i": 109,
+     "question_id": "q109",
+     "system_name": "FULL",
+     "run_id": "run-20261015-152728",
+     "type": "multi_hop",
+     "question": "Which outage might be affecting Tara Banerjee?",
+     "gold": [
+      "fiber cut on fc road"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber cut on fc road"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fiber cut on fc road",
+     "cited_ids": [
+      "f-0aeb5742",
+      "f-a09f4cb2"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 212.1,
+     "context_lines": 30
+    },
+    {
+     "i": 110,
+     "question_id": "q110",
+     "system_name": "FULL",
+     "run_id": "run-20261015-152728",
+     "type": "multi_hop",
+     "question": "Which outage might be affecting Sanjay Patil?",
+     "gold": [
+      "road works cut in chinchwad"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "flooded junction box in andheri"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "flooded junction box in andheri",
+     "cited_ids": [
+      "f-366b3254",
+      "f-0035b12a"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 2901.2,
+     "context_lines": 30
+    },
+    {
+     "i": 111,
+     "question_id": "q111",
+     "system_name": "FULL",
+     "run_id": "run-20261015-152728",
+     "type": "multi_hop",
+     "question": "Which outage might be affecting Chirag Jain?",
+     "gold": [
+      "road works cut in chinchwad"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "road works cut in chinchwad"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "road works cut in chinchwad",
+     "cited_ids": [
+      "f-1100fc1b",
+      "f-f0d4757d"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 214.5,
+     "context_lines": 30
+    },
+    {
+     "i": 112,
+     "question_id": "q112",
+     "system_name": "FULL",
+     "run_id": "run-20261015-152728",
+     "type": "multi_hop",
+     "question": "Which outage might be affecting Bob Menon?",
+     "gold": [
+      "road works cut in chinchwad"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "road works cut in chinchwad"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "road works cut in chinchwad",
+     "cited_ids": [
+      "f-daa70021",
+      "f-f0d4757d"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 185.1,
+     "context_lines": 30
+    },
+    {
+     "i": 113,
+     "question_id": "q113",
+     "system_name": "FULL",
+     "run_id": "run-20261015-152728",
+     "type": "multi_hop",
+     "question": "Which customers might be affected by the substation failure in gachibowli?",
+     "gold": [
+      "farhan khan",
+      "gaurav chawla",
+      "qasim ali",
+      "rahul sharma",
+      "wasim akhtar"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "rahul sharma",
+      "farhan khan",
+      "qasim ali",
+      "gaurav chawla",
+      "wasim akhtar"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "rahul sharma, farhan khan, qasim ali, gaurav chawla, wasim akhtar",
+     "cited_ids": [
+      "f-e6cf6880",
+      "f-893fcd05",
+      "f-7d46b854",
+      "f-6786dec2",
+      "f-33197173",
+      "f-5d8f45e6"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 199.5,
+     "context_lines": 30
+    },
+    {
+     "i": 114,
+     "question_id": "q114",
+     "system_name": "FULL",
+     "run_id": "run-20261015-152728",
+     "type": "multi_hop",
+     "question": "Which customers might be affected by the flooded junction box in andheri?",
+     "gold": [
+      "bhavna shetty",
+      "rahul shah",
+      "ritu saxena",
+      "uday rao"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "rahul shah",
+      "uday rao",
+      "ritu saxena",
+      "bhavna shetty"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "rahul shah, uday rao, ritu saxena, bhavna shetty",
+     "cited_ids": [
+      "f-0035b12a",
+      "f-f72e143e",
+      "f-2c5c778e",
+      "f-1183ad99",
+      "f-52638f68"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 225.3,
+     "context_lines": 30
+    },
+    {
+     "i": 115,
+     "question_id": "q115",
+     "system_name": "FULL",
+     "run_id": "run-20261015-152728",
+     "type": "multi_hop",
+     "question": "Which customers might be affected by the fiber cut on fc road?",
+     "gold": [
+      "esha iyer",
+      "fatima sheikh",
+      "omar siddiqui",
+      "tara banerjee"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fatima sheikh",
+      "omar siddiqui",
+      "tara banerjee",
+      "esha iyer"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fatima sheikh, omar siddiqui, tara banerjee, esha iyer",
+     "cited_ids": [
+      "f-a09f4cb2",
+      "f-7901e96f",
+      "f-65fb3a7b",
+      "f-0aeb5742",
+      "f-acdea3dc"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 213.7,
+     "context_lines": 30
+    },
+    {
+     "i": 116,
+     "question_id": "q116",
+     "system_name": "FULL",
+     "run_id": "run-20261015-152728",
+     "type": "multi_hop",
+     "question": "Which customers might be affected by the road works cut in chinchwad?",
+     "gold": [
+      "alice roy",
+      "bob menon",
+      "chirag jain",
+      "ishaan verma",
+      "neha kapoor",
+      "sanjay patil"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "alice roy",
+      "neha kapoor",
+      "ishaan verma",
+      "bob menon",
+      "chirag jain",
+      "sanjay patil"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "alice roy, neha kapoor, ishaan verma, bob menon, chirag jain, sanjay patil",
+     "cited_ids": [
+      "f-f0d4757d",
+      "f-a245dd50",
+      "f-2ed8a96b",
+      "f-be3363ee",
+      "f-daa70021",
+      "f-1100fc1b",
+      "f-366b3254"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 167.5,
+     "context_lines": 30
+    },
+    {
+     "i": 117,
+     "question_id": "q117",
+     "system_name": "FULL",
+     "run_id": "run-20261015-152728",
+     "type": "multi_hop",
+     "question": "Which city does the customer with ticket PML-2051 live in?",
+     "gold": [
+      "nashik"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "nashik"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "nashik",
+     "cited_ids": [
+      "f-c4fe3d40",
+      "f-cdc915ff"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 206.5,
+     "context_lines": 30
+    },
+    {
+     "i": 118,
+     "question_id": "q118",
+     "system_name": "FULL",
+     "run_id": "run-20261015-152728",
+     "type": "multi_hop",
+     "question": "Which city does the customer with ticket PML-2056 live in?",
+     "gold": [
+      "pune"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "pune"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "pune",
+     "cited_ids": [
+      "f-be0c8610",
+      "f-0aeb5742"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 175.3,
+     "context_lines": 30
+    },
+    {
+     "i": 119,
+     "question_id": "q119",
+     "system_name": "FULL",
+     "run_id": "run-20261015-152728",
+     "type": "multi_hop",
+     "question": "Which city does the customer with ticket PML-2067 live in?",
+     "gold": [
+      "pune"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "pune"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "pune",
+     "cited_ids": [
+      "f-a25017e0",
+      "f-7901e96f"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 185.0,
+     "context_lines": 30
+    },
+    {
+     "i": 120,
+     "question_id": "q120",
+     "system_name": "FULL",
+     "run_id": "run-20261015-152728",
+     "type": "multi_hop",
+     "question": "What router does the owner of ticket PML-2053 have?",
+     "gold": [
+      "ax1800"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "ax1800"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "ax1800",
+     "cited_ids": [
+      "f-c0d49ea3",
+      "f-7df61a0b"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 262.0,
+     "context_lines": 30
+    },
+    {
+     "i": 121,
+     "question_id": "q121",
+     "system_name": "FULL",
+     "run_id": "run-20261015-152728",
+     "type": "multi_hop",
+     "question": "Which plan is the customer with ticket PML-2052 on?",
+     "gold": [
+      "fiber 100"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 100"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fiber 100",
+     "cited_ids": [
+      "f-d89b87df",
+      "f-18799e01"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 215.5,
+     "context_lines": 30
+    },
+    {
+     "i": 122,
+     "question_id": "q122",
+     "system_name": "FULL",
+     "run_id": "run-20261015-152728",
+     "type": "multi_hop",
+     "question": "Which plan is the customer with ticket PML-2065 on?",
+     "gold": [
+      "fiber 300"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 300"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fiber 300",
+     "cited_ids": [
+      "f-4240411e",
+      "f-c3c20e7c"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 154.0,
+     "context_lines": 30
+    },
+    {
+     "i": 123,
+     "question_id": "q123",
+     "system_name": "FULL",
+     "run_id": "run-20261015-152728",
+     "type": "multi_hop",
+     "question": "Which city does the customer with ticket PML-2066 live in?",
+     "gold": [
+      "navi mumbai"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "navi mumbai"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "navi mumbai",
+     "cited_ids": [
+      "f-5be1b4ef",
+      "f-c5495731"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 262.8,
+     "context_lines": 30
+    }
+   ],
+   "n_target": 18,
+   "pending": [],
+   "summary": {
+    "overall": {
+     "n": 18,
+     "accuracy": 0.8333,
+     "ci95": [
+      0.6078,
+      0.9416
+     ],
+     "evidence_recall": 0.8333
+    },
+    "by_type": {
+     "multi_hop": {
+      "n": 18,
+      "accuracy": 0.8333,
+      "ci95": [
+       0.6078,
+       0.9416
+      ],
+      "evidence_recall": 0.8333
+     }
+    },
+    "by_model": {
+     "groq2:qwen/qwen3.8-27b": {
+      "n": 3,
+      "accuracy": 0.6667,
+      "ci95": [
+       0.2077,
+       0.9385
+      ],
+      "evidence_recall": 0.6667
+     },
+     "groq3:qwen/qwen3.8-27b": {
+      "n": 5,
+      "accuracy": 1.0,
+      "ci95": [
+       0.5655,
+       1.0
+      ],
+      "evidence_recall": 1.0
+     },
+     "groq4:qwen/qwen3.8-27b": {
+      "n": 6,
+      "accuracy": 0.8333,
+      "ci95": [
+       0.4365,
+       0.9699
+      ],
+      "evidence_recall": 0.8333
+     },
+     "groq5:qwen/qwen3.8-27b": {
+      "n": 4,
+      "accuracy": 0.75,
+      "ci95": [
+       0.3006,
+       0.9544
+      ],
+      "evidence_recall": 0.75
+     }
+    },
+    "collision_questions": {
+     "n": 0,
+     "accuracy": null,
+     "ci95": null,
+     "evidence_recall": null
+    },
+    "abstention": {
+     "precision": 0.0,
+     "recall": null,
+     "hallucinations": 0,
+     "false_refusals": 1,
+     "should_refuse": 0
+    },
+    "retrieval_ms": {
+     "p50": 214.1,
+     "p95": 2912.2
+    },
+    "avg_context_lines": 30.0
+   }
+  }
+ },
+ "git": {
+  "head": "46a46f166d35ffd5111118689901609c992081c3",
+  "dirty": " M relay/agents.py\n M relay/config.py\n M relay/kb.py\n M relay/memory.py\n M relay/queries.py\n",
+  "at": "2026-10-15 15:29:02",
+  "models": [
+   "groq3:qwen/qwen3.8-27b",
+   "groq4:qwen/qwen3.8-27b",
+   "groq5:qwen/qwen3.8-27b"
+  ],
+  "old_expand": true
+ },
+ "run_id": "run-20261015-152728"
+}

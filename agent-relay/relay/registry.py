@@ -85,6 +85,14 @@ TICKET_TYPES = [
     "cancellation_request", "router_config", "router_rebooting", "app_bug", "contact_update", "account_access",
 ]
 
+# service_request objects (the extraction prompt's list): account work, not a fault to diagnose
+SERVICE_REQUESTS = {
+    "service_pause", "cancellation_request", "relocation_same_city", "relocation_intercity", "plan_upgrade",
+    "plan_downgrade", "addon_add", "addon_removal", "billing_dispute", "invoice_resend", "payment_reconciliation",
+    "payment_method_change", "gst_invoice_request", "billing_date_change", "contact_update", "account_access",
+    "router_config",
+}
+
 LIFE = {
     "lives_in":          ("customer", "city",         "single", "semantic", "trust"),
     "works_at":          ("customer", "organization", "single", "semantic", "trust"),

@@ -1,0 +1,1022 @@
+{
+ "systems": {
+  "FULL": {
+   "rows": [
+    {
+     "i": 18,
+     "question_id": "q018",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "world_time",
+     "question": "Which contact channel did Manav Gupta prefer on 2026-09-23?",
+     "gold": [
+      "sms"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "sms"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "sms",
+     "cited_ids": [
+      "f-586614d5"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 3444.5,
+     "context_lines": 30
+    },
+    {
+     "i": 19,
+     "question_id": "q019",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "world_time",
+     "question": "Where did Zoya Mirza actually live on 2026-09-20?",
+     "gold": [
+      "secunderabad"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "secunderabad"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "secunderabad",
+     "cited_ids": [
+      "f-f326e0ec"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 324.7,
+     "context_lines": 30
+    },
+    {
+     "i": 20,
+     "question_id": "q020",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "world_time",
+     "question": "Where did Bhavna Shetty actually live on 2026-09-21?",
+     "gold": [
+      "mumbai"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "mumbai"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "mumbai",
+     "cited_ids": [
+      "f-b39a8e72",
+      "f-e73548f8"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 283.0,
+     "context_lines": 30
+    },
+    {
+     "i": 21,
+     "question_id": "q021",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "world_time",
+     "question": "Where did Uday Rao actually live on 2026-09-17?",
+     "gold": [
+      "mumbai"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "hyderabad"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "hyderabad",
+     "cited_ids": [
+      "f-37edf41f"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 213.4,
+     "context_lines": 30
+    },
+    {
+     "i": 22,
+     "question_id": "q022",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "world_time",
+     "question": "Where did Ritu Saxena actually live on 2026-09-21?",
+     "gold": [
+      "mumbai"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "mumbai"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "mumbai",
+     "cited_ids": [
+      "f-8f558f9a",
+      "f-922fbb6f"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 214.5,
+     "context_lines": 30
+    },
+    {
+     "i": 23,
+     "question_id": "q023",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "world_time",
+     "question": "Which contact channel did Neha Kapoor prefer on 2026-09-21?",
+     "gold": [
+      "whatsapp"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "whatsapp"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "whatsapp",
+     "cited_ids": [
+      "f-19856b8e"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 191.7,
+     "context_lines": 30
+    },
+    {
+     "i": 24,
+     "question_id": "q024",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "world_time",
+     "question": "Where did Alice Rao actually live on 2026-09-25?",
+     "gold": [
+      "mysuru"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "mysuru"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "mysuru",
+     "cited_ids": [
+      "f-264503ab"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 279.0,
+     "context_lines": 30
+    },
+    {
+     "i": 25,
+     "question_id": "q025",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "world_time",
+     "question": "Where did Uday Rao actually live on 2026-09-23?",
+     "gold": [
+      "mumbai"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "mumbai"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "mumbai",
+     "cited_ids": [
+      "f-acca4f78",
+      "f-37edf41f"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 165.0,
+     "context_lines": 30
+    },
+    {
+     "i": 26,
+     "question_id": "q026",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "world_time",
+     "question": "Where did Uday Rao actually live on 2026-09-08?",
+     "gold": [
+      "hyderabad"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "hyderabad"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "hyderabad",
+     "cited_ids": [
+      "f-37edf41f"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 195.9,
+     "context_lines": 30
+    },
+    {
+     "i": 27,
+     "question_id": "q027",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "world_time",
+     "question": "Which plan was Alice Rao on on 2026-09-13?",
+     "gold": [
+      "fiber 1000"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 1000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fiber 1000",
+     "cited_ids": [
+      "f-1fc865eb"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 216.8,
+     "context_lines": 30
+    },
+    {
+     "i": 28,
+     "question_id": "q028",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "world_time",
+     "question": "Where did Esha Iyer actually live on 2026-09-12?",
+     "gold": [
+      "bengaluru"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "bengaluru"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "bengaluru",
+     "cited_ids": [
+      "f-2649ce07"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 215.2,
+     "context_lines": 30
+    },
+    {
+     "i": 29,
+     "question_id": "q029",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "world_time",
+     "question": "Which plan was Divya Menon on on 2026-09-10?",
+     "gold": [
+      "fiber 1000"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 1000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fiber 1000",
+     "cited_ids": [
+      "f-82664f20"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 251.7,
+     "context_lines": 30
+    },
+    {
+     "i": 30,
+     "question_id": "q030",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "world_time",
+     "question": "Where did Dev Malhotra actually live on 2026-09-20?",
+     "gold": [
+      "mysuru"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "mysuru"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "mysuru",
+     "cited_ids": [
+      "f-f9365e78"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 225.7,
+     "context_lines": 30
+    },
+    {
+     "i": 31,
+     "question_id": "q031",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "world_time",
+     "question": "Which router did Divya Menon have on 2026-09-19?",
+     "gold": [
+      "pml hub 6 pro"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "pml hub 6 pro"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "pml hub 6 pro",
+     "cited_ids": [
+      "f-858923fd"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 188.9,
+     "context_lines": 30
+    },
+    {
+     "i": 32,
+     "question_id": "q032",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "world_time",
+     "question": "Where did Tara Banerjee actually live on 2026-09-13?",
+     "gold": [
+      "mumbai"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "mumbai"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "mumbai",
+     "cited_ids": [
+      "f-ca984362"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 237.5,
+     "context_lines": 30
+    },
+    {
+     "i": 33,
+     "question_id": "q033",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "world_time",
+     "question": "Where did Yamini Krishnan actually live on 2026-09-24?",
+     "gold": [
+      "mysuru"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "mysuru"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "mysuru",
+     "cited_ids": [
+      "f-41761eef"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 223.4,
+     "context_lines": 30
+    },
+    {
+     "i": 34,
+     "question_id": "q034",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "world_time",
+     "question": "Which contact channel did Rahul Sharma prefer on 2026-09-10?",
+     "gold": [
+      "email"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "email"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "email",
+     "cited_ids": [
+      "f-dd147f76"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 191.6,
+     "context_lines": 30
+    },
+    {
+     "i": 35,
+     "question_id": "q035",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "world_time",
+     "question": "Where did Pooja Bhat actually live on 2026-09-09?",
+     "gold": [
+      "navi mumbai"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "navi mumbai"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "navi mumbai",
+     "cited_ids": [
+      "f-485f62a0"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 218.4,
+     "context_lines": 30
+    },
+    {
+     "i": 37,
+     "question_id": "q037",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "belief_time",
+     "question": "On 2026-09-10, which router did our records list for Neha Kapoor?",
+     "gold": [
+      "ax1800"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "ax1800"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "ax1800",
+     "cited_ids": [
+      "f-ad6e19f3"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 204.6,
+     "context_lines": 30
+    },
+    {
+     "i": 38,
+     "question_id": "q038",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "belief_time",
+     "question": "On 2026-09-26, which city did our records list for Bhavna Shetty?",
+     "gold": [
+      "mumbai"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "mumbai"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "mumbai",
+     "cited_ids": [
+      "f-e73548f8"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 336.9,
+     "context_lines": 30
+    },
+    {
+     "i": 40,
+     "question_id": "q040",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "belief_time",
+     "question": "On 2026-09-22, which city did our records list for Wasim Akhtar?",
+     "gold": [
+      "mumbai"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "mumbai"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "mumbai",
+     "cited_ids": [
+      "f-31b3921f"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 253.5,
+     "context_lines": 30
+    },
+    {
+     "i": 41,
+     "question_id": "q041",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "belief_time",
+     "question": "On 2026-09-27, which city did our records list for Gita Pillai?",
+     "gold": [
+      "thane"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "thane"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "thane",
+     "cited_ids": [
+      "f-f5f8e4a2"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 269.2,
+     "context_lines": 30
+    },
+    {
+     "i": 43,
+     "question_id": "q043",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "belief_time",
+     "question": "On 2026-09-16, which router did our records list for Wasim Akhtar?",
+     "gold": [
+      "pml hub 6 pro"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "pml hub 6 pro"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "pml hub 6 pro",
+     "cited_ids": [
+      "f-0ec82873"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 251.3,
+     "context_lines": 30
+    },
+    {
+     "i": 44,
+     "question_id": "q044",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "belief_time",
+     "question": "On 2026-09-17, which city did our records list for Uday Rao?",
+     "gold": [
+      "hyderabad"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "hyderabad"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "hyderabad",
+     "cited_ids": [
+      "f-37edf41f"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 234.2,
+     "context_lines": 30
+    },
+    {
+     "i": 46,
+     "question_id": "q046",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "belief_time",
+     "question": "On 2026-09-28, which city did our records list for Wasim Akhtar?",
+     "gold": [
+      "hyderabad"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "hyderabad"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "hyderabad",
+     "cited_ids": [
+      "f-1366d771"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 190.9,
+     "context_lines": 30
+    },
+    {
+     "i": 49,
+     "question_id": "q049",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "belief_time",
+     "question": "On 2026-09-13, which plan did our records list for Yamini Krishnan?",
+     "gold": [
+      "basic 50"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "basic 50"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "basic 50",
+     "cited_ids": [
+      "f-51525c36"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 187.2,
+     "context_lines": 30
+    },
+    {
+     "i": 52,
+     "question_id": "q052",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "belief_time",
+     "question": "On 2026-09-09, which plan did our records list for Bob Menon?",
+     "gold": [
+      "fiber 100"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 100"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fiber 100",
+     "cited_ids": [
+      "f-48d0d227"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 232.3,
+     "context_lines": 30
+    },
+    {
+     "i": 73,
+     "question_id": "q073",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "disagreement",
+     "question": "Which plan is Dev Malhotra on, and is it disputed?",
+     "gold": [
+      "fiber 1000"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 1000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Dev Malhotra is on the fiber 1000 plan, and it is not disputed.",
+     "cited_ids": [
+      "f-3b558fde"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 229.4,
+     "context_lines": 30
+    },
+    {
+     "i": 76,
+     "question_id": "q076",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "disagreement",
+     "question": "Which plan is Gaurav Chawla on, and is it disputed?",
+     "gold": [
+      "fiber 100"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 100"
+     ],
+     "conflict": true,
+     "unknown": false,
+     "answer": "Gaurav Chawla is on the fiber 100 plan, and yes, it is disputed (conflicting records exist).",
+     "cited_ids": [
+      "f-3bbe1ef9",
+      "f-7aff2aef"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 216.4,
+     "context_lines": 30
+    },
+    {
+     "i": 79,
+     "question_id": "q079",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "disagreement",
+     "question": "Which plan is Eshan Ghosh on, and is it disputed?",
+     "gold": [
+      "fiber 100"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 100"
+     ],
+     "conflict": true,
+     "unknown": false,
+     "answer": "Eshan Ghosh is on the fiber 100 plan, and yes, it is disputed (conflicting records exist).",
+     "cited_ids": [
+      "f-c60e1afe",
+      "f-00bbe42b"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 220.3,
+     "context_lines": 30
+    },
+    {
+     "i": 82,
+     "question_id": "q082",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "disagreement",
+     "question": "Which plan is Fatima Sheikh on, and is it disputed?",
+     "gold": [
+      "fiber 300"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 300"
+     ],
+     "conflict": true,
+     "unknown": false,
+     "answer": "Fatima Sheikh is on the fiber 300 plan, and yes, it is disputed (there is a conflicting record for fiber 1000).",
+     "cited_ids": [
+      "f-9584e804",
+      "f-503fe62f"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 218.5,
+     "context_lines": 30
+    },
+    {
+     "i": 85,
+     "question_id": "q085",
+     "system_name": "FULL",
+     "run_id": "run-20261015-154016",
+     "type": "disagreement",
+     "question": "Which plan is Neha Kapoor on, and is it disputed?",
+     "gold": [
+      "basic 50"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "basic 50"
+     ],
+     "conflict": true,
+     "unknown": false,
+     "answer": "Neha Kapoor is on the basic 50 plan. Yes, the plan is disputed (conflicting records exist).",
+     "cited_ids": [
+      "f-b37dd707",
+      "f-c3d236b2"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 211.8,
+     "context_lines": 30
+    }
+   ],
+   "n_target": 52,
+   "pending": [
+    36,
+    39,
+    42,
+    45,
+    47,
+    48,
+    50,
+    51,
+    53,
+    72,
+    74,
+    75,
+    77,
+    78,
+    80,
+    81,
+    83,
+    84,
+    86,
+    87
+   ],
+   "summary": {
+    "overall": {
+     "n": 32,
+     "accuracy": 0.9375,
+     "ci95": [
+      0.7985,
+      0.9827
+     ],
+     "evidence_recall": 1.0
+    },
+    "by_type": {
+     "belief_time": {
+      "n": 9,
+      "accuracy": 1.0,
+      "ci95": [
+       0.7008,
+       1.0
+      ],
+      "evidence_recall": 1.0
+     },
+     "disagreement": {
+      "n": 5,
+      "accuracy": 0.8,
+      "ci95": [
+       0.3755,
+       0.9638
+      ],
+      "evidence_recall": 1.0
+     },
+     "world_time": {
+      "n": 18,
+      "accuracy": 0.9444,
+      "ci95": [
+       0.7424,
+       0.9901
+      ],
+      "evidence_recall": 1.0
+     }
+    },
+    "by_model": {
+     "groq4:qwen/qwen3.8-27b": {
+      "n": 23,
+      "accuracy": 0.913,
+      "ci95": [
+       0.732,
+       0.9758
+      ],
+      "evidence_recall": 1.0
+     },
+     "groq5:qwen/qwen3.8-27b": {
+      "n": 9,
+      "accuracy": 1.0,
+      "ci95": [
+       0.7008,
+       1.0
+      ],
+      "evidence_recall": 1.0
+     }
+    },
+    "collision_questions": {
+     "n": 0,
+     "accuracy": null,
+     "ci95": null,
+     "evidence_recall": null
+    },
+    "abstention": {
+     "precision": null,
+     "recall": null,
+     "hallucinations": 0,
+     "false_refusals": 0,
+     "should_refuse": 0
+    },
+    "retrieval_ms": {
+     "p50": 219.4,
+     "p95": 336.9
+    },
+    "avg_context_lines": 30.0
+   }
+  }
+ },
+ "git": {
+  "head": "46a46f166d35ffd5111118689901609c992081c3",
+  "dirty": " M relay/agents.py\n M relay/config.py\n M relay/kb.py\n M relay/memory.py\n M relay/queries.py\n",
+  "at": "2026-10-15 15:46:10",
+  "models": [
+   "groq4:qwen/qwen3.8-27b"
+  ],
+  "old_expand": false
+ },
+ "run_id": "run-20261015-154016"
+}

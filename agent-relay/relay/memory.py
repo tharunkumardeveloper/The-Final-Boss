@@ -43,6 +43,26 @@ def resolve_entity(tenant, name, typ, log=None):
     return rows[0][0] if rows and rows[0][1] < config.ALIAS_MAX_DIST else key
 
 
+def _digits(s):
+    return re.findall(r"\d+", s)
+
+
+def close_entity(tenant, name, predicate, typ, log=None):
+    """A misspelt name ("tahne", "mumbia") -> the existing entity it means ("thane", "mumbai"); else the name itself.
+    Candidates: objects this tenant already holds for the predicate. The alias is recorded on the entity."""
+    import difflib
+    if len(name) < 4 or db.run(tenant, "entity exists", Q.ENTITY_EXISTS, {"k": name}, log, ro=True):
+        return name
+    keys = [r[0] for r in db.run(tenant, "typo candidates", Q.OBJECTS_OF, {"p": predicate}, log, ro=True)]
+    # ponytail: character ratio only; digits must match so "fiber 100" never becomes "fiber 300"
+    best = max(((difflib.SequenceMatcher(None, name, k).ratio(), k) for k in keys
+                if k and _digits(k) == _digits(name) and k[0] == name[0]), default=(0, None))
+    if best[0] < config.TYPO_MIN_RATIO:
+        return name
+    db.run(tenant, "record alias", Q.ADD_ALIAS, {"k": best[1], "a": name}, log)
+    return best[1]
+
+
 def record_episode(tenant, *, agent, session_id, customer, text, at, speaker, mentions=(), log=None,
                    extraction=None):
     """Store one raw event. `mentions` = [(name, type)] entities it is about. extraction = (model, prompt version)
@@ -71,7 +91,10 @@ def assert_triple(tenant, *, agent, episode_id, subject, predicate, obj, at, val
     if o_type == "city" and R.for_tenant(tenant) == "isp":
         from . import kb  # lazy: kb imports db
         place = kb.resolve_place(obj)  # "hsr layout bangalore" / "blr" -> the catalogue's canonical area or city
-        obj = place["key"] if place else obj
+        o_n = norm(obj)
+        if place and not place["area"] and o_n.endswith(" " + place["phrase"]):
+            place = None  # "navi mumbai" is its own place, not "mumbai": keep the longer name
+        obj = place["key"] if place else close_entity(tenant, o_n, predicate, o_type, log)
     s = resolve_entity(tenant, subject, s_type, log)
     o = resolve_entity(tenant, obj, o_type, log)
     at_ms = to_ms(at)
@@ -219,7 +242,11 @@ def ingest_turn(tenant, *, agent, session_id, customer, text, at, speaker="custo
             p = f["predicate"] = "interested_in"  # "can i opt for fiber 1000?" asks; only a clear yes places an order
         if R.object_type(p) == "plan" and R.for_tenant(tenant) == "isp":
             plan = catalogue_plan(f["object"])
-            if not plan:  # "Fiber 200" doesn't exist: never store a plan the catalogue doesn't have
+            if not plan and p == "on_plan" and re.fullmatch(r"[a-z ]+ \d+", norm(f["object"])):
+                # ponytail: "basic 50" is a legacy plan they're on, a claim worth keeping (billing outranks it);
+                # any "<word> <number>" passes, so a misheard tier is kept too. Upgrade: a legacy-plan list.
+                plan = norm(f["object"])
+            if not plan:  # "Fiber 200" can't be bought: never store a plan to sell that the catalogue doesn't have
                 dropped.append(f)
                 continue
             f = {**f, "object": plan}

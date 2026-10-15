@@ -3,3 +3,9 @@ In the working tree at the time, relay/retrieve.py, lab.py, queries.py, converse
 Reload (data.load via reload script, 13:44-13:58): working tree, relay/ dirty only in lab.py at start (retrieve.py clean). Extraction uses llm/memory, not retrieve.
 Round 1 answers: RELAY_EVAL_MODELS = gpt-oss-120b and qwen3.8-27b alternating over Groq keys 1-5 -> 96 paired questions, then gpt-oss-120b hit 429 on keys 1-4.
 Round 2: RELAY_EVAL_MODELS = qwen3.8-27b on keys 1-5 for the remaining 64 (3 FULL-only rows on 120b dropped so every pair shares one model).
+
+Fix pass 2026-10-15 (IST), HEAD 46a46f1 + uncommitted relay/ fixes 1-7 (agents, config, kb, memory, queries, registry, retrieve).
+Per-fix reloads fix1, fix2, fix3, fix5, fix6, fix6b: see reload_state.txt. Per-fix answer runs: eval/fixlog/*.json.
+Final run run-20261015-161615 on graph reload fix6b: RELAY_EVAL_MODELS=gemini:gemini-3.5-flash-lite (qwen and
+gpt-oss-120b at daily caps on Groq keys 1-5). Pre-fix results kept as results_baseline_fe9abb5.json/.md; final main
+phase copy results_final_main.json; ablations appended to results.json. bench_shim.py removed (no longer needed).

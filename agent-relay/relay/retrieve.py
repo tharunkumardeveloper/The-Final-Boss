@@ -102,7 +102,7 @@ def _link(tenant, question, qvec, k=8, log=None):
         customers |= set(found)
     near = {t for src in ("name", "fuzzy") for key, _, _ in by.get(src, []) for t in key.split()}
     return {"linked": sorted(found, key=len, reverse=True), "vector": by.get("vector", []),
-            "unknown": _unknown_names(question, {key for key, _, _ in exact} | set(found), near),
+            "unknown": _unknown_names(question, {key for key, _, _ in exact} | set(found), near, _tenant_vocab(tenant)),
             "person": bool(customers & set(found))}
 
 
@@ -154,7 +154,15 @@ _CUE = {"does", "did", "is", "was", "has", "had", "will", "can", "about", "for",
 _ID = re.compile(r"[a-z]+-\d[a-z0-9-]*")  # ticket-like ids: pml-2041-b343, tkt-7
 
 
-def _unknown_names(question, known, near):
+@lru_cache(maxsize=64)
+def _tenant_vocab(tenant):
+    """Words of what this tenant's memory names besides people (issues, fixes, playbooks): "slow" in "slow speed".
+    ponytail: read once per process; a word first seen after that can still read as a name until restart."""
+    rows = db.run(tenant, "recall: vocabulary", Q.TOPIC_WORDS, ro=True)
+    return frozenset(t for (k,) in rows for t in _words(k))
+
+
+def _unknown_names(question, known, near, vocab=frozenset()):
     """The specific people (or ids) a question names that memory doesn't hold.
     A word reads as a name when it isn't ordinary, catalogue or graph vocabulary and it is possessive ("kevin's"),
     capitalised mid-sentence ("does Kevin"), or in a subject slot ("where does kevin live", "about kevin").
@@ -169,7 +177,7 @@ def _unknown_names(question, known, near):
         if _ID.fullmatch(w):
             out += [] if w in known else [w]
             continue
-        if (len(w) < 3 or not w.isalpha() or w.endswith("ing") or w in _COMMON or w in _STOP or w in covered or w in _vocab()
+        if (len(w) < 3 or not w.isalpha() or w.endswith("ing") or w in _COMMON or w in _STOP or w in covered or w in _vocab() or w in vocab
                 or any(_lev(w, t) <= 1 for t in near)):
             continue
         prev = toks[i - 1].lower() if i else "."

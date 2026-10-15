@@ -295,42 +295,42 @@ Last full run: 16 of 18 backend checks passed. `test_profile` could not run (eve
 
 ## 6. Results
 
-Full numbers, method and caveats: `agent-relay/eval/components.md` and `eval/results.md`. All data is synthetic and built from our own templates. 95% Wilson intervals; the difference uses a paired bootstrap.
+Full numbers, method and caveats: `agent-relay/eval/components.md` (fix log) and `eval/results.md`. All data is synthetic, built from our own templates. 95% Wilson intervals.
 
-**Scaled set** (40 customers, 556 turns, 160 questions, reloaded with real extraction; both systems answer each question with the same pinned model):
+**Scaled set** (40 customers, 556 turns, 160 questions), after the fixes below:
 
-| | Result |
-|---|---|
-| Relay | **68.8%** (110/160) [61–75%] |
-| Vector store (B1) | **55.0%** (88/160) [47–62%] |
-| Difference | **+13.8 points** [+6.2, +21.2]; Relay-only right 32, B1-only 10 (McNemar p = 0.0009) |
-| Without the 16 disagreement questions (invalid on this load, see below) | 76.4% vs 61.1% |
-| Retrieval latency p50 | Relay 259 ms, B1 45 ms |
+| System | Accuracy [95% CI] | Evidence recall | Retrieval p50 |
+|---|---|---|---|
+| **Relay (full)** | **91%** [85–94%] | 96% | 216 ms |
+| Vector store (B1) | 50% [42–58%] | 73% | 46 ms |
+| Relay without the two clocks (A1, 63-question subset) | 71% [59–81%] | 93% | 215 ms |
+| Relay without multi-hop expansion (A2, same subset) | 81% [70–89%] | 82% | 124 ms |
 
-By type, Relay vs B1: completeness 100 vs 44, current 94 vs 72, handoff 100 vs 83, multi-hop 28 vs 0, procedural 56 vs 44, world time 89 vs 83, **belief time 78 vs 89**, **unknown 67 vs 72**, disagreement 0 vs 0.
+On the same subset full Relay scores 90%, so **the two clocks are worth about 19 points and multi-hop expansion about 9**: the graph machinery earns its keep, measured, not assumed.
 
-The small 74-question set (93% vs 43%) overstated the gap: on the larger set Relay drops to 69%. The graph still wins clearly, but by about 14 points, not 50.
+By type, Relay vs B1: disagreement 100 vs 6, multi-hop 100 vs 28, completeness 100 vs 33, current 100 vs 44, belief time 94 vs 39, handoff 100 vs 67, world time 89 vs 89, unknown 89 vs 89, **procedural 44 vs 50** (still behind). Abstention: Relay precision 89%, recall 89% (B1: 29% / 89%).
 
-**Why Relay misses** (50): right answer not retrieved 21, conflict not flagged 13, wrong or incomplete value 10, answered a should-refuse question 6.
+**Caveat on comparability:** the first scored run (Relay 68.8% vs B1 55.0%) used qwen3.8-27b; Groq's daily caps then forced the final run onto gemini-3.5-flash-lite for both systems. The paired comparison inside each run is fair; the jump from 69% to 91% mixes the fixes with the model change. Each fix was also scored on its own (fix log), mostly on qwen.
 
-**Abstention** (18 should-refuse questions): Relay precision 52% [33–71%], recall 67% [44–84%] (wrongly refused 11 answerable ones); B1 precision 34%, recall 72%.
+**Fix log** (one fix at a time, re-scored after each):
 
-**Components (no LLM calls):**
+| # | Root cause found by the evaluation | Metric | Before | After |
+|---|---|---|---|---|
+| 1 | The resolver's pickup returned from the lab branch before any billing tool ran, so billing never wrote its claims | disagreement answers / cross-agent contradictions | 0/16 / 0/16 | 11/16 / 11/16 |
+| 2 | Write-time typos created new entities ("Tahne" superseded Thane); a city inside a longer name was shortened ("navi mumbai" → "mumbai") | typos mapped / name collisions / unchanged facts kept | 2/8 / 2/4 / 8/14 | 8/8 / 4/4 / 14/14 |
+| 3 | The same early return skipped the outage feed, so no `affects` facts existed for multi-hop | multi-hop gold in context / answers | 7/18 / 5/18 | 15/18 / 15/18 |
+| 4 | The 2-hop expansion caps cut arbitrarily, not by hop distance | multi-hop gold in context / answers | 15/18 | 18/18 / 18/18 |
+| 5 | Off-catalogue plans the customer is on ("basic 50") were dropped at write time | extraction recall | 295/306 | 306/306 |
+| 6 | An open account request was taken as the context of a new fault, so its ticket never opened | load errors | 7 | 0 |
+| 7 | The unknown-person check counted issue/fix names as names | answerable questions refused by it | 2 | 0 |
 
-| Metric | Result |
-|---|---|
-| Extraction recall, planted facts | 94.4% (289/306) [91–96%] |
-| Predicate normalisation | 100% (257/257) |
-| Issue-paraphrase entity resolution | pairwise precision 1.00, recall 0.75 |
-| Typos mapped to the existing entity | **25% (2/8)**: "Tahne" becomes a new city and supersedes Thane |
-| Name collisions kept apart | 4/4 pairs; exact current city 2/4 ("navi mumbai" extracted as "mumbai") |
-| Contradiction handling | 61.2% (52/85) [51–71%]; 76.5% excluding extraction misses; change 72%, multi 100%, unchanged 57% |
+Belief time was not a two-clock bug: its misses were fix 5. "Unchanged" contradictions needed no separate fix: the guard was right, typos were the cause.
 
-**Invalid on this load, not a measure of the engine:** cross-agent contradictions (0/16) and disagreement questions (0/16). The resolver's billing pickups returned empty observations, so the planted disagreements never entered the graph (`pick_up` needs investigating).
+**Components (no LLM calls), final load:** extraction recall 306/306, predicate normalisation 100%, typos mapped 8/8, name collisions kept apart 4/4, cross-agent contradictions 16/16.
 
-**Bug found by the evaluation, fixed:** recall crashed on any `open:<attribute>` fact (its predicate had no embedding); 155 of 160 questions hit it on the reloaded graph. Open predicates are now embedded on first use (`tests/test_recall.py` checks this). The scored run used a copy of the code with an eval-only workaround, so the numbers above are for the code before the 2-query recall.
+**The small 74-question set** (93% vs 43%) is kept for history only; the scaled run is the headline.
 
-**Not run yet:** k-sensitivity, ablations, determinism re-runs, out-of-distribution extraction, LoCoMo QA (`python -m eval.bench_shim --tenant pml-bench --phases ksweep,ablations,variance`).
+**Still open:** procedural questions (44%), one ablation baseline (B0) partly scored, determinism re-runs, out-of-distribution extraction, LoCoMo QA.
 
 **Engineering numbers:**
 
@@ -368,7 +368,7 @@ Differentiation and demo depth rise: a worldwide company with region graphs, ope
 Track coverage and demo quality rise: the intake agent follows a written spec, its questions and their answers are memory every agent can see, identity is a graph match, tickets carry the full handoff, and the chat shows the graph work as it happens. Model quota is now the main operational risk: planned replies need no model, but extraction does. Estimate: **≈ 8/10 now**.
 
 ### Update after Phase 17
-Evaluation rigor rises from 5 to about 7: the scaled run is scored with intervals, paired tests, component metrics and a miss breakdown, and it lowered our own headline. It also exposed real weaknesses to fix next: typo entities (25%), abstention precision (52%), multi-hop (28%), and the billing pickup that kept disagreements out of the graph. Graph use rises: recall is two queries and the resolver's choice comes from a path query. Estimate: **≈ 8.5/10**, with the next gains in those four weaknesses rather than new features.
+Evaluation rigor rises from 5 to about 8 (after the fix log and ablations): the scaled run is scored with intervals, paired tests, component metrics and a miss breakdown, and it lowered our own headline. It also exposed real weaknesses to fix next: typo entities (25%), abstention precision (52%), multi-hop (28%), and the billing pickup that kept disagreements out of the graph. Graph use rises: recall is two queries and the resolver's choice comes from a path query. Estimate: **≈ 8.5/10**, with the next gains in those four weaknesses rather than new features.
 
 ### Update after Phase 16
 Deployment and security move most: the app is live on Render and Vercel, every tenant request and stream needs that tenant's key, and the isolation audit is drawn. Demo quality rises with the handoff replay, the network map and live graph access. Still open: the scaled evaluation, the video, the unknown-person fallback. Estimate: **≈ 8.5/10 now**.

@@ -1,6 +1,16 @@
 {
  "git": {
-  "snapshot": "git archive of HEAD fe9abb5 (clean relay/), run outside the working tree"
+  "commit": "46a46f166d35ffd5111118689901609c992081c3",
+  "relay_retrieve_dirty": true,
+  "relay_dirty": [
+   "M relay/agents.py",
+   " M relay/config.py",
+   " M relay/kb.py",
+   " M relay/memory.py",
+   " M relay/queries.py",
+   " M relay/registry.py",
+   " M relay/retrieve.py"
+  ]
  },
  "small_set": {
   "relay": {
@@ -276,6 +286,513 @@
     "report": "eval/load_report_bench.json",
     "graph": "pml-bench",
     "snapshot": "git archive of HEAD fe9abb5 (clean relay/), run outside the working tree"
+   }
+  },
+  "fix1": {
+   "extraction": {
+    "planted": 306,
+    "recovered": 289,
+    "recall": 0.9444,
+    "extra_facts": 104,
+    "load_errors": 7
+   },
+   "predicate_normalization": {
+    "n": 257,
+    "correct": 257,
+    "accuracy": 1.0,
+    "ci95": [
+     0.9853,
+     1.0
+    ]
+   },
+   "entity_resolution": {
+    "issue_aliases": {
+     "precision": 1.0,
+     "recall": 0.75,
+     "pairs_merged": 57,
+     "gold_pairs": 76,
+     "mentions": 32,
+     "entities": 10,
+     "clusters": 6
+    },
+    "typos": {
+     "n": 8,
+     "ok": 2,
+     "failures": [
+      {
+       "text": "Like I said, I'm in Nasik now.",
+       "stored": [
+        "nasik"
+       ]
+      },
+      {
+       "text": "Like I said, I'm in Mumbia now.",
+       "stored": [
+        "mumbia"
+       ]
+      },
+      {
+       "text": "Still living in Puen, same as before.",
+       "stored": [
+        "puan"
+       ]
+      },
+      {
+       "text": "Again, we're still in Tahne.",
+       "stored": [
+        "tahne"
+       ]
+      },
+      {
+       "text": "Again, we're still in Tahne.",
+       "stored": [
+        "tahne"
+       ]
+      },
+      {
+       "text": "Again, we're still in Hydrabad.",
+       "stored": [
+        "hydrabad"
+       ]
+      }
+     ]
+    },
+    "collisions": {
+     "n": 4,
+     "kept_apart": 2,
+     "ci95": [
+      0.15,
+      0.85
+     ]
+    }
+   },
+   "contradiction": {
+    "change": {
+     "n": 39,
+     "correct": 28,
+     "extraction_miss": 1,
+     "accuracy": 0.7179,
+     "ci95": [
+      0.5622,
+      0.8346
+     ]
+    },
+    "multi": {
+     "n": 16,
+     "correct": 16,
+     "extraction_miss": 0,
+     "accuracy": 1.0,
+     "ci95": [
+      0.8064,
+      1.0
+     ]
+    },
+    "unchanged": {
+     "n": 14,
+     "correct": 8,
+     "extraction_miss": 0,
+     "accuracy": 0.5714,
+     "ci95": [
+      0.3259,
+      0.7862
+     ]
+    },
+    "cross_agent": {
+     "n": 16,
+     "correct": 11,
+     "extraction_miss": 5,
+     "accuracy": 0.6875,
+     "ci95": [
+      0.444,
+      0.8584
+     ]
+    }
+   },
+   "contradiction_overall": {
+    "k": 63,
+    "n": 85,
+    "rate": 0.7412,
+    "ci95": [
+     0.6391,
+     0.8224
+    ],
+    "excluding_extraction_misses": {
+     "k": 63,
+     "n": 79,
+     "rate": 0.7975,
+     "ci95": [
+      0.696,
+      0.8713
+     ]
+    }
+   },
+   "misses_by_predicate": {
+    "on_plan": "11/52",
+    "lives_in": "6/66"
+   },
+   "_source": {
+    "report": "eval/load_report_fix1.json",
+    "graph": "pml-bench",
+    "commit": "46a46f166d35ffd5111118689901609c992081c3",
+    "relay_retrieve_dirty": false,
+    "relay_dirty": [
+     "M relay/agents.py",
+     " M relay/config.py",
+     " M relay/kb.py",
+     " M relay/memory.py",
+     " M relay/queries.py"
+    ]
+   }
+  },
+  "fix2": {
+   "extraction": {
+    "planted": 306,
+    "recovered": 295,
+    "recall": 0.9641,
+    "extra_facts": 106,
+    "load_errors": 7
+   },
+   "predicate_normalization": {
+    "n": 263,
+    "correct": 263,
+    "accuracy": 1.0,
+    "ci95": [
+     0.9856,
+     1.0
+    ]
+   },
+   "entity_resolution": {
+    "issue_aliases": {
+     "precision": 1.0,
+     "recall": 0.75,
+     "pairs_merged": 57,
+     "gold_pairs": 76,
+     "mentions": 32,
+     "entities": 10,
+     "clusters": 6
+    },
+    "typos": {
+     "n": 8,
+     "ok": 8,
+     "failures": []
+    },
+    "collisions": {
+     "n": 4,
+     "kept_apart": 4,
+     "ci95": [
+      0.5101,
+      1.0
+     ]
+    }
+   },
+   "contradiction": {
+    "change": {
+     "n": 39,
+     "correct": 32,
+     "extraction_miss": 1,
+     "accuracy": 0.8205,
+     "ci95": [
+      0.6733,
+      0.9102
+     ]
+    },
+    "multi": {
+     "n": 16,
+     "correct": 16,
+     "extraction_miss": 0,
+     "accuracy": 1.0,
+     "ci95": [
+      0.8064,
+      1.0
+     ]
+    },
+    "unchanged": {
+     "n": 14,
+     "correct": 14,
+     "extraction_miss": 0,
+     "accuracy": 1.0,
+     "ci95": [
+      0.7847,
+      1.0
+     ]
+    },
+    "cross_agent": {
+     "n": 16,
+     "correct": 11,
+     "extraction_miss": 5,
+     "accuracy": 0.6875,
+     "ci95": [
+      0.444,
+      0.8584
+     ]
+    }
+   },
+   "contradiction_overall": {
+    "k": 73,
+    "n": 85,
+    "rate": 0.8588,
+    "ci95": [
+     0.7693,
+     0.9174
+    ],
+    "excluding_extraction_misses": {
+     "k": 73,
+     "n": 79,
+     "rate": 0.9241,
+     "ci95": [
+      0.844,
+      0.9647
+     ]
+    }
+   },
+   "misses_by_predicate": {
+    "on_plan": "11/52"
+   },
+   "_source": {
+    "report": "eval/load_report_fix2.json",
+    "graph": "pml-bench",
+    "commit": "46a46f166d35ffd5111118689901609c992081c3",
+    "relay_retrieve_dirty": false,
+    "relay_dirty": [
+     "M relay/agents.py",
+     " M relay/config.py",
+     " M relay/kb.py",
+     " M relay/memory.py",
+     " M relay/queries.py"
+    ]
+   }
+  },
+  "fix5": {
+   "extraction": {
+    "planted": 306,
+    "recovered": 306,
+    "recall": 1.0,
+    "extra_facts": 100,
+    "load_errors": 7
+   },
+   "predicate_normalization": {
+    "n": 274,
+    "correct": 274,
+    "accuracy": 1.0,
+    "ci95": [
+     0.9862,
+     1.0
+    ]
+   },
+   "entity_resolution": {
+    "issue_aliases": {
+     "precision": 1.0,
+     "recall": 0.75,
+     "pairs_merged": 57,
+     "gold_pairs": 76,
+     "mentions": 32,
+     "entities": 10,
+     "clusters": 6
+    },
+    "typos": {
+     "n": 8,
+     "ok": 8,
+     "failures": []
+    },
+    "collisions": {
+     "n": 4,
+     "kept_apart": 4,
+     "ci95": [
+      0.5101,
+      1.0
+     ]
+    }
+   },
+   "contradiction": {
+    "change": {
+     "n": 39,
+     "correct": 36,
+     "extraction_miss": 0,
+     "accuracy": 0.9231,
+     "ci95": [
+      0.7968,
+      0.9735
+     ]
+    },
+    "multi": {
+     "n": 16,
+     "correct": 16,
+     "extraction_miss": 0,
+     "accuracy": 1.0,
+     "ci95": [
+      0.8064,
+      1.0
+     ]
+    },
+    "unchanged": {
+     "n": 14,
+     "correct": 14,
+     "extraction_miss": 0,
+     "accuracy": 1.0,
+     "ci95": [
+      0.7847,
+      1.0
+     ]
+    },
+    "cross_agent": {
+     "n": 16,
+     "correct": 14,
+     "extraction_miss": 2,
+     "accuracy": 0.875,
+     "ci95": [
+      0.6398,
+      0.965
+     ]
+    }
+   },
+   "contradiction_overall": {
+    "k": 80,
+    "n": 85,
+    "rate": 0.9412,
+    "ci95": [
+     0.8696,
+     0.9746
+    ],
+    "excluding_extraction_misses": {
+     "k": 80,
+     "n": 83,
+     "rate": 0.9639,
+     "ci95": [
+      0.899,
+      0.9876
+     ]
+    }
+   },
+   "misses_by_predicate": {},
+   "_source": {
+    "report": "eval/load_report_fix5.json",
+    "graph": "pml-bench",
+    "commit": "46a46f166d35ffd5111118689901609c992081c3",
+    "relay_retrieve_dirty": false,
+    "relay_dirty": [
+     "M relay/agents.py",
+     " M relay/config.py",
+     " M relay/kb.py",
+     " M relay/memory.py",
+     " M relay/queries.py"
+    ]
+   }
+  },
+  "fix6": {
+   "extraction": {
+    "planted": 306,
+    "recovered": 306,
+    "recall": 1.0,
+    "extra_facts": 97,
+    "load_errors": 0
+   },
+   "predicate_normalization": {
+    "n": 274,
+    "correct": 274,
+    "accuracy": 1.0,
+    "ci95": [
+     0.9862,
+     1.0
+    ]
+   },
+   "entity_resolution": {
+    "issue_aliases": {
+     "precision": 1.0,
+     "recall": 0.75,
+     "pairs_merged": 57,
+     "gold_pairs": 76,
+     "mentions": 32,
+     "entities": 10,
+     "clusters": 6
+    },
+    "typos": {
+     "n": 8,
+     "ok": 8,
+     "failures": []
+    },
+    "collisions": {
+     "n": 4,
+     "kept_apart": 4,
+     "ci95": [
+      0.5101,
+      1.0
+     ]
+    }
+   },
+   "contradiction": {
+    "change": {
+     "n": 39,
+     "correct": 36,
+     "extraction_miss": 0,
+     "accuracy": 0.9231,
+     "ci95": [
+      0.7968,
+      0.9735
+     ]
+    },
+    "multi": {
+     "n": 16,
+     "correct": 16,
+     "extraction_miss": 0,
+     "accuracy": 1.0,
+     "ci95": [
+      0.8064,
+      1.0
+     ]
+    },
+    "unchanged": {
+     "n": 14,
+     "correct": 14,
+     "extraction_miss": 0,
+     "accuracy": 1.0,
+     "ci95": [
+      0.7847,
+      1.0
+     ]
+    },
+    "cross_agent": {
+     "n": 16,
+     "correct": 16,
+     "extraction_miss": 0,
+     "accuracy": 1.0,
+     "ci95": [
+      0.8064,
+      1.0
+     ]
+    }
+   },
+   "contradiction_overall": {
+    "k": 82,
+    "n": 85,
+    "rate": 0.9647,
+    "ci95": [
+     0.9013,
+     0.9879
+    ],
+    "excluding_extraction_misses": {
+     "k": 82,
+     "n": 85,
+     "rate": 0.9647,
+     "ci95": [
+      0.9013,
+      0.9879
+     ]
+    }
+   },
+   "misses_by_predicate": {},
+   "_source": {
+    "report": "eval/load_report_fix6.json",
+    "graph": "pml-bench",
+    "commit": "46a46f166d35ffd5111118689901609c992081c3",
+    "relay_retrieve_dirty": false,
+    "relay_dirty": [
+     "M relay/agents.py",
+     " M relay/config.py",
+     " M relay/kb.py",
+     " M relay/memory.py",
+     " M relay/queries.py",
+     " M relay/registry.py"
+    ]
    }
   }
  },
@@ -718,6 +1235,580 @@
      "mcnemar_exact_p": 1.0
     }
    }
+  },
+  "final-160": {
+   "tenant": "pml-bench",
+   "dataset": "40 customers, 556 customer turns, 160 questions",
+   "run_id": "run-20261015-161615",
+   "provenance": null,
+   "systems": {
+    "FULL": {
+     "accuracy": {
+      "k": 145,
+      "n": 160,
+      "rate": 0.9062,
+      "ci95": [
+       0.8511,
+       0.9424
+      ]
+     },
+     "abstention": {
+      "precision": {
+       "k": 16,
+       "n": 18,
+       "rate": 0.8889,
+       "ci95": [
+        0.672,
+        0.969
+       ]
+      },
+      "recall": {
+       "k": 16,
+       "n": 18,
+       "rate": 0.8889,
+       "ci95": [
+        0.672,
+        0.969
+       ]
+      },
+      "should_refuse": 18
+     },
+     "misses": {
+      "gold in context, wrong/incomplete value chosen": 8,
+      "retrieval: gold value not in context -> wrong answer": 3,
+      "retrieval: gold value not in context -> refused": 2,
+      "answered a should-refuse question (hallucination)": 2
+     },
+     "by_model": {
+      "gemini-3.5-flash-lite": {
+       "k": 145,
+       "n": 160,
+       "rate": 0.9062,
+       "ci95": [
+        0.8511,
+        0.9424
+       ]
+      }
+     },
+     "misses_by_type": {
+      "procedural": 10,
+      "world_time": 2,
+      "unknown": 2,
+      "belief_time": 1
+     }
+    },
+    "B1": {
+     "accuracy": {
+      "k": 80,
+      "n": 160,
+      "rate": 0.5,
+      "ci95": [
+       0.4234,
+       0.5766
+      ]
+     },
+     "abstention": {
+      "precision": {
+       "k": 16,
+       "n": 56,
+       "rate": 0.2857,
+       "ci95": [
+        0.1842,
+        0.4148
+       ]
+      },
+      "recall": {
+       "k": 16,
+       "n": 18,
+       "rate": 0.8889,
+       "ci95": [
+        0.672,
+        0.969
+       ]
+      },
+      "should_refuse": 18
+     },
+     "misses": {
+      "gold in context but model refused": 23,
+      "retrieval: gold value not in context -> wrong answer": 21,
+      "retrieval: gold value not in context -> refused": 17,
+      "gold in context, conflict not flagged": 9,
+      "gold in context, wrong/incomplete value chosen": 8,
+      "answered a should-refuse question (hallucination)": 2
+     },
+     "by_model": {
+      "gemini-3.5-flash-lite": {
+       "k": 80,
+       "n": 160,
+       "rate": 0.5,
+       "ci95": [
+        0.4234,
+        0.5766
+       ]
+      }
+     },
+     "misses_by_type": {
+      "disagreement": 15,
+      "multi_hop": 13,
+      "completeness": 12,
+      "belief_time": 11,
+      "current": 10,
+      "procedural": 9,
+      "handoff": 6,
+      "world_time": 2,
+      "unknown": 2
+     }
+    }
+   },
+   "paired": {
+    "n": 160,
+    "relay": {
+     "k": 145,
+     "n": 160,
+     "rate": 0.9062,
+     "ci95": [
+      0.8511,
+      0.9424
+     ]
+    },
+    "b1": {
+     "k": 80,
+     "n": 160,
+     "rate": 0.5,
+     "ci95": [
+      0.4234,
+      0.5766
+     ]
+    },
+    "diff": 0.4062,
+    "diff_ci95_bootstrap": [
+     0.3125,
+     0.5
+    ],
+    "relay_only_correct": 75,
+    "b1_only_correct": 10,
+    "mcnemar_exact_p": 1.8582753310340622e-13
+   },
+   "by_type": {
+    "belief_time": {
+     "n": 18,
+     "relay": {
+      "k": 17,
+      "n": 18,
+      "rate": 0.9444,
+      "ci95": [
+       0.7424,
+       0.9901
+      ]
+     },
+     "b1": {
+      "k": 7,
+      "n": 18,
+      "rate": 0.3889,
+      "ci95": [
+       0.203,
+       0.6138
+      ]
+     },
+     "diff": 0.5556,
+     "diff_ci95_bootstrap": [
+      0.3333,
+      0.7778
+     ],
+     "relay_only_correct": 10,
+     "b1_only_correct": 0,
+     "mcnemar_exact_p": 0.001953125
+    },
+    "completeness": {
+     "n": 18,
+     "relay": {
+      "k": 18,
+      "n": 18,
+      "rate": 1.0,
+      "ci95": [
+       0.8241,
+       1.0
+      ]
+     },
+     "b1": {
+      "k": 6,
+      "n": 18,
+      "rate": 0.3333,
+      "ci95": [
+       0.1628,
+       0.5625
+      ]
+     },
+     "diff": 0.6667,
+     "diff_ci95_bootstrap": [
+      0.4444,
+      0.8889
+     ],
+     "relay_only_correct": 12,
+     "b1_only_correct": 0,
+     "mcnemar_exact_p": 0.00048828125
+    },
+    "current": {
+     "n": 18,
+     "relay": {
+      "k": 18,
+      "n": 18,
+      "rate": 1.0,
+      "ci95": [
+       0.8241,
+       1.0
+      ]
+     },
+     "b1": {
+      "k": 8,
+      "n": 18,
+      "rate": 0.4444,
+      "ci95": [
+       0.2456,
+       0.6628
+      ]
+     },
+     "diff": 0.5556,
+     "diff_ci95_bootstrap": [
+      0.3333,
+      0.7778
+     ],
+     "relay_only_correct": 10,
+     "b1_only_correct": 0,
+     "mcnemar_exact_p": 0.001953125
+    },
+    "disagreement": {
+     "n": 16,
+     "relay": {
+      "k": 16,
+      "n": 16,
+      "rate": 1.0,
+      "ci95": [
+       0.8064,
+       1.0
+      ]
+     },
+     "b1": {
+      "k": 1,
+      "n": 16,
+      "rate": 0.0625,
+      "ci95": [
+       0.0111,
+       0.2833
+      ]
+     },
+     "diff": 0.9375,
+     "diff_ci95_bootstrap": [
+      0.8125,
+      1.0
+     ],
+     "relay_only_correct": 15,
+     "b1_only_correct": 0,
+     "mcnemar_exact_p": 6.103515625e-05
+    },
+    "handoff": {
+     "n": 18,
+     "relay": {
+      "k": 18,
+      "n": 18,
+      "rate": 1.0,
+      "ci95": [
+       0.8241,
+       1.0
+      ]
+     },
+     "b1": {
+      "k": 12,
+      "n": 18,
+      "rate": 0.6667,
+      "ci95": [
+       0.4375,
+       0.8372
+      ]
+     },
+     "diff": 0.3333,
+     "diff_ci95_bootstrap": [
+      0.1111,
+      0.5556
+     ],
+     "relay_only_correct": 6,
+     "b1_only_correct": 0,
+     "mcnemar_exact_p": 0.03125
+    },
+    "multi_hop": {
+     "n": 18,
+     "relay": {
+      "k": 18,
+      "n": 18,
+      "rate": 1.0,
+      "ci95": [
+       0.8241,
+       1.0
+      ]
+     },
+     "b1": {
+      "k": 5,
+      "n": 18,
+      "rate": 0.2778,
+      "ci95": [
+       0.125,
+       0.5087
+      ]
+     },
+     "diff": 0.7222,
+     "diff_ci95_bootstrap": [
+      0.5,
+      0.9444
+     ],
+     "relay_only_correct": 13,
+     "b1_only_correct": 0,
+     "mcnemar_exact_p": 0.000244140625
+    },
+    "procedural": {
+     "n": 18,
+     "relay": {
+      "k": 8,
+      "n": 18,
+      "rate": 0.4444,
+      "ci95": [
+       0.2456,
+       0.6628
+      ]
+     },
+     "b1": {
+      "k": 9,
+      "n": 18,
+      "rate": 0.5,
+      "ci95": [
+       0.2903,
+       0.7097
+      ]
+     },
+     "diff": -0.0556,
+     "diff_ci95_bootstrap": [
+      -0.4444,
+      0.3333
+     ],
+     "relay_only_correct": 6,
+     "b1_only_correct": 7,
+     "mcnemar_exact_p": 1.0
+    },
+    "unknown": {
+     "n": 18,
+     "relay": {
+      "k": 16,
+      "n": 18,
+      "rate": 0.8889,
+      "ci95": [
+       0.672,
+       0.969
+      ]
+     },
+     "b1": {
+      "k": 16,
+      "n": 18,
+      "rate": 0.8889,
+      "ci95": [
+       0.672,
+       0.969
+      ]
+     },
+     "diff": 0.0,
+     "diff_ci95_bootstrap": [
+      -0.2222,
+      0.2222
+     ],
+     "relay_only_correct": 2,
+     "b1_only_correct": 2,
+     "mcnemar_exact_p": 1.0
+    },
+    "world_time": {
+     "n": 18,
+     "relay": {
+      "k": 16,
+      "n": 18,
+      "rate": 0.8889,
+      "ci95": [
+       0.672,
+       0.969
+      ]
+     },
+     "b1": {
+      "k": 16,
+      "n": 18,
+      "rate": 0.8889,
+      "ci95": [
+       0.672,
+       0.969
+      ]
+     },
+     "diff": 0.0,
+     "diff_ci95_bootstrap": [
+      -0.1667,
+      0.1667
+     ],
+     "relay_only_correct": 1,
+     "b1_only_correct": 1,
+     "mcnemar_exact_p": 1.0
+    }
+   }
   }
- }
+ },
+ "fix_log": [
+  {
+   "id": 1,
+   "fix": "Resolver.pick_up reads billing before the lab branch (lab path returned before any tool ran)",
+   "metric": "disagreement, answers (FULL / B1)",
+   "before": "0/16 / 0/16",
+   "after": "11/16 / 1/16",
+   "n": 16,
+   "state": "reload fix1; qwen3.8-27b, Groq keys 1-5; eval/fixlog/fix1.json"
+  },
+  {
+   "id": 1,
+   "fix": "(same)",
+   "metric": "contradiction cross_agent (zero-LLM)",
+   "before": "0/16",
+   "after": "11/16",
+   "n": 16,
+   "state": "reload fix1; 5 misses = customer plan claim never stored (fix 5)"
+  },
+  {
+   "id": 2,
+   "fix": "Write-time typo resolution vs places on file (difflib >= 0.75, digits equal, alias recorded); a city matched inside a longer name keeps the longer name",
+   "metric": "typos mapped to existing entity",
+   "before": "2/8",
+   "after": "8/8",
+   "n": 8,
+   "state": "reload fix2"
+  },
+  {
+   "id": 2,
+   "fix": "(same)",
+   "metric": "name collisions kept apart (navi mumbai)",
+   "before": "2/4",
+   "after": "4/4",
+   "n": 4,
+   "state": "reload fix2"
+  },
+  {
+   "id": 2,
+   "fix": "(same)",
+   "metric": "contradiction unchanged / change",
+   "before": "8/14 / 28/39",
+   "after": "14/14 / 32/39",
+   "n": "14 / 39",
+   "state": "reload fix2 (Tier 3 item 6 needed no separate fix: the guard was right, the typo was the cause)"
+  },
+  {
+   "id": 3,
+   "fix": "Resolver.pick_up reads the outage feed before the lab branch (0 `affects` facts in the graph)",
+   "metric": "multi_hop gold in context (zero-LLM)",
+   "before": "7/18",
+   "after": "15/18",
+   "n": 18,
+   "state": "reload fix3"
+  },
+  {
+   "id": 3,
+   "fix": "(same)",
+   "metric": "multi_hop answers (FULL)",
+   "before": "5/18",
+   "after": "15/18",
+   "n": 18,
+   "state": "reload fix3, old expansion patched in; qwen3.8-27b, Groq keys 1-5 then 3-5; eval/fixlog/fix3.json"
+  },
+  {
+   "id": 4,
+   "fix": "2-hop recall caps (max_entities/max_facts) cut by hop distance, not arbitrarily",
+   "metric": "multi_hop gold in context / answers",
+   "before": "15/18 / 15/18",
+   "after": "18/18 / 18/18",
+   "n": 18,
+   "state": "same graph as 3; other types' evidence unchanged; p50 156 -> 158 ms; eval/fixlog/fix4.json"
+  },
+  {
+   "id": 5,
+   "fix": "on_plan keeps an off-catalogue plan the customer is on ('basic 50'); purchase predicates still need the catalogue",
+   "metric": "extraction recall (planted facts stored)",
+   "before": "295/306",
+   "after": "306/306",
+   "n": 306,
+   "state": "reload fix5; every 'basic 50' claim (11 turns) had been dropped at write time"
+  },
+  {
+   "id": 5,
+   "fix": "(same)",
+   "metric": "belief_time / disagreement gold in context",
+   "before": "15/18 / 13/16",
+   "after": "18/18 / 16/16",
+   "n": "18 / 16",
+   "state": "reload fix5 (belief_time misses were this, not a two-clock bug)"
+  },
+  {
+   "id": 5,
+   "fix": "(same)",
+   "metric": "belief_time / world_time / disagreement answers",
+   "before": "14/18 / 16/18 / 11/16",
+   "after": "9/9 / 17/18 / 4/5 (partial)",
+   "n": "9 / 18 / 5",
+   "state": "qwen3.8-27b, Groq keys 3-5 then 4 only; qwen daily cap hit; eval/fixlog/fix5.json"
+  },
+  {
+   "id": 5,
+   "fix": "(same)",
+   "metric": "contradiction cross_agent / change",
+   "before": "11/16 / 32/39",
+   "after": "14/16 / 36/39",
+   "n": "16 / 39",
+   "state": "reload fix5"
+  },
+  {
+   "id": 6,
+   "fix": "An open account request (invoice, pause...) is not the context for a new fault: the fault opens its own ticket",
+   "metric": "load errors (ticket never opened)",
+   "before": "7",
+   "after": "0",
+   "n": 634,
+   "state": "reload fix6b"
+  },
+  {
+   "id": 6,
+   "fix": "(same)",
+   "metric": "cross_agent / current gold in context",
+   "before": "14/16 / 17/18",
+   "after": "16/16 / 18/18",
+   "n": "16 / 18",
+   "state": "reload fix6b"
+  },
+  {
+   "id": 7,
+   "fix": "Unknown-person heuristic: words of the tenant's issue/fix/playbook names are vocabulary ('for slow speeds')",
+   "metric": "answerable questions emptied by the heuristic",
+   "before": "2 (q128, q129)",
+   "after": "0",
+   "n": 160,
+   "state": "graph fix6b; 'Kevin' probes still refused 4/4; of the 11 false refusals at baseline, 0 came from the heuristic"
+  },
+  {
+   "id": "final",
+   "fix": "all of the above",
+   "metric": "160-question head-to-head (Relay / B1)",
+   "before": "68.8% / 55.0% (qwen)",
+   "after": "90.6% / 50.0% (gemini-3.5-flash-lite)",
+   "n": 160,
+   "state": "reload fix6b, working tree on 46a46f1; answer model differs from baseline (Groq daily caps), same model for both systems"
+  }
+ ],
+ "notes": [
+  "## Methodology and caveats (read before quoting)",
+  "",
+  "- **Answer models.** Fixes 1, 3, 4, 5 were scored on qwen3.8-27b (Groq keys 1-5); qwen and gpt-oss-120b then hit their daily caps on every key, so the final 160-question run uses gemini-3.5-flash-lite for both systems. The final headline is not same-model comparable with the 68.8% baseline; the paired comparison inside each run is. B1 moved 55.0% -> 50.0% across the model change.",
+  "- **Graph.** Each write-path fix was measured on a fresh reload of `mem:pml-bench` from `data/scenario.json` (extraction answers cached, so the extracted text is identical across reloads; lab runs during the load call an LLM and are not cached). Reload times and git state per reload: `eval/reload_state.txt`. Load reports: `eval/load_report_fix*.json`.",
+  "- **bench_shim removed.** `relay/retrieve.py` `_pvec` now embeds open predicates; all runs here use `python -m eval.run_eval` directly.",
+  "- **Fix 3/4 attribution:** the fix-3 row ran with the pre-fix-4 expansion patched in (scratch `oldexp.py`), on the same graph as fix 4.",
+  "- **Not fixed:** procedural 8/18 (gold fix not in context for 'which fix has worked before for X'); 8 remaining Relay misses are generation (gold in context, wrong value chosen), so retrieval is no longer the top miss bucket.",
+  "- All data synthetic from our own templates and question generator (in-distribution).",
+  ""
+ ]
 }
