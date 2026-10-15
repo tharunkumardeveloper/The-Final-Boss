@@ -47,7 +47,9 @@ def _words(text):
 
 
 def _grams(words):
-    return sorted({" ".join(words[i:j]) for i in range(len(words)) for j in range(i + 1, min(i + MAX_GRAM, len(words)) + 1)})
+    """Every phrase of up to MAX_GRAM words, plus its singular ("slow speeds" also tries "slow speed")."""
+    grams = {" ".join(words[i:j]) for i in range(len(words)) for j in range(i + 1, min(i + MAX_GRAM, len(words)) + 1)}
+    return sorted(grams | {g[:-1] for g in grams if len(g) > 3 and g.endswith("s") and not g.endswith("ss")})
 
 
 def _lev(a, b):
@@ -100,6 +102,10 @@ def _link(tenant, question, qvec, k=8, log=None):
         found += [key for key in _fuzzy_pick([(key, s) for key, _, s in by.get("fuzzy", [])], fuzzy)
                   if key not in found]
         customers |= set(found)
+    if not customers & set(found) and not any(typ == "ticket" for key, typ, _ in exact if key in found):
+        # nobody named: a question about an issue or a fix itself ("which fix worked for slow speeds?") seeds from it.
+        # Not otherwise: an issue is a hub ("no internet" links many customers) and would flood one customer's answer
+        found += [key for key, typ, _ in exact if typ in ("issue", "fix") and key not in found]
     near = {t for src in ("name", "fuzzy") for key, _, _ in by.get(src, []) for t in key.split()}
     return {"linked": sorted(found, key=len, reverse=True), "vector": by.get("vector", []),
             "unknown": _unknown_names(question, {key for key, _, _ in exact} | set(found), near, _tenant_vocab(tenant)),

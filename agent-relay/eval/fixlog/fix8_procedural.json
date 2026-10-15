@@ -1,0 +1,140 @@
+{
+ "124": {
+  "model": "qwen/qwen3.8-27b",
+  "gold": [
+   "change wifi channel"
+  ],
+  "FULL": {
+   "values": [
+    "change wifi channel"
+   ],
+   "ok": true
+  },
+  "B1": {
+   "values": [
+    "change wifi channel"
+   ],
+   "ok": true
+  }
+ },
+ "125": {
+  "model": "openai/gpt-oss-20b",
+  "gold": [
+   "enable qos"
+  ],
+  "FULL": {
+   "values": [
+    "enable qos"
+   ],
+   "ok": true
+  },
+  "B1": {
+   "values": [
+    "changing the Wi\u2011Fi channel"
+   ],
+   "ok": false
+  }
+ },
+ "126": {
+  "model": "groq4:openai/gpt-oss-20b",
+  "gold": [
+   "replace fiber cable"
+  ],
+  "FULL": {
+   "values": [
+    "replace fiber cable"
+   ],
+   "ok": true
+  },
+  "B1": {
+   "values": [
+    "replacing the fiber cable"
+   ],
+   "ok": false
+  }
+ },
+ "127": {
+  "model": "groq5:openai/gpt-oss-20b",
+  "gold": [
+   "firmware update"
+  ],
+  "FULL": {
+   "values": [
+    "firmware update"
+   ],
+   "ok": true
+  },
+  "B1": {
+   "values": [],
+   "ok": false
+  }
+ },
+ "128": {
+  "model": "gemini:gemini-3.5-flash",
+  "gold": [
+   "reset line profile"
+  ],
+  "FULL": {
+   "values": [],
+   "ok": false
+  },
+  "B1": {
+   "values": [],
+   "ok": false
+  }
+ },
+ "129": {
+  "model": "gemini:gemini-3.5-flash",
+  "gold": [
+   "add mesh extender"
+  ],
+  "FULL": {
+   "values": [
+    "add mesh extender"
+   ],
+   "ok": true
+  },
+  "B1": {
+   "values": [
+    "mesh extender"
+   ],
+   "ok": true
+  }
+ },
+ "130": {
+  "model": "gemini:gemini-3.5-flash",
+  "gold": [
+   "change wifi channel"
+  ],
+  "FULL": {
+   "values": [
+    "change wifi channel"
+   ],
+   "ok": true
+  },
+  "B1": {
+   "values": [
+    "change wifi channel"
+   ],
+   "ok": true
+  }
+ },
+ "131": {
+  "model": "gemini:gemini-3.5-flash",
+  "gold": [
+   "replace fiber cable"
+  ],
+  "FULL": {
+   "values": [
+    "replace fiber cable"
+   ],
+   "ok": true
+  },
+  "B1": {
+   "values": [
+    "replace fiber cable"
+   ],
+   "ok": true
+  }
+ }
+}

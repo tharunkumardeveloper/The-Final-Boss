@@ -112,7 +112,9 @@ def fault_after_request_gets_its_own_ticket():
 
 def topic_words_are_not_names():
     say("pml-9", ("reset line profile", "resolves", "slow speed"))
-    assert retrieve.recall(T, "Which fix has worked before for slow speeds?")["unknown"] == []
+    r = retrieve.recall(T, "Which fix has worked before for slow speeds?")
+    assert r["unknown"] == [] and "slow speed" in r["seeds"], r["seeds"]  # plural links; no one named, so the issue seeds
+    assert any("reset line profile" in ln for ln in r["lines"])
     r = retrieve.recall(T, "Which fix worked for Kevin?")
     assert r["unknown"] == ["kevin"] and r["lines"] == []
 
