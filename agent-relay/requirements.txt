@@ -3,6 +3,7 @@ groq>=1.0
 httpx
 fastembed>=0.7
 numpy
+tzdata
 fastapi>=0.115
 uvicorn[standard]>=0.30
 mcp>=2.3

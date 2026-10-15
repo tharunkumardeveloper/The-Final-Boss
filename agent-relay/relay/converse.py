@@ -326,7 +326,8 @@ _DATE_CHANGE = re.compile(
     r"|\b(15|16|17|18|19|20)\s?(oct|october|nov|november|jan|feb|mar|apr|may|jun|jul|aug|sep)\b", re.I)
 
 
-def intake_reply(tenant, *, customer, session_id, text, learned, ticket, opened, at=None, greeted=False, log=None):
+def intake_reply(tenant, *, customer, session_id, text, learned, ticket, opened, at=None, greeted=False, country=None,
+                 log=None):
     """One reply, following intake_agent_spec.md: graph check, then the planned move, then the model (only when it
     has to word something), then the spec's guards."""
     if is_data_request(text):
@@ -350,6 +351,8 @@ def intake_reply(tenant, *, customer, session_id, text, learned, ticket, opened,
     if not iso:  # no address on file yet: the last place they mentioned ("do you serve Chicago?") sets the country
         said = [text] + [tx for sp, tx in reversed(turns) if sp == "customer"]
         iso = next((p["country"] for p in map(kb.resolve_place, said) if p), None)
+    if not iso and country in kb.world()["countries"]:  # nothing said yet: where they're browsing from sets the currency
+        iso = country
     home = next((r["tenant"] for r in world["regions"].values() if iso in r["countries"]), tenant) if iso else tenant
     country = iso or kb.default_country(kb.region_of(home))
     if kb.PLAN_WORDS.search(f" {kb.norm(text)} "):

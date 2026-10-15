@@ -65,7 +65,7 @@ class Intake:
     id = "intake"
 
     def handle(self, tenant, *, customer, session_id, text, at, ticket_id=None, reply_llm=False, greeted=False,
-               log=None):
+               country=None, log=None):
         """One customer message. Learns facts; opens a ticket and hands it to the resolver on a new issue.
         reply_llm: write the reply with the LLM, grounded in memory (otherwise a template, no LLM call)."""
         ticket = open_ticket_for(tenant, customer, log)
@@ -136,7 +136,7 @@ class Intake:
         if reply_llm:
             reply = converse.intake_reply(tenant, customer=norm(customer), session_id=session_id, text=text,
                                           learned=learned, ticket=ticket, opened=opened, at=at, greeted=greeted,
-                                          log=log)
+                                          country=country, log=log)
         reply = reply or self._template(learned, opened, text)
         if ticket or opened:  # the ticket node carries what intake learned this turn (priority, details)
             db.run(tenant, "ticket profile", Q.TICKET_PROFILE, {"t": ticket or opened}, log)

@@ -122,6 +122,7 @@ class ChatIn(BaseModel):
     session_id: str | None = None
     at: str | None = None
     greeted: bool = False  # the client already greeted them by name (the portal does): no second greeting
+    country: str | None = None  # where the visitor is browsing from (ISO code), for prices before they give an address
 
     @field_validator("customer")
     @classmethod
@@ -330,7 +331,7 @@ def chat(tenant: str, body: ChatIn):
     except Exception as e:
         print(f"lab before_chat: {e}")
     out = agents.Intake().handle(tenant, customer=body.customer, session_id=sid, text=body.text, at=at,
-                                 reply_llm=True, greeted=body.greeted, log=log)
+                                 reply_llm=True, greeted=body.greeted, country=body.country, log=log)
     try:  # the resolver hears this too: a yes/no to "is it working now?", or a complaint about a broken line
         lab.on_chat(tenant, body.customer, body.text, out.get("ticket_opened"))
     except Exception as e:
@@ -686,6 +687,12 @@ def lab_reset(tenant: str):
 @app.get("/api/tenants/{tenant}/sharing/crossings")
 def sharing_crossings(tenant: str, reader: str | None = None, writer: str | None = None):
     return sharing.crossings(T(tenant), reader or None, writer or None)
+
+
+@app.get("/api/locate")
+def locate(tz: str | None = None, lang: str | None = None):
+    """The visitor's likely country and the region desk that serves it, from their browser's timezone and language."""
+    return kb.locate_visitor(tz, lang) or {"country": None}
 
 
 @app.get("/api/demo/keys")

@@ -63,7 +63,8 @@ export const api = {
   myGraph: (tenant: string, customer: string) => req<Graph>(`${t(tenant)}/my-graph${q({ customer })}`),
   card: (tenant: string, id: string) => req<Card>(`${t(tenant)}/card/${encodeURIComponent(id)}`),
   tickets: (tenant: string) => req<Ticket[]>(`${t(tenant)}/tickets`),
-  chat: (tenant: string, body: { customer: string; text: string; session_id?: string; greeted?: boolean }) => post<ChatResponse>(`${t(tenant)}/chat`, body),
+  locate: (tz: string, lang: string) => req<{ country: string | null; name?: string; tenant?: string }>(`/api/locate${q({ tz, lang })}`),
+  chat: (tenant: string, body: { customer: string; text: string; session_id?: string; greeted?: boolean; country?: string }) => post<ChatResponse>(`${t(tenant)}/chat`, body),
   pickup: (tenant: string, ticket: string) => post<PickupResponse>(`${t(tenant)}/tickets/${encodeURIComponent(ticket)}/pickup`),
   fix: (tenant: string, ticket: string, fix: string, worked: boolean) =>
     post<FixResponse>(`${t(tenant)}/tickets/${encodeURIComponent(ticket)}/fix`, { fix, worked }),

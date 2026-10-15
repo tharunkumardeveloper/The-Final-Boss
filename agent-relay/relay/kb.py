@@ -397,3 +397,39 @@ def region_summary():
     return [{"code": code, "tenant": r["tenant"], "name": r["name"],
              "countries": [w["countries"][i]["name"] for i in r["countries"]],
              "cities": sum(1 for c in w["cities"] if c["region"] == code)} for code, r in w["regions"].items()]
+
+
+@lru_cache
+def _zone_countries():
+    """IANA timezone -> ISO country, from the system's zone.tab (or the tzdata package on Windows)."""
+    text = None
+    for path in ("/usr/share/zoneinfo/zone.tab", "/usr/share/zoneinfo/zone1970.tab"):
+        try:
+            text = open(path, encoding="utf-8").read()
+            break
+        except OSError:
+            pass
+    if text is None:
+        try:
+            import importlib.resources as res
+            text = res.files("tzdata").joinpath("zoneinfo/zone.tab").read_text(encoding="utf-8")
+        except Exception:
+            return {}
+    out = {}
+    for line in text.splitlines():
+        cols = line.split("\t")
+        if len(cols) >= 3 and not line.startswith("#"):
+            out[cols[2]] = cols[0].split(",")[0]
+    return out
+
+
+def locate_visitor(tz=None, lang=None):
+    """Where a visitor probably is, from the browser's timezone (then its language region). No IP lookup."""
+    w = world()
+    iso = _zone_countries().get(tz or "")
+    if iso not in w["countries"] and lang and "-" in lang:
+        iso = lang.split("-")[-1].upper()
+    if iso not in w["countries"]:
+        return None
+    region = next((code for code, r in w["regions"].items() if iso in r["countries"]), None)
+    return {"country": iso, "name": country_name(iso), "region": region, "tenant": w["regions"][region]["tenant"]} if region else None

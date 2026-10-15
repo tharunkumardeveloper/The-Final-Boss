@@ -16,13 +16,13 @@ interface Line { id: string; ep?: string; speaker: string; text: string; at?: st
   mark?: string; rename?: boolean; images?: ChatImages }
 export type Subscribe = (fn: (e: RelayEvent) => void) => () => void
 
-const QUICK: [string, string][] = [
-  ['My wifi drops every evening', 'My wifi drops every evening, mostly on my PS5.'],
-  ['I moved house', 'I moved house last week, to '],
-  ['Which plan am I on?', 'Which plan am I on?'],
-  ['How much is Fiber 300?', 'How much is Fiber 300?'],
-  ['Do you cover Baner?', 'Do you cover Baner?'],
-  ['I no longer live in …', 'I no longer live in '],
+const QUICK: [string, string, string][] = [
+  ['Wifi keeps dropping', 'My wifi drops every evening, mostly on my PS5.', '📶'],
+  ['Internet is down', "My internet isn't working at all.", '⚠️'],
+  ['Which plan am I on?', 'Which plan am I on?', '📄'],
+  ['Plans and prices', 'What plans do you have, and how much are they?', '💸'],
+  ['I moved house', 'I moved house last week, to ', '🏠'],
+  ['Upgrade my speed', 'I want a faster plan.', '🚀'],
 ]
 const FLY_MS = 1200
 
@@ -153,9 +153,9 @@ function HistoryRow({ s, customer }: { s: ConversationSession; customer: string 
   )
 }
 
-export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, typeRef, memoryWidth = 380, side = 'memory' }: { tenant: string; customers: Customer[]; subscribe: Subscribe
+export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, typeRef, country, memoryWidth = 380, side = 'memory' }: { tenant: string; customers: Customer[]; subscribe: Subscribe
   onWho?: (who: string | null) => void; onChips?: (chips: Chip[]) => void; memoryWidth?: number; side?: 'memory' | 'tickets' | 'none'
-  typeRef?: { current: ((text: string) => void) | null } }) {
+  typeRef?: { current: ((text: string) => void) | null }; country?: string }) {
   const reduce = useReducedMotion()
   const [who, setWho] = useState<string | null>(null)
   const [session, setSession] = useState<string>()
@@ -176,7 +176,7 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
   const [lastChat, setLastChat] = useState<LastChat | undefined>(() => readLast(tenant))
   useEffect(() => setLastChat(readLast(tenant)), [tenant])
   const scroller = useRef<HTMLDivElement>(null)
-  const input = useRef<HTMLInputElement>(null)
+  const input = useRef<HTMLTextAreaElement>(null)
   const tickets = useRef(new Set<string>())
   const busyRef = useRef(false)
   const typer = useRef<ReturnType<typeof setInterval>>()
@@ -259,6 +259,7 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
     })
   }, [who, subscribe])
 
+  useEffect(() => { if (!text && input.current) input.current.style.height = '' }, [text])
   if (typeRef) typeRef.current = typeInto  // lets a panel outside the chat type a message into it
   function typeInto(full: string) {
     clearInterval(typer.current)
@@ -302,7 +303,7 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
     const localId = `local-${Date.now()}`
     setLines((l) => [...l, { id: localId, speaker: 'customer', text: msg, pending: true, local: true }])
     try {
-      const r = await api.chat(tenant, { customer: who, text: msg, session_id: session, greeted: true })  // we greet on screen
+      const r = await api.chat(tenant, { customer: who, text: msg, session_id: session, greeted: true, country })  // we greet on screen
       setSession(r.session_id)
       writeSession(sessionKey(tenant, who), r.session_id)
       // The socket may already have delivered Kavya's reply. The reply's episode id is the shared key, so the
@@ -407,23 +408,35 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
             {error && <p className="text-sm text-danger" role="alert">{error}</p>}
           </div>
 
-          <div className="space-y-3 px-5 pb-5 pt-2">
-              {who && <div className="flex flex-wrap gap-2">
-                {QUICK.map(([label, full]) => (
-                  <button key={label} type="button" onClick={() => typeInto(full)} disabled={busy}
-                    className="rounded-full bg-sunk px-3.5 py-1.5 text-[13px] text-ink-2 transition duration-300 ease-spring hover:bg-signal-tint hover:text-signal-deep active:scale-[0.97] disabled:opacity-50">
-                    {label}
+          <div className="px-4 pb-4 pt-2">
+              <div className="rounded-[1.4rem] bg-sunk/60 p-2 ring-signal/40 transition duration-300 ease-spring focus-within:bg-surface focus-within:shadow-soft focus-within:ring-2">
+                {who && (
+                  <div className="scroll-thin -mx-0.5 flex gap-1.5 overflow-x-auto px-0.5 pb-2" aria-label="Quick replies">
+                    {QUICK.map(([label, full, icon]) => (
+                      <button key={label} type="button" onClick={() => typeInto(full)} disabled={busy}
+                        className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-surface px-3 py-1.5 text-[12.5px] text-ink-2 hairline transition duration-300 ease-spring hover:bg-signal-tint hover:text-signal-deep active:scale-[0.97] disabled:opacity-50">
+                        <span aria-hidden="true">{icon}</span>{label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                <form onSubmit={send} className="flex items-end gap-2">
+                  <label htmlFor="pml-msg" className="sr-only">Message {BOT}</label>
+                  <textarea id="pml-msg" ref={input} rows={1}
+                    className="max-h-36 min-h-[44px] min-w-0 flex-1 resize-none bg-transparent px-3 py-2.5 text-[15px] leading-snug text-ink outline-none placeholder:text-ink-3"
+                    placeholder={who ? `Tell ${BOT} what's going on, ${first(who)}…` : `Say hi and tell ${BOT} your name`} value={text}
+                    onChange={(e) => { clearInterval(typer.current); setText(e.target.value); e.target.style.height = 'auto'; e.target.style.height = `${e.target.scrollHeight}px` }}
+                    onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (text.trim() && !busy) send() } }}
+                    disabled={busy} autoFocus={!who} />
+                  <button className="btn-signal h-11 shrink-0 !px-4" aria-label="Send" disabled={busy || !text.trim()}>
+                    <span className="hidden text-sm sm:inline">Send</span><Send />
                   </button>
-                ))}
-              </div>}
-              <form onSubmit={send} className="flex items-center gap-2 rounded-full bg-sunk/70 p-1.5 pl-5 ring-signal/40 transition duration-300 ease-spring focus-within:bg-surface focus-within:ring-2">
-                <label htmlFor="pml-msg" className="sr-only">Message {BOT}</label>
-                <input id="pml-msg" ref={input} className="h-10 min-w-0 flex-1 bg-transparent text-[15px] text-ink outline-none placeholder:text-ink-3"
-                  placeholder={who ? `Message ${BOT}, ${first(who)}` : `Say hi and tell ${BOT} your name`} value={text}
-                  onChange={(e) => { clearInterval(typer.current); setText(e.target.value) }} disabled={busy} autoFocus={!who} />
-                <button className="btn-signal h-11 w-11 shrink-0 !p-0" aria-label="Send" disabled={busy || !text.trim()}><Send /></button>
-              </form>
-              {session && <p className="px-2 font-mono text-[10.5px] text-ink-3">session {session} · continues next time on this device</p>}
+                </form>
+              </div>
+              <p className="mt-1.5 flex items-center justify-between gap-2 px-3 text-[10.5px] text-ink-3">
+                <span>{busy ? <span className="animate-breathe text-signal-deep">{BOT} is replying…</span> : 'Enter to send · Shift+Enter for a new line'}</span>
+                {session && <span className="truncate font-mono">continues next time on this device</span>}
+              </p>
             </div>
         </section>
 
