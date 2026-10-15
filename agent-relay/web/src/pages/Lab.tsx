@@ -8,6 +8,7 @@ import type { Chip } from '../lib/chips'
 import { GuideCard, splitGuides } from '../components/Guides'
 import { Check, Database, Pulse, Sparkle, Warning } from '../components/Icons'
 import { api } from '../lib/api'
+import { BOT } from '../lib/brand'
 import { useRelayStream } from '../lib/stream'
 import { useTenant } from '../lib/tenant'
 import type { Customer, LabHome, LabManual, LabMessage, LabOlt, LabPreset, LabRun, LabStep, LabView, RelayEvent } from '../lib/types'
@@ -401,6 +402,7 @@ export default function LabPage() {
   const [chips, setChips] = useState<Chip[]>([])
   const [people, setPeople] = useState<Customer[]>([])
   const [breakKey, setBreakKey] = useState('random')
+  const [pick, setPick] = useState<string>()
   const onWho = useCallback((w: string | null) => { if (w) setFocus(w) }, [])
   const refreshPeople = useCallback(() => { api.customers(tenant).then(setPeople).catch(() => {}) }, [tenant])
   useEffect(() => { if (talk) refreshPeople() }, [talk, refreshPeople])
@@ -436,6 +438,18 @@ export default function LabPage() {
     ['Fixed & proven', s ? `${s.fixed}/${s.investigated}` : '–', 'text-current'], ['First-try fixes', s?.first_try ?? '–'],
     ['Avg time to fix', s?.avg_seconds != null ? `${s.avg_seconds}s` : '–'],
   ]
+
+  // the one story a judge should follow: break -> customer complains -> resolver works -> verified
+  const focusRun = ordered.find((r) => r.customer === focus)
+  const broken = !!view?.faults.some((f) => f.active && f.customer === focus)
+  const stage = focusRun?.verdict || (focusRun && focusRun.status !== 'running') ? 3 : focusRun ? 2 : broken || waiting ? 1 : 0
+  const STEPS = [
+    ['Break it', 'Pick a fault below. The truth goes into a graph the resolver cannot read.'],
+    ['Customer complains', `${me?.name.split(' ')[0] ?? 'The customer'} messages ${BOT}; the complaint lands in shared memory.`],
+    ['Resolver works', 'It reads what intake learned, measures the line with Cypher, picks an action.'],
+    ['Verified & graded', focusRun?.verdict ? `${focusRun.verdict.correct ? 'Right diagnosis' : 'Wrong diagnosis'} · ${focusRun.verdict.fixed ? 'fixed and proven' : 'not fixed'}` : 'Only "fixed" when the readings prove it, then graded against the hidden truth.'],
+  ]
+  const chosen = view?.presets.find((p) => p.key === pick)
 
   if (talk) {
     const mine = view?.focus === focus ? view : undefined
@@ -547,6 +561,17 @@ export default function LabPage() {
             ))}
           </dl>
         </div>
+        <ol className="mt-6 grid gap-2 sm:grid-cols-4" aria-label="What happens">
+          {STEPS.map(([t, d], i) => (
+            <li key={t} aria-current={i === stage ? 'step' : undefined}
+              className={`rounded-2xl px-4 py-3 transition duration-300 ease-spring ${i === stage ? 'bg-ink text-paper shadow-lift' : i < stage ? 'bg-current-tint text-ink' : 'bg-surface text-ink-3 hairline'}`}>
+              <p className="flex items-center gap-2 text-sm font-semibold">
+                <span className={`flex h-5 w-5 items-center justify-center rounded-full text-[11px] num ${i === stage ? 'bg-paper text-ink' : i < stage ? 'bg-current text-white' : 'bg-sunk'}`}>{i < stage ? '✓' : i + 1}</span>{t}
+              </p>
+              <p className={`mt-1 text-[11.5px] leading-snug ${i === stage ? 'text-paper/70' : ''}`}>{d}</p>
+            </li>
+          ))}
+        </ol>
         {error && <p className="mt-4 rounded-xl bg-danger-tint px-4 py-2 text-sm text-danger" role="alert">{error}</p>}
 
         <div className="mt-8 grid gap-6 xl:grid-cols-[320px_minmax(0,1fr)_380px]">
@@ -571,33 +596,33 @@ export default function LabPage() {
               </div>
               <p className="mt-2 text-[11px] text-ink-3">Blind test breaks something random. Even the console hides what it was until the resolver is graded.</p>
             </div>
-            <ul className="space-y-2">
+            <div className="grid grid-cols-2 gap-2">
               {view?.presets.map((p) => {
                 const fits = !!focus && p.customers.includes(focus)
                 return (
-                  <li key={p.key} className={`group rounded-2xl bg-surface p-4 hairline transition duration-300 ease-spring ${fits ? 'hover:shadow-soft' : 'opacity-60'}`}>
-                    <div className="flex items-start gap-3">
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-sunk text-ink"><PresetIcon name={p.icon} /></span>
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center justify-between gap-2">
-                          <h3 className="text-sm font-semibold">{p.title}</h3>
-                          <span className="chip bg-sunk text-[10px] text-ink-3">{p.layer}</span>
-                        </div>
-                        <p className="mt-1 text-xs leading-relaxed text-ink-2">{p.blurb}</p>
-                        <p className="mt-1.5 text-xs italic text-ink-3">“{p.says}”</p>
-                        <div className="mt-2.5 flex items-center justify-between gap-2">
-                          <span className="text-[10.5px] text-ink-3">Right fix: {p.action.toLowerCase()}</span>
-                          <button className="btn !bg-danger !px-3 !py-1 text-xs text-white hover:!bg-danger/90" disabled={!fits || !!busy} onClick={() => inject(p)}
-                            title={fits ? `Break it for ${me?.name}` : 'Pick a customer whose hub fits this fault'}>
-                            {busy === p.key ? 'Breaking…' : 'Break it'}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
+                  <button key={p.key} onClick={() => setPick(p.key)} aria-pressed={pick === p.key} disabled={!fits}
+                    title={fits ? p.blurb : 'Pick a customer whose hub fits this fault'}
+                    className={`flex flex-col items-start gap-1.5 rounded-2xl p-3 text-left transition duration-300 ease-spring disabled:opacity-40 ${pick === p.key ? 'bg-ink text-paper' : 'bg-surface hairline hover:shadow-soft'}`}>
+                    <span className={`flex h-8 w-8 items-center justify-center rounded-xl ${pick === p.key ? 'bg-paper/15' : 'bg-sunk'}`}><PresetIcon name={p.icon} /></span>
+                    <span className="text-xs font-semibold leading-tight">{p.title}</span>
+                    <span className={`text-[10px] ${pick === p.key ? 'text-paper/60' : 'text-ink-3'}`}>{p.layer}</span>
+                  </button>
                 )
               })}
-            </ul>
+            </div>
+            {chosen && (
+              <div className="rounded-2xl bg-surface p-4 hairline">
+                <h3 className="text-sm font-semibold">{chosen.title}</h3>
+                <p className="mt-1 text-xs leading-relaxed text-ink-2">{chosen.blurb}</p>
+                <p className="mt-1.5 text-xs italic text-ink-3">“{chosen.says}”</p>
+                <div className="mt-2.5 flex items-center justify-between gap-2">
+                  <span className="text-[10.5px] text-ink-3">Right fix: {chosen.action.toLowerCase()}</span>
+                  <button className="btn !bg-danger !px-3 !py-1 text-xs text-white hover:!bg-danger/90" disabled={!focus || !chosen.customers.includes(focus) || !!busy} onClick={() => inject(chosen)}>
+                    {busy === chosen.key ? 'Breaking…' : `Break it for ${me?.name.split(' ')[0] ?? 'them'}`}
+                  </button>
+                </div>
+              </div>
+            )}
           </section>
 
           {/* network */}
@@ -628,8 +653,9 @@ export default function LabPage() {
               {view?.network?.olts.map((o) => <div key={o.id} className="mt-3"><EveningChart o={o} /></div>)}
             </div>
 
-            <div className="rounded-2xl bg-surface p-4 hairline">
-              <div className="flex flex-wrap items-end justify-between gap-3">
+            <details className="group rounded-2xl bg-surface p-4 hairline">
+              <summary className="cursor-pointer list-none text-sm font-semibold">Operator tools <span className="font-normal text-ink-3">· try a fix yourself, or ask the resolver to check</span></summary>
+              <div className="mt-3 flex flex-wrap items-end justify-between gap-3">
                 <div>
                   <p className="eyebrow">Try a fix yourself</p>
                   <p className="mt-1 text-xs text-ink-2">Same network, same check. A wrong fix stays broken, and the readings show it.</p>
@@ -653,7 +679,7 @@ export default function LabPage() {
                   </motion.p>
                 )}
               </AnimatePresence>
-            </div>
+            </details>
           </section>
 
           {/* resolver */}
