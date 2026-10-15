@@ -20,24 +20,7 @@ export function KavyaAvatar({ size = 44, thinking = false, ripple = 0, online = 
             transition={{ duration: 0.9, ease: [0.32, 0.72, 0, 1] }} />
         )}
       </AnimatePresence>
-      <svg viewBox="0 0 48 48" width={size} height={size} className="relative">
-        <defs>
-          <linearGradient id="kavya-bg" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="rgb(var(--signal))" />
-            <stop offset="1" stopColor="rgb(var(--signal-deep))" />
-          </linearGradient>
-        </defs>
-        <circle cx="24" cy="24" r="24" fill="url(#kavya-bg)" />
-        {/* hair arc + face: a friendly, abstract portrait rather than a stock photo */}
-        <path d="M11 25c0-9 5.8-14.5 13-14.5S37 16 37 25c-2.2-4.6-6.5-7.6-13-7.6S13.2 20.4 11 25Z" fill="rgb(var(--ink))" opacity="0.92" />
-        <circle cx="24" cy="26" r="10.5" fill="#F8E7D8" />
-        <path d="M13.5 24.5c1.8-4.4 5.5-6.8 10.5-6.8s8.7 2.4 10.5 6.8c-3-2.4-6.3-3.4-10.5-3.4s-7.5 1-10.5 3.4Z" fill="rgb(var(--ink))" opacity="0.92" />
-        <circle cx="20.2" cy="26.6" r="1.25" fill="rgb(var(--ink))" />
-        <circle cx="27.8" cy="26.6" r="1.25" fill="rgb(var(--ink))" />
-        <path d="M20.6 30.3c1 1.3 2.1 1.9 3.4 1.9s2.4-.6 3.4-1.9" fill="none" stroke="rgb(var(--ink))" strokeWidth="1.3" strokeLinecap="round" />
-        <circle cx="24" cy="21.9" r="0.9" fill="rgb(var(--signal))" />
-        <path d="M14 44c1.6-5.2 5.4-8 10-8s8.4 2.8 10 8" fill="rgb(var(--paper))" opacity="0.95" />
-      </svg>
+      <img src="/brand/mr-fix-it.gif" alt="" width={size} height={size} className="relative rounded-full object-cover ring-1 ring-line/10" />
       {online && <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-current ring-2 ring-surface" />}
     </span>
   )
