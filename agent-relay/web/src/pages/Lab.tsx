@@ -319,13 +319,13 @@ function Step({ s, live }: { s: LabStep; live: boolean }) {
   )
 }
 
-export function Trace({ run }: { run?: LabRun }) {
+export function Trace({ run, fill = false }: { run?: LabRun; fill?: boolean }) {
   const box = useRef<HTMLDivElement>(null)
   useEffect(() => { const el = box.current; if (el) el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' }) }, [run?.steps.length])
   if (!run) return <p className="rounded-2xl bg-sunk/60 p-4 text-sm text-ink-2">Break something on the left. The customer will complain the way a real person would, intake hands the ticket over, and the resolver's work shows up here, step by step.</p>
   const live = run.status === 'running'
   return (
-    <div>
+    <div className={fill ? 'flex h-full min-h-0 flex-col' : ''}>
       <div className="flex flex-wrap items-center gap-2">
         <h3 className="font-display text-lg font-semibold">{run.name}</h3>
         {run.ticket && <span className="chip bg-sunk font-mono text-ink-2">{run.ticket}</span>}
@@ -334,7 +334,7 @@ export function Trace({ run }: { run?: LabRun }) {
         {run.diagnosis?.by === 'procedural memory' && <ProcBadge />}
       </div>
       {run.said && <p className="mt-1 text-xs text-ink-3">Said: <span className="italic text-ink-2">“{run.said}”</span>{run.symptoms.length > 0 && <> · heard: {run.symptoms.join(', ')}</>}</p>}
-      <div ref={box} className="scroll-thin mt-4 max-h-[540px] overflow-y-auto pr-1">
+      <div ref={box} className={`scroll-thin mt-4 overflow-y-auto pr-1 ${fill ? 'min-h-0 flex-1' : 'max-h-[540px]'}`}>
         <ol className="relative space-y-4 before:absolute before:left-3 before:top-2 before:h-[calc(100%-1rem)] before:w-px before:bg-line/10">
           {run.steps.map((s) => <Step key={s.i} s={s} live={live && s.i === run.steps.length - 1} />)}
           {live && <li className="pl-9 text-xs text-ink-3 animate-breathe">Working…</li>}
@@ -460,6 +460,7 @@ export default function LabPage() {
   const [people, setPeople] = useState<Customer[]>([])
   const [breakKey, setBreakKey] = useState('random')
   const [pick, setPick] = useState<string>()
+  const [side, setSide] = useState<'trace' | 'phone'>('trace')
   const onWho = useCallback((w: string | null) => { if (w) setFocus(w) }, [])
   const refreshPeople = useCallback(() => { api.customers(tenant).then(setPeople).catch(() => {}) }, [tenant])
   useEffect(() => { if (talk) refreshPeople() }, [talk, refreshPeople])
@@ -585,9 +586,10 @@ export default function LabPage() {
     )
   }
 
+  // One screen on a desktop: the page never scrolls, each column scrolls inside itself. Smaller screens stack.
   return (
-    <div className="min-h-[100dvh]">
-      <header className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-between gap-3 px-4 py-5 sm:px-6">
+    <div className="flex min-h-[100dvh] flex-col xl:h-[100dvh]">
+      <header className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
         <Link to="/console"><Wordmark sub="Network" /></Link>
         <ConsoleNav />
         <div className="flex items-center gap-2">
@@ -597,58 +599,54 @@ export default function LabPage() {
         </div>
       </header>
 
-      <div className="mx-auto max-w-[1400px] px-4 pb-4 sm:px-6">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 pb-3 sm:px-6">
         <div role="tablist" aria-label="Network view" className="inline-flex rounded-full bg-surface p-1 hairline">
           {([[false, 'One line · lab'], [true, 'Whole region · map']] as const).map(([m, label]) => (
             <button key={label} role="tab" aria-selected={map === m} onClick={() => setMap(m)}
               className={`rounded-full px-3.5 py-1.5 text-xs transition duration-300 ease-spring ${map === m ? 'bg-ink font-medium text-paper' : 'text-ink-2 hover:bg-sunk'}`}>{label}</button>
           ))}
         </div>
+        {!map && (
+          <>
+            <h1 className="font-display text-xl font-semibold tracking-[-0.01em]" title="The last mile lives in FalkorDB. A fault's truth goes into a separate graph the resolver can't read; it measures with Cypher and algo.maxFlow, acts, and only calls it fixed when the readings prove it.">
+              Break the network. Watch it get fixed.</h1>
+            <dl className="ml-auto flex flex-wrap gap-1.5">
+              {tiles.map(([k, v, cls]) => (
+                <div key={k} className="flex items-baseline gap-1.5 rounded-full bg-surface px-3 py-1 hairline">
+                  <dd className={`font-display text-sm font-semibold num ${cls ?? ''}`}>{v}</dd><dt className="text-[10.5px] text-ink-3">{k}</dt>
+                </div>
+              ))}
+            </dl>
+          </>
+        )}
       </div>
 
       {map ? (
-        <main className="mx-auto max-w-[1400px] px-4 pb-20 sm:px-6" role="tabpanel">
-          {error && <p className="mb-4 rounded-xl bg-danger-tint px-4 py-2 text-sm text-danger" role="alert">{error}</p>}
-          <div className="mb-4 max-w-3xl"><ShowMe tenant={tenant} kind="network" /></div>
-          <NetworkMap tenant={tenant} subscribe={subscribe} onHub={openHub} hubCustomers={(city) => inCity(city).length} />
+        <main className="grid min-h-0 flex-1 gap-4 px-4 pb-4 sm:px-6 xl:grid-cols-[minmax(0,1fr)_400px]" role="tabpanel">
+          <div className="min-h-0 xl:overflow-y-auto scroll-thin">
+            {error && <p className="mb-4 rounded-xl bg-danger-tint px-4 py-2 text-sm text-danger" role="alert">{error}</p>}
+            <NetworkMap tenant={tenant} subscribe={subscribe} onHub={openHub} hubCustomers={(city) => inCity(city).length} />
+          </div>
+          <aside className="scroll-thin min-h-0 xl:overflow-y-auto"><ShowMe tenant={tenant} kind="network" /></aside>
         </main>
       ) : (
-      <main className="mx-auto max-w-[1400px] px-4 pb-20 sm:px-6" role="tabpanel">
-        <div className="flex flex-wrap items-end justify-between gap-6">
-          <div className="max-w-2xl">
-            <p className="eyebrow">Resolver agent · diagnose, act, verify</p>
-            <h1 className="mt-1 font-display text-4xl font-semibold tracking-[-0.02em] sm:text-5xl">Break the network. Watch it get fixed.</h1>
-            <p className="mt-3 text-sm leading-relaxed text-ink-2">
-              The last mile lives in FalkorDB: core, city hub, area exchange, street cabinet, every home's box. Inject a fault and the
-              truth goes into a separate graph the resolver can't read. It reads what intake learned, measures the network with Cypher and
-              <code className="mx-1 font-mono text-xs">algo.maxFlow</code>, picks an action, and only calls it fixed when the readings prove it.
-            </p>
-          </div>
-          <dl className="grid w-full grid-cols-2 gap-2 sm:w-auto sm:grid-cols-5">
-            {tiles.map(([k, v, cls]) => (
-              <div key={k} className="rounded-2xl bg-surface px-4 py-3 hairline">
-                <dd className={`font-display text-2xl font-semibold num ${cls ?? ''}`}>{v}</dd><dt className="text-[11px] text-ink-3">{k}</dt>
-              </div>
-            ))}
-          </dl>
-        </div>
-        <ol className="mt-6 grid gap-2 sm:grid-cols-4" aria-label="What happens">
+      <main className="flex min-h-0 flex-1 flex-col gap-3 px-4 pb-4 sm:px-6" role="tabpanel">
+        <ol className="grid shrink-0 gap-1.5 sm:grid-cols-4" aria-label="What happens">
           {STEPS.map(([t, d], i) => (
-            <li key={t} aria-current={i === stage ? 'step' : undefined}
-              className={`rounded-2xl px-4 py-3 transition duration-300 ease-spring ${i === stage ? 'bg-ink text-paper shadow-lift' : i < stage ? 'bg-current-tint text-ink' : 'bg-surface text-ink-3 hairline'}`}>
-              <p className="flex items-center gap-2 text-sm font-semibold">
-                <span className={`flex h-5 w-5 items-center justify-center rounded-full text-[11px] num ${i === stage ? 'bg-paper text-ink' : i < stage ? 'bg-current text-white' : 'bg-sunk'}`}>{i < stage ? '✓' : i + 1}</span>{t}
-              </p>
-              <p className={`mt-1 text-[11.5px] leading-snug ${i === stage ? 'text-paper/70' : ''}`}>{d}</p>
+            <li key={t} aria-current={i === stage ? 'step' : undefined} title={d}
+              className={`flex items-center gap-2 rounded-xl px-3 py-2 transition duration-300 ease-spring ${i === stage ? 'bg-ink text-paper shadow-lift' : i < stage ? 'bg-current-tint text-ink' : 'bg-surface text-ink-3 hairline'}`}>
+              <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] num ${i === stage ? 'bg-paper text-ink' : i < stage ? 'bg-current text-white' : 'bg-sunk'}`}>{i < stage ? '✓' : i + 1}</span>
+              <span className="min-w-0"><span className="block text-xs font-semibold">{t}</span>
+                <span className={`block truncate text-[10.5px] ${i === stage ? 'text-paper/70' : ''}`}>{d}</span></span>
             </li>
           ))}
         </ol>
-        {error && <p className="mt-4 rounded-xl bg-danger-tint px-4 py-2 text-sm text-danger" role="alert">{error}</p>}
+        {error && <p className="shrink-0 rounded-xl bg-danger-tint px-4 py-2 text-sm text-danger" role="alert">{error}</p>}
 
-        <div className="mt-8 grid gap-6 xl:grid-cols-[320px_minmax(0,1fr)_380px]">
+        <div className="grid min-h-0 flex-1 gap-4 xl:grid-cols-[300px_minmax(0,1fr)_380px]">
           {/* faults */}
-          <section aria-label="Faults" className="space-y-4">
-            <div className="rounded-2xl bg-surface p-4 hairline">
+          <section aria-label="Faults" className="scroll-thin min-h-0 space-y-3 xl:overflow-y-auto xl:pr-1">
+            <div className="rounded-2xl bg-surface p-3 hairline">
               <p className="eyebrow">Customer</p>
               <div className="mt-2 flex flex-wrap gap-1.5">
                 {custs.map((c) => (
@@ -660,12 +658,12 @@ export default function LabPage() {
               </div>
               {me && <p className="mt-2 text-[11px] text-ink-3">{me.area} · {me.pop_label} · {me.uplinks > 1 ? 'hub has a backup link' : 'hub has no backup link'}</p>}
               <div className="mt-3 flex gap-2">
-                <button className="btn-primary flex-1 !py-2 text-xs" disabled={!!busy} onClick={() => inject('random')}>
+                <button className="btn-primary flex-1 !py-2 text-xs" disabled={!!busy} onClick={() => inject('random')}
+                  title="Breaks something random. Even the console hides what it was until the resolver is graded.">
                   <Sparkle className="h-4 w-4" />{busy === 'random' ? 'Breaking…' : 'Blind test'}
                 </button>
                 <button className="btn-ghost !py-2 text-xs hairline" disabled={!!busy} onClick={heal}>{busy === 'heal' ? 'Healing…' : 'Heal all'}</button>
               </div>
-              <p className="mt-2 text-[11px] text-ink-3">Blind test breaks something random. Even the console hides what it was until the resolver is graded.</p>
             </div>
             <div className="grid grid-cols-2 gap-2">
               {view?.presets.map((p) => {
@@ -673,16 +671,16 @@ export default function LabPage() {
                 return (
                   <button key={p.key} onClick={() => setPick(p.key)} aria-pressed={pick === p.key} disabled={!fits}
                     title={fits ? p.blurb : 'Pick a customer whose hub fits this fault'}
-                    className={`flex flex-col items-start gap-1.5 rounded-2xl p-3 text-left transition duration-300 ease-spring disabled:opacity-40 ${pick === p.key ? 'bg-ink text-paper' : 'bg-surface hairline hover:shadow-soft'}`}>
-                    <span className={`flex h-8 w-8 items-center justify-center rounded-xl ${pick === p.key ? 'bg-paper/15' : 'bg-sunk'}`}><PresetIcon name={p.icon} /></span>
-                    <span className="text-xs font-semibold leading-tight">{p.title}</span>
-                    <span className={`text-[10px] ${pick === p.key ? 'text-paper/60' : 'text-ink-3'}`}>{p.layer}</span>
+                    className={`flex items-center gap-2 rounded-xl p-2 text-left transition duration-300 ease-spring disabled:opacity-40 ${pick === p.key ? 'bg-ink text-paper' : 'bg-surface hairline hover:shadow-soft'}`}>
+                    <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${pick === p.key ? 'bg-paper/15' : 'bg-sunk'}`}><PresetIcon name={p.icon} className="h-4 w-4" /></span>
+                    <span className="min-w-0"><span className="block text-[11.5px] font-semibold leading-tight">{p.title}</span>
+                      <span className={`block text-[10px] ${pick === p.key ? 'text-paper/60' : 'text-ink-3'}`}>{p.layer}</span></span>
                   </button>
                 )
               })}
             </div>
             {chosen && (
-              <div className="rounded-2xl bg-surface p-4 hairline">
+              <div className="rounded-2xl bg-surface p-3 hairline">
                 <h3 className="text-sm font-semibold">{chosen.title}</h3>
                 <p className="mt-1 text-xs leading-relaxed text-ink-2">{chosen.blurb}</p>
                 <p className="mt-1.5 text-xs italic text-ink-3">“{chosen.says}”</p>
@@ -694,56 +692,21 @@ export default function LabPage() {
                 </div>
               </div>
             )}
-          </section>
-
-          {/* network */}
-          <section aria-label="Network" className="min-w-0 space-y-4">
-            <div className="lab-grid overflow-hidden rounded-[1.75rem] bg-ink p-4 text-white shadow-lift">
-              <div className="flex flex-wrap items-center justify-between gap-2 px-1">
-                <div>
-                  <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-white/45">Live network · {view?.network?.pop.label ?? '…'}</p>
-                  <p className="text-sm text-white/80">Core → city hub → area exchange → street cabinet → homes</p>
-                </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {view?.faults.filter((f) => f.active).map((f) => (
-                    <span key={f.id} className={`chip ${f.mitigated ? 'bg-conflict/20 text-conflict' : 'bg-danger/20 text-[#ff9b8f]'}`}>
-                      <Warning className="h-3 w-3" />{f.title ?? 'Hidden fault'}{f.mitigated ? ' · on backup' : ''}</span>
-                  ))}
-                  {waiting && <span className="chip bg-white/10 text-white/80 animate-breathe">{waiting.split(' ')[0]} is telling intake…</span>}
-                </div>
-              </div>
-              <div className="scroll-thin mt-3 overflow-x-auto">
-                {view?.network ? <Canvas view={view.network} focus={focus ?? null} /> : <p className="py-24 text-center text-sm text-white/50">{view && !custs.length ? 'No customer has a line yet. Chat as a customer with a city first.' : 'Loading the network…'}</p>}
-              </div>
-              <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 px-1 text-[10.5px] text-white/55">
-                {(['ok', 'dark', 'flapping', 'frozen', 'paused', 'slow'] as LabHome['state'][]).map((k) => (
-                  <span key={k} className="inline-flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-[3px]" style={{ background: HOME_COLOR[k] }} />{HOME_WORD[k]}</span>
-                ))}
-                <span className="inline-flex items-center gap-1.5"><i className="h-0.5 w-4 border-t-2 border-dotted border-white/40" />standby link</span>
-              </div>
-              {view?.network?.olts.map((o) => <div key={o.id} className="mt-3"><EveningChart o={o} /></div>)}
-            </div>
-
-            <details className="group rounded-2xl bg-surface p-4 hairline">
-              <summary className="cursor-pointer list-none text-sm font-semibold">Operator tools <span className="font-normal text-ink-3">· try a fix yourself, or ask the resolver to check</span></summary>
-              <div className="mt-3 flex flex-wrap items-end justify-between gap-3">
-                <div>
-                  <p className="eyebrow">Try a fix yourself</p>
-                  <p className="mt-1 text-xs text-ink-2">Same network, same check. A wrong fix stays broken, and the readings show it.</p>
-                </div>
-                <button className="btn-ghost !py-1.5 text-xs hairline" disabled={!focus || busy === 'investigate'} onClick={investigate}>Ask the resolver to check {me?.name.split(' ')[0] ?? ''}</button>
-              </div>
-              <div className="mt-3 flex flex-col gap-2 sm:flex-row">
-                <label htmlFor="lab-action" className="sr-only">Action</label>
-                <select id="lab-action" className="field !py-2 text-sm" value={manual.action} onChange={(e) => setManual({ action: e.target.value })}>
-                  {ACTIONS.map(([k, l]) => <option key={k} value={k}>{l}</option>)}
-                </select>
-                <button className="btn-primary shrink-0 !py-2 text-sm" disabled={!focus || manual.busy} onClick={tryFix}>{manual.busy ? 'Working…' : `Apply to ${me?.name.split(' ')[0] ?? '…'}`}</button>
+            <details className="rounded-2xl bg-surface p-3 hairline">
+              <summary className="cursor-pointer list-none text-sm font-semibold">Operator tools <span className="font-normal text-ink-3">· try a fix yourself</span></summary>
+              <p className="mt-2 text-xs text-ink-2">Same network, same check. A wrong fix stays broken, and the readings show it.</p>
+              <label htmlFor="lab-action" className="sr-only">Action</label>
+              <select id="lab-action" className="field mt-2 !py-2 text-sm" value={manual.action} onChange={(e) => setManual({ action: e.target.value })}>
+                {ACTIONS.map(([k, l]) => <option key={k} value={k}>{l}</option>)}
+              </select>
+              <div className="mt-2 flex gap-2">
+                <button className="btn-primary flex-1 !py-2 text-xs" disabled={!focus || manual.busy} onClick={tryFix}>{manual.busy ? 'Working…' : `Apply to ${me?.name.split(' ')[0] ?? '…'}`}</button>
+                <button className="btn-ghost !py-2 text-xs hairline" disabled={!focus || busy === 'investigate'} onClick={investigate}>Ask the resolver</button>
               </div>
               <AnimatePresence>
                 {manual.result && (
                   <motion.p initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                    className={`mt-3 rounded-xl px-3 py-2 text-sm ${manual.result.fixed ? 'bg-current-tint text-current' : manual.result.before.length ? 'bg-danger-tint text-danger' : 'bg-sunk text-ink-2'}`}>
+                    className={`mt-2 rounded-xl px-3 py-2 text-xs ${manual.result.fixed ? 'bg-current-tint text-current' : manual.result.before.length ? 'bg-danger-tint text-danger' : 'bg-sunk text-ink-2'}`}>
                     {manual.result.fixed ? `${manual.result.label}: fixed. Every reading is healthy now.`
                       : manual.result.before.length ? `${manual.result.label}: didn't fix it. Still failing: ${manual.result.after.map((x) => WHAT[x] ?? x).join(', ')}.`
                         : `${manual.result.label}: nothing was broken for this customer.`}
@@ -753,22 +716,55 @@ export default function LabPage() {
             </details>
           </section>
 
-          {/* resolver */}
-          <section aria-label="Resolver" className="space-y-4">
-            <div className="rounded-2xl bg-surface p-5 hairline">
-              <div className="mb-3 flex items-center justify-between gap-2">
-                <p className="eyebrow">Resolver at work</p>
-                {ordered.length > 1 && (
-                  <select aria-label="Pick a run" className="rounded-full bg-sunk px-2 py-1 text-[11px] text-ink-2 outline-none" value={run?.id ?? ''} onChange={(e) => setPicked(e.target.value)}>
-                    {ordered.map((r) => <option key={r.id} value={r.id}>{r.name.split(' ')[0]} · {r.status}</option>)}
-                  </select>
-                )}
+          {/* network: takes whatever height is left */}
+          <section aria-label="Network" className="lab-grid flex min-h-[520px] min-w-0 flex-col overflow-hidden rounded-[1.75rem] bg-ink p-4 text-white shadow-lift xl:min-h-0">
+            <div className="flex shrink-0 flex-wrap items-center justify-between gap-2 px-1">
+              <div>
+                <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-white/45">Live network · {view?.network?.pop.label ?? '…'}</p>
+                <p className="text-sm text-white/80">Core → city hub → area exchange → street cabinet → homes</p>
               </div>
-              <Trace run={run} />
+              <div className="flex flex-wrap gap-1.5">
+                {view?.faults.filter((f) => f.active).map((f) => (
+                  <span key={f.id} className={`chip ${f.mitigated ? 'bg-conflict/20 text-conflict' : 'bg-danger/20 text-[#ff9b8f]'}`}>
+                    <Warning className="h-3 w-3" />{f.title ?? 'Hidden fault'}{f.mitigated ? ' · on backup' : ''}</span>
+                ))}
+                {waiting && <span className="chip bg-white/10 text-white/80 animate-breathe">{waiting.split(' ')[0]} is telling intake…</span>}
+              </div>
             </div>
-            <div>
-              <p className="eyebrow mb-2 text-center">What {run ? run.name.split(' ')[0] : 'the customer'} sees</p>
-              <Phone run={run} />
+            <div className="scroll-thin mt-3 min-h-0 flex-1 overflow-auto">
+              {view?.network ? <Canvas view={view.network} focus={focus ?? null} /> : <p className="py-24 text-center text-sm text-white/50">{view && !custs.length ? 'No customer has a line yet. Chat as a customer with a city first.' : 'Loading the network…'}</p>}
+            </div>
+            <div className="mt-2 flex shrink-0 flex-wrap gap-x-4 gap-y-1 px-1 text-[10.5px] text-white/55">
+              {(['ok', 'dark', 'flapping', 'frozen', 'paused', 'slow'] as LabHome['state'][]).map((k) => (
+                <span key={k} className="inline-flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-[3px]" style={{ background: HOME_COLOR[k] }} />{HOME_WORD[k]}</span>
+              ))}
+              <span className="inline-flex items-center gap-1.5"><i className="h-0.5 w-4 border-t-2 border-dotted border-white/40" />standby link</span>
+            </div>
+            {!!view?.network?.olts.length && (
+              <details className="mt-2 shrink-0 rounded-xl bg-white/[0.04] px-3 py-2">
+                <summary className="cursor-pointer list-none text-xs text-white/70">Evening load at the exchange{view.network.olts.length > 1 ? 's' : ''} <span className="text-white/40">· capacity from algo.maxFlow</span></summary>
+                {view.network.olts.map((o) => <div key={o.id} className="mt-2"><EveningChart o={o} /></div>)}
+              </details>
+            )}
+          </section>
+
+          {/* resolver: the trace, or what the customer sees */}
+          <section aria-label="Resolver" className="flex min-h-[560px] flex-col rounded-2xl bg-surface p-4 hairline xl:min-h-0">
+            <div className="mb-3 flex shrink-0 items-center justify-between gap-2">
+              <div role="tablist" aria-label="Resolver view" className="inline-flex rounded-full bg-sunk/70 p-0.5">
+                {([['trace', 'Resolver at work'], ['phone', `What ${run ? run.name.split(' ')[0] : 'the customer'} sees`]] as const).map(([k, label]) => (
+                  <button key={k} role="tab" aria-selected={side === k} onClick={() => setSide(k)}
+                    className={`rounded-full px-3 py-1 text-[11px] ${side === k ? 'bg-ink font-medium text-paper' : 'text-ink-2'}`}>{label}</button>
+                ))}
+              </div>
+              {ordered.length > 1 && (
+                <select aria-label="Pick a run" className="rounded-full bg-sunk px-2 py-1 text-[11px] text-ink-2 outline-none" value={run?.id ?? ''} onChange={(e) => setPicked(e.target.value)}>
+                  {ordered.map((r) => <option key={r.id} value={r.id}>{r.name.split(' ')[0]} · {r.status}</option>)}
+                </select>
+              )}
+            </div>
+            <div className="min-h-0 flex-1" role="tabpanel">
+              {side === 'trace' ? <Trace run={run} fill /> : <div className="scroll-thin h-full overflow-y-auto"><Phone run={run} /></div>}
             </div>
           </section>
         </div>
