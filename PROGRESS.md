@@ -245,6 +245,8 @@ Known issue at the time (fixed in Phase 17): an unknown person could be answered
 | Tool catalogue | Seven typed, hand-written tools (`recall_customer`, `facts_at`, `claims`, `who_handled`, `affected_by` depth 1–4, `capacity` via maxFlow, `past_fixes`). Bad arguments are refused and unknown names return `unknown_entity` before the tool's query runs; every call is logged (tool, args, ms, rows, outcome) and shown above the raw Cypher. Same tools over MCP (14 in all) and `/api/tenants/{t}/tools` |
 | One-click contrasts | "Where does X live?" now vs as of a past date; "What plan is X on?" with both agents' claims, trust ranking and the Conflict node; "<hub> is down" at depth 1 vs depth 3 with a path per row. Entities picked from the live graph, read-only |
 | README | "How Relay follows the Graph Hacks principles": each principle mapped to file and screen, and where Relay goes further |
+| Live chat fixes | The resolver waits until the customer's line is known before picking up (it once answered a first message with mock readings and a fix that contradicted the outage); the outage and "note-taking paused" are said once, then the ETA; on-screen greetings carry a time |
+| Robustness | A query retries when FalkorDB Cloud drops the connection; the usage ledger retries its file swap on Windows; the Usage tab re-checks any model not heard from in 10 minutes, so quota used by another process shows up |
 | Tests | `tests/test_contract.py` (all four outcomes, hops, both clocks, argument checks, depth cap, grounding scope), extended `test_api`, `test_mcp` and web render tests |
 
 Known gaps: the new screens are checked by render tests and builds, not yet clicked through in a browser; the "now vs then" demo needs a customer who has moved; the network contrast is on the map tab only; "How I know" appears only when the reply repeats a fact's value.
@@ -324,7 +326,7 @@ Full numbers, method and caveats: `agent-relay/eval/components.md` (fix log) and
 
 On the same subset full Relay scores 90%, so **the two clocks are worth about 19 points and multi-hop expansion about 9**: the graph machinery earns its keep, measured, not assumed.
 
-By type, Relay vs B1: disagreement 100 vs 6, multi-hop 100 vs 28, completeness 100 vs 33, current 100 vs 44, belief time 94 vs 39, handoff 100 vs 67, world time 89 vs 89, unknown 89 vs 89, **procedural 44 vs 50** (still behind). Abstention: Relay precision 89%, recall 89% (B1: 29% / 89%).
+By type, Relay vs B1: disagreement 100 vs 6, multi-hop 100 vs 28, completeness 100 vs 33, current 100 vs 44, belief time 94 vs 39, handoff 100 vs 67, world time 89 vs 89, unknown 89 vs 89, procedural 44 vs 50 in that run, **17/17 vs 11/17 after fix 8** (scored on the procedural slice of the benchmark, mixed answer models, same model for both systems per question). Abstention: Relay precision 89%, recall 89% (B1: 29% / 89%).
 
 **Caveat on comparability:** the first scored run (Relay 68.8% vs B1 55.0%) used qwen3.8-27b; Groq's daily caps then forced the final run onto gemini-3.5-flash-lite for both systems. The paired comparison inside each run is fair; the jump from 69% to 91% mixes the fixes with the model change. Each fix was also scored on its own (fix log), mostly on qwen.
 
@@ -339,6 +341,7 @@ By type, Relay vs B1: disagreement 100 vs 6, multi-hop 100 vs 28, completeness 1
 | 5 | Off-catalogue plans the customer is on ("basic 50") were dropped at write time | extraction recall | 295/306 | 306/306 |
 | 6 | An open account request was taken as the context of a new fault, so its ticket never opened | load errors | 7 | 0 |
 | 7 | The unknown-person check counted issue/fix names as names | answerable questions refused by it | 2 | 0 |
+| 8 | Procedural: the lab filed fixes under its own names ("wifi channel change" vs the team's "change wifi channel"); the graph recorded every fix tried but not which one worked; the lab improvised extra fixes on the scripted benchmark; plurals ("slow speeds") didn't link and a question naming no one never seeded from the issue it asked about | procedural gold in context / answers (Relay vs B1) | 13/18 / 8 vs 9 (of 18) | 18/18 / 17 vs 11 (of 17 scored) |
 
 Belief time was not a two-clock bug: its misses were fix 5. "Unchanged" contradictions needed no separate fix: the guard was right, typos were the cause.
 
@@ -346,7 +349,7 @@ Belief time was not a two-clock bug: its misses were fix 5. "Unchanged" contradi
 
 **The small 74-question set** (93% vs 43%) is kept for history only; the scaled run is the headline.
 
-**Still open:** procedural questions (44%), one ablation baseline (B0) partly scored, determinism re-runs, out-of-distribution extraction, LoCoMo QA.
+**Still open:** a full reload and rerun on the final code (procedural was re-scored on a slice), one ablation baseline (B0) partly scored, determinism re-runs, out-of-distribution extraction, LoCoMo QA.
 
 **Engineering numbers:**
 
@@ -384,7 +387,7 @@ Differentiation and demo depth rise: a worldwide company with region graphs, ope
 Track coverage and demo quality rise: the intake agent follows a written spec, its questions and their answers are memory every agent can see, identity is a graph match, tickets carry the full handoff, and the chat shows the graph work as it happens. Model quota is now the main operational risk: planned replies need no model, but extraction does. Estimate: **≈ 8/10 now**.
 
 ### Update after Phase 18
-The evaluation drove the work: seven root causes fixed, each measured, and the ablations show the graph features earn their keep (two clocks ≈ +19 points, multi-hop ≈ +9). The judges' published principles (answer shapes, path with the answer, a fixed tool catalogue with checked arguments, names resolved before reasoning) are now visible on screen. Still open: procedural questions (44%), a same-model before/after headline, determinism and LoCoMo runs, a browser click-through. Estimate: **≈ 9/10**.
+The evaluation drove the work: seven root causes fixed, each measured, and the ablations show the graph features earn their keep (two clocks ≈ +19 points, multi-hop ≈ +9). The judges' published principles (answer shapes, path with the answer, a fixed tool catalogue with checked arguments, names resolved before reasoning) are now visible on screen. Still open: a same-model before/after headline, determinism and LoCoMo runs, a browser click-through. Estimate: **≈ 9/10**.
 
 ### Update after Phase 17
 Evaluation rigor rises from 5 to about 8 (after the fix log and ablations): the scaled run is scored with intervals, paired tests, component metrics and a miss breakdown, and it lowered our own headline. It also exposed real weaknesses to fix next: typo entities (25%), abstention precision (52%), multi-hop (28%), and the billing pickup that kept disagreements out of the graph. Graph use rises: recall is two queries and the resolver's choice comes from a path query. Estimate: **≈ 8.5/10**, with the next gains in those four weaknesses rather than new features.
