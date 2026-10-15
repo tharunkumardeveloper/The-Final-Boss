@@ -11,6 +11,7 @@ import type { Chip } from '../lib/chips'
 import { GuideCard, splitGuides } from '../components/Guides'
 import { Check, Database, Pulse, Sparkle, Warning } from '../components/Icons'
 import { api } from '../lib/api'
+import { titleCase } from '../lib/format'
 import { BOT } from '../lib/brand'
 import { useRelayStream } from '../lib/stream'
 import { useTenant } from '../lib/tenant'
@@ -46,10 +47,93 @@ function PresetIcon({ name, className = 'h-5 w-5' }: { name: string; className?:
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden>{p}</svg>
 }
 
+
+// ---------------------------------------------------------------- field dispatch (only when the resolver sends people)
+
+const CREW: Record<string, { who: string; to: string }> = {
+  dispatch_technician_home: { who: 'Technician', to: 'home' },
+  dispatch_cable_crew: { who: 'Cable crew', to: 'cabinet' },
+  dispatch_backbone_crew: { who: 'Backbone team', to: 'hub link' },
+}
+export interface Dispatch { action: string; customer: string; name: string; tech?: string | null; at: number; ms: number
+  verified?: LabStep; stage: 'enroute' | 'onsite' | 'done' | 'failed'; p: number }
+
+/** The run's latest field job, while it is out (and for a few seconds after the re-measurement, so the result is seen). */
+export function useDispatch(run?: LabRun): Dispatch | null {
+  const [, tick] = useState(0)
+  const act = run ? [...run.steps].reverse().find((x) => x.kind === 'act' && String(x.data?.action ?? '') in CREW) : undefined
+  const verified = act && run ? run.steps.find((x) => x.i > act.i && x.kind === 'verify') : undefined
+  const ms = act ? Math.max(4, Number(act.data?.delayed) || 6) * 1000 : 0
+  const live = !!act && (!verified || Date.now() - verified.at < 12_000)
+  useEffect(() => {
+    if (!live) return
+    const id = setInterval(() => tick((n) => n + 1), 100)
+    return () => clearInterval(id)
+  }, [live])
+  if (!act || !run || !live) return null
+  const p = Math.min(1, (Date.now() - act.at) / ms)
+  const stage = verified ? (verified.status === 'ok' ? 'done' : 'failed') : p < 0.45 ? 'enroute' : 'onsite'
+  return { action: String(act.data.action), customer: run.customer, name: run.name, tech: run.technician, at: act.at, ms, verified, stage, p }
+}
+
+function Van({ x, y, color }: { x: number; y: number; color: string }) {
+  return (
+    <g transform={`translate(${x - 13} ${y - 9})`} pointerEvents="none">
+      <rect x="0" y="2" width="18" height="11" rx="2.5" fill={color} />
+      <path d="M18 5h4.5l3.5 4v4h-8z" fill={color} />
+      <rect x="19.5" y="6" width="3.5" height="3" rx="0.6" fill="rgb(var(--ink))" opacity="0.6" />
+      <circle cx="5" cy="14.5" r="2.4" fill="rgb(var(--ink))" stroke="white" strokeWidth="1" />
+      <circle cx="20" cy="14.5" r="2.4" fill="rgb(var(--ink))" stroke="white" strokeWidth="1" />
+    </g>
+  )
+}
+
+/** Under the diagram, only while a crew is out: who went where, the route, and how far along the job is. */
+export function FieldDispatch({ d, view }: { d: Dispatch; view: NonNullable<LabView['network']> }) {
+  const crew = CREW[d.action]
+  const home = view.homes.find((h) => h.customer === d.customer)
+  const cab = view.splitters.find((x) => x.id === home?.splitter)
+  const link = view.links.find((l) => l.link === 'cut') ?? view.links[0]
+  const first = d.name.split(' ')[0]
+  const where = d.action === 'dispatch_technician_home' ? `${first}'s home${home ? ` · port ${home.port}` : ''}${cab ? `, ${cab.label}` : ''}`
+    : d.action === 'dispatch_cable_crew' ? `the feeder cable of ${cab?.label ?? 'the street cabinet'}`
+      : `${view.pop.label.replace(' POP', '')} hub ↔ ${link?.label ?? 'core'}`
+  const stages: [Dispatch['stage'] | 'sent', string][] = [['sent', 'Dispatched'], ['enroute', 'En route'], ['onsite', 'On site · repairing'], ['done', 'Verified by re-measuring']]
+  const at = { sent: 0, enroute: 1, onsite: 2, done: 3, failed: 3 }[d.stage]
+  const van = d.stage === 'enroute' ? Math.min(1, d.p / 0.45) : 1
+  const tone = d.stage === 'failed' ? '#ff9b8f' : d.stage === 'done' ? 'rgb(var(--current))' : 'rgb(var(--conflict))'
+  return (
+    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={SPRING}
+      className="mt-2 shrink-0 rounded-2xl bg-white/[0.06] p-3 ring-1 ring-white/10" role="status" aria-live="polite">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <p className="text-sm font-semibold">
+          <span style={{ color: tone }}>●</span> {crew.who}{d.tech ? ` · ${titleCase(d.tech)}` : ''} sent to {where}
+        </p>
+        <p className="text-[11px] text-white/50">Only a hands-on fix clears this · about 2 hours in real life, fast-forwarded to {Math.round(d.ms / 1000)} s</p>
+      </div>
+      <svg viewBox="0 0 600 34" className="mt-2 h-8 w-full" aria-hidden="true">
+        <line x1="20" y1="22" x2="580" y2="22" stroke="rgb(255 255 255 / 0.15)" strokeWidth="4" strokeLinecap="round" />
+        <line x1="20" y1="22" x2={20 + 560 * van} y2="22" stroke={tone} strokeWidth="4" strokeLinecap="round" />
+        <text x="20" y="10" className="fill-white/50 text-[9px]">Depot · {view.pop.label.replace(' POP', '')}</text>
+        <text x="580" y="10" textAnchor="end" className="fill-white/70 text-[9px]">{crew.to}</text>
+        <Van x={20 + 560 * van} y={20} color={tone} />
+      </svg>
+      <ol className="mt-2 grid grid-cols-4 gap-1.5">
+        {stages.map(([k, label], i) => (
+          <li key={k} className={`rounded-lg px-2 py-1 text-[10.5px] ${i < at ? 'bg-white/10 text-white/80' : i === at ? 'text-ink' : 'bg-white/[0.03] text-white/35'}`}
+            style={i === at ? { background: tone } : undefined}>
+            {i < at ? '✓ ' : ''}{k === 'done' && d.stage === 'failed' ? 'Still failing · retrying' : label}
+          </li>
+        ))}
+      </ol>
+    </motion.div>
+  )
+}
+
 // ---------------------------------------------------------------- the network canvas
 
 /** The network as the container allows: left to right when there's room, top to bottom when narrow. Never cut. */
-export function Canvas({ view, focus }: { view: NonNullable<LabView['network']>; focus: string | null }) {
+export function Canvas({ view, focus, dispatch }: { view: NonNullable<LabView['network']>; focus: string | null; dispatch?: Dispatch | null }) {
   const box = useRef<HTMLDivElement>(null)
   const [width, setWidth] = useState(720)
   useTouchTick()
@@ -194,6 +278,28 @@ export function Canvas({ view, focus }: { view: NonNullable<LabView['network']>;
           return <path key={`s-${s.id}`} d={`M${p.x} ${p.y - 11} l11 11 l-11 11 l-11 -11z`} fill="rgb(var(--ink))" stroke={s.feeder === 'cut' ? C.bad : C.ok} strokeWidth="2">
             <title>{s.label}</title></path>
         })}
+        {dispatch && (() => {  // the crew: from the hub out to the place only hands can fix
+          const home = view.homes.find((h) => h.customer === dispatch.customer)
+          const ci = Math.max(0, cores.findIndex((l) => l.link === 'cut'))
+          const goal = dispatch.action === 'dispatch_technician_home' && home ? pos.home[home.id]
+            : dispatch.action === 'dispatch_cable_crew' && home && pos.olt[view.splitters.find((x) => x.id === home.splitter)?.olt ?? '']
+              ? mid(pos.spl[home.splitter], pos.olt[view.splitters.find((x) => x.id === home.splitter)!.olt])
+              : pos.core[ci] ? mid(pos.pop, pos.core[ci]) : pos.pop
+          if (!goal) return null
+          const from = { x: pos.pop.x, y: pos.pop.y + 34 }
+          const t = dispatch.stage === 'enroute' ? Math.min(1, dispatch.p / 0.45) : 1
+          const e = 1 - (1 - t) ** 3  // ease out: the van slows as it arrives
+          const x = from.x + (goal.x - from.x) * e, y = from.y + (goal.y - from.y) * e
+          const tone = dispatch.stage === 'failed' ? C.bad : dispatch.stage === 'done' ? C.ok : C.warn
+          return (
+            <g pointerEvents="none">
+              <line x1={from.x} y1={from.y} x2={goal.x} y2={goal.y} stroke={tone} strokeOpacity="0.35" strokeWidth="1.5" strokeDasharray="3 5" />
+              {dispatch.stage === 'onsite' && <circle cx={goal.x} cy={goal.y} r="16" fill="none" stroke={tone} strokeWidth="2" className="lab-alarm" />}
+              {dispatch.stage === 'done' && <g><circle cx={goal.x} cy={goal.y} r="13" fill={C.ok} /><path d={`M${goal.x - 5} ${goal.y}l3.5 3.5 6.5-7`} stroke="white" strokeWidth="2.2" fill="none" strokeLinecap="round" /></g>}
+              <Van x={x} y={y - 16} color={tone} />
+            </g>
+          )
+        })()}
         {/* what live Cypher just read: the resolver measuring this line, node by node */}
         {[...cores.map((l, i) => [pos.core[i], l.id] as const), [pos.pop, view.pop.id] as const,
           ...view.olts.map((o) => [pos.olt[o.id], o.id] as const), ...view.splitters.map((x) => [pos.spl[x.id], x.id] as const),
@@ -508,6 +614,7 @@ export default function LabPage() {
     ['Verified & graded', focusRun?.verdict ? `${focusRun.verdict.correct ? 'Right diagnosis' : 'Wrong diagnosis'} · ${focusRun.verdict.fixed ? 'fixed and proven' : 'not fixed'}` : 'Only "fixed" when the readings prove it, then graded against the hidden truth.'],
   ]
   const chosen = view?.presets.find((p) => p.key === pick)
+  const crew = useDispatch(focusRun ?? run)
 
   if (talk) {
     const mine = view?.focus === focus ? view : undefined
@@ -570,7 +677,7 @@ export default function LabPage() {
                 </div>
               </div>
               <div className="mt-2">
-                {mine?.network ? <Canvas view={mine.network} focus={focus ?? null} />
+                {mine?.network ? <Canvas view={mine.network} focus={focus ?? null} dispatch={crew} />
                   : <p className="py-14 text-center text-sm text-white/45">Say hi in the chat and tell it where you live. Your line shows up here.</p>}
               </div>
               <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 px-1 text-[10.5px] text-white/55">
@@ -731,9 +838,10 @@ export default function LabPage() {
                 {waiting && <span className="chip bg-white/10 text-white/80 animate-breathe">{waiting.split(' ')[0]} is telling intake…</span>}
               </div>
             </div>
-            <div className="scroll-thin mt-3 min-h-0 flex-1 overflow-auto">
-              {view?.network ? <Canvas view={view.network} focus={focus ?? null} /> : <p className="py-24 text-center text-sm text-white/50">{view && !custs.length ? 'No customer has a line yet. Chat as a customer with a city first.' : 'Loading the network…'}</p>}
+            <div className={`scroll-thin mt-3 min-h-0 overflow-auto ${crew ? 'shrink' : 'flex flex-1 items-center justify-center'}`}>
+              {view?.network ? <Canvas view={view.network} focus={focus ?? null} dispatch={crew} /> : <p className="py-24 text-center text-sm text-white/50">{view && !custs.length ? 'No customer has a line yet. Chat as a customer with a city first.' : 'Loading the network…'}</p>}
             </div>
+            <AnimatePresence>{crew && view?.network && <FieldDispatch key={crew.at} d={crew} view={view.network} />}</AnimatePresence>
             <div className="mt-2 flex shrink-0 flex-wrap gap-x-4 gap-y-1 px-1 text-[10.5px] text-white/55">
               {(['ok', 'dark', 'flapping', 'frozen', 'paused', 'slow'] as LabHome['state'][]).map((k) => (
                 <span key={k} className="inline-flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-[3px]" style={{ background: HOME_COLOR[k] }} />{HOME_WORD[k]}</span>

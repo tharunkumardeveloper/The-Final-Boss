@@ -100,3 +100,26 @@ describe('answer contract and tools', async () => {
     expect(wrap(<ShowMe tenant="pml" kind="network" />)).toContain('Looking for real examples')
   })
 })
+
+describe('field dispatch', async () => {
+  const { FieldDispatch, Canvas } = await import('./Lab')
+  const net = {
+    pop: { id: 'pop-1', label: 'Mumbai POP', city: 'mumbai' },
+    links: [{ id: 'core-a', label: 'Core West', status: 'up', role: 'primary' as const, active: true, link: 'up' as const, gbps: 10, flow: 4 }],
+    olts: [{ id: 'olt-1', label: 'Andheri OLT', status: 'up', peak_gbps: 6, uplink_gbps: 10, flow_gbps: 4, free_peak_mbps: 900, curve: [1, 2] }],
+    splitters: [{ id: 'spl-1', label: 'Cabinet 4', feeder: 'cut' as const, olt: 'olt-1' }],
+    homes: [{ id: 'ont-1', splitter: 'spl-1', port: 3, customer: 'kevin', name: 'Kevin', rx: -30, box: 'b', account: 'active', wifi: 1, state: 'dark' as const }],
+  }
+  const d = { action: 'dispatch_cable_crew', customer: 'kevin', name: 'Kevin', tech: 'ravi kumar', at: 0, ms: 8000, stage: 'onsite' as const, p: 0.6 }
+  const text = (el: JSX.Element) => renderToString(el).replace(/<!-- -->/g, '')
+  it('says who went where and how far along the job is', () => {
+    const t = text(<FieldDispatch d={d} view={net} />)
+    expect(t).toContain('Cable crew · Ravi Kumar sent to the feeder cable of Cabinet 4')
+    expect(t).toContain('On site · repairing')
+    expect(t).toContain('fast-forwarded to 8 s')
+  })
+  it('draws the van on the diagram only while a crew is out', () => {
+    expect(renderToString(<Canvas view={net} focus="kevin" dispatch={d} />)).toContain('stroke-dasharray="3 5"')
+    expect(renderToString(<Canvas view={net} focus="kevin" />)).not.toContain('stroke-dasharray="3 5"')
+  })
+})
