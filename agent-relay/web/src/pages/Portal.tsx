@@ -30,6 +30,39 @@ const plansFrom = (kb?: Kb) => kb?.plans.length
     note: p.notes, perks: [`About ${p.devices} devices`, ...p.includes.map(cap)], featured: p.key === 'fiber 300' }))
   : PLANS
 
+/** Tickets and memory share one full-height panel, so each has room; it jumps to Tickets when one opens. */
+function AccountPanel({ tenant, who, customer, chips, subscribe, onAsk }: { tenant: string; who: string | null; customer?: Customer
+  chips: Chip[]; subscribe: (fn: (e: RelayEvent) => void) => () => void; onAsk: (t: string) => void }) {
+  const [tab, setTab] = useState<'tickets' | 'memory'>('memory')
+  const [fresh, setFresh] = useState<{ tickets: boolean; memory: boolean }>({ tickets: false, memory: false })
+  const settled = chips.filter((c) => c.phase === 'settled').length
+  useEffect(() => subscribe((e) => {
+    if (e.type === 'ticket_opened' && e.data.customer === who) setTab('tickets')
+    else if ((e.type === 'pickup' || e.type === 'ticket_status' || (e.type === 'message' && e.data.speaker === 'resolver' && e.data.customer === who)))
+      setFresh((f) => ({ ...f, tickets: true }))
+  }), [subscribe, who])
+  useEffect(() => { if (settled) setFresh((f) => ({ ...f, memory: true })) }, [settled])
+  const pick = (t: 'tickets' | 'memory') => { setTab(t); setFresh((f) => ({ ...f, [t]: false })) }
+  return (
+    <div className="flex h-[700px] min-h-0 flex-col gap-3 xl:h-auto">
+      <div className="flex rounded-full bg-surface p-1 hairline" role="tablist" aria-label="Your account">
+        {([['tickets', 'Your tickets'], ['memory', 'What we remember']] as const).map(([k, label]) => (
+          <button key={k} role="tab" aria-selected={tab === k} onClick={() => pick(k)}
+            className={`relative flex-1 rounded-full px-4 py-2 text-sm font-medium transition duration-300 ease-spring ${tab === k ? 'bg-ink text-paper shadow-soft' : 'text-ink-2 hover:bg-sunk'}`}>
+            {label}
+            {fresh[k] && tab !== k && <i className="absolute right-3 top-2 h-2 w-2 rounded-full bg-signal animate-breathe" aria-label="new" />}
+          </button>
+        ))}
+      </div>
+      <div className="min-h-0 flex-1">
+        {tab === 'tickets'
+          ? <TicketsPanel tenant={tenant} who={who} customer={customer} subscribe={subscribe} onAsk={onAsk} />
+          : <MemoryPanel who={who} customer={customer} chips={chips} tenant={tenant} />}
+      </div>
+    </div>
+  )
+}
+
 export default function Portal() {
   const { tenant, setTenant } = useTenant()
   const graph = useRef(emptyGraph())
@@ -123,18 +156,12 @@ export default function Portal() {
             </p>
           </div>
           {/* chat | your tickets + what we remember | your graph */}
-          <div className="grid animate-rise gap-4 [animation-delay:100ms] lg:grid-cols-[380px_minmax(0,1fr)] xl:h-[calc(100dvh-210px)] xl:min-h-[660px] xl:max-h-[940px] xl:grid-cols-[380px_minmax(300px,0.85fr)_minmax(0,1.25fr)]">
+          <div className="grid animate-rise gap-4 [animation-delay:100ms] lg:grid-cols-[380px_minmax(0,1fr)] xl:h-[calc(100dvh-210px)] xl:min-h-[660px] xl:max-h-[940px] xl:grid-cols-[380px_minmax(340px,1fr)_minmax(0,1fr)]">
             <div className="h-[700px] min-h-0 xl:h-auto">
               <SupportDesk tenant={tenant} customers={customers} subscribe={subscribe} side="none" onWho={setWho} onChips={setChips} typeRef={typeRef} />
             </div>
-            <div className="flex h-[700px] min-h-0 flex-col gap-4 xl:h-auto">
-              <div className="min-h-0 shrink-0 basis-[42%]">
-                <TicketsPanel tenant={tenant} who={who} customer={customers.find((c) => c.key === who)} subscribe={subscribe} onAsk={(t) => typeRef.current?.(t)} />
-              </div>
-              <div className="min-h-0 flex-1">
-                <MemoryPanel who={who} customer={customers.find((c) => c.key === who)} chips={chips} tenant={tenant} />
-              </div>
-            </div>
+            <AccountPanel tenant={tenant} who={who} customer={customers.find((c) => c.key === who)} chips={chips} subscribe={subscribe}
+              onAsk={(t) => typeRef.current?.(t)} />
             <div className="min-h-[560px] lg:col-span-2 xl:col-span-1 xl:min-h-0">
               <Suspense fallback={null}><MyGraph tenant={tenant} who={who} subscribe={subscribe} /></Suspense>
             </div>
