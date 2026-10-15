@@ -17,7 +17,7 @@ import { titleCase } from '../lib/format'
 import { useTenant } from '../lib/tenant'
 import type { Community } from '../lib/types'
 
-type Tab = 'inspect' | 'ask' | 'tickets'
+type Tab = 'inspect' | 'ask' | 'tickets' | 'clocks'
 const LEGEND_KINDS = ['customer', 'city', 'plan', 'device', 'issue', 'fix', 'outage', 'ticket']
 
 export default function Console() {
@@ -43,29 +43,30 @@ export default function Console() {
     const node = id ? c.store.nodes.get(id) : undefined
     if (node?.kind === 'customer') setClockWho(node.label)
   }
+  const GRAPH_H = 'h-[min(78vh,860px)] min-h-[520px]'  // the graph is the screen: tall, and the side panels match it
 
   const consolidate = async () => {
     setConsolidating(true)
     try { const r = await api.consolidate(tenant); setCommunities(r.communities); c.refreshAll() } finally { setConsolidating(false) }
   }
 
-  const tabs: [Tab, string][] = [['ask', 'Ask resolver'], ['inspect', 'Inspect'], ['tickets', `Tickets${c.tickets.length ? ` · ${c.tickets.filter((t) => t.status !== 'resolved').length} open` : ''}`]]
+  const tabs: [Tab, string][] = [['ask', 'Ask'], ['inspect', 'Inspect'], ['tickets', `Tickets${c.tickets.length ? ` · ${c.tickets.filter((t) => t.status !== 'resolved').length} open` : ''}`], ['clocks', 'Two clocks']]
 
   return (
-    <div className="flex min-h-[100dvh] flex-col lg:h-[100dvh]">
+    <div className="flex min-h-[100dvh] flex-col">
       <TopBar tenant={tenant} setTenant={setTenant} stats={c.stats} sim={c.sim} setSim={c.setSim} simTime={c.simTime} status={c.status}
         cypherCount={c.cypher.length} openCypher={() => setCypherOpen(true)} usage={c.usage}
         onReset={() => { setSelected(null); setHighlight(new Set()); setCommunities(undefined); c.clearFeed(); c.refreshAll(true) }} />
 
-      <div className="grid min-h-0 flex-1 grid-cols-1 gap-3 px-3 pb-3 lg:grid-cols-[300px_minmax(0,1fr)_360px] xl:grid-cols-[340px_minmax(0,1fr)_390px]">
-        <aside className="panel flex h-[420px] min-h-0 flex-col overflow-hidden lg:h-auto">
+      <div className="grid grid-cols-1 items-start gap-3 px-3 pb-3 lg:grid-cols-[280px_minmax(0,1fr)_380px] xl:grid-cols-[320px_minmax(0,1fr)_420px]">
+        <aside className={`panel order-3 flex h-[420px] flex-col overflow-hidden lg:order-none lg:h-[min(78vh,860px)] lg:min-h-[520px]`}>
           {replaying
             ? <KnownList r={r} label={(id) => r.graph.nodes.get(id)?.label ?? c.store.nodes.get(id)?.label ?? id.replace(/^e:/, '')} onSelect={select} />
             : <Feed feed={c.feed} customers={c.customers} />}
         </aside>
 
-        <main className="flex min-h-0 flex-col gap-3">
-          <section className="panel relative h-[460px] overflow-hidden lg:h-auto lg:flex-1" aria-label={replaying ? 'Memory graph, replay' : 'Memory graph'}>
+        <main className="order-1 flex min-w-0 flex-col gap-3 lg:order-none">
+          <section className={`panel relative overflow-hidden ${GRAPH_H}`} aria-label={replaying ? 'Memory graph, replay' : 'Memory graph'}>
             <MemoryGraph store={graph} version={replaying ? r.rv : c.version} highlight={replaying ? undefined : highlight} selected={selected} onSelect={select}
               focusId={!replaying && c.view.focus ? entityId(c.view.focus) : null} />
             <div className="absolute left-4 right-28 top-3">
@@ -109,12 +110,9 @@ export default function Console() {
           <section className="panel shrink-0" aria-label="Time">
             <TimeBar r={r} on={replaying} setOn={setReplaying} />
           </section>
-          <section className="panel h-[250px] shrink-0 overflow-hidden">
-            <ClockPanel tenant={tenant} customers={c.customers} subject={clockWho} onSubject={setClockWho} version={c.version} simTime={c.simTime} />
-          </section>
         </main>
 
-        <aside className="panel flex min-h-[480px] flex-col overflow-hidden lg:min-h-0">
+        <aside className={`panel order-2 flex h-[640px] flex-col overflow-hidden lg:order-none lg:h-[min(78vh,860px)] lg:min-h-[520px]`}>
           <div role="tablist" aria-label="Inspector" className="flex gap-1 p-2 shadow-[0_1px_0_rgb(var(--line)/0.07)]">
             {tabs.map(([id, name]) => (
               <button key={id} role="tab" aria-selected={tab === id} onClick={() => setTab(id)}
@@ -125,6 +123,7 @@ export default function Console() {
             <div hidden={tab !== 'ask'}><AskPanel tenant={tenant} onAnswer={setHighlight} logCypher={c.logCypher} /></div>
             {tab === 'inspect' && <Inspector tenant={tenant} id={selected} version={c.version} />}
             {tab === 'tickets' && <Tickets tenant={tenant} tickets={c.tickets} logCypher={c.logCypher} refresh={c.refreshLists} />}
+            {tab === 'clocks' && <ClockPanel tenant={tenant} customers={c.customers} subject={clockWho} onSubject={setClockWho} version={c.version} simTime={c.simTime} />}
           </div>
         </aside>
       </div>
