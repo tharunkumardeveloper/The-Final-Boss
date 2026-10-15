@@ -65,7 +65,7 @@ class Intake:
     id = "intake"
 
     def handle(self, tenant, *, customer, session_id, text, at, ticket_id=None, reply_llm=False, greeted=False,
-               country=None, log=None):
+               country=None, speak=True, log=None):
         """One customer message. Learns facts; opens a ticket and hands it to the resolver on a new issue.
         reply_llm: write the reply with the LLM, grounded in memory (otherwise a template, no LLM call)."""
         ticket = open_ticket_for(tenant, customer, log)
@@ -133,18 +133,18 @@ class Intake:
             memory.remember(tenant, agent="intake", session_id=session_id, customer=customer, at=at, facts=[],
                             text=f"intake declined a request for customer data and pointed to the legal team: {text}",
                             log=log)
-        if reply_llm:
+        if reply_llm and speak:  # speak=False: the resolver owns this conversation; intake only takes notes
             reply = converse.intake_reply(tenant, customer=norm(customer), session_id=session_id, text=text,
                                           learned=learned, ticket=ticket, opened=opened, at=at, greeted=greeted,
                                           country=country, log=log)
-        reply = reply or self._template(learned, opened, text)
+        reply = (reply or self._template(learned, opened, text)) if speak else None
         if ticket or opened:  # the ticket node carries what intake learned this turn (priority, details)
             db.run(tenant, "ticket profile", Q.TICKET_PROFILE, {"t": ticket or opened}, log)
         db.run(tenant, "link sessions", Q.LINK_SESSIONS, {"c": c}, log)
-        if res.get("extraction_failed"):
+        if res.get("extraction_failed") and reply:
             reply += " (Heads up: my note-taking is paused for a few minutes, so I may ask you to repeat that later.)"
         reply_eid = None
-        if reply_llm:  # the agent's side of the conversation is episodic memory too
+        if reply_llm and speak:  # the agent's side of the conversation is episodic memory too
             reply_eid = memory.record_episode(tenant, agent=self.id, session_id=session_id, customer=customer,
                                               text=reply, at=to_ms(at) + 1000, speaker="agent", log=log)
         return {**res, "ticket_opened": opened, "reply": reply, "reply_episode_id": reply_eid}

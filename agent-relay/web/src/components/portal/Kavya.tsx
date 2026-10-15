@@ -32,7 +32,7 @@ export function Typing({ step }: { step?: string }) {
   return (
     <motion.div className="flex items-end gap-2.5" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 4 }} transition={SPRING}
       role="status" aria-live="polite" aria-label={step ? `${BOT}: ${step}` : `${BOT} is typing`}>
-      <KavyaAvatar size={32} thinking online={false} />
+      <KavyaAvatar size={40} thinking online={false} />
       <div className="flex items-center gap-3 rounded-2xl rounded-bl-md bg-sunk px-4 py-3">
         <span className="flex items-center gap-1">
           {[0, 1, 2].map((i) => (

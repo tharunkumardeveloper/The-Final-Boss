@@ -67,3 +67,6 @@ export function wilson(k: number, n: number): [number, number] {
 }
 
 export const pct = (x: number) => `${Math.round(x * 100)}%`
+
+/** 'IN' -> the Indian flag emoji (Windows gets it from the flag polyfill font loaded in main.tsx). */
+export const flag = (iso: string) => String.fromCodePoint(...iso.toUpperCase().split('').map((c) => 127397 + c.charCodeAt(0)))

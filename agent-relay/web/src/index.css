@@ -28,7 +28,7 @@ html, body, #root { height: 100%; }
 body {
   background: rgb(var(--paper));
   color: rgb(var(--ink));
-  font-family: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Twemoji Country Flags", "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   font-feature-settings: "ss01";
 }

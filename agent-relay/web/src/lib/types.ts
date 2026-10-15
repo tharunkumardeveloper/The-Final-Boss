@@ -80,7 +80,7 @@ export interface Ticket {
   opened_at?: string | null; trail: TrailStep[]
 }
 export interface ChatResponse {
-  reply: string; session_id: string; learned: FactChange[]; ticket_opened?: string | null; cypher: CypherEntry[]
+  reply: string; speaker?: string; session_id: string; learned: FactChange[]; ticket_opened?: string | null; cypher: CypherEntry[]
   episode_id?: string; reply_episode_id?: string | null
   images?: ChatImages | null  // games or streaming came up: pictures for the reply bubble
 }

@@ -1291,6 +1291,32 @@ def on_chat(tenant, customer, text, opened=None):
     return start(tenant, c, ticket=open_ticket_for(tenant, c), said=text)  # an open ticket, or none: still look
 
 
+def resolver_turn(tenant, customer, kind, handled, session_id):
+    """The resolver's own answer while it owns the case, so intake doesn't talk over it. Returns (text, episode id)."""
+    c = norm(customer)
+    first = _first(c)
+    if kind == "busy":
+        text = "I'm still on it, checking your line right now. I'll message you here in a moment."
+    elif kind == "guided":
+        text = "Thanks! Checking your line again now."
+    elif kind == "details":
+        with _lock:
+            w = _awaiting.get((tenant, c))
+        r = _run(tenant, w["run"]) if w else None
+        need = _visit_details(_Shim(tenant, c, r))["need"] if r else []
+        text = ("Thanks. I still need " + "; ".join(need) + ".") if need else "Got everything. Booking the visit now."
+    elif kind == "confirm":
+        text = ("Brilliant, thanks for checking! I've closed your case. If anything acts up again, just tell me here."
+                if handled == "confirmed" else
+                "Sorry it's still acting up. I'm taking another look right now." if handled else
+                f"Is it working for you now, {first}? Just tell me yes or no.")
+    else:
+        return None, None
+    eid = memory.record_episode(tenant, agent="resolver", session_id=session_id, customer=c, text=text, at=_ms(),
+                                speaker="resolver")
+    return text, eid
+
+
 def waiting_kind(tenant, customer):
     """What the resolver is waiting on for this customer: confirm / guided / details / busy, or None."""
     c = norm(customer)

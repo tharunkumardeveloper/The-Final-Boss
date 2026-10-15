@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { WakeGate } from './components/WakeGate'
 import './index.css'
+import { polyfillCountryFlagEmojis } from 'country-flag-emoji-polyfill'
 import { TenantProvider } from './lib/tenant'
 import Portal from './pages/Portal'
 
@@ -19,6 +20,8 @@ const DatabasePage = lazy(() => import('./pages/Database'))
 const LabPage = lazy(() => import('./pages/Lab'))
 const GraphPage = lazy(() => import('./pages/Graph'))
 const IsolationPage = lazy(() => import('./pages/Isolation'))
+
+polyfillCountryFlagEmojis()  // Windows has no flag emoji; this adds a flag-only font there
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

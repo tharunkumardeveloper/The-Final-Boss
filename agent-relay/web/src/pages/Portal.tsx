@@ -11,7 +11,7 @@ import type { Chip } from '../lib/chips'
 // the graph canvas is heavy; it loads once someone is chatting
 const MyGraph = lazy(() => import('../components/portal/MyGraph'))
 import { api } from '../lib/api'
-import { titleCase } from '../lib/format'
+import { flag, titleCase } from '../lib/format'
 import { activeOutages, applyEvent, emptyGraph, loadGraph } from '../lib/graph'
 import { useRelayStream } from '../lib/stream'
 import { useTenant } from '../lib/tenant'
@@ -146,7 +146,7 @@ export default function Portal() {
               </select>
               {kb && kb.countries.length > 1 && (
                 <select aria-label="Country" className="bg-transparent outline-none" value={kb.country} onChange={(e) => { setCountry(e.target.value); try { localStorage.setItem('wifight.place.v2', 'picked') } catch { /* private */ } }}>
-                  {kb.countries.map((c) => <option key={c.iso} value={c.iso}>{c.name}</option>)}
+                  {kb.countries.map((c) => <option key={c.iso} value={c.iso}>{flag(c.iso)} {c.name}</option>)}
                 </select>
               )}
             </label>

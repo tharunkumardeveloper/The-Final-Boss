@@ -16,14 +16,6 @@ interface Line { id: string; ep?: string; speaker: string; text: string; at?: st
   mark?: string; rename?: boolean; images?: ChatImages }
 export type Subscribe = (fn: (e: RelayEvent) => void) => () => void
 
-const QUICK: [string, string, string][] = [
-  ['Wifi keeps dropping', 'My wifi drops every evening, mostly on my PS5.', '📶'],
-  ['Internet is down', "My internet isn't working at all.", '⚠️'],
-  ['Which plan am I on?', 'Which plan am I on?', '📄'],
-  ['Plans and prices', 'What plans do you have, and how much are they?', '💸'],
-  ['I moved house', 'I moved house last week, to ', '🏠'],
-  ['Upgrade my speed', 'I want a faster plan.', '🚀'],
-]
 const FLY_MS = 1200
 
 const sessionKey = (tenant: string, who: string) => `pml.session.${tenant}.${who}`
@@ -92,7 +84,7 @@ function Bubble({ l, customer, flying, onRename }: { l: Line; customer: string; 
   return (
     <motion.div layout="position" initial={{ opacity: 0, y: 14, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={SPRING}
       className={`flex items-end gap-2.5 ${mine ? 'flex-row-reverse' : ''}`}>
-      {kavya ? <KavyaAvatar size={32} online={false} /> : !mine && (
+      {kavya ? <KavyaAvatar size={40} online={false} /> : !mine && (
         <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold ${tool ? 'bg-sunk text-ink-2' : l.speaker === 'noc' ? 'bg-current text-white' : 'bg-ink text-paper'}`}>
           {tool ? 'SYS' : l.speaker === 'noc' ? 'NOC' : 'RS'}
         </span>
@@ -309,13 +301,13 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
       // The socket may already have delivered Kavya's reply. The reply's episode id is the shared key, so the
       // socket copy and this one collapse into one bubble whichever arrives first (no text matching, no races).
       const replyId = r.reply_episode_id
-        ?? linesRef.current.find((l) => l.speaker === 'intake' && l.text === r.reply)?.id
+        ?? linesRef.current.find((l) => l.speaker === (r.speaker ?? 'intake') && l.text === r.reply)?.id
         ?? `reply-${localId}`
       setLines((ls) => {
         const done = ls.map((l) => (l.id === localId ? { ...l, ep: r.episode_id ?? l.ep, pending: false, at: l.at ?? new Date().toISOString() } : l))
           .filter((l, i, all) => !(l.ep && all.findIndex((x) => x.ep === l.ep) !== i))
         const next = done.some((l) => l.id === replyId || l.ep === replyId) ? done
-          : [...done, { id: replyId, ep: r.reply_episode_id ?? undefined, speaker: 'intake', text: r.reply,
+          : [...done, { id: replyId, ep: r.reply_episode_id ?? undefined, speaker: r.speaker ?? 'intake', text: r.reply,
             at: new Date().toISOString(), local: !r.reply_episode_id }]
         const pics = r.images?.images.length ? r.images : undefined
         return pics ? next.map((l) => (l.id === replyId || l.ep === replyId ? { ...l, images: pics } : l)) : next
@@ -341,7 +333,7 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
       <div className={`grid h-full min-h-0 grid-cols-1 gap-4 ${side === 'none' ? '' : memoryWidth === 380 ? 'lg:grid-cols-[minmax(0,1fr)_340px] xl:grid-cols-[minmax(0,1fr)_380px]' : 'lg:grid-cols-[minmax(0,1fr)_300px]'}`}>
         <section className="relative flex min-h-[620px] flex-col overflow-hidden rounded-[1.75rem] bg-surface shadow-lift hairline lg:min-h-0" aria-label={`Chat with ${BOT}`}>
           <header className="flex items-center gap-3.5 px-6 py-4 shadow-[0_1px_0_rgb(var(--line)/0.07)]">
-            <KavyaAvatar size={48} thinking={busy} ripple={ripple} />
+            <KavyaAvatar size={64} thinking={busy} ripple={ripple} />
             <div className="min-w-0 flex-1">
               <p className="font-display text-lg font-semibold leading-tight">{BOT}</p>
               <p className="text-[13px] text-ink-3">“{BOT_TAGLINE}” · <span className="text-current">online</span>, replies in seconds</p>
@@ -409,21 +401,11 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
           </div>
 
           <div className="px-4 pb-4 pt-2">
-              <div className="rounded-[1.4rem] bg-sunk/60 p-2 ring-signal/40 transition duration-300 ease-spring focus-within:bg-surface focus-within:shadow-soft focus-within:ring-2">
-                {who && (
-                  <div className="scroll-thin -mx-0.5 flex gap-1.5 overflow-x-auto px-0.5 pb-2" aria-label="Quick replies">
-                    {QUICK.map(([label, full, icon]) => (
-                      <button key={label} type="button" onClick={() => typeInto(full)} disabled={busy}
-                        className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-surface px-3 py-1.5 text-[12.5px] text-ink-2 hairline transition duration-300 ease-spring hover:bg-signal-tint hover:text-signal-deep active:scale-[0.97] disabled:opacity-50">
-                        <span aria-hidden="true">{icon}</span>{label}
-                      </button>
-                    ))}
-                  </div>
-                )}
+              <div className="rounded-[1.6rem] bg-sunk/60 p-2.5 ring-signal/40 transition duration-300 ease-spring focus-within:bg-surface focus-within:shadow-soft focus-within:ring-2">
                 <form onSubmit={send} className="flex items-end gap-2">
                   <label htmlFor="pml-msg" className="sr-only">Message {BOT}</label>
                   <textarea id="pml-msg" ref={input} rows={1}
-                    className="max-h-36 min-h-[44px] min-w-0 flex-1 resize-none bg-transparent px-3 py-2.5 text-[15px] leading-snug text-ink outline-none placeholder:text-ink-3"
+                    className="max-h-52 min-h-[56px] min-w-0 flex-1 resize-none bg-transparent px-3.5 py-3.5 text-[16px] leading-relaxed text-ink outline-none placeholder:text-ink-3"
                     placeholder={who ? `Tell ${BOT} what's going on, ${first(who)}…` : `Say hi and tell ${BOT} your name`} value={text}
                     onChange={(e) => { clearInterval(typer.current); setText(e.target.value); e.target.style.height = 'auto'; e.target.style.height = `${e.target.scrollHeight}px` }}
                     onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (text.trim() && !busy) send() } }}

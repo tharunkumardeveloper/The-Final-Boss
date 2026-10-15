@@ -326,20 +326,26 @@ def chat(tenant: str, body: ChatIn):
     log = []
     at = to_ms(body.at) if body.at else now_ms(tenant)
     sid = body.session_id or f"{norm(body.customer).replace(' ', '-')}-web-{datetime.fromtimestamp(at / 1000):%Y%m%d}"
+    owner = lab.waiting_kind(tenant, body.customer)  # the resolver is mid-case: only it answers (one voice at a time)
     try:  # before intake replies: the resolver claims a fresh complaint, so the two agents don't talk over each other
         lab.before_chat(tenant, body.customer, body.text)
     except Exception as e:
         print(f"lab before_chat: {e}")
     out = agents.Intake().handle(tenant, customer=body.customer, session_id=sid, text=body.text, at=at,
-                                 reply_llm=True, greeted=body.greeted, country=body.country, log=log)
+                                 reply_llm=True, greeted=body.greeted, country=body.country, speak=not owner, log=log)
+    handled = None
     try:  # the resolver hears this too: a yes/no to "is it working now?", or a complaint about a broken line
-        lab.on_chat(tenant, body.customer, body.text, out.get("ticket_opened"))
+        handled = lab.on_chat(tenant, body.customer, body.text, out.get("ticket_opened"))
     except Exception as e:
         print(f"lab on_chat: {e}")
+    speaker = "intake"
+    if owner:
+        out["reply"], out["reply_episode_id"] = lab.resolver_turn(tenant, body.customer, owner, handled, sid)
+        speaker = "resolver"
     shown = None  # instruction pictures travel as [guide:...] markers in the messages instead
     retired = [{"fact_id": r["fact_id"], "subject": r["triple"][0], "predicate": r["triple"][1],
                 "object": r["triple"][2], "status": "retired"} for r in out.get("retired", [])]
-    return {"reply": out["reply"], "session_id": sid, "learned": fact_changes(out["facts"]) + retired,
+    return {"reply": out["reply"], "speaker": speaker, "session_id": sid, "learned": fact_changes(out["facts"]) + retired,
             "episode_id": out["episode_id"], "reply_episode_id": out.get("reply_episode_id"), "orders": out.get("orders", []),
             "ticket_opened": out["ticket_opened"].upper() if out["ticket_opened"] else None, "cypher": log,
             "images": shown}
