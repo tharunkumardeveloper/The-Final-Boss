@@ -202,10 +202,11 @@ def budget_note(budget, plans):
             + (f" Over budget (never call these a fit): {', '.join(over)}." if over else ""))
 
 
-def customer_notes(tenant, customer, log=None):
-    """The customer's memory as plain sentences, plus deterministic notes a weak model would otherwise get wrong."""
+def customer_notes(tenant, customer, log=None, facts=None):
+    """The customer's memory as plain sentences, plus deterministic notes a weak model would otherwise get wrong.
+    facts: customer_facts() the caller already read this turn (saves the round trip)."""
     from . import cards  # lazy: cards imports agents, which imports this module
-    facts = retrieve.customer_facts(tenant, customer, log=log)
+    facts = retrieve.customer_facts(tenant, customer, log=log) if facts is None else facts
     now = [f for f in facts if f["active"]]
     before = [f for f in facts if not f["active"]][-3:]
     from . import registry as R
@@ -213,10 +214,10 @@ def customer_notes(tenant, customer, log=None):
                                    R.subject_type(f["predicate"]), R.object_type(f["predicate"]))
     notes = [say(f) + "." for f in now] + [f"Earlier (no longer true): {say(f)}." for f in before]
     from . import orders
-    for o in orders.for_customer(tenant, customer, log):
-        if o["status"] != "installed":
-            notes.append(f"Open order {o['order_id']}: {o['plan'].title()}, status {o['status']}, installation by {o['eta'][:10]}"
-                         f" at {(o['install_at'] or 'an address still to confirm').title()}. They are NOT on this plan until it is installed.")
+    open_orders = [o for o in orders.for_customer(tenant, customer, log) if o["status"] != "installed"]
+    for o in open_orders:
+        notes.append(f"Open order {o['order_id']}: {o['plan'].title()}, status {o['status']}, installation by {o['eta'][:10]}"
+                     f" at {(o['install_at'] or 'an address still to confirm').title()}. They are NOT on this plan until it is installed.")
     region, iso = kb.region_of(tenant), None
     for pred, c in [(f["predicate"], f["object"]) for f in now
                     if f["predicate"] in ("lives_in", "moving_to") and f["subject"] == customer]:
@@ -237,8 +238,7 @@ def customer_notes(tenant, customer, log=None):
     if notes and not any(f["predicate"] == "on_plan" for f in now):  # a brand-new person has nothing to "remember"
         notes.append("They are not on any of our plans yet.")
     budget = next((f["object"] for f in now if f["predicate"] == "budget"), None)
-    has_pending_order = any(o["status"] != "installed" for o in orders.for_customer(tenant, customer, log))
-    if budget and not has_pending_order:
+    if budget and not open_orders:
         note = budget_note(budget, kb.price_list(tenant, iso or kb.default_country(region), log=log))
         notes += [note] if note else []
     from . import lab  # lazy: lab imports agents, which imports this module
@@ -340,7 +340,8 @@ def intake_reply(tenant, *, customer, session_id, text, learned, ticket, opened,
         return f"Happy to help, {first}. Reach out any time."
     from . import intake
     intake.step(tenant, customer, "Looking you up in our records", at)
-    notes, used, iso = customer_notes(tenant, customer, log)
+    facts = retrieve.customer_facts(tenant, customer, log=log)  # read once for the notes and the turn plan
+    notes, used, iso = customer_notes(tenant, customer, log, facts=facts)
     sharing.consult(tenant, "intake", used, log=log)  # includes facts other agents wrote (billing, tickets...)
     turns = [(sp, tx) for sp, tx, _, _ in session_turns(tenant, session_id, log) if sp != "action"][:-1]
     history = turns[-4:]  # last few turns only, so a weak model can't snowball its own long answers
@@ -360,7 +361,7 @@ def intake_reply(tenant, *, customer, session_id, text, learned, ticket, opened,
     plans = kb.price_list(home, country, log=log)
     tk = ticket or opened
     plan = intake.plan_turn(tenant, customer=customer, text=text, learned=learned, ticket=tk, history=turns,
-                            first_turn=first_turn, plans=plans, at=at, session_id=session_id, log=log)
+                            first_turn=first_turn, plans=plans, at=at, session_id=session_id, log=log, facts=facts)
     from . import lab
     if lab.claimed(tenant, customer) and plan.ask is not None and plan.ask.key not in ("identifier", "area"):
         plan.ask = None  # the resolver is measuring the line; intake's checklist would talk over it

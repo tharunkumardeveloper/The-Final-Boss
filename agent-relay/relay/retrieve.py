@@ -8,7 +8,7 @@ from . import db, embed, events, llm, queries as Q, registry as R
 from .memory import norm, to_date, to_ms
 
 FIELDS = ["fact_id", "subject", "predicate", "object", "active", "valid_from", "valid_to",
-          "recorded_at", "expired_at", "asserted_by", "support", "last_seen", "agents"]
+          "recorded_at", "expired_at", "asserted_by", "support", "last_seen", "agents", "salience"]
 
 # Ablations switch off one graph capability at a time.
 MODES = {
@@ -26,44 +26,166 @@ def _predicate_vecs():
     return {p: np.array(v) / np.linalg.norm(v) for p, v in zip(R.PREDICATES, vecs)}
 
 
-def detect_entities(tenant, question, log=None):
-    """Exact entity linking: known names (and unique customer first names) found in the question."""
-    q = " " + re.sub(r"[^a-z0-9\- ]", " ", question.lower()) + " "
-    q = " ".join(q.split())
-    q = f" {q} "
-    rows = db.run(tenant, "known entities", Q.KNOWN_ENTITIES, log=log, ro=True)
-    found = [k for k, _ in rows if f" {k} " in q]
-    first = {}
-    for k, t in rows:
-        if t == "customer":
-            first.setdefault(k.split()[0], []).append(k)
-    found += [ks[0] for name, ks in first.items() if len(ks) == 1 and f" {name} " in q and ks[0] not in found]
-    if not any(t == "customer" for k, t in rows if k in found):
-        found += [k for k in fuzzy_customers(tenant, q, log) if k not in found]
-    return sorted(found, key=len, reverse=True)
+def _pvec(p):
+    """Registry predicates are embedded once; open ones (`open:<attribute>`) the first time they show up."""
+    pv = _predicate_vecs()
+    if p not in pv:
+        v = np.array(embed.embed_one(p.split(":", 1)[-1].replace("_", " ")))
+        pv[p] = v / np.linalg.norm(v)
+    return pv[p]
 
+
+LINK_TYPES = {"customer", "ticket", "city", "outage", "plan", "router"}  # what recall may seed from by name
+MAX_GRAM = 8  # longest entity name, in words, that exact linking looks up
 
 _STOP = set("what where when which does did have has the and for from with about who how is are was were this that "
             "live lives living plan plans router ticket city moved move still now currently their they them".split())
 
 
-def fuzzy_customers(tenant, text, log=None):
-    """Customers named with a typo ("alise rao" is Alice Rao), through FalkorDB's full-text index (one edit away).
-    Only a clear winner counts: two customers who fit equally well are not guessed between."""
-    words = [w for w in text.split() if len(w) >= 4 and w not in _STOP and w.isalpha()]
-    if not words:
-        return []
-    q = "|".join(f"%{w}%" for w in words)
-    try:
-        rows = db.run(tenant, "fuzzy customers", Q.FUZZY_CUSTOMERS_FLEX, {"q": q, "words": words}, log, ro=True)
-    except Exception:  # FLEX not loaded on this server: score alone
-        try:
-            rows = [r + [0] for r in db.run(tenant, "fuzzy customers", Q.FUZZY_CUSTOMERS, {"q": q}, log, ro=True)]
-        except Exception:  # graphs set up before the full-text index existed
-            return []
+def _words(text):
+    return re.sub(r"[^a-z0-9\- ]", " ", str(text).lower()).split()
+
+
+def _grams(words):
+    return sorted({" ".join(words[i:j]) for i in range(len(words)) for j in range(i + 1, min(i + MAX_GRAM, len(words)) + 1)})
+
+
+def _lev(a, b):
+    """Edit distance; names are short, so the O(len^2) table is nothing."""
+    row = list(range(len(b) + 1))
+    for i, ca in enumerate(a, 1):
+        prev, row[0] = row[0], i
+        for j, cb in enumerate(b, 1):
+            prev, row[j] = row[j], min(row[j] + 1, row[j - 1] + 1, prev + (ca != cb))
+    return row[-1]
+
+
+def _fuzzy_words(words):
+    return [w for w in words if len(w) >= 4 and w not in _STOP and w.isalpha()]
+
+
+def _fuzzy_pick(rows, words):
+    """[(key, score)] from the full-text index -> [the one clear winner] or []. Equal scores break on edit distance:
+    only name words the message came close to (<= 2 edits) count, more of the name matched wins, then fewer edits.
+    An untyped surname never decides ("chitraa" stays ambiguous between two Chitras)."""
+    def dist(key):
+        hit = [d for d in (min(_lev(t, w) for w in words) for t in key.split()) if d <= 2]
+        return sum(hit) - 10 * len(hit)
+    rows = sorted(((key, score, dist(key)) for key, score in rows), key=lambda r: (-r[1], r[2]))[:5]
     if not rows or (len(rows) > 1 and (rows[1][1], -rows[1][2]) >= (rows[0][1], -rows[0][2])):
         return []
     return [rows[0][0]]
+
+
+def _link(tenant, question, qvec, k=8, log=None):
+    """Round trip 1: exact names, unique first names, typo names and vector seeds, one UNION query.
+    -> {linked: entity keys (longest first), vector: [(key, type, distance)], unknown: names memory doesn't hold,
+        person: whether a customer was linked}"""
+    words = _words(question)
+    fuzzy = _fuzzy_words(words)
+    rows = db.run(tenant, "recall: link", Q.RECALL_LINK, {
+        "grams": _grams(words), "names": "|".join(sorted({w for w in words if w.isalpha() and len(w) >= 2})),
+        "fuzzy": "|".join(f"%{w}%" for w in fuzzy), "qvec": qvec, "k": k, "limit": 8}, log, ro=True)
+    by = {}
+    for src, key, typ, score in rows:
+        by.setdefault(src, []).append((key, typ, score))
+    exact = by.get("exact", [])
+    found = [key for key, typ, _ in exact if typ in LINK_TYPES]
+    first = {}
+    for key, _, _ in by.get("name", []):
+        first.setdefault(key.split()[0], set()).add(key)
+    found += [min(ks) for name, ks in first.items() if len(ks) == 1 and name in words and min(ks) not in found]
+    customers = {key for key, typ, _ in exact if typ == "customer"} | {key for key, _, _ in by.get("name", [])}
+    if not customers & set(found) and fuzzy:
+        found += [key for key in _fuzzy_pick([(key, s) for key, _, s in by.get("fuzzy", [])], fuzzy)
+                  if key not in found]
+        customers |= set(found)
+    near = {t for src in ("name", "fuzzy") for key, _, _ in by.get(src, []) for t in key.split()}
+    return {"linked": sorted(found, key=len, reverse=True), "vector": by.get("vector", []),
+            "unknown": _unknown_names(question, {key for key, _, _ in exact} | set(found), near),
+            "person": bool(customers & set(found))}
+
+
+def detect_entities(tenant, question, log=None):
+    """Entity linking: known names, unique customer first names, else one clear typo match ("alise rao")."""
+    return _link(tenant, question, embed.embed_one(question), log=log)["linked"]
+
+
+# Ordinary words that are never a person's name, even capitalised or right after "does"/"about".
+# ponytail: a hand list plus the catalogue's and registry's vocabulary; an unusual word in a person slot can still
+# read as a name (the cost is "I don't know", never someone else's facts). Upgrade: a POS tagger.
+_COMMON = set("""
+a an the i me my mine we us our you your he him his she her they them their it its this that these those there here
+what which who whom whose where when why how whats wheres whos hows is are was were be been being am do does did done
+have has had having will would shall should can could may might must not no yes ok okay please thanks thank hi hello
+hey dear sir madam of in on at to for from by with about into onto over under after before since until during
+between through against without within near across and or but if then else so than too very just also only even
+still now currently today yesterday tomorrow ago recently lately again ever never always often sometimes all any
+some each every most more less many much few several other another same such own both either neither none one two
+three first last next new old current previous latest earlier later back up down out off get got give gave tell told
+say said know knew show find found need needs want wants like likes make made take took see seen look check going go
+went come came call called use uses used using pay paid move moved moving live lives living lived stay stays stayed
+work works working worked happen happened happening fix fixed fixing break broke broken stop stopped start started
+anyone anybody someone somebody everyone everybody nobody customer customers subscriber subscribers user users person
+people member members client clients account accounts name names number numbers address addresses email phone mobile
+city cities area areas town place places location home house office country region plan plans package packages
+router routers modem device devices ticket tickets outage outages issue issues problem problems complaint complaints
+status speed speeds internet broadband fiber fibre wifi network line lines connection connections service services
+bill bills billing payment payments price prices cost costs order orders install installation technician technicians
+visit visits appointment slot support team agent agents resolver intake history fact facts memory record records data
+info information detail details question answer reason time date day days week weeks month months year years morning
+evening night least best worst top total count average mbps gbps monthly
+""".split())
+
+
+@lru_cache
+def _vocab():
+    """Words of the catalogue (cities, aliases, areas, plans, routers, add-ons, services) and of the registry."""
+    from . import kb  # lazy: kb imports db
+    w = kb.world()
+    names = [c["key"] for c in w["cities"]] + [a for c in w["cities"] for a in c.get("aliases", [])]
+    names += [a["key"] for c in w["cities"] for a in c.get("areas", [])]
+    names += [x[f] for kind in ("plans", "routers", "addons", "services") for x in w[kind] for f in ("key", "name")]
+    names += [str(t) for p, (s, o, *_) in R.PREDICATES.items() for t in (p, s, o)]
+    return frozenset(t for n in names for t in _words(n.replace("_", " ")))
+
+
+_CUE = {"does", "did", "is", "was", "has", "had", "will", "can", "about", "for", "of", "with", "named", "called"}
+_ID = re.compile(r"[a-z]+-\d[a-z0-9-]*")  # ticket-like ids: pml-2041-b343, tkt-7
+
+
+def _unknown_names(question, known, near):
+    """The specific people (or ids) a question names that memory doesn't hold.
+    A word reads as a name when it isn't ordinary, catalogue or graph vocabulary and it is possessive ("kevin's"),
+    capitalised mid-sentence ("does Kevin"), or in a subject slot ("where does kevin live", "about kevin").
+    known: entity keys the question matched; near: name words of customers the full-text index reached
+    (a typo of a customer's name, or an ambiguous first name, is not unknown)."""
+    covered = {t for key in known for t in key.split()}
+    toks = re.findall(r"[A-Za-z][A-Za-z0-9\-]*(?:['’]s\b)?|[.?!]", question)
+    out = []
+    for i, tok in enumerate(toks):
+        possessive = tok[-2:].lower() in ("'s", "’s")
+        w = (tok[:-2] if possessive else tok).lower()
+        if _ID.fullmatch(w):
+            out += [] if w in known else [w]
+            continue
+        if (len(w) < 3 or not w.isalpha() or w.endswith("ing") or w in _COMMON or w in _STOP or w in covered or w in _vocab()
+                or any(_lev(w, t) <= 1 for t in near)):
+            continue
+        prev = toks[i - 1].lower() if i else "."
+        if possessive or (tok[0].isupper() and prev not in ".?!") or prev in _CUE:
+            out.append(w)
+    return list(dict.fromkeys(out))
+
+
+def fuzzy_customers(tenant, text, log=None):
+    """Customers named with a typo ("alise rao" is Alice Rao), through FalkorDB's full-text index (one edit away).
+    Only a clear winner counts: two customers who fit equally well are not guessed between."""
+    words = _fuzzy_words(_words(text))
+    if not words:
+        return []
+    rows = db.run(tenant, "fuzzy customers", Q.FUZZY_CUSTOMERS, {"q": "|".join(f"%{w}%" for w in words)}, log, ro=True)
+    return _fuzzy_pick(rows, words)
 
 
 def _annotate_conflicts(facts):
@@ -92,18 +214,23 @@ def fmt(f, temporal=True):
 
 
 def recall(tenant, question, *, mode="full", k=8, log=None):
+    """Two round trips: link (names + vector seeds), then the bounded hop expansion with salience on each fact.
+    -> {seeds, facts, lines, unknown}. unknown: people/ids the question names that memory doesn't hold. Naming one
+    with no known customer alongside means no facts at all: never another person's memory in their place."""
     cfg = MODES[mode]
     qvec = embed.embed_one(question)
-    linked = detect_entities(tenant, question, log)
-    vrows = db.run(tenant, "vector seeds", Q.VECTOR_SEEDS, {"qvec": qvec, "k": k, "limit": 8}, log, ro=True)
+    ln = _link(tenant, question, qvec, k, log)
+    linked, vrows = ln["linked"], ln["vector"]
+    if ln["unknown"] and not ln["person"]:
+        return {"seeds": [], "facts": [], "lines": [], "unknown": ln["unknown"]}
     if linked:
         extra = [key for key, typ, _ in vrows if typ != "customer" and key not in linked][:3]
         seeds, dist = linked + extra, {s: 0 for s in linked} | {s: 1 for s in extra}
     else:
         seeds = [key for key, _, _ in vrows][:5]
         dist = {s: 0 for s in seeds}
-    rows = db.run(tenant, "retrieve facts", Q.retrieve_facts(cfg["hops"]),
-                  {"seeds": seeds, "max_entities": 100, "max_facts": 400}, log, ro=True)
+    rows = db.run(tenant, "recall: facts", Q.retrieve_facts(cfg["hops"]),
+                  {"seeds": seeds, "max_entities": 100, "max_facts": 400}, log, ro=True) if seeds else []
     facts = [dict(zip(FIELDS, r)) for r in rows]
     if cfg["temporal"]:
         _annotate_conflicts(facts)
@@ -118,15 +245,12 @@ def recall(tenant, question, *, mode="full", k=8, log=None):
     q = np.array(qvec) / np.linalg.norm(qvec)
     pv = _predicate_vecs()
     # Importance (Generative Agents): PageRank salience from consolidation, a light nudge within a hop tier.
-    keys = list({k for f in facts for k in (f["subject"], f["object"])})
-    sal = dict(db.run(tenant, "entity salience", Q.ENTITY_SALIENCE, {"keys": keys}, log, ro=True)) if keys else {}
-    top = max(sal.values(), default=0) or 1
-    importance = lambda f: max(sal.get(f["subject"], 0), sal.get(f["object"], 0)) / top
+    top = max((f["salience"] or 0 for f in facts), default=0) or 1
     facts.sort(key=lambda f: (min(dist.get(f["subject"], 9), dist.get(f["object"], 9)),
-                              -(float(pv[f["predicate"]] @ q) + SALIENCE_WEIGHT * importance(f)),
+                              -(float(_pvec(f["predicate"]) @ q) + SALIENCE_WEIGHT * (f["salience"] or 0) / top),
                               not f["active"], f["recorded_at"]))
     facts = facts[:MAX_LINES]
-    return {"seeds": seeds, "facts": facts, "lines": [fmt(f, cfg["temporal"]) for f in facts]}
+    return {"seeds": seeds, "facts": facts, "lines": [fmt(f, cfg["temporal"]) for f in facts], "unknown": ln["unknown"]}
 
 
 def customer_context(tenant, customer, log=None):
@@ -154,7 +278,12 @@ def ask(tenant, question, *, mode="full", agent=None, log=None):
     """agent: who is asking; when given, the facts the answer cites are recorded as CONSULTED by that agent.
     (The benchmark leaves it None so measuring never writes to the graph it measures.)"""
     r = recall(tenant, question, mode=mode, log=log)
-    a = llm.answer(question, r["lines"])
+    if r["unknown"] and not r["facts"]:  # names someone memory doesn't hold: abstain, no model call to talk round it
+        who = ", ".join(n.upper() if any(c.isdigit() for c in n) else n.title() for n in r["unknown"])
+        a = {"answer": f"I don't have anything on file about {who}.", "values": [], "cited_ids": [],
+             "conflict": False, "unknown": True}
+    else:
+        a = llm.answer(question, r["lines"])
     known = {f["fact_id"] for f in r["facts"]}
     a = {**a, "cited_ids": [i for i in a["cited_ids"] if i in known], "recall": r}
     if agent:

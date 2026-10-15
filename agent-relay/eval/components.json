@@ -1,0 +1,723 @@
+{
+ "git": {
+  "snapshot": "git archive of HEAD fe9abb5 (clean relay/), run outside the working tree"
+ },
+ "small_set": {
+  "relay": {
+   "k": 69,
+   "n": 74,
+   "rate": 0.9324,
+   "ci95": [
+    0.8514,
+    0.9708
+   ]
+  },
+  "b1": {
+   "k": 20,
+   "n": 46,
+   "rate": 0.4348,
+   "ci95": [
+    0.3021,
+    0.5775
+   ]
+  },
+  "head_to_head_relay": {
+   "k": 42,
+   "n": 46,
+   "rate": 0.913,
+   "ci95": [
+    0.7968,
+    0.9657
+   ]
+  },
+  "head_to_head_b1": {
+   "k": 20,
+   "n": 46,
+   "rate": 0.4348,
+   "ci95": [
+    0.3021,
+    0.5775
+   ]
+  },
+  "mcnemar_p_worst_case": 5.947612226009369e-05,
+  "note": "aggregates from README/PROGRESS; per-question rows not kept, so no bootstrap"
+ },
+ "components": {
+  "previous-reload": {
+   "extraction": {
+    "planted": 306,
+    "recovered": 282,
+    "recall": 0.9216,
+    "extra_facts": 2,
+    "load_errors": 14
+   },
+   "predicate_normalization": {
+    "n": 255,
+    "correct": 255,
+    "accuracy": 1.0,
+    "ci95": [
+     0.9852,
+     1.0
+    ]
+   },
+   "entity_resolution": {
+    "issue_aliases": {
+     "precision": 0.9565,
+     "recall": 0.7857,
+     "pairs_merged": 46,
+     "gold_pairs": 56,
+     "mentions": 27,
+     "entities": 9,
+     "clusters": 6
+    },
+    "typos": {
+     "n": 8,
+     "ok": 2,
+     "failures": [
+      {
+       "text": "Like I said, I'm in Nasik now.",
+       "stored": [
+        "nasik"
+       ]
+      },
+      {
+       "text": "Like I said, I'm in Mumbia now.",
+       "stored": [
+        "mumbia"
+       ]
+      },
+      {
+       "text": "Still living in Puen, same as before.",
+       "stored": [
+        "puen"
+       ]
+      },
+      {
+       "text": "Again, we're still in Tahne.",
+       "stored": [
+        "tahne"
+       ]
+      },
+      {
+       "text": "Again, we're still in Tahne.",
+       "stored": [
+        "tahne"
+       ]
+      },
+      {
+       "text": "Again, we're still in Hydrabad.",
+       "stored": [
+        "hydrabad"
+       ]
+      }
+     ]
+    }
+   },
+   "misses_by_predicate": {
+    "owns_device": "12/75",
+    "lives_in": "7/66",
+    "reported_issue": "5/32"
+   },
+   "_source": {
+    "report": "data/load_report.json",
+    "graph": null,
+    "commit": "fe9abb5d0ff3368974212c4d41364ad2c355a80b",
+    "relay_retrieve_dirty": false,
+    "relay_dirty": [
+     "M relay/lab.py",
+     " M relay/queries.py",
+     "?? relay/procedural.py"
+    ]
+   }
+  },
+  "bench-reload-2026-10-15": {
+   "extraction": {
+    "planted": 306,
+    "recovered": 289,
+    "recall": 0.9444,
+    "extra_facts": 101,
+    "load_errors": 7
+   },
+   "predicate_normalization": {
+    "n": 257,
+    "correct": 257,
+    "accuracy": 1.0,
+    "ci95": [
+     0.9853,
+     1.0
+    ]
+   },
+   "entity_resolution": {
+    "issue_aliases": {
+     "precision": 1.0,
+     "recall": 0.75,
+     "pairs_merged": 57,
+     "gold_pairs": 76,
+     "mentions": 32,
+     "entities": 10,
+     "clusters": 6
+    },
+    "typos": {
+     "n": 8,
+     "ok": 2,
+     "failures": [
+      {
+       "text": "Like I said, I'm in Nasik now.",
+       "stored": [
+        "nasik"
+       ]
+      },
+      {
+       "text": "Like I said, I'm in Mumbia now.",
+       "stored": [
+        "mumbia"
+       ]
+      },
+      {
+       "text": "Still living in Puen, same as before.",
+       "stored": [
+        "puan"
+       ]
+      },
+      {
+       "text": "Again, we're still in Tahne.",
+       "stored": [
+        "tahne"
+       ]
+      },
+      {
+       "text": "Again, we're still in Tahne.",
+       "stored": [
+        "tahne"
+       ]
+      },
+      {
+       "text": "Again, we're still in Hydrabad.",
+       "stored": [
+        "hydrabad"
+       ]
+      }
+     ]
+    },
+    "collisions": {
+     "n": 4,
+     "kept_apart": 2,
+     "ci95": [
+      0.15,
+      0.85
+     ]
+    }
+   },
+   "contradiction": {
+    "change": {
+     "n": 39,
+     "correct": 28,
+     "extraction_miss": 1,
+     "accuracy": 0.7179,
+     "ci95": [
+      0.5622,
+      0.8346
+     ]
+    },
+    "multi": {
+     "n": 16,
+     "correct": 16,
+     "extraction_miss": 0,
+     "accuracy": 1.0,
+     "ci95": [
+      0.8064,
+      1.0
+     ]
+    },
+    "unchanged": {
+     "n": 14,
+     "correct": 8,
+     "extraction_miss": 0,
+     "accuracy": 0.5714,
+     "ci95": [
+      0.3259,
+      0.7862
+     ]
+    },
+    "cross_agent": {
+     "n": 16,
+     "correct": 0,
+     "extraction_miss": 16,
+     "accuracy": 0.0,
+     "ci95": [
+      0.0,
+      0.1936
+     ]
+    }
+   },
+   "contradiction_overall": {
+    "k": 52,
+    "n": 85,
+    "rate": 0.6118,
+    "ci95": [
+     0.5055,
+     0.7084
+    ],
+    "excluding_extraction_misses": {
+     "k": 52,
+     "n": 68,
+     "rate": 0.7647,
+     "ci95": [
+      0.6514,
+      0.8497
+     ]
+    }
+   },
+   "misses_by_predicate": {
+    "on_plan": "11/52",
+    "lives_in": "6/66"
+   },
+   "_source": {
+    "report": "eval/load_report_bench.json",
+    "graph": "pml-bench",
+    "snapshot": "git archive of HEAD fe9abb5 (clean relay/), run outside the working tree"
+   }
+  }
+ },
+ "bench": {
+  "scaled-160": {
+   "tenant": "pml-bench",
+   "dataset": "40 customers, 556 customer turns, 160 questions",
+   "run_id": "run-20261015-140300",
+   "provenance": "git archive of HEAD fe9abb5 (relay/ clean, incl. retrieve.py) + eval/bench_shim.py; graph mem:pml-bench reloaded 2026-10-15 13:44-13:58 IST; answers 2026-10-15",
+   "systems": {
+    "FULL": {
+     "accuracy": {
+      "k": 110,
+      "n": 160,
+      "rate": 0.6875,
+      "ci95": [
+       0.612,
+       0.7542
+      ]
+     },
+     "abstention": {
+      "precision": {
+       "k": 12,
+       "n": 23,
+       "rate": 0.5217,
+       "ci95": [
+        0.3296,
+        0.7076
+       ]
+      },
+      "recall": {
+       "k": 12,
+       "n": 18,
+       "rate": 0.6667,
+       "ci95": [
+        0.4375,
+        0.8372
+       ]
+      },
+      "should_refuse": 18
+     },
+     "misses": {
+      "gold in context, conflict not flagged": 13,
+      "retrieval: gold value not in context -> refused": 11,
+      "gold in context, wrong/incomplete value chosen": 10,
+      "retrieval: gold value not in context -> wrong answer": 10,
+      "answered a should-refuse question (hallucination)": 6
+     },
+     "by_model": {
+      "openai/gpt-oss-120b": {
+       "k": 9,
+       "n": 16,
+       "rate": 0.5625,
+       "ci95": [
+        0.3318,
+        0.769
+       ]
+      },
+      "qwen/qwen3.8-27b": {
+       "k": 101,
+       "n": 144,
+       "rate": 0.7014,
+       "ci95": [
+        0.6222,
+        0.7701
+       ]
+      }
+     },
+     "misses_by_type": {
+      "disagreement": 16,
+      "multi_hop": 13,
+      "procedural": 8,
+      "unknown": 6,
+      "belief_time": 4,
+      "world_time": 2,
+      "current": 1
+     }
+    },
+    "B1": {
+     "accuracy": {
+      "k": 88,
+      "n": 160,
+      "rate": 0.55,
+      "ci95": [
+       0.4726,
+       0.625
+      ]
+     },
+     "abstention": {
+      "precision": {
+       "k": 13,
+       "n": 38,
+       "rate": 0.3421,
+       "ci95": [
+        0.2121,
+        0.5011
+       ]
+      },
+      "recall": {
+       "k": 13,
+       "n": 18,
+       "rate": 0.7222,
+       "ci95": [
+        0.4913,
+        0.875
+       ]
+      },
+      "should_refuse": 18
+     },
+     "misses": {
+      "retrieval: gold value not in context -> refused": 21,
+      "retrieval: gold value not in context -> wrong answer": 18,
+      "gold in context, conflict not flagged": 15,
+      "gold in context, wrong/incomplete value chosen": 9,
+      "answered a should-refuse question (hallucination)": 5,
+      "gold in context but model refused": 4
+     },
+     "by_model": {
+      "openai/gpt-oss-120b": {
+       "k": 4,
+       "n": 16,
+       "rate": 0.25,
+       "ci95": [
+        0.1018,
+        0.495
+       ]
+      },
+      "qwen/qwen3.8-27b": {
+       "k": 84,
+       "n": 144,
+       "rate": 0.5833,
+       "ci95": [
+        0.5017,
+        0.6607
+       ]
+      }
+     },
+     "misses_by_type": {
+      "multi_hop": 18,
+      "disagreement": 16,
+      "completeness": 10,
+      "procedural": 10,
+      "current": 5,
+      "unknown": 5,
+      "world_time": 3,
+      "handoff": 3,
+      "belief_time": 2
+     }
+    }
+   },
+   "paired": {
+    "n": 160,
+    "relay": {
+     "k": 110,
+     "n": 160,
+     "rate": 0.6875,
+     "ci95": [
+      0.612,
+      0.7542
+     ]
+    },
+    "b1": {
+     "k": 88,
+     "n": 160,
+     "rate": 0.55,
+     "ci95": [
+      0.4726,
+      0.625
+     ]
+    },
+    "diff": 0.1375,
+    "diff_ci95_bootstrap": [
+     0.0625,
+     0.2125
+    ],
+    "relay_only_correct": 32,
+    "b1_only_correct": 10,
+    "mcnemar_exact_p": 0.0009406740282429382
+   },
+   "by_type": {
+    "belief_time": {
+     "n": 18,
+     "relay": {
+      "k": 14,
+      "n": 18,
+      "rate": 0.7778,
+      "ci95": [
+       0.5478,
+       0.91
+      ]
+     },
+     "b1": {
+      "k": 16,
+      "n": 18,
+      "rate": 0.8889,
+      "ci95": [
+       0.672,
+       0.969
+      ]
+     },
+     "diff": -0.1111,
+     "diff_ci95_bootstrap": [
+      -0.3333,
+      0.1111
+     ],
+     "relay_only_correct": 1,
+     "b1_only_correct": 3,
+     "mcnemar_exact_p": 0.625
+    },
+    "completeness": {
+     "n": 18,
+     "relay": {
+      "k": 18,
+      "n": 18,
+      "rate": 1.0,
+      "ci95": [
+       0.8241,
+       1.0
+      ]
+     },
+     "b1": {
+      "k": 8,
+      "n": 18,
+      "rate": 0.4444,
+      "ci95": [
+       0.2456,
+       0.6628
+      ]
+     },
+     "diff": 0.5556,
+     "diff_ci95_bootstrap": [
+      0.3333,
+      0.7778
+     ],
+     "relay_only_correct": 10,
+     "b1_only_correct": 0,
+     "mcnemar_exact_p": 0.001953125
+    },
+    "current": {
+     "n": 18,
+     "relay": {
+      "k": 17,
+      "n": 18,
+      "rate": 0.9444,
+      "ci95": [
+       0.7424,
+       0.9901
+      ]
+     },
+     "b1": {
+      "k": 13,
+      "n": 18,
+      "rate": 0.7222,
+      "ci95": [
+       0.4913,
+       0.875
+      ]
+     },
+     "diff": 0.2222,
+     "diff_ci95_bootstrap": [
+      0.0556,
+      0.4444
+     ],
+     "relay_only_correct": 4,
+     "b1_only_correct": 0,
+     "mcnemar_exact_p": 0.125
+    },
+    "disagreement": {
+     "n": 16,
+     "relay": {
+      "k": 0,
+      "n": 16,
+      "rate": 0.0,
+      "ci95": [
+       0.0,
+       0.1936
+      ]
+     },
+     "b1": {
+      "k": 0,
+      "n": 16,
+      "rate": 0.0,
+      "ci95": [
+       0.0,
+       0.1936
+      ]
+     },
+     "diff": 0.0,
+     "diff_ci95_bootstrap": [
+      0.0,
+      0.0
+     ],
+     "relay_only_correct": 0,
+     "b1_only_correct": 0,
+     "mcnemar_exact_p": 1.0
+    },
+    "handoff": {
+     "n": 18,
+     "relay": {
+      "k": 18,
+      "n": 18,
+      "rate": 1.0,
+      "ci95": [
+       0.8241,
+       1.0
+      ]
+     },
+     "b1": {
+      "k": 15,
+      "n": 18,
+      "rate": 0.8333,
+      "ci95": [
+       0.6078,
+       0.9416
+      ]
+     },
+     "diff": 0.1667,
+     "diff_ci95_bootstrap": [
+      0.0,
+      0.3333
+     ],
+     "relay_only_correct": 3,
+     "b1_only_correct": 0,
+     "mcnemar_exact_p": 0.25
+    },
+    "multi_hop": {
+     "n": 18,
+     "relay": {
+      "k": 5,
+      "n": 18,
+      "rate": 0.2778,
+      "ci95": [
+       0.125,
+       0.5087
+      ]
+     },
+     "b1": {
+      "k": 0,
+      "n": 18,
+      "rate": 0.0,
+      "ci95": [
+       0.0,
+       0.1759
+      ]
+     },
+     "diff": 0.2778,
+     "diff_ci95_bootstrap": [
+      0.0556,
+      0.5
+     ],
+     "relay_only_correct": 5,
+     "b1_only_correct": 0,
+     "mcnemar_exact_p": 0.0625
+    },
+    "procedural": {
+     "n": 18,
+     "relay": {
+      "k": 10,
+      "n": 18,
+      "rate": 0.5556,
+      "ci95": [
+       0.3372,
+       0.7544
+      ]
+     },
+     "b1": {
+      "k": 8,
+      "n": 18,
+      "rate": 0.4444,
+      "ci95": [
+       0.2456,
+       0.6628
+      ]
+     },
+     "diff": 0.1111,
+     "diff_ci95_bootstrap": [
+      -0.1667,
+      0.3889
+     ],
+     "relay_only_correct": 4,
+     "b1_only_correct": 2,
+     "mcnemar_exact_p": 0.6875
+    },
+    "unknown": {
+     "n": 18,
+     "relay": {
+      "k": 12,
+      "n": 18,
+      "rate": 0.6667,
+      "ci95": [
+       0.4375,
+       0.8372
+      ]
+     },
+     "b1": {
+      "k": 13,
+      "n": 18,
+      "rate": 0.7222,
+      "ci95": [
+       0.4913,
+       0.875
+      ]
+     },
+     "diff": -0.0556,
+     "diff_ci95_bootstrap": [
+      -0.3333,
+      0.2222
+     ],
+     "relay_only_correct": 3,
+     "b1_only_correct": 4,
+     "mcnemar_exact_p": 1.0
+    },
+    "world_time": {
+     "n": 18,
+     "relay": {
+      "k": 16,
+      "n": 18,
+      "rate": 0.8889,
+      "ci95": [
+       0.672,
+       0.969
+      ]
+     },
+     "b1": {
+      "k": 15,
+      "n": 18,
+      "rate": 0.8333,
+      "ci95": [
+       0.6078,
+       0.9416
+      ]
+     },
+     "diff": 0.0556,
+     "diff_ci95_bootstrap": [
+      -0.1111,
+      0.2778
+     ],
+     "relay_only_correct": 2,
+     "b1_only_correct": 1,
+     "mcnemar_exact_p": 1.0
+    }
+   }
+  }
+ }
+}

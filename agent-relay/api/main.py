@@ -395,7 +395,10 @@ RETURN fx.name_key, issue.name_key, count(DISTINCT ep) AS times, max(ep.recorded
 ORDER BY times DESC LIMIT 30
 """
     rows = db.run(tenant, "procedural memory", QUERY, ro=True)
-    return {"fixes": [{"fix": r[0], "issue": r[1], "times": r[2], "last_used": events.iso(r[3])} for r in rows]}
+    from relay import procedural  # ordered procedure paths from the network lab (steps, successes, failures)
+    procs = [{**p, "last_used": events.iso(p["last_used"])} for p in procedural.procedures(tenant)]
+    return {"fixes": [{"fix": r[0], "issue": r[1], "times": r[2], "last_used": events.iso(r[3])} for r in rows],
+            "procedures": procs}
 
 
 @app.get("/api/tenants/{tenant}/network")

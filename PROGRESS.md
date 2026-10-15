@@ -221,7 +221,17 @@ Known issues: uvicorn `--reload` hangs on this Windows setup (restart the API by
 | **Lab as one path** | A four-step strip (break it → customer complains → resolver works → verified and graded) driven by the live fault and run; faults as a compact grid with one detail card; manual fixes folded into Operator tools |
 | **Graph access, live** | Every live Cypher event now carries the graph keys it started from (its parameters) and the keys it came back with (its rows, including Node/Edge objects). The memory graph, the customer's own graph, the network map and the lab line light up exactly those nodes and edges as each query runs (blue: read, green: write), with a dot running along each edge walked, and a ticker naming the query and how many nodes/edges it touched. The screens' own page loads are filtered out so only agent work glows |
 
-Known issue: an unknown person ("where does Kevin live?" before Kevin is in the graph) can be answered from the vector seeds of someone else; it should say it doesn't know.
+Known issue at the time (fixed in Phase 17): an unknown person could be answered from someone else's facts.
+
+### Phase 17: Measured, and the graph does more of the deciding
+| Item | What changed |
+|---|---|
+| Evaluation run | The scaled benchmark reloaded and scored in full (section 6), plus component and abstention metrics. The headline moved from 93% vs 43% (74 questions) to 69% vs 55% (160 questions) |
+| Unknown person abstains | A question naming someone memory doesn't hold ("where does Kevin live?") returns no facts and "I don't have anything on file about Kevin", with no LLM call. Typos still link; nameless questions still use vector seeds |
+| Recall in 2 round trips | Linking (exact name n-grams on an index, full-text names and typos, vector seeds) is one UNION query; the 2-hop expansion carries PageRank salience. 4–5 queries became 2, ranking identical to before on the test set |
+| Procedures as paths | A verified fix is stored as `(:Procedure)-[:FIRST]->(:ProcStep)-[:NEXT]->…` with `SEEN_WITH` readings and symptoms, `RESOLVES` issues, `WORKED_AT` cabinets and `LEARNED_FROM` tickets; repeats merge and count successes and failures |
+| Resolver decides from the graph | Before the model, one path query ranks past procedures by smoothed success rate, recency and network distance (hops up the access tree to a shared exchange or hub). A confident, feasible match is taken; a wrong one is recorded as a failure |
+| Tests | `tests/test_recall.py`, `tests/test_procedural.py` (no LLM calls, own tenants, cleaned up) |
 
 ## 3. Architecture
 
@@ -283,17 +293,53 @@ cd web && npm install && npm run dev       # web (VITE_API_URL=http://localhost:
 
 Last full run: 16 of 18 backend checks passed. `test_profile` could not run (every model out of quota) and `test_transcript` failed on a test expectation that was then corrected; both need a rerun once model quota is back. The web app builds and its 18 tests pass.
 
-## 6. Results so far
+## 6. Results
 
-| Measure | Result | Caveat |
-|---|---|---|
-| Relay vs vector store, small set | 93% vs 43% (91% vs 43% head-to-head) | 74 questions, our own synthetic data |
-| Scaled set, Relay only | 16/20 so far | Run stopped early. All 4 misses were the "we" extraction bug, now fixed |
-| Extraction recall, planted facts | 95.8% (293/306) small set; 92% (282/306) on the scaled 556-turn reload | In-distribution (our templates) |
-| Concurrent writes | 18.3 / 23.7 writes/s (1 / 4 graphs), 0 duplicates | Client round trips dominate; tenant parallelism barely shows at app level |
-| Recall latency | 178 ms @ 1.1K facts, 210 ms @ 10.9K | Includes ~24 ms network per query |
-| Simulator | 17/17 planted moments hit | — |
-| API memory | ~353 MB | Render free tier is 512 MB |
+Full numbers, method and caveats: `agent-relay/eval/components.md` and `eval/results.md`. All data is synthetic and built from our own templates. 95% Wilson intervals; the difference uses a paired bootstrap.
+
+**Scaled set** (40 customers, 556 turns, 160 questions, reloaded with real extraction; both systems answer each question with the same pinned model):
+
+| | Result |
+|---|---|
+| Relay | **68.8%** (110/160) [61–75%] |
+| Vector store (B1) | **55.0%** (88/160) [47–62%] |
+| Difference | **+13.8 points** [+6.2, +21.2]; Relay-only right 32, B1-only 10 (McNemar p = 0.0009) |
+| Without the 16 disagreement questions (invalid on this load, see below) | 76.4% vs 61.1% |
+| Retrieval latency p50 | Relay 259 ms, B1 45 ms |
+
+By type, Relay vs B1: completeness 100 vs 44, current 94 vs 72, handoff 100 vs 83, multi-hop 28 vs 0, procedural 56 vs 44, world time 89 vs 83, **belief time 78 vs 89**, **unknown 67 vs 72**, disagreement 0 vs 0.
+
+The small 74-question set (93% vs 43%) overstated the gap: on the larger set Relay drops to 69%. The graph still wins clearly, but by about 14 points, not 50.
+
+**Why Relay misses** (50): right answer not retrieved 21, conflict not flagged 13, wrong or incomplete value 10, answered a should-refuse question 6.
+
+**Abstention** (18 should-refuse questions): Relay precision 52% [33–71%], recall 67% [44–84%] (wrongly refused 11 answerable ones); B1 precision 34%, recall 72%.
+
+**Components (no LLM calls):**
+
+| Metric | Result |
+|---|---|
+| Extraction recall, planted facts | 94.4% (289/306) [91–96%] |
+| Predicate normalisation | 100% (257/257) |
+| Issue-paraphrase entity resolution | pairwise precision 1.00, recall 0.75 |
+| Typos mapped to the existing entity | **25% (2/8)**: "Tahne" becomes a new city and supersedes Thane |
+| Name collisions kept apart | 4/4 pairs; exact current city 2/4 ("navi mumbai" extracted as "mumbai") |
+| Contradiction handling | 61.2% (52/85) [51–71%]; 76.5% excluding extraction misses; change 72%, multi 100%, unchanged 57% |
+
+**Invalid on this load, not a measure of the engine:** cross-agent contradictions (0/16) and disagreement questions (0/16). The resolver's billing pickups returned empty observations, so the planted disagreements never entered the graph (`pick_up` needs investigating).
+
+**Bug found by the evaluation, fixed:** recall crashed on any `open:<attribute>` fact (its predicate had no embedding); 155 of 160 questions hit it on the reloaded graph. Open predicates are now embedded on first use (`tests/test_recall.py` checks this). The scored run used a copy of the code with an eval-only workaround, so the numbers above are for the code before the 2-query recall.
+
+**Not run yet:** k-sensitivity, ablations, determinism re-runs, out-of-distribution extraction, LoCoMo QA (`python -m eval.bench_shim --tenant pml-bench --phases ksweep,ablations,variance`).
+
+**Engineering numbers:**
+
+| Measure | Result |
+|---|---|
+| Recall round trips | 5 → **2** (mem:pml, read-only: 194 → 106 ms for "who lives in Pune?") |
+| Concurrent writes | 18.3 / 23.7 writes/s (1 / 4 graphs), 0 duplicates |
+| Simulator | 17/17 planted moments hit |
+| API memory | ~340 MB peak (Render free tier 512 MB) |
 
 ## 7. Evaluator's assessment
 
@@ -321,6 +367,9 @@ Differentiation and demo depth rise: a worldwide company with region graphs, ope
 ### Update after Phase 10
 Track coverage and demo quality rise: the intake agent follows a written spec, its questions and their answers are memory every agent can see, identity is a graph match, tickets carry the full handoff, and the chat shows the graph work as it happens. Model quota is now the main operational risk: planned replies need no model, but extraction does. Estimate: **≈ 8/10 now**.
 
+### Update after Phase 17
+Evaluation rigor rises from 5 to about 7: the scaled run is scored with intervals, paired tests, component metrics and a miss breakdown, and it lowered our own headline. It also exposed real weaknesses to fix next: typo entities (25%), abstention precision (52%), multi-hop (28%), and the billing pickup that kept disagreements out of the graph. Graph use rises: recall is two queries and the resolver's choice comes from a path query. Estimate: **≈ 8.5/10**, with the next gains in those four weaknesses rather than new features.
+
 ### Update after Phase 16
 Deployment and security move most: the app is live on Render and Vercel, every tenant request and stream needs that tenant's key, and the isolation audit is drawn. Demo quality rises with the handoff replay, the network map and live graph access. Still open: the scaled evaluation, the video, the unknown-person fallback. Estimate: **≈ 8.5/10 now**.
 
@@ -329,8 +378,8 @@ Track coverage and differentiation rise most: the resolver now acts on a network
 
 ## 8. What's missing, in priority order
 
-1. **Finish the evaluation**: the scaled Relay vs B1 comparison, component metrics, abstention P/R, LoCoMo QA and out-of-distribution extraction. Run it as a plain background script (no agent cost), spread across models. Until then, the strongest claim rests on 74 questions.
-2. **Unknown-person fallback**: when entity linking finds no one, answer "I don't know" instead of falling back to vector seeds.
+1. **Fix what the evaluation found**: typos creating new entities (25%), abstention precision (52%), multi-hop (28%), the billing pickup returning empty observations; then rerun the scaled set on the current code, and run the k-sweep, ablations, variance, OOD extraction and LoCoMo QA.
+2. **Recall speed**: the graph is still 259 ms p50 vs 45 ms for the vector store; most of the rest is per-turn writes (~40 queries a chat turn).
 3. **Protect the API further**: tenant keys are enforced (Phase 15); still missing are rate limiting on `/chat` and an operator-only key for reset and route edits on the public demo.
 4. **Demo video (3 min) and blog post.**
 5. **Speed up writes and linking:**

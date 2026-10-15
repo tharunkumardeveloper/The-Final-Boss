@@ -15,7 +15,7 @@ import threading
 import time
 import uuid
 
-from . import cards, config, db, events, experts, kb, llm, memory, network, retrieve, sharing
+from . import cards, config, db, events, experts, kb, llm, memory, network, procedural, retrieve, sharing
 from .memory import norm
 
 HOMES_PER_SPLITTER = 14
@@ -223,6 +223,7 @@ def _ms():
 
 def ensure(tenant, log=None):
     """Give every connected customer a box on a street cabinet with neighbour homes; set hub link roles. Idempotent."""
+    procedural.setup(tenant)  # indexes for the procedure graph
     for c, olt, label, area in _q(tenant, "customers without a line", UNSEEDED, log=log, ro=True):
         sid = f"spl-{olt[4:]}"
         _q(tenant, "street cabinet", ENSURE_SPLITTER,
@@ -601,12 +602,49 @@ def feasible(action, m):
     return None
 
 
-def decide(m, said, tried):
+CAUSE_OF = {a: c for c, a in CAUSES.items()} | {"dispatch_backbone_crew": "hub_link_down"}
+
+
+def _memory_says(s):
+    return (f"{ACTION_LABEL[s['action']]}: fixed this {s['successes']} time{'s' if s['successes'] != 1 else ''} "
+            f"({s['nearby']} nearby), failed {s['failures']}; past path {' → '.join(s['steps'])}")
+
+
+def from_memory(run, m, tried, issues):
+    """Ask the procedure graph first. A confident, feasible match decides; otherwise it is context for the model."""
+    log = []
+    s = procedural.suggest(run.tenant, m, run.data["symptoms"], issues, tried, _ms(), log)
+    if s is None:
+        run.step("memory", "Procedural memory: no past procedure for these readings",
+                 "Nothing verified yet for " + (", ".join(procedural.readings(m)) or "these readings") + ".", "info", log)
+        return None, None
+    why_not = feasible(s["action"], m)
+    if not s["confident"] or why_not:
+        run.step("memory", f"Procedural memory: closest match is {ACTION_LABEL[s['action']].lower()}, not taking it",
+                 _memory_says(s) + (f". Not feasible: {why_not}" if why_not else
+                                    f". Success rate {s['rate']:.0%} is below {procedural.CONFIDENT:.0%}") +
+                 "; the model decides, with this as context.", "info", log, {"procedure": s})
+        return None, s
+    times = f"{s['successes']} time{'s' if s['successes'] != 1 else ''}"
+    run.step("memory", f"Procedural memory: {ACTION_LABEL[s['action']].lower()} fixed this {times} "
+             f"({s['nearby']} nearby) — taking it",
+             f"{_memory_says(s)}. Score {s['score']} (success {s['rate']:.0%}, nearest {s['nearest_hops']} hops).",
+             "ok", log, {"procedure": s})
+    r_cause, r_action = rules(m, tried)
+    cause = CAUSE_OF[s["action"]]
+    return {"cause": cause, "action": s["action"], "by": "procedural memory", "procedure": s["id"],
+            "agrees": (cause, s["action"]) == (r_cause, r_action), "rules": {"cause": r_cause, "action": r_action},
+            "why": f"Procedural memory: this exact reading pattern was fixed by a "
+                   f"{FIX_NAME.get(s['action'], s['action'])} {times} before ({s['nearby']} nearby)."}, s
+
+
+def decide(m, said, tried, hint=None):
     """The model reasons over the readings; the rules are the fallback and the safety net."""
     r_cause, r_action = rules(m, tried)
     try:
         out = llm.chat_json("answer", DECIDE_SYSTEM,
-                            _readings_text(m, said) + f"\nAlready tried: {', '.join(tried) or 'nothing'}",
+                            _readings_text(m, said) + f"\nAlready tried: {', '.join(tried) or 'nothing'}"
+                            + (f"\nProcedural memory (past verified fixes, not proof): {_memory_says(hint)}" if hint else ""),
                             DECIDE_SCHEMA, "lab_decide")
         cause, action, why, model = out["cause"], out["action"], out["why"].strip(), out.get("_model")
         if action not in ACTION_LABEL or action in tried or (action == "none" and problems(m)):
@@ -871,10 +909,12 @@ def investigate(run):
         _healthy(run, m, network_issue)
         return
     tried, last = [], None
+    issues = [norm(f["object"]) for f in facts if f["predicate"] in ("reported_issue", "ticket_about")]
     for _ in range(3):
         if not problems(m):
             break
-        d = decide(m, run.said, tried)
+        d, hint = from_memory(run, m, tried, issues)
+        d = d or decide(m, run.said, tried, hint)
         run.data["diagnosis"] = d
         run.step("think", d["why"], f"Cause: {d['cause'].replace('_', ' ')} · next: {ACTION_LABEL[d['action']]}", "info",
                  data={"cause": d["cause"], "action": d["action"], "by": d["by"], "agrees": d["agrees"],
@@ -925,9 +965,23 @@ def investigate(run):
                      "pending")
             done.wait(res["delayed"] + 5)
         m = _read(run, verify=True)
+        if d.get("procedure") and problems(m):  # memory's pick didn't fix it: the graph learns that
+            log = []
+            p = procedural.failed(t, d["procedure"], run.ticket, _ms(), log)
+            run.step("memory", "Procedural memory was wrong here: failure recorded",
+                     f"{ACTION_LABEL[d['action']]} did not clear {', '.join(problems(m))}; that procedure now has "
+                     f"{p['failures'] if p else '?'} failure(s).", "bad", log)
     ok = not problems(m)
     run.step("verify", "Verified: every reading is healthy" if ok else "Still failing: " + ", ".join(problems(m)),
              "Proved by measuring the network again, not by trusting the action.", "ok" if ok else "bad")
+    if tried and last != "guided_check":  # the ordered path, failed attempts included; a success only if re-measured
+        log = []
+        p = procedural.record(t, before, tried, ok, run.data["symptoms"], issues, run.ticket, _ms(), log)
+        if p:
+            run.step("memory", f"Procedural memory: {'saved' if ok else 'marked failed'} the path {' → '.join(tried)}",
+                     f"{p['successes']} success(es), {p['failures']} failure(s) for this procedure"
+                     + (" — only counted because the re-measurement passed." if ok else "."), "ok" if ok else "bad",
+                     log, {"procedure": p})
     if ok and last == "reroute_standby":  # working again on the backup; book the permanent repair
         act(t, "dispatch_backbone_crew", m)
         run.step("act", ACTION_LABEL["dispatch_backbone_crew"], "Service is restored on the standby link; the main link "

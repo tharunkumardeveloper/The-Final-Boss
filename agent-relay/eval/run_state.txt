@@ -1,0 +1,5 @@
+Scaled run 2026-10-15 (IST). Code: `git archive HEAD` of fe9abb5 into a scratch dir (relay/ clean), run with eval/bench_shim.py.
+In the working tree at the time, relay/retrieve.py, lab.py, queries.py, converse.py, intake.py were modified by other engineers (uncommitted); NOT used.
+Reload (data.load via reload script, 13:44-13:58): working tree, relay/ dirty only in lab.py at start (retrieve.py clean). Extraction uses llm/memory, not retrieve.
+Round 1 answers: RELAY_EVAL_MODELS = gpt-oss-120b and qwen3.8-27b alternating over Groq keys 1-5 -> 96 paired questions, then gpt-oss-120b hit 429 on keys 1-4.
+Round 2: RELAY_EVAL_MODELS = qwen3.8-27b on keys 1-5 for the remaining 64 (3 FULL-only rows on 120b dropped so every pair shares one model).

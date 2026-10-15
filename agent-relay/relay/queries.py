@@ -178,36 +178,39 @@ CONSTRAINTS = [
     ("MANDATORY", "Fact", "triple_key"),
     ("MANDATORY", "Episode", "episode_id"),
 ]
+# Customers named with a typo, through the full-text index ('%alise%' = one edit away). Best score first; the
+# edit-distance tie-break between equal scores is computed in Python (retrieve._fuzzy_pick).
 FUZZY_CUSTOMERS = """
 CALL db.idx.fulltext.queryNodes('Customer', $q) YIELD node, score
-RETURN node.name_key, score ORDER BY score DESC LIMIT 5
-"""
-# Same, with FLEX's edit distance as the tie-break. Only name words the message came close to (<= 2 edits) count:
-# more of the name matched wins, then fewer edits. An untyped surname never decides ("chitraa" stays ambiguous).
-FUZZY_CUSTOMERS_FLEX = """
-CALL db.idx.fulltext.queryNodes('Customer', $q) YIELD node, score
-WITH node, score, [t IN split(node.name_key, ' ') |
-  reduce(m = 99, w IN $words | CASE WHEN flex.text.levenshtein(t, w) < m THEN flex.text.levenshtein(t, w) ELSE m END)] AS ds
-WITH node, score, [d IN ds WHERE d <= 2] AS hit
-RETURN node.name_key, score, reduce(s = 0, d IN hit | s + d) - 10 * size(hit) AS dist
-ORDER BY score DESC, dist ASC LIMIT 5
+RETURN node.name_key, score ORDER BY score DESC LIMIT 20
 """
 
-KNOWN_ENTITIES = """
-MATCH (e:Entity) WHERE e.type IN ['customer', 'ticket', 'city', 'outage', 'plan', 'router']
-RETURN e.name_key, e.type
-"""
-
-# Vector entry points: episodes similar to the question -> the entities they mention.
-VECTOR_SEEDS = """
+# Read path, round trip 1 of 2: every way into the graph for one question, as one UNION of index lookups.
+#  exact:  each word n-gram of the question looked up on the Entity.name_key range index (no scan of every name);
+#          all types come back, recall seeds from customers/tickets/cities/outages/plans/routers only
+#  name:   customers sharing a word with the question (full-text, exact words): unique first names
+#  fuzzy:  customers one edit from a longer word (full-text '%w%'): typos
+#  vector: episodes similar to the question -> the entities they mention (score is a distance: ascending; one
+#          episode gives its entities equal scores, so name breaks the tie and recall is deterministic)
+# A graph without the 'Customer' full-text index just returns no name/fuzzy rows.
+RECALL_LINK = """
+MATCH (e:Entity) WHERE e.name_key IN $grams
+RETURN 'exact' AS src, e.name_key AS key, e.type AS type, 0.0 AS score
+UNION ALL
+CALL db.idx.fulltext.queryNodes('Customer', $names) YIELD node, score
+RETURN 'name' AS src, node.name_key AS key, 'customer' AS type, score ORDER BY score DESC LIMIT 50
+UNION ALL
+CALL db.idx.fulltext.queryNodes('Customer', $fuzzy) YIELD node, score
+RETURN 'fuzzy' AS src, node.name_key AS key, 'customer' AS type, score ORDER BY score DESC LIMIT 20
+UNION ALL
 CALL db.idx.vector.queryNodes('Episode', 'embedding', $k, vecf32($qvec)) YIELD node AS ep, score
 MATCH (ep)-[:MENTIONS]->(e:Entity)
-RETURN e.name_key, e.type, min(score) AS dist
-ORDER BY dist ASC LIMIT $limit
+RETURN 'vector' AS src, e.name_key AS key, e.type AS type, min(score) AS score ORDER BY score ASC, key ASC LIMIT $limit
 """
 
 # Associative recall: expand from seed entities over current-world RELATED edges, then collect
-# every fact (current and superseded) about the reached entities, with support = best agent trust.
+# every fact (current and superseded) about the reached entities, with support = best agent trust and
+# salience = the higher PageRank salience of the fact's entities (null before consolidation has run).
 _EXPAND = {
     0: "WITH collect(DISTINCT seed) AS ns",
     1: f"OPTIONAL MATCH (seed)-[:{REL}]-(n:Entity)\nWITH collect(DISTINCT seed) + collect(DISTINCT n) AS ns",
@@ -227,8 +230,10 @@ MATCH (f:Fact)-[:ABOUT]->(n)
 WITH DISTINCT f LIMIT $max_facts
 MATCH (f)<-[:DERIVED]-(ep:Episode)<-[:WROTE]-(a:Agent)
 WITH f, max(a.trust) AS support, max(ep.recorded_at) AS last_seen, collect(DISTINCT a.agent_id) AS agents
+OPTIONAL MATCH (f)-[:ABOUT]->(x:Entity)
+WITH f, support, last_seen, agents, max(x.salience) AS salience
 RETURN f.fact_id, f.subject, f.predicate, f.object_value, f.active, f.valid_from, f.valid_to,
-       f.recorded_at, f.expired_at, f.asserted_by, support, last_seen, agents
+       f.recorded_at, f.expired_at, f.asserted_by, support, last_seen, agents, salience
 """
 
 
@@ -415,8 +420,6 @@ RETURN e.name_key, r.predicate, o.name_key LIMIT 40
 """
 
 SET_COMMUNITY_SUMMARY = "MATCH (c:Community {community_id:$cid}) SET c.summary = $summary"
-
-ENTITY_SALIENCE = "MATCH (e:Entity) WHERE e.name_key IN $keys AND e.salience IS NOT NULL RETURN e.name_key, e.salience"
 
 # ---------------------------------------------------------------- conversation
 

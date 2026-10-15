@@ -1,0 +1,6016 @@
+{
+ "systems": {
+  "FULL": {
+   "rows": [
+    {
+     "i": 0,
+     "question_id": "q000",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "current",
+     "question": "Which plan is Alice Rao on?",
+     "gold": [
+      "fiber 300"
+     ],
+     "model": "openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 300"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fiber 300",
+     "cited_ids": [
+      "f-9f75e7a4"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 2833.3,
+     "context_lines": 30
+    },
+    {
+     "i": 1,
+     "question_id": "q001",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "current",
+     "question": "Where does Bhavna Shetty live now?",
+     "gold": [
+      "mumbai"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "mumbai"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "mumbai",
+     "cited_ids": [
+      "f-7e56273c"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 275.6,
+     "context_lines": 30
+    },
+    {
+     "i": 2,
+     "question_id": "q002",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "current",
+     "question": "What is the status of Kabir Singh's ticket PML-2047?",
+     "gold": [
+      "resolved"
+     ],
+     "model": "groq2:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "resolved"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "resolved",
+     "cited_ids": [
+      "f-fc176d32"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 297.0,
+     "context_lines": 30
+    },
+    {
+     "i": 3,
+     "question_id": "q003",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "current",
+     "question": "What is the status of Fatima Sheikh's ticket PML-2067?",
+     "gold": [
+      "resolved"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "resolved"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "resolved",
+     "cited_ids": [
+      "f-ec847e7a",
+      "f-237c5e22"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 262.7,
+     "context_lines": 30
+    },
+    {
+     "i": 4,
+     "question_id": "q004",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "current",
+     "question": "What is the status of Qasim Ali's ticket PML-2052?",
+     "gold": [
+      "resolved"
+     ],
+     "model": "groq3:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "resolved"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "resolved",
+     "cited_ids": [
+      "f-cc19c4cc"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 249.5,
+     "context_lines": 30
+    },
+    {
+     "i": 5,
+     "question_id": "q005",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "current",
+     "question": "How does Bhavna Shetty want to be contacted now?",
+     "gold": [
+      "phone"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "phone"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "phone",
+     "cited_ids": [
+      "f-6a93c548"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 256.6,
+     "context_lines": 30
+    },
+    {
+     "i": 7,
+     "question_id": "q007",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "current",
+     "question": "Where does Ritu Saxena live now?",
+     "gold": [
+      "mumbai"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "mumbai"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "mumbai",
+     "cited_ids": [
+      "f-fab634aa"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 333.0,
+     "context_lines": 30
+    },
+    {
+     "i": 8,
+     "question_id": "q008",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "current",
+     "question": "What is the status of Sanjay Patil's ticket PML-2055?",
+     "gold": [
+      "resolved"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "",
+     "cited_ids": [],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 239.2,
+     "context_lines": 30
+    },
+    {
+     "i": 9,
+     "question_id": "q009",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "current",
+     "question": "Which plan is Vikram Desai on?",
+     "gold": [
+      "fiber 300"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 300"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fiber 300",
+     "cited_ids": [
+      "f-1e819365"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 253.7,
+     "context_lines": 30
+    },
+    {
+     "i": 11,
+     "question_id": "q011",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "current",
+     "question": "Which city does Alice Roy live in?",
+     "gold": [
+      "pimpri"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": true,
+     "values": [
+      "pimpri"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "pimpri",
+     "cited_ids": [
+      "f-d1d42452"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 218.5,
+     "context_lines": 30
+    },
+    {
+     "i": 13,
+     "question_id": "q013",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "current",
+     "question": "Which city does Rahul Sharma live in?",
+     "gold": [
+      "hyderabad"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": true,
+     "values": [
+      "hyderabad"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "hyderabad",
+     "cited_ids": [
+      "f-12f776b0"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 200.0,
+     "context_lines": 30
+    },
+    {
+     "i": 15,
+     "question_id": "q015",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "current",
+     "question": "Which city does Priya Naik live in?",
+     "gold": [
+      "navi mumbai"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": true,
+     "values": [
+      "mumbai"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "mumbai",
+     "cited_ids": [
+      "f-34fdc616"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 204.1,
+     "context_lines": 30
+    },
+    {
+     "i": 17,
+     "question_id": "q017",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "current",
+     "question": "Which city does Arjun Mehra live in?",
+     "gold": [
+      "navi mumbai"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": true,
+     "values": [
+      "mumbai"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "mumbai",
+     "cited_ids": [
+      "f-65ed1404"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 209.9,
+     "context_lines": 30
+    },
+    {
+     "i": 18,
+     "question_id": "q018",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "world_time",
+     "question": "Which contact channel did Manav Gupta prefer on 2026-09-23?",
+     "gold": [
+      "sms"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "sms"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "sms",
+     "cited_ids": [
+      "f-9df9177e"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 229.7,
+     "context_lines": 30
+    },
+    {
+     "i": 19,
+     "question_id": "q019",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "world_time",
+     "question": "Where did Zoya Mirza actually live on 2026-09-20?",
+     "gold": [
+      "secunderabad"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "secunderabad"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "secunderabad",
+     "cited_ids": [
+      "f-d471bd8b"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 265.3,
+     "context_lines": 30
+    },
+    {
+     "i": 21,
+     "question_id": "q021",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "world_time",
+     "question": "Where did Uday Rao actually live on 2026-09-17?",
+     "gold": [
+      "mumbai"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "hyderabad"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "hyderabad",
+     "cited_ids": [
+      "f-4082f5da"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 241.3,
+     "context_lines": 30
+    },
+    {
+     "i": 23,
+     "question_id": "q023",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "world_time",
+     "question": "Which contact channel did Neha Kapoor prefer on 2026-09-21?",
+     "gold": [
+      "whatsapp"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "whatsapp"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "whatsapp",
+     "cited_ids": [
+      "f-2406b375"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 260.7,
+     "context_lines": 30
+    },
+    {
+     "i": 25,
+     "question_id": "q025",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "world_time",
+     "question": "Where did Uday Rao actually live on 2026-09-23?",
+     "gold": [
+      "mumbai"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "mumbai"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "mumbai",
+     "cited_ids": [
+      "f-bea62f11"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 256.7,
+     "context_lines": 30
+    },
+    {
+     "i": 27,
+     "question_id": "q027",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "world_time",
+     "question": "Which plan was Alice Rao on on 2026-09-13?",
+     "gold": [
+      "fiber 1000"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 1000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fiber 1000",
+     "cited_ids": [
+      "f-e58e7073"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 237.7,
+     "context_lines": 30
+    },
+    {
+     "i": 28,
+     "question_id": "q028",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "world_time",
+     "question": "Where did Esha Iyer actually live on 2026-09-12?",
+     "gold": [
+      "bengaluru"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "bengaluru"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "bengaluru",
+     "cited_ids": [
+      "f-0dc2f93d"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 271.4,
+     "context_lines": 30
+    },
+    {
+     "i": 29,
+     "question_id": "q029",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "world_time",
+     "question": "Which plan was Divya Menon on on 2026-09-10?",
+     "gold": [
+      "fiber 1000"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 1000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fiber 1000",
+     "cited_ids": [
+      "f-a68a5982"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 264.2,
+     "context_lines": 30
+    },
+    {
+     "i": 31,
+     "question_id": "q031",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "world_time",
+     "question": "Which router did Divya Menon have on 2026-09-19?",
+     "gold": [
+      "pml hub 6 pro"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "pml hub 6 pro"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "pml hub 6 pro",
+     "cited_ids": [
+      "f-47d64b6f",
+      "f-cdecde1c"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 261.7,
+     "context_lines": 30
+    },
+    {
+     "i": 33,
+     "question_id": "q033",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "world_time",
+     "question": "Where did Yamini Krishnan actually live on 2026-09-24?",
+     "gold": [
+      "mysuru"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "mysuru"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "mysuru",
+     "cited_ids": [
+      "f-b537bbd9"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 232.0,
+     "context_lines": 30
+    },
+    {
+     "i": 35,
+     "question_id": "q035",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "world_time",
+     "question": "Where did Pooja Bhat actually live on 2026-09-09?",
+     "gold": [
+      "navi mumbai"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "mumbai"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "mumbai",
+     "cited_ids": [
+      "f-bb7295ba"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 250.3,
+     "context_lines": 30
+    },
+    {
+     "i": 37,
+     "question_id": "q037",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "belief_time",
+     "question": "On 2026-09-10, which router did our records list for Neha Kapoor?",
+     "gold": [
+      "ax1800"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "ax1800"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "ax1800",
+     "cited_ids": [
+      "f-1c830595"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 248.6,
+     "context_lines": 30
+    },
+    {
+     "i": 38,
+     "question_id": "q038",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "belief_time",
+     "question": "On 2026-09-26, which city did our records list for Bhavna Shetty?",
+     "gold": [
+      "mumbai"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "mumbai"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "mumbai",
+     "cited_ids": [
+      "f-7e56273c"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 235.0,
+     "context_lines": 30
+    },
+    {
+     "i": 39,
+     "question_id": "q039",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "belief_time",
+     "question": "On 2026-09-16, which plan did our records list for Aditi Kulkarni?",
+     "gold": [
+      "basic 50"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 300"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fiber 300",
+     "cited_ids": [
+      "f-23170fd6"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 259.1,
+     "context_lines": 30
+    },
+    {
+     "i": 41,
+     "question_id": "q041",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "belief_time",
+     "question": "On 2026-09-27, which city did our records list for Gita Pillai?",
+     "gold": [
+      "thane"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "thane"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "thane",
+     "cited_ids": [
+      "f-65d239e8"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 265.5,
+     "context_lines": 30
+    },
+    {
+     "i": 43,
+     "question_id": "q043",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "belief_time",
+     "question": "On 2026-09-16, which router did our records list for Wasim Akhtar?",
+     "gold": [
+      "pml hub 6 pro"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "pml hub 6 pro"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "pml hub 6 pro",
+     "cited_ids": [
+      "f-71c8375f"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 241.0,
+     "context_lines": 30
+    },
+    {
+     "i": 45,
+     "question_id": "q045",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "belief_time",
+     "question": "On 2026-09-12, which contact channel did our records list for Manav Gupta?",
+     "gold": [
+      "phone"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "phone"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "phone",
+     "cited_ids": [
+      "f-9d067673"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 255.9,
+     "context_lines": 30
+    },
+    {
+     "i": 47,
+     "question_id": "q047",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "belief_time",
+     "question": "On 2026-09-14, which plan did our records list for Omar Siddiqui?",
+     "gold": [
+      "basic 50"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 100"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fiber 100",
+     "cited_ids": [
+      "f-e8e105c8"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 260.1,
+     "context_lines": 30
+    },
+    {
+     "i": 48,
+     "question_id": "q048",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "belief_time",
+     "question": "On 2026-09-11, which router did our records list for Rahul Shah?",
+     "gold": [
+      "ax3000"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "ax3000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "ax3000",
+     "cited_ids": [
+      "f-893e47e7"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 272.8,
+     "context_lines": 30
+    },
+    {
+     "i": 49,
+     "question_id": "q049",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "belief_time",
+     "question": "On 2026-09-13, which plan did our records list for Yamini Krishnan?",
+     "gold": [
+      "basic 50"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 300"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fiber 300",
+     "cited_ids": [
+      "f-52889392"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 264.0,
+     "context_lines": 30
+    },
+    {
+     "i": 51,
+     "question_id": "q051",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "belief_time",
+     "question": "On 2026-09-25, which city did our records list for Dev Malhotra?",
+     "gold": [
+      "mysuru"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "hyderabad"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "hyderabad",
+     "cited_ids": [
+      "f-fecb659a"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 242.3,
+     "context_lines": 30
+    },
+    {
+     "i": 53,
+     "question_id": "q053",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "belief_time",
+     "question": "On 2026-09-15, which contact channel did our records list for Bhavna Shetty?",
+     "gold": [
+      "email"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "email"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "email",
+     "cited_ids": [
+      "f-24fb62e6"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 271.6,
+     "context_lines": 30
+    },
+    {
+     "i": 55,
+     "question_id": "q055",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "completeness",
+     "question": "Which devices does Uday Rao own?",
+     "gold": [
+      "android phone",
+      "iphone"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "iphone",
+      "android phone"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Uday Rao owns an iPhone and an Android phone.",
+     "cited_ids": [
+      "f-e25fcc21",
+      "f-529b280a"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 256.7,
+     "context_lines": 30
+    },
+    {
+     "i": 57,
+     "question_id": "q057",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "completeness",
+     "question": "Which devices does Rahul Shah own?",
+     "gold": [
+      "android phone",
+      "xbox"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "xbox",
+      "android phone"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Rahul Shah owns an Xbox and an Android phone.",
+     "cited_ids": [
+      "f-756507f4",
+      "f-2dcc0292"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 239.1,
+     "context_lines": 30
+    },
+    {
+     "i": 58,
+     "question_id": "q058",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "completeness",
+     "question": "Which devices does Bhavna Shetty own?",
+     "gold": [
+      "laptop",
+      "ps5",
+      "xbox"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "xbox",
+      "laptop",
+      "ps5"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "xbox, laptop, ps5",
+     "cited_ids": [
+      "f-9ce42c23",
+      "f-fd32c8d9",
+      "f-8c79423d"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 230.8,
+     "context_lines": 30
+    },
+    {
+     "i": 59,
+     "question_id": "q059",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "completeness",
+     "question": "Which devices does Jaya Reddy own?",
+     "gold": [
+      "ipad",
+      "smart tv"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "ipad",
+      "smart tv"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Jaya Reddy owns an iPad and a Smart TV.",
+     "cited_ids": [
+      "f-fc9c6b06",
+      "f-805b0350"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 258.5,
+     "context_lines": 30
+    },
+    {
+     "i": 61,
+     "question_id": "q061",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "completeness",
+     "question": "Which devices does Divya Menon own?",
+     "gold": [
+      "iphone",
+      "ps5"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "ps5",
+      "iphone"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "ps5 and iphone",
+     "cited_ids": [
+      "f-58eed16c",
+      "f-db0b95a6"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 312.3,
+     "context_lines": 30
+    },
+    {
+     "i": 63,
+     "question_id": "q063",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "completeness",
+     "question": "Which devices does Vikram Desai own?",
+     "gold": [
+      "desktop pc",
+      "ps5"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "desktop pc",
+      "ps5"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Vikram Desai owns a desktop pc and a ps5.",
+     "cited_ids": [
+      "f-3efbc6c2",
+      "f-39980689"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 258.5,
+     "context_lines": 30
+    },
+    {
+     "i": 65,
+     "question_id": "q065",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "completeness",
+     "question": "Which devices does Priya Nair own?",
+     "gold": [
+      "ipad",
+      "laptop"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "ipad",
+      "laptop"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Priya Nair owns an iPad and a laptop.",
+     "cited_ids": [
+      "f-7e6bb079",
+      "f-14b64f10"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 257.0,
+     "context_lines": 30
+    },
+    {
+     "i": 67,
+     "question_id": "q067",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "completeness",
+     "question": "Which devices does Wasim Akhtar own?",
+     "gold": [
+      "laptop",
+      "smart tv"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "smart tv",
+      "laptop"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "smart tv and laptop",
+     "cited_ids": [
+      "f-5bb792cd",
+      "f-8a718595"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 253.7,
+     "context_lines": 30
+    },
+    {
+     "i": 68,
+     "question_id": "q068",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "completeness",
+     "question": "Which devices does Rahul Sharma own?",
+     "gold": [
+      "laptop",
+      "smart tv",
+      "xbox"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "smart tv",
+      "xbox",
+      "laptop"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "smart tv, xbox, laptop",
+     "cited_ids": [
+      "f-c3b65cba",
+      "f-3b6a665d",
+      "f-d0b2ab09"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 269.1,
+     "context_lines": 30
+    },
+    {
+     "i": 69,
+     "question_id": "q069",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "completeness",
+     "question": "Which devices does Fatima Sheikh own?",
+     "gold": [
+      "ipad",
+      "xbox"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "ipad",
+      "xbox"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Fatima Sheikh owns an iPad and an Xbox.",
+     "cited_ids": [
+      "f-94f14f4a",
+      "f-cab5893d"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 256.5,
+     "context_lines": 30
+    },
+    {
+     "i": 71,
+     "question_id": "q071",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "completeness",
+     "question": "Which devices does Lata Joshi own?",
+     "gold": [
+      "android phone",
+      "echo dot",
+      "smart tv"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "smart tv",
+      "android phone",
+      "echo dot"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "smart tv, android phone, echo dot",
+     "cited_ids": [
+      "f-57e0f293",
+      "f-e591908d",
+      "f-fedd3612"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 255.3,
+     "context_lines": 30
+    },
+    {
+     "i": 73,
+     "question_id": "q073",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "disagreement",
+     "question": "Which plan is Dev Malhotra on, and is it disputed?",
+     "gold": [
+      "fiber 1000"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 1000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Dev Malhotra is on the fiber 1000 plan, and there is no indication that it is disputed.",
+     "cited_ids": [
+      "f-97d00887"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 261.0,
+     "context_lines": 30
+    },
+    {
+     "i": 75,
+     "question_id": "q075",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "disagreement",
+     "question": "Which plan is Hari Kumar on, and is it disputed?",
+     "gold": [
+      "fiber 300"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 300",
+      "no"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fiber 300, no",
+     "cited_ids": [
+      "f-0cd5d740"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 291.8,
+     "context_lines": 30
+    },
+    {
+     "i": 77,
+     "question_id": "q077",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "disagreement",
+     "question": "Which plan is Jaya Reddy on, and is it disputed?",
+     "gold": [
+      "fiber 1000"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 1000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fiber 1000, no",
+     "cited_ids": [
+      "f-d223f3ad"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 263.0,
+     "context_lines": 30
+    },
+    {
+     "i": 78,
+     "question_id": "q078",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "disagreement",
+     "question": "Which plan is Sanjay Patil on, and is it disputed?",
+     "gold": [
+      "fiber 1000"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 1000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fiber 1000",
+     "cited_ids": [
+      "f-f5fceff6"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 261.1,
+     "context_lines": 30
+    },
+    {
+     "i": 79,
+     "question_id": "q079",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "disagreement",
+     "question": "Which plan is Eshan Ghosh on, and is it disputed?",
+     "gold": [
+      "fiber 100"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 100"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fiber 100, not disputed",
+     "cited_ids": [
+      "f-ba245f9b"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 263.8,
+     "context_lines": 30
+    },
+    {
+     "i": 81,
+     "question_id": "q081",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "disagreement",
+     "question": "Which plan is Ritu Saxena on, and is it disputed?",
+     "gold": [
+      "fiber 300"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 300"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fiber 300, no",
+     "cited_ids": [
+      "f-8651cd98"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 326.3,
+     "context_lines": 30
+    },
+    {
+     "i": 83,
+     "question_id": "q083",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "disagreement",
+     "question": "Which plan is Pooja Bhat on, and is it disputed?",
+     "gold": [
+      "fiber 300"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 300"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fiber 300, not disputed",
+     "cited_ids": [
+      "f-00781dc0"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 258.3,
+     "context_lines": 30
+    },
+    {
+     "i": 85,
+     "question_id": "q085",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "disagreement",
+     "question": "Which plan is Neha Kapoor on, and is it disputed?",
+     "gold": [
+      "basic 50"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "unknown",
+     "cited_ids": [],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 260.4,
+     "context_lines": 30
+    },
+    {
+     "i": 87,
+     "question_id": "q087",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "disagreement",
+     "question": "Which plan is Gita Pillai on, and is it disputed?",
+     "gold": [
+      "fiber 1000"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 1000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fiber 1000, not disputed",
+     "cited_ids": [
+      "f-7010c19e"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 257.9,
+     "context_lines": 30
+    },
+    {
+     "i": 88,
+     "question_id": "q088",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "handoff",
+     "question": "What router does Manav Gupta have?",
+     "gold": [
+      "ax3000"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "ax3000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "ax3000",
+     "cited_ids": [
+      "f-6992c72a"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 256.1,
+     "context_lines": 30
+    },
+    {
+     "i": 89,
+     "question_id": "q089",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "handoff",
+     "question": "How should I contact Priya Naik?",
+     "gold": [
+      "whatsapp"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "whatsapp"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "whatsapp",
+     "cited_ids": [
+      "f-41b37ed3"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 247.3,
+     "context_lines": 30
+    },
+    {
+     "i": 91,
+     "question_id": "q091",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "handoff",
+     "question": "What router does Gaurav Chawla have?",
+     "gold": [
+      "ax5400"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "ax5400"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "ax5400",
+     "cited_ids": [
+      "f-e212d0b2"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 259.0,
+     "context_lines": 30
+    },
+    {
+     "i": 93,
+     "question_id": "q093",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "handoff",
+     "question": "How should I contact Hari Kumar?",
+     "gold": [
+      "email"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "email"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "email",
+     "cited_ids": [
+      "f-5286bf43"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 254.2,
+     "context_lines": 30
+    },
+    {
+     "i": 95,
+     "question_id": "q095",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "handoff",
+     "question": "How should I contact Vikram Desai?",
+     "gold": [
+      "phone"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "phone"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "phone",
+     "cited_ids": [
+      "f-0911e0c7"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 281.5,
+     "context_lines": 30
+    },
+    {
+     "i": 97,
+     "question_id": "q097",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "handoff",
+     "question": "What router does Yamini Krishnan have?",
+     "gold": [
+      "pml hub 6"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "pml hub 6"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "pml hub 6",
+     "cited_ids": [
+      "f-07834b17"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 239.5,
+     "context_lines": 30
+    },
+    {
+     "i": 98,
+     "question_id": "q098",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "handoff",
+     "question": "How should I contact Chirag Jain?",
+     "gold": [
+      "sms"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "sms"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "sms",
+     "cited_ids": [
+      "f-69b47087"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 240.3,
+     "context_lines": 30
+    },
+    {
+     "i": 99,
+     "question_id": "q099",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "handoff",
+     "question": "What router does Carol Dsouza have?",
+     "gold": [
+      "ax3000"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "ax3000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "ax3000",
+     "cited_ids": [
+      "f-d2b18c84"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 257.3,
+     "context_lines": 30
+    },
+    {
+     "i": 101,
+     "question_id": "q101",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "handoff",
+     "question": "How should I contact Arjun Mehra?",
+     "gold": [
+      "email"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "email"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "email",
+     "cited_ids": [
+      "f-1a728ed9"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 235.3,
+     "context_lines": 30
+    },
+    {
+     "i": 103,
+     "question_id": "q103",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "handoff",
+     "question": "What router does Alice Roy have?",
+     "gold": [
+      "ax3000"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "ax3000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "ax3000",
+     "cited_ids": [
+      "f-0a1c5ff8"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 252.9,
+     "context_lines": 30
+    },
+    {
+     "i": 105,
+     "question_id": "q105",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "handoff",
+     "question": "What router does Arjun Mehra have?",
+     "gold": [
+      "pml hub 6 pro"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "pml hub 6 pro"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "pml hub 6 pro",
+     "cited_ids": [
+      "f-929c402b"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 231.7,
+     "context_lines": 30
+    },
+    {
+     "i": 107,
+     "question_id": "q107",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "multi_hop",
+     "question": "Which outage might be affecting Qasim Ali?",
+     "gold": [
+      "substation failure in gachibowli"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "area uplink upgrade"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "area uplink upgrade",
+     "cited_ids": [
+      "f-4d8232bd",
+      "f-c2a0323e"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 261.9,
+     "context_lines": 30
+    },
+    {
+     "i": 108,
+     "question_id": "q108",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "multi_hop",
+     "question": "Which outage might be affecting Neha Kapoor?",
+     "gold": [
+      "road works cut in chinchwad"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "pml-2049"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "pml-2049",
+     "cited_ids": [
+      "f-b426e5e5",
+      "f-dcd92103"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 256.8,
+     "context_lines": 30
+    },
+    {
+     "i": 109,
+     "question_id": "q109",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "multi_hop",
+     "question": "Which outage might be affecting Tara Banerjee?",
+     "gold": [
+      "fiber cut on fc road"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "evening wifi drops"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "evening wifi drops",
+     "cited_ids": [
+      "f-8842747e",
+      "f-6b117d0e",
+      "f-7e6dd991",
+      "f-bdaa8176",
+      "f-50e5fe5e",
+      "f-5634af23",
+      "f-b75d75fc"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 262.3,
+     "context_lines": 30
+    },
+    {
+     "i": 111,
+     "question_id": "q111",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "multi_hop",
+     "question": "Which outage might be affecting Chirag Jain?",
+     "gold": [
+      "road works cut in chinchwad"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "no internet"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "no internet",
+     "cited_ids": [
+      "f-1e459584"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 237.4,
+     "context_lines": 30
+    },
+    {
+     "i": 113,
+     "question_id": "q113",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "multi_hop",
+     "question": "Which customers might be affected by the substation failure in gachibowli?",
+     "gold": [
+      "farhan khan",
+      "gaurav chawla",
+      "qasim ali",
+      "rahul sharma",
+      "wasim akhtar"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "unknown",
+     "cited_ids": [],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 283.1,
+     "context_lines": 30
+    },
+    {
+     "i": 115,
+     "question_id": "q115",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "multi_hop",
+     "question": "Which customers might be affected by the fiber cut on fc road?",
+     "gold": [
+      "esha iyer",
+      "fatima sheikh",
+      "omar siddiqui",
+      "tara banerjee"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "pooja bhat"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "pooja bhat",
+     "cited_ids": [
+      "f-e85bb81b"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 323.4,
+     "context_lines": 30
+    },
+    {
+     "i": 117,
+     "question_id": "q117",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "multi_hop",
+     "question": "Which city does the customer with ticket PML-2051 live in?",
+     "gold": [
+      "nashik"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "nasik"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "nasik",
+     "cited_ids": [
+      "f-7347bc88",
+      "f-e85bb81b"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 272.8,
+     "context_lines": 30
+    },
+    {
+     "i": 118,
+     "question_id": "q118",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "multi_hop",
+     "question": "Which city does the customer with ticket PML-2056 live in?",
+     "gold": [
+      "pune"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "puan"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "puan",
+     "cited_ids": [
+      "f-8ee7c24a"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 282.2,
+     "context_lines": 30
+    },
+    {
+     "i": 119,
+     "question_id": "q119",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "multi_hop",
+     "question": "Which city does the customer with ticket PML-2067 live in?",
+     "gold": [
+      "pune"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "pune"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "pune",
+     "cited_ids": [
+      "f-237c5e22",
+      "f-00d5d45b"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 282.7,
+     "context_lines": 30
+    },
+    {
+     "i": 121,
+     "question_id": "q121",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "multi_hop",
+     "question": "Which plan is the customer with ticket PML-2052 on?",
+     "gold": [
+      "fiber 100"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 100"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fiber 100",
+     "cited_ids": [
+      "f-940e9714",
+      "f-91e7ca45"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 275.0,
+     "context_lines": 30
+    },
+    {
+     "i": 123,
+     "question_id": "q123",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "multi_hop",
+     "question": "Which city does the customer with ticket PML-2066 live in?",
+     "gold": [
+      "navi mumbai"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "mumbai"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "mumbai",
+     "cited_ids": [
+      "f-d97030cb",
+      "f-c60ead96"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 271.4,
+     "context_lines": 30
+    },
+    {
+     "i": 125,
+     "question_id": "q125",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "procedural",
+     "question": "Which fix has worked before for gaming lag and high latency?",
+     "gold": [
+      "enable qos"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "enable qos"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "enable qos",
+     "cited_ids": [
+      "f-43441a10",
+      "f-64be6445"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 274.6,
+     "context_lines": 30
+    },
+    {
+     "i": 127,
+     "question_id": "q127",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "procedural",
+     "question": "Which fix has worked before for the router rebooting by itself?",
+     "gold": [
+      "firmware update"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "firmware update"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "firmware update",
+     "cited_ids": [
+      "f-cb9db656"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 276.8,
+     "context_lines": 30
+    },
+    {
+     "i": 128,
+     "question_id": "q128",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "procedural",
+     "question": "Which fix has worked before for slow speeds?",
+     "gold": [
+      "reset line profile"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "",
+     "cited_ids": [],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 251.6,
+     "context_lines": 30
+    },
+    {
+     "i": 129,
+     "question_id": "q129",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "procedural",
+     "question": "Which fix has worked before for weak wifi in far rooms?",
+     "gold": [
+      "add mesh extender"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "add mesh extender"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "add mesh extender",
+     "cited_ids": [
+      "f-949814ce",
+      "f-e42e88f5"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 290.1,
+     "context_lines": 30
+    },
+    {
+     "i": 131,
+     "question_id": "q131",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "procedural",
+     "question": "What fixed Priya Naik's ticket PML-2072?",
+     "gold": [
+      "replace fiber cable"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "area uplink upgrade"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "area uplink upgrade",
+     "cited_ids": [
+      "f-ac9c8c30",
+      "f-aea415c5"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 245.4,
+     "context_lines": 30
+    },
+    {
+     "i": 133,
+     "question_id": "q133",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "procedural",
+     "question": "What fixed Eshan Ghosh's ticket PML-2066?",
+     "gold": [
+      "add mesh extender"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "add mesh extender"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "add mesh extender",
+     "cited_ids": [
+      "f-8a27e971"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 257.4,
+     "context_lines": 30
+    },
+    {
+     "i": 135,
+     "question_id": "q135",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "procedural",
+     "question": "What fixed Jaya Reddy's ticket PML-2046?",
+     "gold": [
+      "firmware update"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "firmware update"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "firmware update",
+     "cited_ids": [
+      "f-982ded8f",
+      "f-8709a199",
+      "f-906157e6"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 290.7,
+     "context_lines": 30
+    },
+    {
+     "i": 137,
+     "question_id": "q137",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "procedural",
+     "question": "Which fixes were tried on ticket PML-2071?",
+     "gold": [
+      "move router"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "move router"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "move router",
+     "cited_ids": [
+      "f-45685392"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 261.2,
+     "context_lines": 30
+    },
+    {
+     "i": 138,
+     "question_id": "q138",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "procedural",
+     "question": "Which fixes were tried on ticket PML-2045?",
+     "gold": [
+      "enable qos",
+      "restart router"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "restart router",
+      "area uplink upgrade",
+      "enable qos"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "restart router, area uplink upgrade, enable qos",
+     "cited_ids": [
+      "f-bc194b2d",
+      "f-94264f45",
+      "f-6e10acd9"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 282.4,
+     "context_lines": 30
+    },
+    {
+     "i": 139,
+     "question_id": "q139",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "procedural",
+     "question": "Which fixes were tried on ticket PML-2042?",
+     "gold": [
+      "restart router"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "restart router",
+      "change wifi channel"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "restart router and change wifi channel",
+     "cited_ids": [
+      "f-dff266df",
+      "f-6b66b472"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 286.2,
+     "context_lines": 30
+    },
+    {
+     "i": 141,
+     "question_id": "q141",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "procedural",
+     "question": "Which fixes were tried on ticket PML-2067?",
+     "gold": [
+      "reset line profile"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "area uplink upgrade",
+      "reset line profile"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "area uplink upgrade and reset line profile",
+     "cited_ids": [
+      "f-8837946a",
+      "f-16a193e5"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 267.2,
+     "context_lines": 30
+    },
+    {
+     "i": 143,
+     "question_id": "q143",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "unknown",
+     "question": "What router does Gita Pillai have?",
+     "gold": [],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": true,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "unknown",
+     "cited_ids": [],
+     "correct": true,
+     "error": false,
+     "evidence": null,
+     "retrieval_ms": 249.7,
+     "context_lines": 30
+    },
+    {
+     "i": 145,
+     "question_id": "q145",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "unknown",
+     "question": "What router does Sanjay Patil have?",
+     "gold": [],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": true,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "unknown",
+     "cited_ids": [],
+     "correct": true,
+     "error": false,
+     "evidence": null,
+     "retrieval_ms": 236.5,
+     "context_lines": 30
+    },
+    {
+     "i": 147,
+     "question_id": "q147",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "unknown",
+     "question": "What is the status of Bob Menon's ticket?",
+     "gold": [],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": true,
+     "collision": false,
+     "values": [
+      "on plan"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "on plan",
+     "cited_ids": [
+      "f-750f2266"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": null,
+     "retrieval_ms": 238.5,
+     "context_lines": 30
+    },
+    {
+     "i": 148,
+     "question_id": "q148",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "unknown",
+     "question": "What is the status of Carol Dsouza's ticket?",
+     "gold": [],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": true,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "",
+     "cited_ids": [],
+     "correct": true,
+     "error": false,
+     "evidence": null,
+     "retrieval_ms": 237.0,
+     "context_lines": 30
+    },
+    {
+     "i": 149,
+     "question_id": "q149",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "unknown",
+     "question": "What is the status of Farhan Khan's ticket?",
+     "gold": [],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": true,
+     "collision": false,
+     "values": [
+      "current"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "current",
+     "cited_ids": [
+      "f-1513b8b9"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": null,
+     "retrieval_ms": 225.5,
+     "context_lines": 30
+    },
+    {
+     "i": 151,
+     "question_id": "q151",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "unknown",
+     "question": "Which city does Ivan Shah live in?",
+     "gold": [],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": true,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "I don't know",
+     "cited_ids": [],
+     "correct": true,
+     "error": false,
+     "evidence": null,
+     "retrieval_ms": 264.2,
+     "context_lines": 30
+    },
+    {
+     "i": 153,
+     "question_id": "q153",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "unknown",
+     "question": "Which city does Meera Iyer live in?",
+     "gold": [],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": true,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "unknown",
+     "cited_ids": [],
+     "correct": true,
+     "error": false,
+     "evidence": null,
+     "retrieval_ms": 290.1,
+     "context_lines": 30
+    },
+    {
+     "i": 155,
+     "question_id": "q155",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "unknown",
+     "question": "Which outage affects Thane?",
+     "gold": [],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": true,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "unknown",
+     "cited_ids": [],
+     "correct": true,
+     "error": false,
+     "evidence": null,
+     "retrieval_ms": 272.3,
+     "context_lines": 30
+    },
+    {
+     "i": 157,
+     "question_id": "q157",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "unknown",
+     "question": "What is Carol Dsouza's email address?",
+     "gold": [],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": true,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "The memory does not contain Carol Dsouza's email address.",
+     "cited_ids": [],
+     "correct": true,
+     "error": false,
+     "evidence": null,
+     "retrieval_ms": 303.1,
+     "context_lines": 30
+    },
+    {
+     "i": 158,
+     "question_id": "q158",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "unknown",
+     "question": "What fixed ticket PML-2042?",
+     "gold": [],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": true,
+     "collision": false,
+     "values": [
+      "resolver"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "resolver",
+     "cited_ids": [
+      "f-09ebe623"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": null,
+     "retrieval_ms": 283.6,
+     "context_lines": 30
+    },
+    {
+     "i": 159,
+     "question_id": "q159",
+     "system_name": "FULL",
+     "run_id": "run-20261015-140300",
+     "type": "unknown",
+     "question": "What fixed ticket PML-2048?",
+     "gold": [],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": true,
+     "collision": false,
+     "values": [
+      "move router"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "move router",
+     "cited_ids": [
+      "f-ab340658"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": null,
+     "retrieval_ms": 277.3,
+     "context_lines": 30
+    }
+   ],
+   "n_target": 160,
+   "pending": [
+    6,
+    10,
+    12,
+    14,
+    16,
+    20,
+    22,
+    24,
+    26,
+    30,
+    32,
+    34,
+    36,
+    40,
+    42,
+    44,
+    46,
+    50,
+    52,
+    54,
+    56,
+    60,
+    62,
+    64,
+    66,
+    70,
+    72,
+    74,
+    76,
+    80,
+    82,
+    84,
+    86,
+    90,
+    92,
+    94,
+    96,
+    100,
+    102,
+    104,
+    106,
+    110,
+    112,
+    114,
+    116,
+    120,
+    122,
+    124,
+    126,
+    130,
+    132,
+    134,
+    136,
+    140,
+    142,
+    144,
+    146,
+    150,
+    152,
+    154,
+    156
+   ],
+   "summary": {
+    "overall": {
+     "n": 99,
+     "accuracy": 0.6768,
+     "ci95": [
+      0.5795,
+      0.7608
+     ],
+     "evidence_recall": 0.8182
+    },
+    "by_type": {
+     "belief_time": {
+      "n": 11,
+      "accuracy": 0.6364,
+      "ci95": [
+       0.3538,
+       0.8483
+      ],
+      "evidence_recall": 0.7273
+     },
+     "completeness": {
+      "n": 11,
+      "accuracy": 1.0,
+      "ci95": [
+       0.7412,
+       1.0
+      ],
+      "evidence_recall": 1.0
+     },
+     "current": {
+      "n": 13,
+      "accuracy": 0.9231,
+      "ci95": [
+       0.6669,
+       0.9863
+      ],
+      "evidence_recall": 0.7692
+     },
+     "disagreement": {
+      "n": 9,
+      "accuracy": 0.0,
+      "ci95": [
+       0.0,
+       0.2992
+      ],
+      "evidence_recall": 0.8889
+     },
+     "handoff": {
+      "n": 11,
+      "accuracy": 1.0,
+      "ci95": [
+       0.7412,
+       1.0
+      ],
+      "evidence_recall": 1.0
+     },
+     "multi_hop": {
+      "n": 11,
+      "accuracy": 0.2727,
+      "ci95": [
+       0.0975,
+       0.5657
+      ],
+      "evidence_recall": 0.3636
+     },
+     "procedural": {
+      "n": 11,
+      "accuracy": 0.5455,
+      "ci95": [
+       0.2801,
+       0.7873
+      ],
+      "evidence_recall": 0.9091
+     },
+     "unknown": {
+      "n": 11,
+      "accuracy": 0.6364,
+      "ci95": [
+       0.3538,
+       0.8483
+      ],
+      "evidence_recall": null
+     },
+     "world_time": {
+      "n": 11,
+      "accuracy": 0.9091,
+      "ci95": [
+       0.6226,
+       0.9838
+      ],
+      "evidence_recall": 0.9091
+     }
+    },
+    "by_model": {
+     "groq2:openai/gpt-oss-120b": {
+      "n": 1,
+      "accuracy": 1.0,
+      "ci95": [
+       0.2065,
+       1.0
+      ],
+      "evidence_recall": 1.0
+     },
+     "groq2:qwen/qwen3.8-27b": {
+      "n": 16,
+      "accuracy": 0.8125,
+      "ci95": [
+       0.5699,
+       0.9341
+      ],
+      "evidence_recall": 0.8571
+     },
+     "groq3:openai/gpt-oss-120b": {
+      "n": 1,
+      "accuracy": 1.0,
+      "ci95": [
+       0.2065,
+       1.0
+      ],
+      "evidence_recall": 1.0
+     },
+     "groq3:qwen/qwen3.8-27b": {
+      "n": 16,
+      "accuracy": 0.8125,
+      "ci95": [
+       0.5699,
+       0.9341
+      ],
+      "evidence_recall": 0.7143
+     },
+     "groq4:qwen/qwen3.8-27b": {
+      "n": 16,
+      "accuracy": 0.625,
+      "ci95": [
+       0.3864,
+       0.8152
+      ],
+      "evidence_recall": 0.7857
+     },
+     "groq5:openai/gpt-oss-120b": {
+      "n": 16,
+      "accuracy": 0.5625,
+      "ci95": [
+       0.3318,
+       0.769
+      ],
+      "evidence_recall": 0.7857
+     },
+     "groq5:qwen/qwen3.8-27b": {
+      "n": 16,
+      "accuracy": 0.5625,
+      "ci95": [
+       0.3318,
+       0.769
+      ],
+      "evidence_recall": 0.7857
+     },
+     "openai/gpt-oss-120b": {
+      "n": 1,
+      "accuracy": 1.0,
+      "ci95": [
+       0.2065,
+       1.0
+      ],
+      "evidence_recall": 1.0
+     },
+     "qwen/qwen3.8-27b": {
+      "n": 16,
+      "accuracy": 0.625,
+      "ci95": [
+       0.3864,
+       0.8152
+      ],
+      "evidence_recall": 0.9333
+     }
+    },
+    "collision_questions": {
+     "n": 4,
+     "accuracy": 1.0,
+     "ci95": [
+      0.5101,
+      1.0
+     ],
+     "evidence_recall": 0.5
+    },
+    "abstention": {
+     "precision": 0.6364,
+     "recall": 0.6364,
+     "hallucinations": 4,
+     "false_refusals": 4,
+     "should_refuse": 11
+    },
+    "retrieval_ms": {
+     "p50": 259.0,
+     "p95": 312.3
+    },
+    "avg_context_lines": 30.0
+   }
+  },
+  "B1": {
+   "rows": [
+    {
+     "i": 1,
+     "question_id": "q001",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "current",
+     "question": "Where does Bhavna Shetty live now?",
+     "gold": [
+      "mumbai"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "mumbai"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Mumbai",
+     "cited_ids": [
+      "ep-e1b612a2",
+      "ep-2020790d"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 47.8,
+     "context_lines": 10
+    },
+    {
+     "i": 3,
+     "question_id": "q003",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "current",
+     "question": "What is the status of Fatima Sheikh's ticket PML-2067?",
+     "gold": [
+      "resolved"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "closed"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "closed",
+     "cited_ids": [
+      "ep-a18408a7"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 46.1,
+     "context_lines": 10
+    },
+    {
+     "i": 5,
+     "question_id": "q005",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "current",
+     "question": "How does Bhavna Shetty want to be contacted now?",
+     "gold": [
+      "phone"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "phone"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "phone",
+     "cited_ids": [
+      "ep-884e557b"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 45.1,
+     "context_lines": 10
+    },
+    {
+     "i": 7,
+     "question_id": "q007",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "current",
+     "question": "Where does Ritu Saxena live now?",
+     "gold": [
+      "mumbai"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "Mumbai"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Mumbai",
+     "cited_ids": [
+      "ep-1031df2e"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 39.4,
+     "context_lines": 10
+    },
+    {
+     "i": 8,
+     "question_id": "q008",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "current",
+     "question": "What is the status of Sanjay Patil's ticket PML-2055?",
+     "gold": [
+      "resolved"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "",
+     "cited_ids": [],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 48.8,
+     "context_lines": 10
+    },
+    {
+     "i": 9,
+     "question_id": "q009",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "current",
+     "question": "Which plan is Vikram Desai on?",
+     "gold": [
+      "fiber 300"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 300"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fiber 300",
+     "cited_ids": [
+      "ep-ffe3cd26",
+      "ep-9d5eba50"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 41.0,
+     "context_lines": 10
+    },
+    {
+     "i": 11,
+     "question_id": "q011",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "current",
+     "question": "Which city does Alice Roy live in?",
+     "gold": [
+      "pimpri"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": true,
+     "values": [
+      "pimpri"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Pimpri",
+     "cited_ids": [
+      "ep-2d4a5097",
+      "ep-e170dadb"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 39.6,
+     "context_lines": 10
+    },
+    {
+     "i": 13,
+     "question_id": "q013",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "current",
+     "question": "Which city does Rahul Sharma live in?",
+     "gold": [
+      "hyderabad"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": true,
+     "values": [
+      "hyderabad"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Hyderabad",
+     "cited_ids": [
+      "ep-88d1bc71"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 39.6,
+     "context_lines": 10
+    },
+    {
+     "i": 15,
+     "question_id": "q015",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "current",
+     "question": "Which city does Priya Naik live in?",
+     "gold": [
+      "navi mumbai"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": true,
+     "values": [
+      "navi mumbai"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Navi Mumbai",
+     "cited_ids": [
+      "ep-c19a23e8"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 40.0,
+     "context_lines": 10
+    },
+    {
+     "i": 17,
+     "question_id": "q017",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "current",
+     "question": "Which city does Arjun Mehra live in?",
+     "gold": [
+      "navi mumbai"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": true,
+     "values": [
+      "navi mumbai"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Navi Mumbai",
+     "cited_ids": [
+      "ep-2101b896",
+      "ep-3e804aa8"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 39.7,
+     "context_lines": 10
+    },
+    {
+     "i": 18,
+     "question_id": "q018",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "world_time",
+     "question": "Which contact channel did Manav Gupta prefer on 2026-09-23?",
+     "gold": [
+      "sms"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "",
+     "cited_ids": [],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 45.1,
+     "context_lines": 10
+    },
+    {
+     "i": 19,
+     "question_id": "q019",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "world_time",
+     "question": "Where did Zoya Mirza actually live on 2026-09-20?",
+     "gold": [
+      "secunderabad"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "secunderabad"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Secunderabad",
+     "cited_ids": [
+      "ep-4888e82f",
+      "ep-b5c99586"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 44.9,
+     "context_lines": 10
+    },
+    {
+     "i": 21,
+     "question_id": "q021",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "world_time",
+     "question": "Where did Uday Rao actually live on 2026-09-17?",
+     "gold": [
+      "mumbai"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "mumbai"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "mumbai",
+     "cited_ids": [
+      "ep-39972942",
+      "ep-6c315e3c"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 45.1,
+     "context_lines": 10
+    },
+    {
+     "i": 23,
+     "question_id": "q023",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "world_time",
+     "question": "Which contact channel did Neha Kapoor prefer on 2026-09-21?",
+     "gold": [
+      "whatsapp"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "whatsapp"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "whatsapp",
+     "cited_ids": [
+      "ep-662796fa",
+      "ep-09510292"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 47.2,
+     "context_lines": 10
+    },
+    {
+     "i": 25,
+     "question_id": "q025",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "world_time",
+     "question": "Where did Uday Rao actually live on 2026-09-23?",
+     "gold": [
+      "mumbai"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "mumbai"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "mumbai",
+     "cited_ids": [
+      "ep-39972942",
+      "ep-6c315e3c"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 44.8,
+     "context_lines": 10
+    },
+    {
+     "i": 27,
+     "question_id": "q027",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "world_time",
+     "question": "Which plan was Alice Rao on on 2026-09-13?",
+     "gold": [
+      "fiber 1000"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 1000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fiber 1000",
+     "cited_ids": [
+      "ep-488bac03",
+      "ep-90f28f42"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 44.8,
+     "context_lines": 10
+    },
+    {
+     "i": 28,
+     "question_id": "q028",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "world_time",
+     "question": "Where did Esha Iyer actually live on 2026-09-12?",
+     "gold": [
+      "bengaluru"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "",
+     "cited_ids": [],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 45.1,
+     "context_lines": 10
+    },
+    {
+     "i": 29,
+     "question_id": "q029",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "world_time",
+     "question": "Which plan was Divya Menon on on 2026-09-10?",
+     "gold": [
+      "fiber 1000"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 1000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fiber 1000",
+     "cited_ids": [
+      "ep-04633249",
+      "ep-c42478d8"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 46.0,
+     "context_lines": 10
+    },
+    {
+     "i": 31,
+     "question_id": "q031",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "world_time",
+     "question": "Which router did Divya Menon have on 2026-09-19?",
+     "gold": [
+      "pml hub 6 pro"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "PML Hub 6 Pro"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "PML Hub 6 Pro",
+     "cited_ids": [
+      "ep-874f6ffc"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 49.1,
+     "context_lines": 10
+    },
+    {
+     "i": 33,
+     "question_id": "q033",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "world_time",
+     "question": "Where did Yamini Krishnan actually live on 2026-09-24?",
+     "gold": [
+      "mysuru"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "mysuru"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Mysuru",
+     "cited_ids": [
+      "ep-e9e03fc8"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 46.2,
+     "context_lines": 10
+    },
+    {
+     "i": 35,
+     "question_id": "q035",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "world_time",
+     "question": "Where did Pooja Bhat actually live on 2026-09-09?",
+     "gold": [
+      "navi mumbai"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "navi mumbai"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Navi Mumbai",
+     "cited_ids": [
+      "ep-0e80cec8"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 45.8,
+     "context_lines": 10
+    },
+    {
+     "i": 37,
+     "question_id": "q037",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "belief_time",
+     "question": "On 2026-09-10, which router did our records list for Neha Kapoor?",
+     "gold": [
+      "ax1800"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "ax1800"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "AX1800",
+     "cited_ids": [
+      "ep-91075b3d"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 50.3,
+     "context_lines": 10
+    },
+    {
+     "i": 38,
+     "question_id": "q038",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "belief_time",
+     "question": "On 2026-09-26, which city did our records list for Bhavna Shetty?",
+     "gold": [
+      "mumbai"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "pune"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "pune",
+     "cited_ids": [
+      "ep-2020790d"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 51.8,
+     "context_lines": 10
+    },
+    {
+     "i": 39,
+     "question_id": "q039",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "belief_time",
+     "question": "On 2026-09-16, which plan did our records list for Aditi Kulkarni?",
+     "gold": [
+      "basic 50"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "basic 50"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Basic 50",
+     "cited_ids": [
+      "ep-31862d6a"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 51.5,
+     "context_lines": 10
+    },
+    {
+     "i": 41,
+     "question_id": "q041",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "belief_time",
+     "question": "On 2026-09-27, which city did our records list for Gita Pillai?",
+     "gold": [
+      "thane"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "thane"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "thane",
+     "cited_ids": [
+      "ep-017cef6d"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 50.9,
+     "context_lines": 10
+    },
+    {
+     "i": 43,
+     "question_id": "q043",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "belief_time",
+     "question": "On 2026-09-16, which router did our records list for Wasim Akhtar?",
+     "gold": [
+      "pml hub 6 pro"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "pml hub 6 pro"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "pml hub 6 pro",
+     "cited_ids": [
+      "ep-423cc77f"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 50.7,
+     "context_lines": 10
+    },
+    {
+     "i": 45,
+     "question_id": "q045",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "belief_time",
+     "question": "On 2026-09-12, which contact channel did our records list for Manav Gupta?",
+     "gold": [
+      "phone"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "phone"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "phone",
+     "cited_ids": [
+      "ep-0f2a7e71"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 51.5,
+     "context_lines": 10
+    },
+    {
+     "i": 47,
+     "question_id": "q047",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "belief_time",
+     "question": "On 2026-09-14, which plan did our records list for Omar Siddiqui?",
+     "gold": [
+      "basic 50"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "basic 50"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Basic 50",
+     "cited_ids": [
+      "ep-0ed863bd"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 51.1,
+     "context_lines": 10
+    },
+    {
+     "i": 48,
+     "question_id": "q048",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "belief_time",
+     "question": "On 2026-09-11, which router did our records list for Rahul Shah?",
+     "gold": [
+      "ax3000"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "ax3000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "ax3000",
+     "cited_ids": [
+      "ep-078792ac"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 53.2,
+     "context_lines": 10
+    },
+    {
+     "i": 49,
+     "question_id": "q049",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "belief_time",
+     "question": "On 2026-09-13, which plan did our records list for Yamini Krishnan?",
+     "gold": [
+      "basic 50"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 300"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fiber 300",
+     "cited_ids": [
+      "ep-83f835d5"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 50.2,
+     "context_lines": 10
+    },
+    {
+     "i": 51,
+     "question_id": "q051",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "belief_time",
+     "question": "On 2026-09-25, which city did our records list for Dev Malhotra?",
+     "gold": [
+      "mysuru"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "mysuru"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Mysuru",
+     "cited_ids": [
+      "ep-05712fc8"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 50.0,
+     "context_lines": 10
+    },
+    {
+     "i": 53,
+     "question_id": "q053",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "belief_time",
+     "question": "On 2026-09-15, which contact channel did our records list for Bhavna Shetty?",
+     "gold": [
+      "email"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "email"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "email",
+     "cited_ids": [
+      "ep-72fc41ff"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 51.9,
+     "context_lines": 10
+    },
+    {
+     "i": 55,
+     "question_id": "q055",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "completeness",
+     "question": "Which devices does Uday Rao own?",
+     "gold": [
+      "android phone",
+      "iphone"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "android phone",
+      "iphone"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Android phone and iPhone",
+     "cited_ids": [
+      "ep-0dfc7506",
+      "ep-e31d812e"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 38.8,
+     "context_lines": 10
+    },
+    {
+     "i": 57,
+     "question_id": "q057",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "completeness",
+     "question": "Which devices does Rahul Shah own?",
+     "gold": [
+      "android phone",
+      "xbox"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "AX3000 router",
+      "Android phone",
+      "AX1800 router"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "AX3000 router, Android phone, AX1800 router",
+     "cited_ids": [
+      "ep-078792ac",
+      "ep-85de9e58",
+      "ep-7234ff3d"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 39.8,
+     "context_lines": 10
+    },
+    {
+     "i": 58,
+     "question_id": "q058",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "completeness",
+     "question": "Which devices does Bhavna Shetty own?",
+     "gold": [
+      "laptop",
+      "ps5",
+      "xbox"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "ps5",
+      "laptop",
+      "xbox",
+      "ax1800 router"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "ps5, laptop, xbox, ax1800 router",
+     "cited_ids": [
+      "ep-8c1becf3",
+      "ep-3677b045",
+      "ep-0a075f04",
+      "ep-daec1353"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 40.0,
+     "context_lines": 10
+    },
+    {
+     "i": 59,
+     "question_id": "q059",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "completeness",
+     "question": "Which devices does Jaya Reddy own?",
+     "gold": [
+      "ipad",
+      "smart tv"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "iPad",
+      "smart TV"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "iPad and smart TV",
+     "cited_ids": [
+      "ep-774ca973",
+      "ep-25e32fa2"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 40.0,
+     "context_lines": 10
+    },
+    {
+     "i": 61,
+     "question_id": "q061",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "completeness",
+     "question": "Which devices does Divya Menon own?",
+     "gold": [
+      "iphone",
+      "ps5"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "AX1800 router",
+      "PS5",
+      "iPhone"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "AX1800 router, PS5, iPhone",
+     "cited_ids": [
+      "ep-641b9ce1",
+      "ep-8cb6df56",
+      "ep-6eea368c"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 38.8,
+     "context_lines": 10
+    },
+    {
+     "i": 63,
+     "question_id": "q063",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "completeness",
+     "question": "Which devices does Vikram Desai own?",
+     "gold": [
+      "desktop pc",
+      "ps5"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "desktop PC",
+      "PS5"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "desktop PC, PS5",
+     "cited_ids": [
+      "ep-8fc8022d",
+      "ep-752b1a2b"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 39.2,
+     "context_lines": 10
+    },
+    {
+     "i": 65,
+     "question_id": "q065",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "completeness",
+     "question": "Which devices does Priya Nair own?",
+     "gold": [
+      "ipad",
+      "laptop"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "laptop",
+      "iPad"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "laptop, iPad",
+     "cited_ids": [
+      "ep-0de348e2",
+      "ep-11040040"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 38.9,
+     "context_lines": 10
+    },
+    {
+     "i": 67,
+     "question_id": "q067",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "completeness",
+     "question": "Which devices does Wasim Akhtar own?",
+     "gold": [
+      "laptop",
+      "smart tv"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "I don't know.",
+     "cited_ids": [],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 40.0,
+     "context_lines": 10
+    },
+    {
+     "i": 68,
+     "question_id": "q068",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "completeness",
+     "question": "Which devices does Rahul Sharma own?",
+     "gold": [
+      "laptop",
+      "smart tv",
+      "xbox"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "laptop",
+      "xbox",
+      "smart tv",
+      "ax1800 router",
+      "pml hub 6 pro router"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "laptop, xbox, smart tv, ax1800 router, pml hub 6 pro router",
+     "cited_ids": [
+      "ep-ffb7f2a6",
+      "ep-ac2ae00e",
+      "ep-8f802acb",
+      "ep-74708bdb",
+      "ep-16ccd6d5"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 39.9,
+     "context_lines": 10
+    },
+    {
+     "i": 69,
+     "question_id": "q069",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "completeness",
+     "question": "Which devices does Fatima Sheikh own?",
+     "gold": [
+      "ipad",
+      "xbox"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "PML Hub 6",
+      "Xbox",
+      "iPad"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Fatima Sheikh owns a PML Hub 6 router, an Xbox, and an iPad.",
+     "cited_ids": [
+      "ep-319d12c3",
+      "ep-1657fcde",
+      "ep-ef820aa5"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 38.7,
+     "context_lines": 10
+    },
+    {
+     "i": 71,
+     "question_id": "q071",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "completeness",
+     "question": "Which devices does Lata Joshi own?",
+     "gold": [
+      "android phone",
+      "echo dot",
+      "smart tv"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "smart tv",
+      "android phone",
+      "echo dot",
+      "ax5400 router"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "smart tv, android phone, echo dot, ax5400 router",
+     "cited_ids": [
+      "ep-262ec1ff",
+      "ep-06dbc17a",
+      "ep-a833dae9",
+      "ep-23e7e59e"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 40.3,
+     "context_lines": 10
+    },
+    {
+     "i": 73,
+     "question_id": "q073",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "disagreement",
+     "question": "Which plan is Dev Malhotra on, and is it disputed?",
+     "gold": [
+      "fiber 1000"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 1000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Dev Malhotra is on the Fiber 1000 plan. There is no information in the memory indicating that the plan is disputed.",
+     "cited_ids": [
+      "ep-72176107",
+      "ep-8f527ae6"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 44.2,
+     "context_lines": 10
+    },
+    {
+     "i": 75,
+     "question_id": "q075",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "disagreement",
+     "question": "Which plan is Hari Kumar on, and is it disputed?",
+     "gold": [
+      "fiber 300"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 300"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Fiber 300; no dispute is mentioned in the records.",
+     "cited_ids": [
+      "ep-9b1c443a"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 43.7,
+     "context_lines": 10
+    },
+    {
+     "i": 77,
+     "question_id": "q077",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "disagreement",
+     "question": "Which plan is Jaya Reddy on, and is it disputed?",
+     "gold": [
+      "fiber 1000"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 1000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Jaya Reddy is on the Fiber 1000 plan, and it is not disputed.",
+     "cited_ids": [
+      "ep-7391b7a4"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 46.3,
+     "context_lines": 10
+    },
+    {
+     "i": 78,
+     "question_id": "q078",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "disagreement",
+     "question": "Which plan is Sanjay Patil on, and is it disputed?",
+     "gold": [
+      "fiber 1000"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 1000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fiber 1000, not disputed",
+     "cited_ids": [
+      "ep-91819d83"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 44.1,
+     "context_lines": 10
+    },
+    {
+     "i": 79,
+     "question_id": "q079",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "disagreement",
+     "question": "Which plan is Eshan Ghosh on, and is it disputed?",
+     "gold": [
+      "fiber 100"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 100"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Eshan Ghosh is on the Fiber 100 plan, and there is no indication that it is disputed.",
+     "cited_ids": [
+      "ep-d5340c5c"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 44.1,
+     "context_lines": 10
+    },
+    {
+     "i": 81,
+     "question_id": "q081",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "disagreement",
+     "question": "Which plan is Ritu Saxena on, and is it disputed?",
+     "gold": [
+      "fiber 300"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 300"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Fiber 300; no dispute is mentioned in the records.",
+     "cited_ids": [
+      "ep-19237a01"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 45.1,
+     "context_lines": 10
+    },
+    {
+     "i": 83,
+     "question_id": "q083",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "disagreement",
+     "question": "Which plan is Pooja Bhat on, and is it disputed?",
+     "gold": [
+      "fiber 300"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "The provided memory does not contain information about Pooja Bhat's plan or whether it is disputed.",
+     "cited_ids": [],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 45.9,
+     "context_lines": 10
+    },
+    {
+     "i": 85,
+     "question_id": "q085",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "disagreement",
+     "question": "Which plan is Neha Kapoor on, and is it disputed?",
+     "gold": [
+      "basic 50"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "basic 50"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Neha Kapoor is on the Basic 50 plan. There is no information in the memory indicating that this plan is disputed.",
+     "cited_ids": [
+      "ep-ac59035f"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 45.1,
+     "context_lines": 10
+    },
+    {
+     "i": 87,
+     "question_id": "q087",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "disagreement",
+     "question": "Which plan is Gita Pillai on, and is it disputed?",
+     "gold": [
+      "fiber 1000"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fiber 1000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Fiber 1000; not disputed",
+     "cited_ids": [
+      "ep-1e8067ed"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 45.4,
+     "context_lines": 10
+    },
+    {
+     "i": 88,
+     "question_id": "q088",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "handoff",
+     "question": "What router does Manav Gupta have?",
+     "gold": [
+      "ax3000"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "ax3000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "ax3000",
+     "cited_ids": [
+      "ep-21245820"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 39.3,
+     "context_lines": 10
+    },
+    {
+     "i": 89,
+     "question_id": "q089",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "handoff",
+     "question": "How should I contact Priya Naik?",
+     "gold": [
+      "whatsapp"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "The provided memory does not contain contact information (such as a phone number or email address) for Priya Naik.",
+     "cited_ids": [],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 39.0,
+     "context_lines": 10
+    },
+    {
+     "i": 91,
+     "question_id": "q091",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "handoff",
+     "question": "What router does Gaurav Chawla have?",
+     "gold": [
+      "ax5400"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "ax5400"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "AX5400",
+     "cited_ids": [
+      "ep-e6dbe062"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 46.0,
+     "context_lines": 10
+    },
+    {
+     "i": 93,
+     "question_id": "q093",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "handoff",
+     "question": "How should I contact Hari Kumar?",
+     "gold": [
+      "email"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "email"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "email",
+     "cited_ids": [
+      "ep-1280e0d0"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 40.0,
+     "context_lines": 10
+    },
+    {
+     "i": 95,
+     "question_id": "q095",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "handoff",
+     "question": "How should I contact Vikram Desai?",
+     "gold": [
+      "phone"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "phone"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "phone",
+     "cited_ids": [
+      "ep-ba075c61"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 38.8,
+     "context_lines": 10
+    },
+    {
+     "i": 97,
+     "question_id": "q097",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "handoff",
+     "question": "What router does Yamini Krishnan have?",
+     "gold": [
+      "pml hub 6"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "pml hub 6"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "PML Hub 6",
+     "cited_ids": [
+      "ep-b2ab87a1"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 39.7,
+     "context_lines": 10
+    },
+    {
+     "i": 98,
+     "question_id": "q098",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "handoff",
+     "question": "How should I contact Chirag Jain?",
+     "gold": [
+      "sms"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "",
+     "cited_ids": [],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 40.1,
+     "context_lines": 10
+    },
+    {
+     "i": 99,
+     "question_id": "q099",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "handoff",
+     "question": "What router does Carol Dsouza have?",
+     "gold": [
+      "ax3000"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "ax3000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "AX3000",
+     "cited_ids": [
+      "ep-e5fa8817"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 40.9,
+     "context_lines": 10
+    },
+    {
+     "i": 101,
+     "question_id": "q101",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "handoff",
+     "question": "How should I contact Arjun Mehra?",
+     "gold": [
+      "email"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "email"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "email",
+     "cited_ids": [
+      "ep-67ef704e"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 38.8,
+     "context_lines": 10
+    },
+    {
+     "i": 103,
+     "question_id": "q103",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "handoff",
+     "question": "What router does Alice Roy have?",
+     "gold": [
+      "ax3000"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "ax3000"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "AX3000",
+     "cited_ids": [
+      "ep-593641c0"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 38.9,
+     "context_lines": 10
+    },
+    {
+     "i": 105,
+     "question_id": "q105",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "handoff",
+     "question": "What router does Arjun Mehra have?",
+     "gold": [
+      "pml hub 6 pro"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "pml hub 6 pro"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "PML Hub 6 Pro",
+     "cited_ids": [
+      "ep-1eeade07"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 40.9,
+     "context_lines": 10
+    },
+    {
+     "i": 107,
+     "question_id": "q107",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "multi_hop",
+     "question": "Which outage might be affecting Qasim Ali?",
+     "gold": [
+      "substation failure in gachibowli"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "There is no mention of an outage affecting Qasim Ali in the provided memory lines.",
+     "cited_ids": [],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 43.7,
+     "context_lines": 10
+    },
+    {
+     "i": 108,
+     "question_id": "q108",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "multi_hop",
+     "question": "Which outage might be affecting Neha Kapoor?",
+     "gold": [
+      "road works cut in chinchwad"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fault on our hub near you"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "a fault on the hub near Neha",
+     "cited_ids": [
+      "ep-e69dd989"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 40.2,
+     "context_lines": 10
+    },
+    {
+     "i": 109,
+     "question_id": "q109",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "multi_hop",
+     "question": "Which outage might be affecting Tara Banerjee?",
+     "gold": [
+      "fiber cut on fc road"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "area uplink upgrade"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "area uplink upgrade",
+     "cited_ids": [
+      "ep-f4cf5aa5",
+      "ep-038626e8"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 43.6,
+     "context_lines": 10
+    },
+    {
+     "i": 111,
+     "question_id": "q111",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "multi_hop",
+     "question": "Which outage might be affecting Chirag Jain?",
+     "gold": [
+      "road works cut in chinchwad"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "fault on our hub near you"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "fault on our hub near you",
+     "cited_ids": [
+      "ep-abcce24f"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 40.5,
+     "context_lines": 10
+    },
+    {
+     "i": 113,
+     "question_id": "q113",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "multi_hop",
+     "question": "Which customers might be affected by the substation failure in gachibowli?",
+     "gold": [
+      "farhan khan",
+      "gaurav chawla",
+      "qasim ali",
+      "rahul sharma",
+      "wasim akhtar"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "The provided memory does not contain information about a substation failure in Gachibowli or which customers are affected by it.",
+     "cited_ids": [],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 49.3,
+     "context_lines": 10
+    },
+    {
+     "i": 115,
+     "question_id": "q115",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "multi_hop",
+     "question": "Which customers might be affected by the fiber cut on fc road?",
+     "gold": [
+      "esha iyer",
+      "fatima sheikh",
+      "omar siddiqui",
+      "tara banerjee"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "unknown",
+     "cited_ids": [],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 45.5,
+     "context_lines": 10
+    },
+    {
+     "i": 117,
+     "question_id": "q117",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "multi_hop",
+     "question": "Which city does the customer with ticket PML-2051 live in?",
+     "gold": [
+      "nashik"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "The provided memory lines do not contain information about the city where the customer with ticket PML-2051 lives.",
+     "cited_ids": [],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 45.7,
+     "context_lines": 10
+    },
+    {
+     "i": 118,
+     "question_id": "q118",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "multi_hop",
+     "question": "Which city does the customer with ticket PML-2056 live in?",
+     "gold": [
+      "pune"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "",
+     "cited_ids": [],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 47.5,
+     "context_lines": 10
+    },
+    {
+     "i": 119,
+     "question_id": "q119",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "multi_hop",
+     "question": "Which city does the customer with ticket PML-2067 live in?",
+     "gold": [
+      "pune"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "The provided memory lines do not contain information about the city where the customer with ticket PML-2067 lives.",
+     "cited_ids": [],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 45.7,
+     "context_lines": 10
+    },
+    {
+     "i": 121,
+     "question_id": "q121",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "multi_hop",
+     "question": "Which plan is the customer with ticket PML-2052 on?",
+     "gold": [
+      "fiber 100"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "The provided memory lines do not contain information about the plan associated with ticket PML-2052.",
+     "cited_ids": [],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 47.6,
+     "context_lines": 10
+    },
+    {
+     "i": 123,
+     "question_id": "q123",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "multi_hop",
+     "question": "Which city does the customer with ticket PML-2066 live in?",
+     "gold": [
+      "navi mumbai"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "The provided memory lines do not contain information about ticket PML-2066 or the city of residence for any customer.",
+     "cited_ids": [],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 46.7,
+     "context_lines": 10
+    },
+    {
+     "i": 125,
+     "question_id": "q125",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "procedural",
+     "question": "Which fix has worked before for gaming lag and high latency?",
+     "gold": [
+      "enable qos"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "unknown",
+     "cited_ids": [],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 45.9,
+     "context_lines": 10
+    },
+    {
+     "i": 127,
+     "question_id": "q127",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "procedural",
+     "question": "Which fix has worked before for the router rebooting by itself?",
+     "gold": [
+      "firmware update"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "restart router"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Restart router",
+     "cited_ids": [
+      "ep-159f6d8d",
+      "ep-96f08e46",
+      "ep-c2f5a3d8"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 46.4,
+     "context_lines": 10
+    },
+    {
+     "i": 128,
+     "question_id": "q128",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "procedural",
+     "question": "Which fix has worked before for slow speeds?",
+     "gold": [
+      "reset line profile"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "remote box restart"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "remote box restart",
+     "cited_ids": [
+      "ep-471ad48b",
+      "ep-88ab3b1a",
+      "ep-2a48a08e"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 41.5,
+     "context_lines": 10
+    },
+    {
+     "i": 129,
+     "question_id": "q129",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "procedural",
+     "question": "Which fix has worked before for weak wifi in far rooms?",
+     "gold": [
+      "add mesh extender"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "change wifi channel"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "change wifi channel",
+     "cited_ids": [
+      "ep-e6571a47",
+      "ep-bd1b93f4",
+      "ep-90403933"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 46.1,
+     "context_lines": 10
+    },
+    {
+     "i": 131,
+     "question_id": "q131",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "procedural",
+     "question": "What fixed Priya Naik's ticket PML-2072?",
+     "gold": [
+      "replace fiber cable"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "replace fiber cable"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "replace fiber cable",
+     "cited_ids": [
+      "ep-7e7ff07b",
+      "ep-4411d1ef"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 45.0,
+     "context_lines": 10
+    },
+    {
+     "i": 133,
+     "question_id": "q133",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "procedural",
+     "question": "What fixed Eshan Ghosh's ticket PML-2066?",
+     "gold": [
+      "add mesh extender"
+     ],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "add mesh extender"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "add mesh extender",
+     "cited_ids": [
+      "ep-cdd87f02",
+      "ep-6ce21e3a"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 45.7,
+     "context_lines": 10
+    },
+    {
+     "i": 135,
+     "question_id": "q135",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "procedural",
+     "question": "What fixed Jaya Reddy's ticket PML-2046?",
+     "gold": [
+      "firmware update"
+     ],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "firmware update"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "firmware update",
+     "cited_ids": [
+      "ep-657f4630",
+      "ep-4de4bb55"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 44.5,
+     "context_lines": 10
+    },
+    {
+     "i": 137,
+     "question_id": "q137",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "procedural",
+     "question": "Which fixes were tried on ticket PML-2071?",
+     "gold": [
+      "move router"
+     ],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "move router"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Move router",
+     "cited_ids": [
+      "ep-6aa5cb66"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 46.1,
+     "context_lines": 10
+    },
+    {
+     "i": 138,
+     "question_id": "q138",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "procedural",
+     "question": "Which fixes were tried on ticket PML-2045?",
+     "gold": [
+      "enable qos",
+      "restart router"
+     ],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "restart router"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "restart router",
+     "cited_ids": [
+      "ep-159f6d8d"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 48.9,
+     "context_lines": 10
+    },
+    {
+     "i": 139,
+     "question_id": "q139",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "procedural",
+     "question": "Which fixes were tried on ticket PML-2042?",
+     "gold": [
+      "restart router"
+     ],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [
+      "restart router"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "restart router",
+     "cited_ids": [
+      "ep-b3ac7754"
+     ],
+     "correct": true,
+     "error": false,
+     "evidence": true,
+     "retrieval_ms": 45.8,
+     "context_lines": 10
+    },
+    {
+     "i": 141,
+     "question_id": "q141",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "procedural",
+     "question": "Which fixes were tried on ticket PML-2067?",
+     "gold": [
+      "reset line profile"
+     ],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": false,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "unknown",
+     "cited_ids": [],
+     "correct": false,
+     "error": false,
+     "evidence": false,
+     "retrieval_ms": 46.0,
+     "context_lines": 10
+    },
+    {
+     "i": 143,
+     "question_id": "q143",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "unknown",
+     "question": "What router does Gita Pillai have?",
+     "gold": [],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": true,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "unknown",
+     "cited_ids": [],
+     "correct": true,
+     "error": false,
+     "evidence": null,
+     "retrieval_ms": 40.6,
+     "context_lines": 10
+    },
+    {
+     "i": 145,
+     "question_id": "q145",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "unknown",
+     "question": "What router does Sanjay Patil have?",
+     "gold": [],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": true,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "unknown",
+     "cited_ids": [],
+     "correct": true,
+     "error": false,
+     "evidence": null,
+     "retrieval_ms": 39.0,
+     "context_lines": 10
+    },
+    {
+     "i": 147,
+     "question_id": "q147",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "unknown",
+     "question": "What is the status of Bob Menon's ticket?",
+     "gold": [],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": true,
+     "collision": false,
+     "values": [
+      "crew is already fixing it, so there's no need to call"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "A crew is already fixing the fault on the hub near Bob, so there is no need to call.",
+     "cited_ids": [
+      "ep-f5740368"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": null,
+     "retrieval_ms": 43.4,
+     "context_lines": 10
+    },
+    {
+     "i": 148,
+     "question_id": "q148",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "unknown",
+     "question": "What is the status of Carol Dsouza's ticket?",
+     "gold": [],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": true,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "",
+     "cited_ids": [],
+     "correct": true,
+     "error": false,
+     "evidence": null,
+     "retrieval_ms": 45.2,
+     "context_lines": 10
+    },
+    {
+     "i": 149,
+     "question_id": "q149",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "unknown",
+     "question": "What is the status of Farhan Khan's ticket?",
+     "gold": [],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": true,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "I don't have that information.",
+     "cited_ids": [],
+     "correct": true,
+     "error": false,
+     "evidence": null,
+     "retrieval_ms": 44.4,
+     "context_lines": 10
+    },
+    {
+     "i": 151,
+     "question_id": "q151",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "unknown",
+     "question": "Which city does Ivan Shah live in?",
+     "gold": [],
+     "model": "qwen/qwen3.8-27b",
+     "expect_unknown": true,
+     "collision": false,
+     "values": [
+      "pune"
+     ],
+     "conflict": true,
+     "unknown": false,
+     "answer": "pune",
+     "cited_ids": [
+      "ep-2020790d",
+      "ep-1f5bd341"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": null,
+     "retrieval_ms": 40.3,
+     "context_lines": 10
+    },
+    {
+     "i": 153,
+     "question_id": "q153",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "unknown",
+     "question": "Which city does Meera Iyer live in?",
+     "gold": [],
+     "model": "groq2:qwen/qwen3.8-27b",
+     "expect_unknown": true,
+     "collision": false,
+     "values": [
+      "mumbai"
+     ],
+     "conflict": false,
+     "unknown": false,
+     "answer": "Mumbai",
+     "cited_ids": [
+      "ep-f95a22cf"
+     ],
+     "correct": false,
+     "error": false,
+     "evidence": null,
+     "retrieval_ms": 42.3,
+     "context_lines": 10
+    },
+    {
+     "i": 155,
+     "question_id": "q155",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "unknown",
+     "question": "Which outage affects Thane?",
+     "gold": [],
+     "model": "groq3:qwen/qwen3.8-27b",
+     "expect_unknown": true,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "unknown",
+     "cited_ids": [],
+     "correct": true,
+     "error": false,
+     "evidence": null,
+     "retrieval_ms": 39.9,
+     "context_lines": 10
+    },
+    {
+     "i": 157,
+     "question_id": "q157",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "unknown",
+     "question": "What is Carol Dsouza's email address?",
+     "gold": [],
+     "model": "groq4:qwen/qwen3.8-27b",
+     "expect_unknown": true,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "I don't have Carol Dsouza's email address in the provided memory.",
+     "cited_ids": [],
+     "correct": true,
+     "error": false,
+     "evidence": null,
+     "retrieval_ms": 43.4,
+     "context_lines": 10
+    },
+    {
+     "i": 158,
+     "question_id": "q158",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "unknown",
+     "question": "What fixed ticket PML-2042?",
+     "gold": [],
+     "model": "groq5:openai/gpt-oss-120b",
+     "expect_unknown": true,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "",
+     "cited_ids": [],
+     "correct": true,
+     "error": false,
+     "evidence": null,
+     "retrieval_ms": 40.5,
+     "context_lines": 10
+    },
+    {
+     "i": 159,
+     "question_id": "q159",
+     "system_name": "B1",
+     "run_id": "run-20261015-140300",
+     "type": "unknown",
+     "question": "What fixed ticket PML-2048?",
+     "gold": [],
+     "model": "groq5:qwen/qwen3.8-27b",
+     "expect_unknown": true,
+     "collision": false,
+     "values": [],
+     "conflict": false,
+     "unknown": true,
+     "answer": "unknown",
+     "cited_ids": [],
+     "correct": true,
+     "error": false,
+     "evidence": null,
+     "retrieval_ms": 41.9,
+     "context_lines": 10
+    }
+   ],
+   "n_target": 160,
+   "pending": [
+    0,
+    2,
+    4,
+    6,
+    10,
+    12,
+    14,
+    16,
+    20,
+    22,
+    24,
+    26,
+    30,
+    32,
+    34,
+    36,
+    40,
+    42,
+    44,
+    46,
+    50,
+    52,
+    54,
+    56,
+    60,
+    62,
+    64,
+    66,
+    70,
+    72,
+    74,
+    76,
+    80,
+    82,
+    84,
+    86,
+    90,
+    92,
+    94,
+    96,
+    100,
+    102,
+    104,
+    106,
+    110,
+    112,
+    114,
+    116,
+    120,
+    122,
+    124,
+    126,
+    130,
+    132,
+    134,
+    136,
+    140,
+    142,
+    144,
+    146,
+    150,
+    152,
+    154,
+    156
+   ],
+   "summary": {
+    "overall": {
+     "n": 96,
+     "accuracy": 0.5417,
+     "ci95": [
+      0.4423,
+      0.6378
+     ],
+     "evidence_recall": 0.7176
+    },
+    "by_type": {
+     "belief_time": {
+      "n": 11,
+      "accuracy": 0.8182,
+      "ci95": [
+       0.523,
+       0.9486
+      ],
+      "evidence_recall": 0.9091
+     },
+     "completeness": {
+      "n": 11,
+      "accuracy": 0.3636,
+      "ci95": [
+       0.1517,
+       0.6462
+      ],
+      "evidence_recall": 0.9091
+     },
+     "current": {
+      "n": 10,
+      "accuracy": 0.8,
+      "ci95": [
+       0.4902,
+       0.9433
+      ],
+      "evidence_recall": 0.8
+     },
+     "disagreement": {
+      "n": 9,
+      "accuracy": 0.0,
+      "ci95": [
+       0.0,
+       0.2992
+      ],
+      "evidence_recall": 0.8889
+     },
+     "handoff": {
+      "n": 11,
+      "accuracy": 0.8182,
+      "ci95": [
+       0.523,
+       0.9486
+      ],
+      "evidence_recall": 0.8182
+     },
+     "multi_hop": {
+      "n": 11,
+      "accuracy": 0.0,
+      "ci95": [
+       0.0,
+       0.2588
+      ],
+      "evidence_recall": 0.0
+     },
+     "procedural": {
+      "n": 11,
+      "accuracy": 0.4545,
+      "ci95": [
+       0.2127,
+       0.7199
+      ],
+      "evidence_recall": 0.4545
+     },
+     "unknown": {
+      "n": 11,
+      "accuracy": 0.7273,
+      "ci95": [
+       0.4343,
+       0.9025
+      ],
+      "evidence_recall": null
+     },
+     "world_time": {
+      "n": 11,
+      "accuracy": 0.8182,
+      "ci95": [
+       0.523,
+       0.9486
+      ],
+      "evidence_recall": 1.0
+     }
+    },
+    "by_model": {
+     "groq2:qwen/qwen3.8-27b": {
+      "n": 16,
+      "accuracy": 0.625,
+      "ci95": [
+       0.3864,
+       0.8152
+      ],
+      "evidence_recall": 0.7143
+     },
+     "groq3:qwen/qwen3.8-27b": {
+      "n": 16,
+      "accuracy": 0.75,
+      "ci95": [
+       0.505,
+       0.8982
+      ],
+      "evidence_recall": 0.8571
+     },
+     "groq4:qwen/qwen3.8-27b": {
+      "n": 16,
+      "accuracy": 0.5,
+      "ci95": [
+       0.28,
+       0.72
+      ],
+      "evidence_recall": 0.7143
+     },
+     "groq5:openai/gpt-oss-120b": {
+      "n": 16,
+      "accuracy": 0.25,
+      "ci95": [
+       0.1018,
+       0.495
+      ],
+      "evidence_recall": 0.5714
+     },
+     "groq5:qwen/qwen3.8-27b": {
+      "n": 16,
+      "accuracy": 0.5625,
+      "ci95": [
+       0.3318,
+       0.769
+      ],
+      "evidence_recall": 0.6429
+     },
+     "qwen/qwen3.8-27b": {
+      "n": 16,
+      "accuracy": 0.5625,
+      "ci95": [
+       0.3318,
+       0.769
+      ],
+      "evidence_recall": 0.8
+     }
+    },
+    "collision_questions": {
+     "n": 4,
+     "accuracy": 1.0,
+     "ci95": [
+      0.5101,
+      1.0
+     ],
+     "evidence_recall": 1.0
+    },
+    "abstention": {
+     "precision": 0.32,
+     "recall": 0.7273,
+     "hallucinations": 3,
+     "false_refusals": 17,
+     "should_refuse": 11
+    },
+    "retrieval_ms": {
+     "p50": 44.8,
+     "p95": 51.5
+    },
+    "avg_context_lines": 10.0
+   }
+  }
+ },
+ "tenant": "pml-bench",
+ "subset": [
+  36,
+  54,
+  0,
+  72,
+  88,
+  106,
+  124,
+  142,
+  18,
+  37,
+  55,
+  1,
+  73,
+  89,
+  107,
+  125,
+  143,
+  19,
+  38,
+  56,
+  2,
+  74,
+  90,
+  108,
+  126,
+  144,
+  20,
+  39,
+  57,
+  3,
+  75,
+  91,
+  109,
+  127,
+  145,
+  21,
+  40,
+  58,
+  4,
+  76,
+  92,
+  110,
+  128,
+  146,
+  22,
+  41,
+  59,
+  5,
+  77,
+  93,
+  111,
+  129,
+  147,
+  23,
+  42,
+  60,
+  6,
+  78,
+  94,
+  112,
+  130,
+  148,
+  24
+ ],
+ "todo": [],
+ "dataset": "40 customers, 556 customer turns, 160 questions",
+ "resume": "python -m eval.run_eval --tenant pml-bench --phases main",
+ "run_id": "run-20261015-140300"
+}

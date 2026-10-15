@@ -247,9 +247,10 @@ def _place_name(p):
 
 
 def plan_turn(tenant, *, customer, text, learned, ticket, history, first_turn, plans=(), at=None, session_id=None,
-              log=None):
-    """Decide this turn. history: [(speaker, text)] before this message. plans: local price list for the sales ask."""
-    facts = retrieve.customer_facts(tenant, customer, log=log)
+              log=None, facts=None):
+    """Decide this turn. history: [(speaker, text)] before this message. plans: local price list for the sales ask.
+    facts: customer_facts() already read this turn, if any."""
+    facts = retrieve.customer_facts(tenant, customer, log=log) if facts is None else facts
     now = [f for f in facts if f["active"]]
     plan = Plan(mode=_mode(text, now, ticket), prefix=[], notes=[], writes=[], retires=[])
     waiting = {f["object"] for f in now if f["predicate"] == "awaiting"}
