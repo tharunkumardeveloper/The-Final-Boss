@@ -1,0 +1,8327 @@
+{
+ "company": "Ping Me Later",
+ "customers": [
+  "bob menon",
+  "carol dsouza",
+  "dev malhotra",
+  "esha iyer",
+  "farhan khan",
+  "gita pillai",
+  "hari kumar",
+  "ishaan verma",
+  "jaya reddy",
+  "kabir singh",
+  "lata joshi",
+  "manav gupta",
+  "neha kapoor",
+  "omar siddiqui",
+  "pooja bhat",
+  "qasim ali",
+  "ritu saxena",
+  "sanjay patil",
+  "tara banerjee",
+  "uday rao",
+  "vikram desai",
+  "wasim akhtar",
+  "yamini krishnan",
+  "zoya mirza",
+  "aditi kulkarni",
+  "bhavna shetty",
+  "chirag jain",
+  "divya menon",
+  "eshan ghosh",
+  "fatima sheikh",
+  "gaurav chawla",
+  "hema subramanian",
+  "alice rao",
+  "alice roy",
+  "rahul shah",
+  "rahul sharma",
+  "priya nair",
+  "priya naik",
+  "arjun mehta",
+  "arjun mehra"
+ ],
+ "events": [
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "session_id": "neha-kapoor-s1",
+   "at": "2026-09-01T10:00:00",
+   "text": "My place is in Pimpri.",
+   "expect": [
+    [
+     "lives_in",
+     "pimpri"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "session_id": "zoya-mirza-s1",
+   "at": "2026-09-01T10:00:00",
+   "text": "Our flat is in Nashik.",
+   "expect": [
+    [
+     "lives_in",
+     "nashik"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "session_id": "alice-roy-s1",
+   "at": "2026-09-01T10:00:00",
+   "text": "My place is in Pimpri.",
+   "expect": [
+    [
+     "lives_in",
+     "pimpri"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul shah",
+   "session_id": "rahul-shah-s1",
+   "at": "2026-09-01T10:00:00",
+   "text": "We're based in Mumbai.",
+   "expect": [
+    [
+     "lives_in",
+     "mumbai"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "session_id": "neha-kapoor-s1",
+   "at": "2026-09-01T10:02:00",
+   "text": "We pay for Basic 50.",
+   "expect": [
+    [
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "session_id": "zoya-mirza-s1",
+   "at": "2026-09-01T10:02:00",
+   "text": "I'm on the Fiber 100 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "session_id": "alice-roy-s1",
+   "at": "2026-09-01T10:02:00",
+   "text": "We pay for Fiber 300.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul shah",
+   "session_id": "rahul-shah-s1",
+   "at": "2026-09-01T10:02:00",
+   "text": "My plan is Fiber 1000.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "session_id": "neha-kapoor-s1",
+   "at": "2026-09-01T10:04:00",
+   "text": "My router is an AX1800.",
+   "expect": [
+    [
+     "has_router",
+     "ax1800"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "session_id": "zoya-mirza-s1",
+   "at": "2026-09-01T10:04:00",
+   "text": "I use the AX5400 router.",
+   "expect": [
+    [
+     "has_router",
+     "ax5400"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "session_id": "alice-roy-s1",
+   "at": "2026-09-01T10:04:00",
+   "text": "My router is an AX3000.",
+   "expect": [
+    [
+     "has_router",
+     "ax3000"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul shah",
+   "session_id": "rahul-shah-s1",
+   "at": "2026-09-01T10:04:00",
+   "text": "I use the AX3000 router.",
+   "expect": [
+    [
+     "has_router",
+     "ax3000"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "session_id": "neha-kapoor-s1",
+   "at": "2026-09-01T10:06:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "session_id": "zoya-mirza-s1",
+   "at": "2026-09-01T10:06:00",
+   "text": "Good morning!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "session_id": "alice-roy-s1",
+   "at": "2026-09-01T10:06:00",
+   "text": "Please reach me by email.",
+   "expect": [
+    [
+     "prefers_channel",
+     "email"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul shah",
+   "session_id": "rahul-shah-s1",
+   "at": "2026-09-01T10:06:00",
+   "text": "Please reach me by WhatsApp.",
+   "expect": [
+    [
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "session_id": "neha-kapoor-s1",
+   "at": "2026-09-01T10:08:00",
+   "text": "SMS works best for me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "session_id": "zoya-mirza-s1",
+   "at": "2026-09-01T10:08:00",
+   "text": "Sorry, I was away for a bit.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "session_id": "alice-roy-s1",
+   "at": "2026-09-01T10:08:00",
+   "text": "My Android phone is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "android phone"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul shah",
+   "session_id": "rahul-shah-s1",
+   "at": "2026-09-01T10:08:00",
+   "text": "My Xbox is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "session_id": "neha-kapoor-s1",
+   "at": "2026-09-01T10:10:00",
+   "text": "I also have a desktop PC on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "desktop pc"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "session_id": "zoya-mirza-s1",
+   "at": "2026-09-01T10:10:00",
+   "text": "SMS works best for me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "session_id": "alice-roy-s1",
+   "at": "2026-09-01T10:10:00",
+   "text": "My PS5 is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "ps5"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul shah",
+   "session_id": "rahul-shah-s1",
+   "at": "2026-09-01T10:10:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "session_id": "neha-kapoor-s1",
+   "at": "2026-09-01T10:12:00",
+   "text": "I also have a smart TV on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "session_id": "zoya-mirza-s1",
+   "at": "2026-09-01T10:12:00",
+   "text": "My iPhone is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "iphone"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "session_id": "alice-roy-s1",
+   "at": "2026-09-01T10:12:00",
+   "text": "ok thx",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul shah",
+   "session_id": "rahul-shah-s1",
+   "at": "2026-09-01T10:12:00",
+   "text": "I also have a Android phone on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "android phone"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "session_id": "zoya-mirza-s1",
+   "at": "2026-09-01T10:14:00",
+   "text": "My desktop PC is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "desktop pc"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "bob menon",
+   "session_id": "bob-menon-s1",
+   "at": "2026-09-02T10:00:00",
+   "text": "ok thx",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "ishaan verma",
+   "session_id": "ishaan-verma-s1",
+   "at": "2026-09-02T10:00:00",
+   "text": "I live in Pimpri.",
+   "expect": [
+    [
+     "lives_in",
+     "pimpri"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "session_id": "rahul-sharma-s1",
+   "at": "2026-09-02T10:00:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "session_id": "arjun-mehta-s1",
+   "at": "2026-09-02T10:00:00",
+   "text": "I live in Mysuru.",
+   "expect": [
+    [
+     "lives_in",
+     "mysuru"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "bob menon",
+   "session_id": "bob-menon-s1",
+   "at": "2026-09-02T10:02:00",
+   "text": "We're based in Pimpri.",
+   "expect": [
+    [
+     "lives_in",
+     "pimpri"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "ishaan verma",
+   "session_id": "ishaan-verma-s1",
+   "at": "2026-09-02T10:02:00",
+   "text": "I'm usually free after 6pm.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "session_id": "rahul-sharma-s1",
+   "at": "2026-09-02T10:02:00",
+   "text": "My place is in Hyderabad.",
+   "expect": [
+    [
+     "lives_in",
+     "hyderabad"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "session_id": "arjun-mehta-s1",
+   "at": "2026-09-02T10:02:00",
+   "text": "We pay for Fiber 1000.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "bob menon",
+   "session_id": "bob-menon-s1",
+   "at": "2026-09-02T10:04:00",
+   "text": "My plan is Fiber 100.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "ishaan verma",
+   "session_id": "ishaan-verma-s1",
+   "at": "2026-09-02T10:04:00",
+   "text": "I'm on the Fiber 100 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "session_id": "rahul-sharma-s1",
+   "at": "2026-09-02T10:04:00",
+   "text": "We pay for Basic 50.",
+   "expect": [
+    [
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "session_id": "arjun-mehta-s1",
+   "at": "2026-09-02T10:04:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "bob menon",
+   "session_id": "bob-menon-s1",
+   "at": "2026-09-02T10:06:00",
+   "text": "ok thx",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "ishaan verma",
+   "session_id": "ishaan-verma-s1",
+   "at": "2026-09-02T10:06:00",
+   "text": "I use the AX5400 router.",
+   "expect": [
+    [
+     "has_router",
+     "ax5400"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "session_id": "rahul-sharma-s1",
+   "at": "2026-09-02T10:06:00",
+   "text": "My router is an AX1800.",
+   "expect": [
+    [
+     "has_router",
+     "ax1800"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "session_id": "arjun-mehta-s1",
+   "at": "2026-09-02T10:06:00",
+   "text": "The router at home is the PML Hub 6 model.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "bob menon",
+   "session_id": "bob-menon-s1",
+   "at": "2026-09-02T10:08:00",
+   "text": "SMS is the best way to reach me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "session_id": "rahul-sharma-s1",
+   "at": "2026-09-02T10:08:00",
+   "text": "Please reach me by email.",
+   "expect": [
+    [
+     "prefers_channel",
+     "email"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "session_id": "arjun-mehta-s1",
+   "at": "2026-09-02T10:08:00",
+   "text": "WhatsApp is the best way to reach me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "bob menon",
+   "session_id": "bob-menon-s1",
+   "at": "2026-09-02T10:10:00",
+   "text": "We use a smart TV at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "session_id": "rahul-sharma-s1",
+   "at": "2026-09-02T10:10:00",
+   "text": "My smart TV is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "session_id": "arjun-mehta-s1",
+   "at": "2026-09-02T10:10:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "session_id": "rahul-sharma-s1",
+   "at": "2026-09-02T10:12:00",
+   "text": "I also have a Xbox on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "session_id": "pooja-bhat-s1",
+   "at": "2026-09-03T10:00:00",
+   "text": "My place is in Navi Mumbai.",
+   "expect": [
+    [
+     "lives_in",
+     "navi mumbai"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "session_id": "divya-menon-s1",
+   "at": "2026-09-03T10:00:00",
+   "text": "Our flat is in Nashik.",
+   "expect": [
+    [
+     "lives_in",
+     "nashik"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "session_id": "pooja-bhat-s1",
+   "at": "2026-09-03T10:02:00",
+   "text": "My plan is Fiber 300.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "session_id": "divya-menon-s1",
+   "at": "2026-09-03T10:02:00",
+   "text": "I'm on the Fiber 1000 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "session_id": "pooja-bhat-s1",
+   "at": "2026-09-03T10:04:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "session_id": "divya-menon-s1",
+   "at": "2026-09-03T10:04:00",
+   "text": "The router at home is the AX1800 model.",
+   "expect": [
+    [
+     "has_router",
+     "ax1800"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "session_id": "pooja-bhat-s1",
+   "at": "2026-09-03T10:06:00",
+   "text": "The router at home is the AX3000 model.",
+   "expect": [
+    [
+     "has_router",
+     "ax3000"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "session_id": "divya-menon-s1",
+   "at": "2026-09-03T10:06:00",
+   "text": "Okay, I'll wait for your update.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "session_id": "pooja-bhat-s1",
+   "at": "2026-09-03T10:08:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "session_id": "divya-menon-s1",
+   "at": "2026-09-03T10:08:00",
+   "text": "Please reach me by WhatsApp.",
+   "expect": [
+    [
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "session_id": "pooja-bhat-s1",
+   "at": "2026-09-03T10:10:00",
+   "text": "WhatsApp is the best way to reach me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "session_id": "divya-menon-s1",
+   "at": "2026-09-03T10:10:00",
+   "text": "We use a iPhone at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "iphone"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "session_id": "pooja-bhat-s1",
+   "at": "2026-09-03T10:12:00",
+   "text": "We use a smart TV at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "session_id": "divya-menon-s1",
+   "at": "2026-09-03T10:12:00",
+   "text": "My PS5 is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "ps5"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "session_id": "pooja-bhat-s1",
+   "at": "2026-09-03T10:14:00",
+   "text": "We use a Android phone at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "android phone"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "farhan khan",
+   "session_id": "farhan-khan-s1",
+   "at": "2026-09-04T10:00:00",
+   "text": "Our flat is in Hyderabad.",
+   "expect": [
+    [
+     "lives_in",
+     "hyderabad"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "session_id": "lata-joshi-s1",
+   "at": "2026-09-04T10:00:00",
+   "text": "Our flat is in Secunderabad.",
+   "expect": [
+    [
+     "lives_in",
+     "secunderabad"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "manav gupta",
+   "session_id": "manav-gupta-s1",
+   "at": "2026-09-04T10:00:00",
+   "text": "My place is in Bengaluru.",
+   "expect": [
+    [
+     "lives_in",
+     "bengaluru"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "session_id": "sanjay-patil-s1",
+   "at": "2026-09-04T10:00:00",
+   "text": "I live in Pimpri.",
+   "expect": [
+    [
+     "lives_in",
+     "pimpri"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "session_id": "uday-rao-s1",
+   "at": "2026-09-04T10:00:00",
+   "text": "My place is in Hyderabad.",
+   "expect": [
+    [
+     "lives_in",
+     "hyderabad"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "session_id": "yamini-krishnan-s1",
+   "at": "2026-09-04T10:00:00",
+   "text": "Our flat is in Pune.",
+   "expect": [
+    [
+     "lives_in",
+     "pune"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "session_id": "chirag-jain-s1",
+   "at": "2026-09-04T10:00:00",
+   "text": "My place is in Pimpri.",
+   "expect": [
+    [
+     "lives_in",
+     "pimpri"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice rao",
+   "session_id": "alice-rao-s1",
+   "at": "2026-09-04T10:00:00",
+   "text": "My place is in Thane.",
+   "expect": [
+    [
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehra",
+   "session_id": "arjun-mehra-s1",
+   "at": "2026-09-04T10:00:00",
+   "text": "My place is in Navi Mumbai.",
+   "expect": [
+    [
+     "lives_in",
+     "navi mumbai"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "farhan khan",
+   "session_id": "farhan-khan-s1",
+   "at": "2026-09-04T10:02:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "session_id": "lata-joshi-s1",
+   "at": "2026-09-04T10:02:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "manav gupta",
+   "session_id": "manav-gupta-s1",
+   "at": "2026-09-04T10:02:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "session_id": "sanjay-patil-s1",
+   "at": "2026-09-04T10:02:00",
+   "text": "My plan is Fiber 1000.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "session_id": "uday-rao-s1",
+   "at": "2026-09-04T10:02:00",
+   "text": "I'm on the Basic 50 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "session_id": "yamini-krishnan-s1",
+   "at": "2026-09-04T10:02:00",
+   "text": "Okay, I'll wait for your update.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "session_id": "chirag-jain-s1",
+   "at": "2026-09-04T10:02:00",
+   "text": "Okay, I'll wait for your update.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice rao",
+   "session_id": "alice-rao-s1",
+   "at": "2026-09-04T10:02:00",
+   "text": "We pay for Fiber 1000.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehra",
+   "session_id": "arjun-mehra-s1",
+   "at": "2026-09-04T10:02:00",
+   "text": "My plan is Fiber 300.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "farhan khan",
+   "session_id": "farhan-khan-s1",
+   "at": "2026-09-04T10:04:00",
+   "text": "I'm on the Fiber 1000 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "session_id": "lata-joshi-s1",
+   "at": "2026-09-04T10:04:00",
+   "text": "My plan is Fiber 300.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "manav gupta",
+   "session_id": "manav-gupta-s1",
+   "at": "2026-09-04T10:04:00",
+   "text": "My plan is Fiber 100.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "session_id": "sanjay-patil-s1",
+   "at": "2026-09-04T10:04:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "session_id": "uday-rao-s1",
+   "at": "2026-09-04T10:04:00",
+   "text": "I also have a iPhone on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "iphone"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "session_id": "yamini-krishnan-s1",
+   "at": "2026-09-04T10:04:00",
+   "text": "We pay for Basic 50.",
+   "expect": [
+    [
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "session_id": "chirag-jain-s1",
+   "at": "2026-09-04T10:04:00",
+   "text": "I'm on the Fiber 100 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice rao",
+   "session_id": "alice-rao-s1",
+   "at": "2026-09-04T10:04:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehra",
+   "session_id": "arjun-mehra-s1",
+   "at": "2026-09-04T10:04:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "farhan khan",
+   "session_id": "farhan-khan-s1",
+   "at": "2026-09-04T10:06:00",
+   "text": "The router at home is the PML Hub 6 model.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "session_id": "lata-joshi-s1",
+   "at": "2026-09-04T10:06:00",
+   "text": "I use the AX5400 router.",
+   "expect": [
+    [
+     "has_router",
+     "ax5400"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "manav gupta",
+   "session_id": "manav-gupta-s1",
+   "at": "2026-09-04T10:06:00",
+   "text": "The router at home is the AX3000 model.",
+   "expect": [
+    [
+     "has_router",
+     "ax3000"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "session_id": "sanjay-patil-s1",
+   "at": "2026-09-04T10:06:00",
+   "text": "Please reach me by phone.",
+   "expect": [
+    [
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "session_id": "uday-rao-s1",
+   "at": "2026-09-04T10:06:00",
+   "text": "My Android phone is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "android phone"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "session_id": "yamini-krishnan-s1",
+   "at": "2026-09-04T10:06:00",
+   "text": "I use the PML Hub 6 router.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "session_id": "chirag-jain-s1",
+   "at": "2026-09-04T10:06:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice rao",
+   "session_id": "alice-rao-s1",
+   "at": "2026-09-04T10:06:00",
+   "text": "My router is an AX5400.",
+   "expect": [
+    [
+     "has_router",
+     "ax5400"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehra",
+   "session_id": "arjun-mehra-s1",
+   "at": "2026-09-04T10:06:00",
+   "text": "The router at home is the PML Hub 6 Pro model.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "farhan khan",
+   "session_id": "farhan-khan-s1",
+   "at": "2026-09-04T10:08:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "session_id": "lata-joshi-s1",
+   "at": "2026-09-04T10:08:00",
+   "text": "SMS is the best way to reach me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "manav gupta",
+   "session_id": "manav-gupta-s1",
+   "at": "2026-09-04T10:08:00",
+   "text": "Phone works best for me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "session_id": "sanjay-patil-s1",
+   "at": "2026-09-04T10:08:00",
+   "text": "I also have a Android phone on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "android phone"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "session_id": "uday-rao-s1",
+   "at": "2026-09-04T10:08:00",
+   "text": "Okay, I'll wait for your update.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "session_id": "yamini-krishnan-s1",
+   "at": "2026-09-04T10:08:00",
+   "text": "SMS is the best way to reach me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "session_id": "chirag-jain-s1",
+   "at": "2026-09-04T10:08:00",
+   "text": "My router is an AX5400.",
+   "expect": [
+    [
+     "has_router",
+     "ax5400"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice rao",
+   "session_id": "alice-rao-s1",
+   "at": "2026-09-04T10:08:00",
+   "text": "WhatsApp works best for me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehra",
+   "session_id": "arjun-mehra-s1",
+   "at": "2026-09-04T10:08:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "session_id": "lata-joshi-s1",
+   "at": "2026-09-04T10:10:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "session_id": "sanjay-patil-s1",
+   "at": "2026-09-04T10:10:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "session_id": "yamini-krishnan-s1",
+   "at": "2026-09-04T10:10:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "session_id": "chirag-jain-s1",
+   "at": "2026-09-04T10:10:00",
+   "text": "SMS works best for me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice rao",
+   "session_id": "alice-rao-s1",
+   "at": "2026-09-04T10:10:00",
+   "text": "My iPad is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehra",
+   "session_id": "arjun-mehra-s1",
+   "at": "2026-09-04T10:10:00",
+   "text": "Email is the best way to reach me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "email"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "session_id": "lata-joshi-s1",
+   "at": "2026-09-04T10:12:00",
+   "text": "My Echo Dot is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "echo dot"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "session_id": "sanjay-patil-s1",
+   "at": "2026-09-04T10:12:00",
+   "text": "We use a smart TV at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "session_id": "yamini-krishnan-s1",
+   "at": "2026-09-04T10:12:00",
+   "text": "We use a laptop at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "laptop"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "session_id": "lata-joshi-s1",
+   "at": "2026-09-04T10:14:00",
+   "text": "My Android phone is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "android phone"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "carol dsouza",
+   "session_id": "carol-dsouza-s1",
+   "at": "2026-09-05T10:00:00",
+   "text": "I live in Thane.",
+   "expect": [
+    [
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "session_id": "kabir-singh-s1",
+   "at": "2026-09-05T10:00:00",
+   "text": "I live in Bengaluru.",
+   "expect": [
+    [
+     "lives_in",
+     "bengaluru"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "vikram desai",
+   "session_id": "vikram-desai-s1",
+   "at": "2026-09-05T10:00:00",
+   "text": "Our flat is in Thane.",
+   "expect": [
+    [
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "hema subramanian",
+   "session_id": "hema-subramanian-s1",
+   "at": "2026-09-05T10:00:00",
+   "text": "My place is in Thane.",
+   "expect": [
+    [
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "carol dsouza",
+   "session_id": "carol-dsouza-s1",
+   "at": "2026-09-05T10:02:00",
+   "text": "I'm on the Fiber 300 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "session_id": "kabir-singh-s1",
+   "at": "2026-09-05T10:02:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "vikram desai",
+   "session_id": "vikram-desai-s1",
+   "at": "2026-09-05T10:02:00",
+   "text": "My plan is Fiber 100.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "hema subramanian",
+   "session_id": "hema-subramanian-s1",
+   "at": "2026-09-05T10:02:00",
+   "text": "My plan is Basic 50.",
+   "expect": [
+    [
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "carol dsouza",
+   "session_id": "carol-dsouza-s1",
+   "at": "2026-09-05T10:04:00",
+   "text": "My router is an AX3000.",
+   "expect": [
+    [
+     "has_router",
+     "ax3000"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "session_id": "kabir-singh-s1",
+   "at": "2026-09-05T10:04:00",
+   "text": "My plan is Basic 50.",
+   "expect": [
+    [
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "vikram desai",
+   "session_id": "vikram-desai-s1",
+   "at": "2026-09-05T10:04:00",
+   "text": "Phone is the best way to reach me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "hema subramanian",
+   "session_id": "hema-subramanian-s1",
+   "at": "2026-09-05T10:04:00",
+   "text": "Email works best for me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "email"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "carol dsouza",
+   "session_id": "carol-dsouza-s1",
+   "at": "2026-09-05T10:06:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "session_id": "kabir-singh-s1",
+   "at": "2026-09-05T10:06:00",
+   "text": "The router at home is the AX3000 model.",
+   "expect": [
+    [
+     "has_router",
+     "ax3000"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "vikram desai",
+   "session_id": "vikram-desai-s1",
+   "at": "2026-09-05T10:06:00",
+   "text": "I'm usually free after 6pm.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "hema subramanian",
+   "session_id": "hema-subramanian-s1",
+   "at": "2026-09-05T10:06:00",
+   "text": "My desktop PC is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "desktop pc"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "carol dsouza",
+   "session_id": "carol-dsouza-s1",
+   "at": "2026-09-05T10:08:00",
+   "text": "Please reach me by phone.",
+   "expect": [
+    [
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "session_id": "kabir-singh-s1",
+   "at": "2026-09-05T10:08:00",
+   "text": "ok thx",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "vikram desai",
+   "session_id": "vikram-desai-s1",
+   "at": "2026-09-05T10:08:00",
+   "text": "I also have a PS5 on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "ps5"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "hema subramanian",
+   "session_id": "hema-subramanian-s1",
+   "at": "2026-09-05T10:08:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "carol dsouza",
+   "session_id": "carol-dsouza-s1",
+   "at": "2026-09-05T10:10:00",
+   "text": "We use a iPhone at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "iphone"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "session_id": "kabir-singh-s1",
+   "at": "2026-09-05T10:10:00",
+   "text": "Phone is the best way to reach me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "vikram desai",
+   "session_id": "vikram-desai-s1",
+   "at": "2026-09-05T10:10:00",
+   "text": "We use a desktop PC at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "desktop pc"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "hema subramanian",
+   "session_id": "hema-subramanian-s1",
+   "at": "2026-09-05T10:10:00",
+   "text": "My Echo Dot is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "echo dot"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "carol dsouza",
+   "session_id": "carol-dsouza-s1",
+   "at": "2026-09-05T10:12:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "session_id": "kabir-singh-s1",
+   "at": "2026-09-05T10:12:00",
+   "text": "I also have a iPad on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "hema subramanian",
+   "session_id": "hema-subramanian-s1",
+   "at": "2026-09-05T10:12:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "carol dsouza",
+   "session_id": "carol-dsouza-s1",
+   "at": "2026-09-05T10:14:00",
+   "text": "My Xbox is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "session_id": "kabir-singh-s1",
+   "at": "2026-09-05T10:14:00",
+   "text": "My desktop PC is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "desktop pc"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "session_id": "dev-malhotra-s1",
+   "at": "2026-09-06T10:00:00",
+   "text": "I live in Hyderabad.",
+   "expect": [
+    [
+     "lives_in",
+     "hyderabad"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "omar siddiqui",
+   "session_id": "omar-siddiqui-s1",
+   "at": "2026-09-06T10:00:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "session_id": "qasim-ali-s1",
+   "at": "2026-09-06T10:00:00",
+   "text": "We're based in Hyderabad.",
+   "expect": [
+    [
+     "lives_in",
+     "hyderabad"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "session_id": "ritu-saxena-s1",
+   "at": "2026-09-06T10:00:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "session_id": "tara-banerjee-s1",
+   "at": "2026-09-06T10:00:00",
+   "text": "I live in Mumbai.",
+   "expect": [
+    [
+     "lives_in",
+     "mumbai"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "fatima sheikh",
+   "session_id": "fatima-sheikh-s1",
+   "at": "2026-09-06T10:00:00",
+   "text": "My place is in Pune.",
+   "expect": [
+    [
+     "lives_in",
+     "pune"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "session_id": "priya-naik-s1",
+   "at": "2026-09-06T10:00:00",
+   "text": "I live in Navi Mumbai.",
+   "expect": [
+    [
+     "lives_in",
+     "navi mumbai"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "session_id": "dev-malhotra-s1",
+   "at": "2026-09-06T10:02:00",
+   "text": "Okay, I'll wait for your update.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "omar siddiqui",
+   "session_id": "omar-siddiqui-s1",
+   "at": "2026-09-06T10:02:00",
+   "text": "I live in Pune.",
+   "expect": [
+    [
+     "lives_in",
+     "pune"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "session_id": "qasim-ali-s1",
+   "at": "2026-09-06T10:02:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "session_id": "ritu-saxena-s1",
+   "at": "2026-09-06T10:02:00",
+   "text": "Our flat is in Bengaluru.",
+   "expect": [
+    [
+     "lives_in",
+     "bengaluru"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "session_id": "tara-banerjee-s1",
+   "at": "2026-09-06T10:02:00",
+   "text": "ok thx",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "fatima sheikh",
+   "session_id": "fatima-sheikh-s1",
+   "at": "2026-09-06T10:02:00",
+   "text": "My plan is Fiber 300.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "session_id": "priya-naik-s1",
+   "at": "2026-09-06T10:02:00",
+   "text": "My plan is Fiber 100.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "session_id": "dev-malhotra-s1",
+   "at": "2026-09-06T10:04:00",
+   "text": "My plan is Fiber 1000.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "omar siddiqui",
+   "session_id": "omar-siddiqui-s1",
+   "at": "2026-09-06T10:04:00",
+   "text": "I'm on the Basic 50 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "session_id": "qasim-ali-s1",
+   "at": "2026-09-06T10:04:00",
+   "text": "My plan is Fiber 100.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "session_id": "ritu-saxena-s1",
+   "at": "2026-09-06T10:04:00",
+   "text": "My plan is Fiber 300.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "session_id": "tara-banerjee-s1",
+   "at": "2026-09-06T10:04:00",
+   "text": "I'm on the Basic 50 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "fatima sheikh",
+   "session_id": "fatima-sheikh-s1",
+   "at": "2026-09-06T10:04:00",
+   "text": "My router is an PML Hub 6.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "session_id": "priya-naik-s1",
+   "at": "2026-09-06T10:04:00",
+   "text": "I use the PML Hub 6 Pro router.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "session_id": "dev-malhotra-s1",
+   "at": "2026-09-06T10:06:00",
+   "text": "I use the PML Hub 6 Pro router.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "omar siddiqui",
+   "session_id": "omar-siddiqui-s1",
+   "at": "2026-09-06T10:06:00",
+   "text": "The router at home is the PML Hub 6 Pro model.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "session_id": "qasim-ali-s1",
+   "at": "2026-09-06T10:06:00",
+   "text": "My router is an AX5400.",
+   "expect": [
+    [
+     "has_router",
+     "ax5400"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "session_id": "ritu-saxena-s1",
+   "at": "2026-09-06T10:06:00",
+   "text": "The router at home is the AX1800 model.",
+   "expect": [
+    [
+     "has_router",
+     "ax1800"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "session_id": "tara-banerjee-s1",
+   "at": "2026-09-06T10:06:00",
+   "text": "I use the PML Hub 6 Pro router.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "fatima sheikh",
+   "session_id": "fatima-sheikh-s1",
+   "at": "2026-09-06T10:06:00",
+   "text": "Email is the best way to reach me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "email"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "session_id": "priya-naik-s1",
+   "at": "2026-09-06T10:06:00",
+   "text": "WhatsApp works best for me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "session_id": "dev-malhotra-s1",
+   "at": "2026-09-06T10:08:00",
+   "text": "Please reach me by WhatsApp.",
+   "expect": [
+    [
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "omar siddiqui",
+   "session_id": "omar-siddiqui-s1",
+   "at": "2026-09-06T10:08:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "session_id": "qasim-ali-s1",
+   "at": "2026-09-06T10:08:00",
+   "text": "Please reach me by email.",
+   "expect": [
+    [
+     "prefers_channel",
+     "email"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "session_id": "ritu-saxena-s1",
+   "at": "2026-09-06T10:08:00",
+   "text": "Phone works best for me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "session_id": "tara-banerjee-s1",
+   "at": "2026-09-06T10:08:00",
+   "text": "Email works best for me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "email"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "fatima sheikh",
+   "session_id": "fatima-sheikh-s1",
+   "at": "2026-09-06T10:08:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "session_id": "priya-naik-s1",
+   "at": "2026-09-06T10:08:00",
+   "text": "We use a Echo Dot at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "echo dot"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "session_id": "dev-malhotra-s1",
+   "at": "2026-09-06T10:10:00",
+   "text": "We use a smart TV at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "omar siddiqui",
+   "session_id": "omar-siddiqui-s1",
+   "at": "2026-09-06T10:10:00",
+   "text": "WhatsApp is the best way to reach me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "session_id": "qasim-ali-s1",
+   "at": "2026-09-06T10:10:00",
+   "text": "My PS5 is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "ps5"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "session_id": "ritu-saxena-s1",
+   "at": "2026-09-06T10:10:00",
+   "text": "I also have a laptop on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "laptop"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "session_id": "tara-banerjee-s1",
+   "at": "2026-09-06T10:10:00",
+   "text": "I also have a laptop on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "laptop"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "fatima sheikh",
+   "session_id": "fatima-sheikh-s1",
+   "at": "2026-09-06T10:10:00",
+   "text": "We use a iPad at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "session_id": "priya-naik-s1",
+   "at": "2026-09-06T10:10:00",
+   "text": "Hi there!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "session_id": "dev-malhotra-s1",
+   "at": "2026-09-06T10:12:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "session_id": "qasim-ali-s1",
+   "at": "2026-09-06T10:12:00",
+   "text": "My smart TV is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "session_id": "tara-banerjee-s1",
+   "at": "2026-09-06T10:12:00",
+   "text": "We use a iPad at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "fatima sheikh",
+   "session_id": "fatima-sheikh-s1",
+   "at": "2026-09-06T10:12:00",
+   "text": "We use a Xbox at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "session_id": "priya-naik-s1",
+   "at": "2026-09-06T10:12:00",
+   "text": "I also have a iPad on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "session_id": "dev-malhotra-s1",
+   "at": "2026-09-06T10:14:00",
+   "text": "We use a Xbox at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "session_id": "priya-naik-s1",
+   "at": "2026-09-06T10:14:00",
+   "text": "Okay, I'll wait for your update.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "session_id": "esha-iyer-s1",
+   "at": "2026-09-07T10:00:00",
+   "text": "Sorry, I was away for a bit.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "session_id": "gita-pillai-s1",
+   "at": "2026-09-07T10:00:00",
+   "text": "My place is in Pune.",
+   "expect": [
+    [
+     "lives_in",
+     "pune"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "session_id": "hari-kumar-s1",
+   "at": "2026-09-07T10:00:00",
+   "text": "We're based in Hyderabad.",
+   "expect": [
+    [
+     "lives_in",
+     "hyderabad"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "jaya reddy",
+   "session_id": "jaya-reddy-s1",
+   "at": "2026-09-07T10:00:00",
+   "text": "Okay, I'll wait for your update.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "wasim akhtar",
+   "session_id": "wasim-akhtar-s1",
+   "at": "2026-09-07T10:00:00",
+   "text": "I live in Mumbai.",
+   "expect": [
+    [
+     "lives_in",
+     "mumbai"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "session_id": "aditi-kulkarni-s1",
+   "at": "2026-09-07T10:00:00",
+   "text": "Our flat is in Secunderabad.",
+   "expect": [
+    [
+     "lives_in",
+     "secunderabad"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "session_id": "bhavna-shetty-s1",
+   "at": "2026-09-07T10:00:00",
+   "text": "My place is in Pune.",
+   "expect": [
+    [
+     "lives_in",
+     "pune"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "session_id": "eshan-ghosh-s1",
+   "at": "2026-09-07T10:00:00",
+   "text": "Our flat is in Navi Mumbai.",
+   "expect": [
+    [
+     "lives_in",
+     "navi mumbai"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "session_id": "gaurav-chawla-s1",
+   "at": "2026-09-07T10:00:00",
+   "text": "Our flat is in Hyderabad.",
+   "expect": [
+    [
+     "lives_in",
+     "hyderabad"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "session_id": "priya-nair-s1",
+   "at": "2026-09-07T10:00:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "session_id": "esha-iyer-s1",
+   "at": "2026-09-07T10:02:00",
+   "text": "We're based in Bengaluru.",
+   "expect": [
+    [
+     "lives_in",
+     "bengaluru"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "session_id": "gita-pillai-s1",
+   "at": "2026-09-07T10:02:00",
+   "text": "My plan is Fiber 1000.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "session_id": "hari-kumar-s1",
+   "at": "2026-09-07T10:02:00",
+   "text": "I'm on the Fiber 300 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "jaya reddy",
+   "session_id": "jaya-reddy-s1",
+   "at": "2026-09-07T10:02:00",
+   "text": "My place is in Thane.",
+   "expect": [
+    [
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "wasim akhtar",
+   "session_id": "wasim-akhtar-s1",
+   "at": "2026-09-07T10:02:00",
+   "text": "My plan is Fiber 300.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "session_id": "aditi-kulkarni-s1",
+   "at": "2026-09-07T10:02:00",
+   "text": "I'm on the Basic 50 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "session_id": "bhavna-shetty-s1",
+   "at": "2026-09-07T10:02:00",
+   "text": "My plan is Fiber 1000.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "session_id": "eshan-ghosh-s1",
+   "at": "2026-09-07T10:02:00",
+   "text": "I'm on the Fiber 100 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "session_id": "gaurav-chawla-s1",
+   "at": "2026-09-07T10:02:00",
+   "text": "My plan is Fiber 100.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "session_id": "priya-nair-s1",
+   "at": "2026-09-07T10:02:00",
+   "text": "Our flat is in Navi Mumbai.",
+   "expect": [
+    [
+     "lives_in",
+     "navi mumbai"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "session_id": "esha-iyer-s1",
+   "at": "2026-09-07T10:04:00",
+   "text": "I'm on the Basic 50 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "session_id": "gita-pillai-s1",
+   "at": "2026-09-07T10:04:00",
+   "text": "We use a smart TV at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "session_id": "hari-kumar-s1",
+   "at": "2026-09-07T10:04:00",
+   "text": "Please reach me by email.",
+   "expect": [
+    [
+     "prefers_channel",
+     "email"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "jaya reddy",
+   "session_id": "jaya-reddy-s1",
+   "at": "2026-09-07T10:04:00",
+   "text": "I'm on the Fiber 1000 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "wasim akhtar",
+   "session_id": "wasim-akhtar-s1",
+   "at": "2026-09-07T10:04:00",
+   "text": "My router is an PML Hub 6 Pro.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "session_id": "aditi-kulkarni-s1",
+   "at": "2026-09-07T10:04:00",
+   "text": "Please reach me by phone.",
+   "expect": [
+    [
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "session_id": "bhavna-shetty-s1",
+   "at": "2026-09-07T10:04:00",
+   "text": "My router is an AX1800.",
+   "expect": [
+    [
+     "has_router",
+     "ax1800"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "session_id": "eshan-ghosh-s1",
+   "at": "2026-09-07T10:04:00",
+   "text": "The router at home is the PML Hub 6 Pro model.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "session_id": "gaurav-chawla-s1",
+   "at": "2026-09-07T10:04:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "session_id": "priya-nair-s1",
+   "at": "2026-09-07T10:04:00",
+   "text": "We pay for Fiber 1000.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "session_id": "esha-iyer-s1",
+   "at": "2026-09-07T10:06:00",
+   "text": "My router is an AX1800.",
+   "expect": [
+    [
+     "has_router",
+     "ax1800"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "session_id": "gita-pillai-s1",
+   "at": "2026-09-07T10:06:00",
+   "text": "We use a iPad at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "session_id": "hari-kumar-s1",
+   "at": "2026-09-07T10:06:00",
+   "text": "My Echo Dot is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "echo dot"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "jaya reddy",
+   "session_id": "jaya-reddy-s1",
+   "at": "2026-09-07T10:06:00",
+   "text": "The router at home is the AX3000 model.",
+   "expect": [
+    [
+     "has_router",
+     "ax3000"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "wasim akhtar",
+   "session_id": "wasim-akhtar-s1",
+   "at": "2026-09-07T10:06:00",
+   "text": "Okay, I'll wait for your update.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "session_id": "aditi-kulkarni-s1",
+   "at": "2026-09-07T10:06:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "session_id": "bhavna-shetty-s1",
+   "at": "2026-09-07T10:06:00",
+   "text": "Email is the best way to reach me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "email"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "session_id": "eshan-ghosh-s1",
+   "at": "2026-09-07T10:06:00",
+   "text": "Please reach me by WhatsApp.",
+   "expect": [
+    [
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "session_id": "gaurav-chawla-s1",
+   "at": "2026-09-07T10:06:00",
+   "text": "My router is an AX5400.",
+   "expect": [
+    [
+     "has_router",
+     "ax5400"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "session_id": "priya-nair-s1",
+   "at": "2026-09-07T10:06:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "session_id": "esha-iyer-s1",
+   "at": "2026-09-07T10:08:00",
+   "text": "SMS works best for me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "session_id": "gita-pillai-s1",
+   "at": "2026-09-07T10:08:00",
+   "text": "Sorry, I was away for a bit.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "session_id": "hari-kumar-s1",
+   "at": "2026-09-07T10:08:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "jaya reddy",
+   "session_id": "jaya-reddy-s1",
+   "at": "2026-09-07T10:08:00",
+   "text": "ok thx",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "wasim akhtar",
+   "session_id": "wasim-akhtar-s1",
+   "at": "2026-09-07T10:08:00",
+   "text": "I also have a smart TV on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "session_id": "aditi-kulkarni-s1",
+   "at": "2026-09-07T10:08:00",
+   "text": "We use a laptop at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "laptop"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "session_id": "bhavna-shetty-s1",
+   "at": "2026-09-07T10:08:00",
+   "text": "I'm usually free after 6pm.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "session_id": "eshan-ghosh-s1",
+   "at": "2026-09-07T10:08:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "session_id": "gaurav-chawla-s1",
+   "at": "2026-09-07T10:08:00",
+   "text": "Please reach me by SMS.",
+   "expect": [
+    [
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "session_id": "priya-nair-s1",
+   "at": "2026-09-07T10:08:00",
+   "text": "My router is an AX5400.",
+   "expect": [
+    [
+     "has_router",
+     "ax5400"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "session_id": "esha-iyer-s1",
+   "at": "2026-09-07T10:10:00",
+   "text": "My iPad is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "session_id": "gita-pillai-s1",
+   "at": "2026-09-07T10:10:00",
+   "text": "ok thx",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "session_id": "hari-kumar-s1",
+   "at": "2026-09-07T10:10:00",
+   "text": "My Xbox is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "jaya reddy",
+   "session_id": "jaya-reddy-s1",
+   "at": "2026-09-07T10:10:00",
+   "text": "I also have a smart TV on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "wasim akhtar",
+   "session_id": "wasim-akhtar-s1",
+   "at": "2026-09-07T10:10:00",
+   "text": "My laptop is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "laptop"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "session_id": "aditi-kulkarni-s1",
+   "at": "2026-09-07T10:10:00",
+   "text": "I also have a desktop PC on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "desktop pc"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "session_id": "bhavna-shetty-s1",
+   "at": "2026-09-07T10:10:00",
+   "text": "My Xbox is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "session_id": "eshan-ghosh-s1",
+   "at": "2026-09-07T10:10:00",
+   "text": "My Android phone is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "android phone"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "session_id": "gaurav-chawla-s1",
+   "at": "2026-09-07T10:10:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "session_id": "priya-nair-s1",
+   "at": "2026-09-07T10:10:00",
+   "text": "WhatsApp works best for me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "session_id": "esha-iyer-s1",
+   "at": "2026-09-07T10:12:00",
+   "text": "I also have a Xbox on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "session_id": "bhavna-shetty-s1",
+   "at": "2026-09-07T10:12:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "session_id": "eshan-ghosh-s1",
+   "at": "2026-09-07T10:12:00",
+   "text": "We use a PS5 at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "ps5"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "session_id": "priya-nair-s1",
+   "at": "2026-09-07T10:12:00",
+   "text": "I also have a iPad on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "session_id": "bhavna-shetty-s1",
+   "at": "2026-09-07T10:14:00",
+   "text": "I also have a laptop on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "laptop"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "session_id": "priya-nair-s1",
+   "at": "2026-09-07T10:14:00",
+   "text": "My laptop is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "laptop"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "bob menon",
+   "session_id": "bob-menon-s2",
+   "at": "2026-09-09T10:00:00",
+   "text": "I'm usually free after 6pm.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "ishaan verma",
+   "session_id": "ishaan-verma-s2",
+   "at": "2026-09-09T10:00:00",
+   "text": "Hi there!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "session_id": "neha-kapoor-s2",
+   "at": "2026-09-09T10:00:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "session_id": "alice-roy-s2",
+   "at": "2026-09-09T10:00:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "session_id": "rahul-sharma-s2",
+   "at": "2026-09-09T10:00:00",
+   "text": "Sorry, I was away for a bit.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "ishaan verma",
+   "session_id": "ishaan-verma-s2",
+   "at": "2026-09-09T10:02:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "session_id": "neha-kapoor-s2",
+   "at": "2026-09-09T10:02:00",
+   "text": "There's no internet at all since this morning.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2049",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "no_internet"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "session_id": "alice-roy-s2",
+   "at": "2026-09-09T10:02:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "session_id": "rahul-sharma-s2",
+   "at": "2026-09-09T10:02:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "session_id": "neha-kapoor-s2",
+   "at": "2026-09-09T10:04:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "session_id": "rahul-sharma-s2",
+   "at": "2026-09-09T10:04:00",
+   "text": "Wifi barely reaches my bedroom.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2071",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "weak_range"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "session_id": "pooja-bhat-s2",
+   "at": "2026-09-10T10:00:00",
+   "text": "Every evening the internet disconnects for a few minutes.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2050",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "evening_drops"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "session_id": "zoya-mirza-s2",
+   "at": "2026-09-10T10:00:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "session_id": "divya-menon-s2",
+   "at": "2026-09-10T10:00:00",
+   "text": "The router reboots on its own every few hours.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2065",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "reboots"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "session_id": "pooja-bhat-s2",
+   "at": "2026-09-10T10:02:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "session_id": "zoya-mirza-s2",
+   "at": "2026-09-10T10:02:00",
+   "text": "I'm usually free after 6pm.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "session_id": "divya-menon-s2",
+   "at": "2026-09-10T10:02:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2049",
+   "at": "2026-09-10T15:00:00",
+   "customer": "neha kapoor"
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2071",
+   "at": "2026-09-10T15:00:00",
+   "customer": "rahul sharma"
+  },
+  {
+   "type": "turn",
+   "customer": "farhan khan",
+   "session_id": "farhan-khan-s2",
+   "at": "2026-09-11T10:00:00",
+   "text": "Good morning!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "manav gupta",
+   "session_id": "manav-gupta-s2",
+   "at": "2026-09-11T10:00:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "session_id": "uday-rao-s2",
+   "at": "2026-09-11T10:00:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul shah",
+   "session_id": "rahul-shah-s2",
+   "at": "2026-09-11T10:00:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "session_id": "arjun-mehta-s2",
+   "at": "2026-09-11T10:00:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "farhan khan",
+   "session_id": "farhan-khan-s2",
+   "at": "2026-09-11T10:02:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "session_id": "uday-rao-s2",
+   "at": "2026-09-11T10:02:00",
+   "text": "ok thx",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul shah",
+   "session_id": "rahul-shah-s2",
+   "at": "2026-09-11T10:02:00",
+   "text": "The signal is weak in the far rooms of the flat.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2070",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "weak_range"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "session_id": "arjun-mehta-s2",
+   "at": "2026-09-11T10:02:00",
+   "text": "Good morning!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "session_id": "uday-rao-s2",
+   "at": "2026-09-11T10:04:00",
+   "text": "The router reboots on its own every few hours.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2057",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "reboots"
+    }
+   ]
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2050",
+   "at": "2026-09-11T15:00:00",
+   "customer": "pooja bhat"
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2065",
+   "at": "2026-09-11T15:00:00",
+   "customer": "divya menon"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2049",
+   "fix": "restart router",
+   "worked": false,
+   "at": "2026-09-11T16:00:00",
+   "customer": "neha kapoor"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2071",
+   "fix": "move router",
+   "worked": false,
+   "at": "2026-09-11T16:00:00",
+   "customer": "rahul sharma"
+  },
+  {
+   "type": "turn",
+   "customer": "carol dsouza",
+   "session_id": "carol-dsouza-s2",
+   "at": "2026-09-12T10:00:00",
+   "text": "Okay, I'll wait for your update.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "session_id": "yamini-krishnan-s2",
+   "at": "2026-09-12T10:00:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "carol dsouza",
+   "session_id": "carol-dsouza-s2",
+   "at": "2026-09-12T10:02:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "session_id": "yamini-krishnan-s2",
+   "at": "2026-09-12T10:02:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "session_id": "yamini-krishnan-s2",
+   "at": "2026-09-12T10:04:00",
+   "text": "The connection cuts out at night, it's really annoying.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2059",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "evening_drops"
+    }
+   ]
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2057",
+   "at": "2026-09-12T15:00:00",
+   "customer": "uday rao"
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2070",
+   "at": "2026-09-12T15:00:00",
+   "customer": "rahul shah"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2050",
+   "fix": "restart router",
+   "worked": false,
+   "at": "2026-09-12T16:00:00",
+   "customer": "pooja bhat"
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "session_id": "dev-malhotra-s2",
+   "at": "2026-09-13T10:00:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "session_id": "kabir-singh-s2",
+   "at": "2026-09-13T10:00:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "session_id": "sanjay-patil-s2",
+   "at": "2026-09-13T10:00:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "session_id": "tara-banerjee-s2",
+   "at": "2026-09-13T10:00:00",
+   "text": "Okay, I'll wait for your update.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "fatima sheikh",
+   "session_id": "fatima-sheikh-s2",
+   "at": "2026-09-13T10:00:00",
+   "text": "My internet has been really slow for two days.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2067",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "slow"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "hema subramanian",
+   "session_id": "hema-subramanian-s2",
+   "at": "2026-09-13T10:00:00",
+   "text": "The router reboots on its own every few hours.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2069",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "reboots"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "session_id": "priya-naik-s2",
+   "at": "2026-09-13T10:00:00",
+   "text": "Sorry, I was away for a bit.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehra",
+   "session_id": "arjun-mehra-s2",
+   "at": "2026-09-13T10:00:00",
+   "text": "ok thx",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "session_id": "dev-malhotra-s2",
+   "at": "2026-09-13T10:02:00",
+   "text": "My router keeps restarting by itself.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2041",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "reboots"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "session_id": "kabir-singh-s2",
+   "at": "2026-09-13T10:02:00",
+   "text": "Nothing connects, the internet is totally dead.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2047",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "no_internet"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "session_id": "sanjay-patil-s2",
+   "at": "2026-09-13T10:02:00",
+   "text": "My wifi keeps dropping every evening.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2055",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "evening_drops"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "session_id": "tara-banerjee-s2",
+   "at": "2026-09-13T10:02:00",
+   "text": "I'm getting a fraction of the speed I pay for.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2056",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "slow"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "fatima sheikh",
+   "session_id": "fatima-sheikh-s2",
+   "at": "2026-09-13T10:02:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "hema subramanian",
+   "session_id": "hema-subramanian-s2",
+   "at": "2026-09-13T10:02:00",
+   "text": "I'm usually free after 6pm.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "session_id": "priya-naik-s2",
+   "at": "2026-09-13T10:02:00",
+   "text": "There's no internet at all since this morning.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2072",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "no_internet"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehra",
+   "session_id": "arjun-mehra-s2",
+   "at": "2026-09-13T10:02:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "session_id": "sanjay-patil-s2",
+   "at": "2026-09-13T10:04:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2059",
+   "at": "2026-09-13T15:00:00",
+   "customer": "yamini krishnan"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2050",
+   "fix": "change wifi channel",
+   "worked": true,
+   "at": "2026-09-13T16:00:00",
+   "customer": "pooja bhat"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2057",
+   "fix": "factory reset",
+   "worked": false,
+   "at": "2026-09-13T16:00:00",
+   "customer": "uday rao"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2070",
+   "fix": "move router",
+   "worked": false,
+   "at": "2026-09-13T16:00:00",
+   "customer": "rahul shah"
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "session_id": "lata-joshi-s2",
+   "at": "2026-09-14T10:00:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "omar siddiqui",
+   "session_id": "omar-siddiqui-s2",
+   "at": "2026-09-14T10:00:00",
+   "text": "Good morning!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "vikram desai",
+   "session_id": "vikram-desai-s2",
+   "at": "2026-09-14T10:00:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "session_id": "chirag-jain-s2",
+   "at": "2026-09-14T10:00:00",
+   "text": "The internet is completely down at my place.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2063",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "no_internet"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "session_id": "eshan-ghosh-s2",
+   "at": "2026-09-14T10:00:00",
+   "text": "The signal is weak in the far rooms of the flat.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2066",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "weak_range"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "alice rao",
+   "session_id": "alice-rao-s2",
+   "at": "2026-09-14T10:00:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "session_id": "lata-joshi-s2",
+   "at": "2026-09-14T10:02:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "vikram desai",
+   "session_id": "vikram-desai-s2",
+   "at": "2026-09-14T10:02:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "session_id": "chirag-jain-s2",
+   "at": "2026-09-14T10:02:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "session_id": "eshan-ghosh-s2",
+   "at": "2026-09-14T10:02:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice rao",
+   "session_id": "alice-rao-s2",
+   "at": "2026-09-14T10:02:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "session_id": "lata-joshi-s2",
+   "at": "2026-09-14T10:04:00",
+   "text": "Wifi barely reaches my bedroom.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2048",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "weak_range"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "session_id": "eshan-ghosh-s2",
+   "at": "2026-09-14T10:04:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2041",
+   "at": "2026-09-14T15:00:00",
+   "customer": "dev malhotra"
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2047",
+   "at": "2026-09-14T15:00:00",
+   "customer": "kabir singh"
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2055",
+   "at": "2026-09-14T15:00:00",
+   "customer": "sanjay patil"
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2056",
+   "at": "2026-09-14T15:00:00",
+   "customer": "tara banerjee"
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2067",
+   "at": "2026-09-14T15:00:00",
+   "customer": "fatima sheikh"
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2069",
+   "at": "2026-09-14T15:00:00",
+   "customer": "hema subramanian"
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2072",
+   "at": "2026-09-14T15:00:00",
+   "customer": "priya naik"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2057",
+   "fix": "firmware update",
+   "worked": true,
+   "at": "2026-09-14T16:00:00",
+   "customer": "uday rao"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2070",
+   "fix": "add mesh extender",
+   "worked": true,
+   "at": "2026-09-14T16:00:00",
+   "customer": "rahul shah"
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "session_id": "esha-iyer-s2",
+   "at": "2026-09-15T10:00:00",
+   "text": "I'm usually free after 6pm.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "jaya reddy",
+   "session_id": "jaya-reddy-s2",
+   "at": "2026-09-15T10:00:00",
+   "text": "Video calls freeze and games lag constantly.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2045",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "latency"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "session_id": "qasim-ali-s2",
+   "at": "2026-09-15T10:00:00",
+   "text": "My internet has been really slow for two days.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2052",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "slow"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "session_id": "priya-nair-s2",
+   "at": "2026-09-15T10:00:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "session_id": "esha-iyer-s2",
+   "at": "2026-09-15T10:02:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "jaya reddy",
+   "session_id": "jaya-reddy-s2",
+   "at": "2026-09-15T10:02:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "session_id": "qasim-ali-s2",
+   "at": "2026-09-15T10:02:00",
+   "text": "Good morning!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "session_id": "priya-nair-s2",
+   "at": "2026-09-15T10:02:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "session_id": "esha-iyer-s2",
+   "at": "2026-09-15T10:04:00",
+   "text": "Video calls freeze and games lag constantly.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2042",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "latency"
+    }
+   ]
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2048",
+   "at": "2026-09-15T15:00:00",
+   "customer": "lata joshi"
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2063",
+   "at": "2026-09-15T15:00:00",
+   "customer": "chirag jain"
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2066",
+   "at": "2026-09-15T15:00:00",
+   "customer": "eshan ghosh"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2041",
+   "fix": "factory reset",
+   "worked": false,
+   "at": "2026-09-15T16:00:00",
+   "customer": "dev malhotra"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2047",
+   "fix": "restart router",
+   "worked": false,
+   "at": "2026-09-15T16:00:00",
+   "customer": "kabir singh"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2055",
+   "fix": "restart router",
+   "worked": false,
+   "at": "2026-09-15T16:00:00",
+   "customer": "sanjay patil"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2056",
+   "fix": "restart router",
+   "worked": false,
+   "at": "2026-09-15T16:00:00",
+   "customer": "tara banerjee"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2069",
+   "fix": "factory reset",
+   "worked": false,
+   "at": "2026-09-15T16:00:00",
+   "customer": "hema subramanian"
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "session_id": "gita-pillai-s2",
+   "at": "2026-09-16T10:00:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "session_id": "hari-kumar-s2",
+   "at": "2026-09-16T10:00:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "session_id": "ritu-saxena-s2",
+   "at": "2026-09-16T10:00:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "wasim akhtar",
+   "session_id": "wasim-akhtar-s2",
+   "at": "2026-09-16T10:00:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "session_id": "gaurav-chawla-s2",
+   "at": "2026-09-16T10:00:00",
+   "text": "The router reboots on its own every few hours.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2068",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "reboots"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "session_id": "gita-pillai-s2",
+   "at": "2026-09-16T10:02:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "session_id": "hari-kumar-s2",
+   "at": "2026-09-16T10:02:00",
+   "text": "The signal is weak in the far rooms of the flat.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2044",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "weak_range"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "session_id": "ritu-saxena-s2",
+   "at": "2026-09-16T10:02:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "session_id": "gaurav-chawla-s2",
+   "at": "2026-09-16T10:02:00",
+   "text": "ok thx",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "session_id": "gita-pillai-s2",
+   "at": "2026-09-16T10:04:00",
+   "text": "Every evening the internet disconnects for a few minutes.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2043",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "evening_drops"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "session_id": "hari-kumar-s2",
+   "at": "2026-09-16T10:04:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "session_id": "ritu-saxena-s2",
+   "at": "2026-09-16T10:04:00",
+   "text": "I'm getting a fraction of the speed I pay for.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2053",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "slow"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "session_id": "gaurav-chawla-s2",
+   "at": "2026-09-16T10:04:00",
+   "text": "ok thx",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2042",
+   "at": "2026-09-16T15:00:00",
+   "customer": "esha iyer"
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2045",
+   "at": "2026-09-16T15:00:00",
+   "customer": "jaya reddy"
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2052",
+   "at": "2026-09-16T15:00:00",
+   "customer": "qasim ali"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2041",
+   "fix": "firmware update",
+   "worked": true,
+   "at": "2026-09-16T16:00:00",
+   "customer": "dev malhotra"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2047",
+   "fix": "replace fiber cable",
+   "worked": true,
+   "at": "2026-09-16T16:00:00",
+   "customer": "kabir singh"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2048",
+   "fix": "move router",
+   "worked": false,
+   "at": "2026-09-16T16:00:00",
+   "customer": "lata joshi"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2055",
+   "fix": "change wifi channel",
+   "worked": true,
+   "at": "2026-09-16T16:00:00",
+   "customer": "sanjay patil"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2056",
+   "fix": "reset line profile",
+   "worked": true,
+   "at": "2026-09-16T16:00:00",
+   "customer": "tara banerjee"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2063",
+   "fix": "restart router",
+   "worked": false,
+   "at": "2026-09-16T16:00:00",
+   "customer": "chirag jain"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2067",
+   "fix": "reset line profile",
+   "worked": true,
+   "at": "2026-09-16T16:00:00",
+   "customer": "fatima sheikh"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2069",
+   "fix": "firmware update",
+   "worked": true,
+   "at": "2026-09-16T16:00:00",
+   "customer": "hema subramanian"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2072",
+   "fix": "replace fiber cable",
+   "worked": true,
+   "at": "2026-09-16T16:00:00",
+   "customer": "priya naik"
+  },
+  {
+   "type": "turn",
+   "customer": "bob menon",
+   "session_id": "bob-menon-s3",
+   "at": "2026-09-17T10:00:00",
+   "text": "Moved my plan to Fiber 1000 today.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "on_plan",
+     "old": "fiber 100",
+     "new": "fiber 1000"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "ishaan verma",
+   "session_id": "ishaan-verma-s3",
+   "at": "2026-09-17T10:00:00",
+   "text": "Your technician swapped my router for a PML Hub 6 Pro today.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "has_router",
+     "old": "ax5400",
+     "new": "pml hub 6 pro"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "session_id": "aditi-kulkarni-s2",
+   "at": "2026-09-17T10:00:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "session_id": "bhavna-shetty-s2",
+   "at": "2026-09-17T10:00:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "session_id": "divya-menon-s3",
+   "at": "2026-09-17T10:00:00",
+   "text": "I switched my plan to Fiber 300 today.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "on_plan",
+     "old": "fiber 1000",
+     "new": "fiber 300"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "bob menon",
+   "session_id": "bob-menon-s3",
+   "at": "2026-09-17T10:02:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "ishaan verma",
+   "session_id": "ishaan-verma-s3",
+   "at": "2026-09-17T10:02:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "session_id": "aditi-kulkarni-s2",
+   "at": "2026-09-17T10:02:00",
+   "text": "Rooms away from the router get almost no wifi.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2060",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "weak_range"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "session_id": "bhavna-shetty-s2",
+   "at": "2026-09-17T10:02:00",
+   "text": "My router randomly switches off and comes back on.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2061",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "reboots"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "session_id": "divya-menon-s3",
+   "at": "2026-09-17T10:02:00",
+   "text": "ok thx",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "ishaan verma",
+   "session_id": "ishaan-verma-s3",
+   "at": "2026-09-17T10:04:00",
+   "text": "My PS5 is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "ps5"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "multi",
+     "pred": "owns_device",
+     "new": "ps5"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "session_id": "aditi-kulkarni-s2",
+   "at": "2026-09-17T10:04:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "session_id": "divya-menon-s3",
+   "at": "2026-09-17T10:04:00",
+   "text": "Your technician swapped my router for a PML Hub 6 Pro today.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "has_router",
+     "old": "ax1800",
+     "new": "pml hub 6 pro"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "session_id": "divya-menon-s3",
+   "at": "2026-09-17T10:06:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2043",
+   "at": "2026-09-17T15:00:00",
+   "customer": "gita pillai"
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2044",
+   "at": "2026-09-17T15:00:00",
+   "customer": "hari kumar"
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2053",
+   "at": "2026-09-17T15:00:00",
+   "customer": "ritu saxena"
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2068",
+   "at": "2026-09-17T15:00:00",
+   "customer": "gaurav chawla"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2042",
+   "fix": "restart router",
+   "worked": false,
+   "at": "2026-09-17T16:00:00",
+   "customer": "esha iyer"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2045",
+   "fix": "restart router",
+   "worked": false,
+   "at": "2026-09-17T16:00:00",
+   "customer": "jaya reddy"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2052",
+   "fix": "restart router",
+   "worked": false,
+   "at": "2026-09-17T16:00:00",
+   "customer": "qasim ali"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2063",
+   "fix": "replace fiber cable",
+   "worked": true,
+   "at": "2026-09-17T16:00:00",
+   "customer": "chirag jain"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2066",
+   "fix": "add mesh extender",
+   "worked": true,
+   "at": "2026-09-17T16:00:00",
+   "customer": "eshan ghosh"
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "session_id": "pooja-bhat-s3",
+   "at": "2026-09-18T10:00:00",
+   "text": "Hi there!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "session_id": "zoya-mirza-s3",
+   "at": "2026-09-18T10:00:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "session_id": "alice-roy-s3",
+   "at": "2026-09-18T10:00:00",
+   "text": "Sorry, I was away for a bit.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "session_id": "pooja-bhat-s3",
+   "at": "2026-09-18T10:02:00",
+   "text": "Quick update: I actually moved to Nashik on September 15, sorry for not telling you earlier.",
+   "expect": [
+    [
+     "lives_in",
+     "nashik"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "lives_in",
+     "old": "navi mumbai",
+     "new": "nashik",
+     "backdated": true
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "session_id": "zoya-mirza-s3",
+   "at": "2026-09-18T10:02:00",
+   "text": "I moved to Secunderabad today.",
+   "expect": [
+    [
+     "lives_in",
+     "secunderabad"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "lives_in",
+     "old": "nashik",
+     "new": "secunderabad"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "session_id": "alice-roy-s3",
+   "at": "2026-09-18T10:02:00",
+   "text": "Okay, I'll wait for your update.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "session_id": "alice-roy-s3",
+   "at": "2026-09-18T10:04:00",
+   "text": "Actually, please use SMS from now on instead.",
+   "expect": [
+    [
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "prefers_channel",
+     "old": "email",
+     "new": "sms"
+    }
+   ]
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2060",
+   "at": "2026-09-18T15:00:00",
+   "customer": "aditi kulkarni"
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2061",
+   "at": "2026-09-18T15:00:00",
+   "customer": "bhavna shetty"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2044",
+   "fix": "move router",
+   "worked": false,
+   "at": "2026-09-18T16:00:00",
+   "customer": "hari kumar"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2045",
+   "fix": "enable qos",
+   "worked": true,
+   "at": "2026-09-18T16:00:00",
+   "customer": "jaya reddy"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2052",
+   "fix": "reset line profile",
+   "worked": true,
+   "at": "2026-09-18T16:00:00",
+   "customer": "qasim ali"
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "session_id": "neha-kapoor-s3",
+   "at": "2026-09-19T10:00:00",
+   "text": "Your technician swapped my router for a PML Hub 6 today.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "has_router",
+     "old": "ax1800",
+     "new": "pml hub 6"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "session_id": "rahul-sharma-s3",
+   "at": "2026-09-19T10:00:00",
+   "text": "We replaced the router with a PML Hub 6 Pro this morning.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "has_router",
+     "old": "ax1800",
+     "new": "pml hub 6 pro"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "session_id": "neha-kapoor-s3",
+   "at": "2026-09-19T10:02:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "session_id": "rahul-sharma-s3",
+   "at": "2026-09-19T10:02:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "session_id": "neha-kapoor-s3",
+   "at": "2026-09-19T10:04:00",
+   "text": "Switch my contact preference to WhatsApp, please.",
+   "expect": [
+    [
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "prefers_channel",
+     "old": "sms",
+     "new": "whatsapp"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "session_id": "rahul-sharma-s3",
+   "at": "2026-09-19T10:04:00",
+   "text": "From now on please reach me by phone, not the old way.",
+   "expect": [
+    [
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "prefers_channel",
+     "old": "email",
+     "new": "phone"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "session_id": "neha-kapoor-s3",
+   "at": "2026-09-19T10:06:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2043",
+   "fix": "change wifi channel",
+   "worked": true,
+   "at": "2026-09-19T16:00:00",
+   "customer": "gita pillai"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2044",
+   "fix": "add mesh extender",
+   "worked": true,
+   "at": "2026-09-19T16:00:00",
+   "customer": "hari kumar"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2053",
+   "fix": "reset line profile",
+   "worked": true,
+   "at": "2026-09-19T16:00:00",
+   "customer": "ritu saxena"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2068",
+   "fix": "firmware update",
+   "worked": true,
+   "at": "2026-09-19T16:00:00",
+   "customer": "gaurav chawla"
+  },
+  {
+   "type": "turn",
+   "customer": "carol dsouza",
+   "session_id": "carol-dsouza-s3",
+   "at": "2026-09-20T10:00:00",
+   "text": "Sorry, I was away for a bit.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "farhan khan",
+   "session_id": "farhan-khan-s3",
+   "at": "2026-09-20T10:00:00",
+   "text": "I switched my plan to Basic 50 today.",
+   "expect": [
+    [
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "on_plan",
+     "old": "fiber 1000",
+     "new": "basic 50"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "session_id": "kabir-singh-s3",
+   "at": "2026-09-20T10:00:00",
+   "text": "ok thx",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "fatima sheikh",
+   "session_id": "fatima-sheikh-s3",
+   "at": "2026-09-20T10:00:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "session_id": "priya-naik-s3",
+   "at": "2026-09-20T10:00:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "session_id": "arjun-mehta-s3",
+   "at": "2026-09-20T10:00:00",
+   "text": "As of today we live in Nashik.",
+   "expect": [
+    [
+     "lives_in",
+     "nashik"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "lives_in",
+     "old": "mysuru",
+     "new": "nashik"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "farhan khan",
+   "session_id": "farhan-khan-s3",
+   "at": "2026-09-20T10:02:00",
+   "text": "We use a desktop PC at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "desktop pc"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "multi",
+     "pred": "owns_device",
+     "new": "desktop pc"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "session_id": "kabir-singh-s3",
+   "at": "2026-09-20T10:02:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "fatima sheikh",
+   "session_id": "fatima-sheikh-s3",
+   "at": "2026-09-20T10:02:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "session_id": "arjun-mehta-s3",
+   "at": "2026-09-20T10:02:00",
+   "text": "From now on please reach me by phone, not the old way.",
+   "expect": [
+    [
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "prefers_channel",
+     "old": "whatsapp",
+     "new": "phone"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "farhan khan",
+   "session_id": "farhan-khan-s3",
+   "at": "2026-09-20T10:04:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "session_id": "arjun-mehta-s3",
+   "at": "2026-09-20T10:04:00",
+   "text": "Hi there!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "session_id": "arjun-mehta-s3",
+   "at": "2026-09-20T10:06:00",
+   "text": "Hi there!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2060",
+   "fix": "add mesh extender",
+   "worked": true,
+   "at": "2026-09-20T16:00:00",
+   "customer": "aditi kulkarni"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2061",
+   "fix": "firmware update",
+   "worked": true,
+   "at": "2026-09-20T16:00:00",
+   "customer": "bhavna shetty"
+  },
+  {
+   "type": "turn",
+   "customer": "manav gupta",
+   "session_id": "manav-gupta-s3",
+   "at": "2026-09-21T10:00:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "session_id": "tara-banerjee-s3",
+   "at": "2026-09-21T10:00:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "session_id": "uday-rao-s3",
+   "at": "2026-09-21T10:00:00",
+   "text": "Forgot to mention, I've been living in Mumbai since September 13.",
+   "expect": [
+    [
+     "lives_in",
+     "mumbai"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "lives_in",
+     "old": "hyderabad",
+     "new": "mumbai",
+     "backdated": true
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "session_id": "eshan-ghosh-s3",
+   "at": "2026-09-21T10:00:00",
+   "text": "I also have a iPhone on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "iphone"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "multi",
+     "pred": "owns_device",
+     "new": "iphone"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "rahul shah",
+   "session_id": "rahul-shah-s3",
+   "at": "2026-09-21T10:00:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "manav gupta",
+   "session_id": "manav-gupta-s3",
+   "at": "2026-09-21T10:02:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "session_id": "tara-banerjee-s3",
+   "at": "2026-09-21T10:02:00",
+   "text": "We've just shifted to Pune, today actually.",
+   "expect": [
+    [
+     "lives_in",
+     "pune"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "lives_in",
+     "old": "mumbai",
+     "new": "pune"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "session_id": "uday-rao-s3",
+   "at": "2026-09-21T10:02:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "session_id": "eshan-ghosh-s3",
+   "at": "2026-09-21T10:02:00",
+   "text": "Hi there!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul shah",
+   "session_id": "rahul-shah-s3",
+   "at": "2026-09-21T10:02:00",
+   "text": "I got a new AX1800 router today.",
+   "expect": [
+    [
+     "has_router",
+     "ax1800"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "has_router",
+     "old": "ax3000",
+     "new": "ax1800"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "manav gupta",
+   "session_id": "manav-gupta-s3",
+   "at": "2026-09-21T10:04:00",
+   "text": "Switch my contact preference to SMS, please.",
+   "expect": [
+    [
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "prefers_channel",
+     "old": "phone",
+     "new": "sms"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "session_id": "uday-rao-s3",
+   "at": "2026-09-21T10:04:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "session_id": "eshan-ghosh-s3",
+   "at": "2026-09-21T10:04:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "session_id": "lata-joshi-s3",
+   "at": "2026-09-22T10:00:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "session_id": "yamini-krishnan-s3",
+   "at": "2026-09-22T10:00:00",
+   "text": "Forgot to mention, I've been living in Mysuru since September 16.",
+   "expect": [
+    [
+     "lives_in",
+     "mysuru"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "lives_in",
+     "old": "pune",
+     "new": "mysuru",
+     "backdated": true
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "hema subramanian",
+   "session_id": "hema-subramanian-s3",
+   "at": "2026-09-22T10:00:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "session_id": "lata-joshi-s3",
+   "at": "2026-09-22T10:02:00",
+   "text": "I also have a smart TV on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "multi",
+     "pred": "owns_device",
+     "new": "smart tv"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "session_id": "yamini-krishnan-s3",
+   "at": "2026-09-22T10:02:00",
+   "text": "Moved my plan to Fiber 300 today.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "on_plan",
+     "old": "basic 50",
+     "new": "fiber 300"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "session_id": "yamini-krishnan-s3",
+   "at": "2026-09-22T10:04:00",
+   "text": "Actually, please use phone from now on instead.",
+   "expect": [
+    [
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "prefers_channel",
+     "old": "sms",
+     "new": "phone"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "session_id": "yamini-krishnan-s3",
+   "at": "2026-09-22T10:06:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "session_id": "yamini-krishnan-s3",
+   "at": "2026-09-22T10:08:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "session_id": "yamini-krishnan-s3",
+   "at": "2026-09-22T10:10:00",
+   "text": "We use a Xbox at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "multi",
+     "pred": "owns_device",
+     "new": "xbox"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "session_id": "dev-malhotra-s3",
+   "at": "2026-09-23T10:00:00",
+   "text": "We relocated to Mysuru back on September 17, should have told you then.",
+   "expect": [
+    [
+     "lives_in",
+     "mysuru"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "lives_in",
+     "old": "hyderabad",
+     "new": "mysuru",
+     "backdated": true
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "session_id": "esha-iyer-s3",
+   "at": "2026-09-23T10:00:00",
+   "text": "Forgot to mention, I've been living in Pune since September 17.",
+   "expect": [
+    [
+     "lives_in",
+     "pune"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "lives_in",
+     "old": "bengaluru",
+     "new": "pune",
+     "backdated": true
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "session_id": "hari-kumar-s3",
+   "at": "2026-09-23T10:00:00",
+   "text": "As of today we live in Thane.",
+   "expect": [
+    [
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "lives_in",
+     "old": "hyderabad",
+     "new": "thane"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "omar siddiqui",
+   "session_id": "omar-siddiqui-s3",
+   "at": "2026-09-23T10:00:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "session_id": "qasim-ali-s3",
+   "at": "2026-09-23T10:00:00",
+   "text": "We use a iPad at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "multi",
+     "pred": "owns_device",
+     "new": "ipad"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "session_id": "ritu-saxena-s3",
+   "at": "2026-09-23T10:00:00",
+   "text": "Forgot to mention, I've been living in Mumbai since September 20.",
+   "expect": [
+    [
+     "lives_in",
+     "mumbai"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "lives_in",
+     "old": "bengaluru",
+     "new": "mumbai",
+     "backdated": true
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "session_id": "sanjay-patil-s3",
+   "at": "2026-09-23T10:00:00",
+   "text": "ok thx",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "vikram desai",
+   "session_id": "vikram-desai-s3",
+   "at": "2026-09-23T10:00:00",
+   "text": "I switched my plan to Fiber 300 today.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "on_plan",
+     "old": "fiber 100",
+     "new": "fiber 300"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "session_id": "chirag-jain-s3",
+   "at": "2026-09-23T10:00:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice rao",
+   "session_id": "alice-rao-s3",
+   "at": "2026-09-23T10:00:00",
+   "text": "As of today we live in Mysuru.",
+   "expect": [
+    [
+     "lives_in",
+     "mysuru"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "lives_in",
+     "old": "thane",
+     "new": "mysuru"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehra",
+   "session_id": "arjun-mehra-s3",
+   "at": "2026-09-23T10:00:00",
+   "text": "Sorry, I was away for a bit.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "session_id": "dev-malhotra-s3",
+   "at": "2026-09-23T10:02:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "session_id": "esha-iyer-s3",
+   "at": "2026-09-23T10:02:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "session_id": "hari-kumar-s3",
+   "at": "2026-09-23T10:02:00",
+   "text": "ok thx",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "omar siddiqui",
+   "session_id": "omar-siddiqui-s3",
+   "at": "2026-09-23T10:02:00",
+   "text": "I changed to the Fiber 100 plan this morning.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "on_plan",
+     "old": "basic 50",
+     "new": "fiber 100"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "session_id": "qasim-ali-s3",
+   "at": "2026-09-23T10:02:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "session_id": "ritu-saxena-s3",
+   "at": "2026-09-23T10:02:00",
+   "text": "Good morning!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "session_id": "sanjay-patil-s3",
+   "at": "2026-09-23T10:02:00",
+   "text": "Hi there!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "vikram desai",
+   "session_id": "vikram-desai-s3",
+   "at": "2026-09-23T10:02:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "session_id": "chirag-jain-s3",
+   "at": "2026-09-23T10:02:00",
+   "text": "Moved my plan to Fiber 1000 today.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "on_plan",
+     "old": "fiber 100",
+     "new": "fiber 1000"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "alice rao",
+   "session_id": "alice-rao-s3",
+   "at": "2026-09-23T10:02:00",
+   "text": "Moved my plan to Fiber 300 today.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "on_plan",
+     "old": "fiber 1000",
+     "new": "fiber 300"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehra",
+   "session_id": "arjun-mehra-s3",
+   "at": "2026-09-23T10:02:00",
+   "text": "I'm usually free after 6pm.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "session_id": "esha-iyer-s3",
+   "at": "2026-09-23T10:04:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "session_id": "hari-kumar-s3",
+   "at": "2026-09-23T10:04:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "omar siddiqui",
+   "session_id": "omar-siddiqui-s3",
+   "at": "2026-09-23T10:04:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "session_id": "qasim-ali-s3",
+   "at": "2026-09-23T10:04:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "vikram desai",
+   "session_id": "vikram-desai-s3",
+   "at": "2026-09-23T10:04:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "session_id": "chirag-jain-s3",
+   "at": "2026-09-23T10:04:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice rao",
+   "session_id": "alice-rao-s3",
+   "at": "2026-09-23T10:04:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "ishaan verma",
+   "session_id": "ishaan-verma-s4",
+   "at": "2026-09-24T10:00:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "session_id": "bhavna-shetty-s3",
+   "at": "2026-09-24T10:00:00",
+   "text": "Forgot to mention, I've been living in Mumbai since September 19.",
+   "expect": [
+    [
+     "lives_in",
+     "mumbai"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "lives_in",
+     "old": "pune",
+     "new": "mumbai",
+     "backdated": true
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "session_id": "divya-menon-s4",
+   "at": "2026-09-24T10:00:00",
+   "text": "Hi there!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "session_id": "priya-nair-s3",
+   "at": "2026-09-24T10:00:00",
+   "text": "I changed to the Fiber 300 plan this morning.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "on_plan",
+     "old": "fiber 1000",
+     "new": "fiber 300"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "ishaan verma",
+   "session_id": "ishaan-verma-s4",
+   "at": "2026-09-24T10:02:00",
+   "text": "ok thx",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "session_id": "bhavna-shetty-s3",
+   "at": "2026-09-24T10:02:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "session_id": "priya-nair-s3",
+   "at": "2026-09-24T10:02:00",
+   "text": "I'm usually free after 6pm.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "session_id": "bhavna-shetty-s3",
+   "at": "2026-09-24T10:04:00",
+   "text": "From now on please reach me by phone, not the old way.",
+   "expect": [
+    [
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "prefers_channel",
+     "old": "email",
+     "new": "phone"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "session_id": "priya-nair-s3",
+   "at": "2026-09-24T10:04:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "session_id": "bhavna-shetty-s3",
+   "at": "2026-09-24T10:06:00",
+   "text": "I also have a PS5 on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "ps5"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "multi",
+     "pred": "owns_device",
+     "new": "ps5"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "session_id": "priya-nair-s3",
+   "at": "2026-09-24T10:06:00",
+   "text": "We replaced the router with a PML Hub 6 this morning.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "has_router",
+     "old": "ax5400",
+     "new": "pml hub 6"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "session_id": "priya-nair-s3",
+   "at": "2026-09-24T10:08:00",
+   "text": "Actually, please use SMS from now on instead.",
+   "expect": [
+    [
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "prefers_channel",
+     "old": "whatsapp",
+     "new": "sms"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "session_id": "gita-pillai-s3",
+   "at": "2026-09-25T10:00:00",
+   "text": "Quick update: I actually moved to Thane on September 17, sorry for not telling you earlier.",
+   "expect": [
+    [
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "lives_in",
+     "old": "pune",
+     "new": "thane",
+     "backdated": true
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "jaya reddy",
+   "session_id": "jaya-reddy-s3",
+   "at": "2026-09-25T10:00:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "session_id": "aditi-kulkarni-s3",
+   "at": "2026-09-25T10:00:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "session_id": "gita-pillai-s3",
+   "at": "2026-09-25T10:02:00",
+   "text": "Hi there!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "session_id": "aditi-kulkarni-s3",
+   "at": "2026-09-25T10:02:00",
+   "text": "Moved my plan to Fiber 300 today.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "on_plan",
+     "old": "basic 50",
+     "new": "fiber 300"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "session_id": "aditi-kulkarni-s3",
+   "at": "2026-09-25T10:04:00",
+   "text": "ok thx",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "session_id": "neha-kapoor-s4",
+   "at": "2026-09-26T10:00:00",
+   "text": "Good morning!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "wasim akhtar",
+   "session_id": "wasim-akhtar-s3",
+   "at": "2026-09-26T10:00:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "session_id": "gaurav-chawla-s3",
+   "at": "2026-09-26T10:00:00",
+   "text": "Good morning!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "session_id": "neha-kapoor-s4",
+   "at": "2026-09-26T10:02:00",
+   "text": "I also have a laptop on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "laptop"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "multi",
+     "pred": "owns_device",
+     "new": "laptop"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "wasim akhtar",
+   "session_id": "wasim-akhtar-s3",
+   "at": "2026-09-26T10:02:00",
+   "text": "Sorry, I was away for a bit.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "session_id": "gaurav-chawla-s3",
+   "at": "2026-09-26T10:02:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "session_id": "neha-kapoor-s4",
+   "at": "2026-09-26T10:04:00",
+   "text": "ok thx",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "wasim akhtar",
+   "session_id": "wasim-akhtar-s3",
+   "at": "2026-09-26T10:04:00",
+   "text": "Forgot to mention, I've been living in Hyderabad since September 18.",
+   "expect": [
+    [
+     "lives_in",
+     "hyderabad"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "lives_in",
+     "old": "mumbai",
+     "new": "hyderabad",
+     "backdated": true
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "wasim akhtar",
+   "session_id": "wasim-akhtar-s3",
+   "at": "2026-09-26T10:06:00",
+   "text": "We replaced the router with a PML Hub 6 this morning.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "change",
+     "pred": "has_router",
+     "old": "pml hub 6 pro",
+     "new": "pml hub 6"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "bob menon",
+   "session_id": "bob-menon-s4",
+   "at": "2026-09-27T10:00:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "session_id": "kabir-singh-s4",
+   "at": "2026-09-27T10:00:00",
+   "text": "I also have a Xbox on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "multi",
+     "pred": "owns_device",
+     "new": "xbox"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "session_id": "pooja-bhat-s4",
+   "at": "2026-09-27T10:00:00",
+   "text": "Hi there!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "session_id": "alice-roy-s4",
+   "at": "2026-09-27T10:00:00",
+   "text": "Like I said, I'm in Pimpri now.",
+   "expect": [
+    [
+     "lives_in",
+     "pimpri"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "unchanged",
+     "pred": "lives_in",
+     "value": "pimpri",
+     "typo": "pimpri"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "session_id": "rahul-sharma-s4",
+   "at": "2026-09-27T10:00:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "session_id": "arjun-mehta-s4",
+   "at": "2026-09-27T10:00:00",
+   "text": "Like I said, I'm in Nashik now.",
+   "expect": [
+    [
+     "lives_in",
+     "nashik"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "unchanged",
+     "pred": "lives_in",
+     "value": "nashik"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "session_id": "kabir-singh-s4",
+   "at": "2026-09-27T10:02:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "session_id": "pooja-bhat-s4",
+   "at": "2026-09-27T10:02:00",
+   "text": "There's no internet at all since this morning.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2051",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "no_internet"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "session_id": "alice-roy-s4",
+   "at": "2026-09-27T10:02:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "session_id": "rahul-sharma-s4",
+   "at": "2026-09-27T10:02:00",
+   "text": "My laptop is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "laptop"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "multi",
+     "pred": "owns_device",
+     "new": "laptop"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "session_id": "arjun-mehta-s4",
+   "at": "2026-09-27T10:02:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "session_id": "pooja-bhat-s4",
+   "at": "2026-09-27T10:04:00",
+   "text": "My iPad is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "multi",
+     "pred": "owns_device",
+     "new": "ipad"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "session_id": "alice-roy-s4",
+   "at": "2026-09-27T10:04:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "session_id": "rahul-sharma-s4",
+   "at": "2026-09-27T10:04:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "session_id": "arjun-mehta-s4",
+   "at": "2026-09-27T10:04:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "session_id": "pooja-bhat-s4",
+   "at": "2026-09-27T10:06:00",
+   "text": "Like I said, I'm in Nasik now.",
+   "expect": [
+    [
+     "lives_in",
+     "nashik"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "unchanged",
+     "pred": "lives_in",
+     "value": "nashik",
+     "typo": "nasik"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "session_id": "pooja-bhat-s4",
+   "at": "2026-09-27T10:08:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "session_id": "uday-rao-s4",
+   "at": "2026-09-28T10:00:00",
+   "text": "ok thx",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "session_id": "zoya-mirza-s4",
+   "at": "2026-09-28T10:00:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "fatima sheikh",
+   "session_id": "fatima-sheikh-s4",
+   "at": "2026-09-28T10:00:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "session_id": "uday-rao-s4",
+   "at": "2026-09-28T10:02:00",
+   "text": "Wifi barely reaches my bedroom.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2058",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "weak_range"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "session_id": "zoya-mirza-s4",
+   "at": "2026-09-28T10:02:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "fatima sheikh",
+   "session_id": "fatima-sheikh-s4",
+   "at": "2026-09-28T10:02:00",
+   "text": "Hi there!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "session_id": "uday-rao-s4",
+   "at": "2026-09-28T10:04:00",
+   "text": "Like I said, I'm in Mumbia now.",
+   "expect": [
+    [
+     "lives_in",
+     "mumbai"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "unchanged",
+     "pred": "lives_in",
+     "value": "mumbai",
+     "typo": "mumbia"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "session_id": "zoya-mirza-s4",
+   "at": "2026-09-28T10:04:00",
+   "text": "Still living in Secunderabad, same as before.",
+   "expect": [
+    [
+     "lives_in",
+     "secunderabad"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "unchanged",
+     "pred": "lives_in",
+     "value": "secunderabad"
+    }
+   ]
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2051",
+   "at": "2026-09-28T15:00:00",
+   "customer": "pooja bhat"
+  },
+  {
+   "type": "turn",
+   "customer": "carol dsouza",
+   "session_id": "carol-dsouza-s4",
+   "at": "2026-09-29T10:00:00",
+   "text": "Hi there!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "farhan khan",
+   "session_id": "farhan-khan-s4",
+   "at": "2026-09-29T10:00:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "session_id": "lata-joshi-s4",
+   "at": "2026-09-29T10:00:00",
+   "text": "Good morning!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "session_id": "eshan-ghosh-s4",
+   "at": "2026-09-29T10:00:00",
+   "text": "Sorry, I was away for a bit.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "farhan khan",
+   "session_id": "farhan-khan-s4",
+   "at": "2026-09-29T10:02:00",
+   "text": "Okay, I'll wait for your update.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "session_id": "lata-joshi-s4",
+   "at": "2026-09-29T10:02:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "session_id": "eshan-ghosh-s4",
+   "at": "2026-09-29T10:02:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2058",
+   "at": "2026-09-29T15:00:00",
+   "customer": "uday rao"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2051",
+   "fix": "restart router",
+   "worked": false,
+   "at": "2026-09-29T16:00:00",
+   "customer": "pooja bhat"
+  },
+  {
+   "type": "turn",
+   "customer": "manav gupta",
+   "session_id": "manav-gupta-s4",
+   "at": "2026-09-30T10:00:00",
+   "text": "Sorry, I was away for a bit.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "session_id": "yamini-krishnan-s4",
+   "at": "2026-09-30T10:00:00",
+   "text": "Good morning!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "session_id": "chirag-jain-s4",
+   "at": "2026-09-30T10:00:00",
+   "text": "Good morning!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "hema subramanian",
+   "session_id": "hema-subramanian-s4",
+   "at": "2026-09-30T10:00:00",
+   "text": "My iPad is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "multi",
+     "pred": "owns_device",
+     "new": "ipad"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "session_id": "priya-naik-s4",
+   "at": "2026-09-30T10:00:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "manav gupta",
+   "session_id": "manav-gupta-s4",
+   "at": "2026-09-30T10:02:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "session_id": "yamini-krishnan-s4",
+   "at": "2026-09-30T10:02:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "session_id": "chirag-jain-s4",
+   "at": "2026-09-30T10:02:00",
+   "text": "Every evening the internet disconnects for a few minutes.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2064",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "evening_drops"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "hema subramanian",
+   "session_id": "hema-subramanian-s4",
+   "at": "2026-09-30T10:02:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "session_id": "priya-naik-s4",
+   "at": "2026-09-30T10:02:00",
+   "text": "Again, it's Fiber 100 I'm paying for.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "unchanged",
+     "pred": "on_plan",
+     "value": "fiber 100"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "session_id": "chirag-jain-s4",
+   "at": "2026-09-30T10:04:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "session_id": "priya-naik-s4",
+   "at": "2026-09-30T10:04:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2051",
+   "fix": "replace fiber cable",
+   "worked": true,
+   "at": "2026-09-30T16:00:00",
+   "customer": "pooja bhat"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2058",
+   "fix": "move router",
+   "worked": false,
+   "at": "2026-09-30T16:00:00",
+   "customer": "uday rao"
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "session_id": "esha-iyer-s4",
+   "at": "2026-10-01T10:00:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "session_id": "qasim-ali-s4",
+   "at": "2026-10-01T10:00:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "session_id": "tara-banerjee-s4",
+   "at": "2026-10-01T10:00:00",
+   "text": "Hi there!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "vikram desai",
+   "session_id": "vikram-desai-s4",
+   "at": "2026-10-01T10:00:00",
+   "text": "ok thx",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul shah",
+   "session_id": "rahul-shah-s4",
+   "at": "2026-10-01T10:00:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehra",
+   "session_id": "arjun-mehra-s4",
+   "at": "2026-10-01T10:00:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "session_id": "qasim-ali-s4",
+   "at": "2026-10-01T10:02:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "session_id": "tara-banerjee-s4",
+   "at": "2026-10-01T10:02:00",
+   "text": "I'm usually free after 6pm.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "vikram desai",
+   "session_id": "vikram-desai-s4",
+   "at": "2026-10-01T10:02:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul shah",
+   "session_id": "rahul-shah-s4",
+   "at": "2026-10-01T10:02:00",
+   "text": "Good morning!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehra",
+   "session_id": "arjun-mehra-s4",
+   "at": "2026-10-01T10:02:00",
+   "text": "Again, we're still in Navi Mumbai.",
+   "expect": [
+    [
+     "lives_in",
+     "navi mumbai"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "unchanged",
+     "pred": "lives_in",
+     "value": "navi mumbai"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "session_id": "tara-banerjee-s4",
+   "at": "2026-10-01T10:04:00",
+   "text": "Still living in Puen, same as before.",
+   "expect": [
+    [
+     "lives_in",
+     "pune"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "unchanged",
+     "pred": "lives_in",
+     "value": "pune",
+     "typo": "puen"
+    }
+   ]
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2064",
+   "at": "2026-10-01T15:00:00",
+   "customer": "chirag jain"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2058",
+   "fix": "add mesh extender",
+   "worked": true,
+   "at": "2026-10-01T16:00:00",
+   "customer": "uday rao"
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "session_id": "dev-malhotra-s4",
+   "at": "2026-10-02T10:00:00",
+   "text": "We use a iPad at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "multi",
+     "pred": "owns_device",
+     "new": "ipad"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "omar siddiqui",
+   "session_id": "omar-siddiqui-s4",
+   "at": "2026-10-02T10:00:00",
+   "text": "I also have a iPhone on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "iphone"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "multi",
+     "pred": "owns_device",
+     "new": "iphone"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "session_id": "ritu-saxena-s4",
+   "at": "2026-10-02T10:00:00",
+   "text": "Latency spikes make online gaming impossible.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2054",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "latency"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "session_id": "sanjay-patil-s4",
+   "at": "2026-10-02T10:00:00",
+   "text": "Like I said, I'm in Pimpri now.",
+   "expect": [
+    [
+     "lives_in",
+     "pimpri"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "unchanged",
+     "pred": "lives_in",
+     "value": "pimpri",
+     "typo": "pimpri"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "session_id": "aditi-kulkarni-s4",
+   "at": "2026-10-02T10:00:00",
+   "text": "As I told you, my plan is fiber 300.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "unchanged",
+     "pred": "on_plan",
+     "value": "fiber 300"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "session_id": "bhavna-shetty-s4",
+   "at": "2026-10-02T10:00:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "session_id": "priya-nair-s4",
+   "at": "2026-10-02T10:00:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "session_id": "dev-malhotra-s4",
+   "at": "2026-10-02T10:02:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "omar siddiqui",
+   "session_id": "omar-siddiqui-s4",
+   "at": "2026-10-02T10:02:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "session_id": "ritu-saxena-s4",
+   "at": "2026-10-02T10:02:00",
+   "text": "Okay, I'll wait for your update.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "session_id": "sanjay-patil-s4",
+   "at": "2026-10-02T10:02:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "session_id": "aditi-kulkarni-s4",
+   "at": "2026-10-02T10:02:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "session_id": "bhavna-shetty-s4",
+   "at": "2026-10-02T10:02:00",
+   "text": "Nothing connects, the internet is totally dead.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2062",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "no_internet"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "session_id": "dev-malhotra-s4",
+   "at": "2026-10-02T10:04:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "omar siddiqui",
+   "session_id": "omar-siddiqui-s4",
+   "at": "2026-10-02T10:04:00",
+   "text": "Good morning!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "session_id": "ritu-saxena-s4",
+   "at": "2026-10-02T10:04:00",
+   "text": "I also have a PS5 on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "ps5"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "multi",
+     "pred": "owns_device",
+     "new": "ps5"
+    }
+   ]
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2064",
+   "fix": "restart router",
+   "worked": false,
+   "at": "2026-10-02T16:00:00",
+   "customer": "chirag jain"
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "session_id": "hari-kumar-s4",
+   "at": "2026-10-03T10:00:00",
+   "text": "Again, we're still in Tahne.",
+   "expect": [
+    [
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "unchanged",
+     "pred": "lives_in",
+     "value": "thane",
+     "typo": "tahne"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "jaya reddy",
+   "session_id": "jaya-reddy-s4",
+   "at": "2026-10-03T10:00:00",
+   "text": "The router reboots on its own every few hours.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "ticket_id": "PML-2046",
+   "plants": [
+    {
+     "kind": "issue",
+     "cluster": "reboots"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "alice rao",
+   "session_id": "alice-rao-s4",
+   "at": "2026-10-03T10:00:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "session_id": "hari-kumar-s4",
+   "at": "2026-10-03T10:02:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "jaya reddy",
+   "session_id": "jaya-reddy-s4",
+   "at": "2026-10-03T10:02:00",
+   "text": "I also have a iPad on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "multi",
+     "pred": "owns_device",
+     "new": "ipad"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "jaya reddy",
+   "session_id": "jaya-reddy-s4",
+   "at": "2026-10-03T10:04:00",
+   "text": "Good morning!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "jaya reddy",
+   "session_id": "jaya-reddy-s4",
+   "at": "2026-10-03T10:06:00",
+   "text": "Again, we're still in Tahne.",
+   "expect": [
+    [
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "unchanged",
+     "pred": "lives_in",
+     "value": "thane",
+     "typo": "tahne"
+    }
+   ]
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2054",
+   "at": "2026-10-03T15:00:00",
+   "customer": "ritu saxena"
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2062",
+   "at": "2026-10-03T15:00:00",
+   "customer": "bhavna shetty"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2064",
+   "fix": "change wifi channel",
+   "worked": true,
+   "at": "2026-10-03T16:00:00",
+   "customer": "chirag jain"
+  },
+  {
+   "type": "pick_up",
+   "ticket": "PML-2046",
+   "at": "2026-10-04T15:00:00",
+   "customer": "jaya reddy"
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "session_id": "gita-pillai-s4",
+   "at": "2026-10-05T10:00:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "wasim akhtar",
+   "session_id": "wasim-akhtar-s4",
+   "at": "2026-10-05T10:00:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "session_id": "gaurav-chawla-s4",
+   "at": "2026-10-05T10:00:00",
+   "text": "Hi there!",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "session_id": "gita-pillai-s4",
+   "at": "2026-10-05T10:02:00",
+   "text": "Like I said, I'm in Thane now.",
+   "expect": [
+    [
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "unchanged",
+     "pred": "lives_in",
+     "value": "thane"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "wasim akhtar",
+   "session_id": "wasim-akhtar-s4",
+   "at": "2026-10-05T10:02:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "session_id": "gaurav-chawla-s4",
+   "at": "2026-10-05T10:02:00",
+   "text": "Again, we're still in Hydrabad.",
+   "expect": [
+    [
+     "lives_in",
+     "hyderabad"
+    ]
+   ],
+   "ticket_id": null,
+   "plants": [
+    {
+     "kind": "unchanged",
+     "pred": "lives_in",
+     "value": "hyderabad",
+     "typo": "hydrabad"
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "session_id": "gita-pillai-s4",
+   "at": "2026-10-05T10:04:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "session_id": "gaurav-chawla-s4",
+   "at": "2026-10-05T10:04:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "ticket_id": null,
+   "plants": []
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2046",
+   "fix": "factory reset",
+   "worked": false,
+   "at": "2026-10-05T16:00:00",
+   "customer": "jaya reddy"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2054",
+   "fix": "enable qos",
+   "worked": true,
+   "at": "2026-10-05T16:00:00",
+   "customer": "ritu saxena"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2062",
+   "fix": "replace fiber cable",
+   "worked": true,
+   "at": "2026-10-05T16:00:00",
+   "customer": "bhavna shetty"
+  },
+  {
+   "type": "try_fix",
+   "ticket": "PML-2046",
+   "fix": "firmware update",
+   "worked": true,
+   "at": "2026-10-06T16:00:00",
+   "customer": "jaya reddy"
+  }
+ ]
+}

@@ -1,0 +1,1756 @@
+{
+ "collisions": [
+  [
+   "alice rao",
+   "alice roy"
+  ],
+  [
+   "rahul shah",
+   "rahul sharma"
+  ],
+  [
+   "priya nair",
+   "priya naik"
+  ],
+  [
+   "arjun mehta",
+   "arjun mehra"
+  ]
+ ],
+ "changes": [
+  {
+   "customer": "bob menon",
+   "case": "change",
+   "pred": "on_plan",
+   "old": "fiber 100",
+   "new": "fiber 1000"
+  },
+  {
+   "customer": "dev malhotra",
+   "case": "change",
+   "pred": "lives_in",
+   "old": "hyderabad",
+   "new": "mysuru"
+  },
+  {
+   "customer": "dev malhotra",
+   "case": "multi",
+   "pred": "owns_device",
+   "old": "smart tv",
+   "new": "ipad"
+  },
+  {
+   "customer": "esha iyer",
+   "case": "change",
+   "pred": "lives_in",
+   "old": "bengaluru",
+   "new": "pune"
+  },
+  {
+   "customer": "farhan khan",
+   "case": "change",
+   "pred": "on_plan",
+   "old": "fiber 1000",
+   "new": "basic 50"
+  },
+  {
+   "customer": "farhan khan",
+   "case": "multi",
+   "pred": "owns_device",
+   "old": null,
+   "new": "desktop pc"
+  },
+  {
+   "customer": "gita pillai",
+   "case": "change",
+   "pred": "lives_in",
+   "old": "pune",
+   "new": "thane"
+  },
+  {
+   "customer": "gita pillai",
+   "case": "unchanged",
+   "pred": "lives_in",
+   "new": "thane",
+   "typo": false
+  },
+  {
+   "customer": "hari kumar",
+   "case": "change",
+   "pred": "lives_in",
+   "old": "hyderabad",
+   "new": "thane"
+  },
+  {
+   "customer": "hari kumar",
+   "case": "unchanged",
+   "pred": "lives_in",
+   "new": "thane",
+   "typo": true
+  },
+  {
+   "customer": "ishaan verma",
+   "case": "change",
+   "pred": "has_router",
+   "old": "ax5400",
+   "new": "pml hub 6 pro"
+  },
+  {
+   "customer": "ishaan verma",
+   "case": "multi",
+   "pred": "owns_device",
+   "old": null,
+   "new": "ps5"
+  },
+  {
+   "customer": "jaya reddy",
+   "case": "multi",
+   "pred": "owns_device",
+   "old": "smart tv",
+   "new": "ipad"
+  },
+  {
+   "customer": "jaya reddy",
+   "case": "unchanged",
+   "pred": "lives_in",
+   "new": "thane",
+   "typo": true
+  },
+  {
+   "customer": "kabir singh",
+   "case": "multi",
+   "pred": "owns_device",
+   "old": "ipad",
+   "new": "xbox"
+  },
+  {
+   "customer": "lata joshi",
+   "case": "multi",
+   "pred": "owns_device",
+   "old": "echo dot",
+   "new": "smart tv"
+  },
+  {
+   "customer": "manav gupta",
+   "case": "change",
+   "pred": "prefers_channel",
+   "old": "phone",
+   "new": "sms"
+  },
+  {
+   "customer": "neha kapoor",
+   "case": "change",
+   "pred": "has_router",
+   "old": "ax1800",
+   "new": "pml hub 6"
+  },
+  {
+   "customer": "neha kapoor",
+   "case": "change",
+   "pred": "prefers_channel",
+   "old": "sms",
+   "new": "whatsapp"
+  },
+  {
+   "customer": "neha kapoor",
+   "case": "multi",
+   "pred": "owns_device",
+   "old": "desktop pc",
+   "new": "laptop"
+  },
+  {
+   "customer": "omar siddiqui",
+   "case": "change",
+   "pred": "on_plan",
+   "old": "basic 50",
+   "new": "fiber 100"
+  },
+  {
+   "customer": "omar siddiqui",
+   "case": "multi",
+   "pred": "owns_device",
+   "old": null,
+   "new": "iphone"
+  },
+  {
+   "customer": "pooja bhat",
+   "case": "change",
+   "pred": "lives_in",
+   "old": "navi mumbai",
+   "new": "nashik"
+  },
+  {
+   "customer": "pooja bhat",
+   "case": "multi",
+   "pred": "owns_device",
+   "old": "smart tv",
+   "new": "ipad"
+  },
+  {
+   "customer": "pooja bhat",
+   "case": "unchanged",
+   "pred": "lives_in",
+   "new": "nashik",
+   "typo": true
+  },
+  {
+   "customer": "qasim ali",
+   "case": "multi",
+   "pred": "owns_device",
+   "old": "ps5",
+   "new": "ipad"
+  },
+  {
+   "customer": "ritu saxena",
+   "case": "change",
+   "pred": "lives_in",
+   "old": "bengaluru",
+   "new": "mumbai"
+  },
+  {
+   "customer": "ritu saxena",
+   "case": "multi",
+   "pred": "owns_device",
+   "old": "laptop",
+   "new": "ps5"
+  },
+  {
+   "customer": "sanjay patil",
+   "case": "unchanged",
+   "pred": "lives_in",
+   "new": "pimpri",
+   "typo": true
+  },
+  {
+   "customer": "tara banerjee",
+   "case": "change",
+   "pred": "lives_in",
+   "old": "mumbai",
+   "new": "pune"
+  },
+  {
+   "customer": "tara banerjee",
+   "case": "unchanged",
+   "pred": "lives_in",
+   "new": "pune",
+   "typo": true
+  },
+  {
+   "customer": "uday rao",
+   "case": "change",
+   "pred": "lives_in",
+   "old": "hyderabad",
+   "new": "mumbai"
+  },
+  {
+   "customer": "uday rao",
+   "case": "unchanged",
+   "pred": "lives_in",
+   "new": "mumbai",
+   "typo": true
+  },
+  {
+   "customer": "vikram desai",
+   "case": "change",
+   "pred": "on_plan",
+   "old": "fiber 100",
+   "new": "fiber 300"
+  },
+  {
+   "customer": "wasim akhtar",
+   "case": "change",
+   "pred": "lives_in",
+   "old": "mumbai",
+   "new": "hyderabad"
+  },
+  {
+   "customer": "wasim akhtar",
+   "case": "change",
+   "pred": "has_router",
+   "old": "pml hub 6 pro",
+   "new": "pml hub 6"
+  },
+  {
+   "customer": "yamini krishnan",
+   "case": "change",
+   "pred": "lives_in",
+   "old": "pune",
+   "new": "mysuru"
+  },
+  {
+   "customer": "yamini krishnan",
+   "case": "change",
+   "pred": "on_plan",
+   "old": "basic 50",
+   "new": "fiber 300"
+  },
+  {
+   "customer": "yamini krishnan",
+   "case": "change",
+   "pred": "prefers_channel",
+   "old": "sms",
+   "new": "phone"
+  },
+  {
+   "customer": "yamini krishnan",
+   "case": "multi",
+   "pred": "owns_device",
+   "old": "laptop",
+   "new": "xbox"
+  },
+  {
+   "customer": "zoya mirza",
+   "case": "change",
+   "pred": "lives_in",
+   "old": "nashik",
+   "new": "secunderabad"
+  },
+  {
+   "customer": "zoya mirza",
+   "case": "unchanged",
+   "pred": "lives_in",
+   "new": "secunderabad",
+   "typo": false
+  },
+  {
+   "customer": "aditi kulkarni",
+   "case": "change",
+   "pred": "on_plan",
+   "old": "basic 50",
+   "new": "fiber 300"
+  },
+  {
+   "customer": "aditi kulkarni",
+   "case": "unchanged",
+   "pred": "on_plan",
+   "new": "fiber 300",
+   "typo": false
+  },
+  {
+   "customer": "bhavna shetty",
+   "case": "change",
+   "pred": "lives_in",
+   "old": "pune",
+   "new": "mumbai"
+  },
+  {
+   "customer": "bhavna shetty",
+   "case": "change",
+   "pred": "prefers_channel",
+   "old": "email",
+   "new": "phone"
+  },
+  {
+   "customer": "bhavna shetty",
+   "case": "multi",
+   "pred": "owns_device",
+   "old": "xbox",
+   "new": "ps5"
+  },
+  {
+   "customer": "chirag jain",
+   "case": "change",
+   "pred": "on_plan",
+   "old": "fiber 100",
+   "new": "fiber 1000"
+  },
+  {
+   "customer": "divya menon",
+   "case": "change",
+   "pred": "on_plan",
+   "old": "fiber 1000",
+   "new": "fiber 300"
+  },
+  {
+   "customer": "divya menon",
+   "case": "change",
+   "pred": "has_router",
+   "old": "ax1800",
+   "new": "pml hub 6 pro"
+  },
+  {
+   "customer": "eshan ghosh",
+   "case": "multi",
+   "pred": "owns_device",
+   "old": "android phone",
+   "new": "iphone"
+  },
+  {
+   "customer": "gaurav chawla",
+   "case": "unchanged",
+   "pred": "lives_in",
+   "new": "hyderabad",
+   "typo": true
+  },
+  {
+   "customer": "hema subramanian",
+   "case": "multi",
+   "pred": "owns_device",
+   "old": "desktop pc",
+   "new": "ipad"
+  },
+  {
+   "customer": "alice rao",
+   "case": "change",
+   "pred": "lives_in",
+   "old": "thane",
+   "new": "mysuru"
+  },
+  {
+   "customer": "alice rao",
+   "case": "change",
+   "pred": "on_plan",
+   "old": "fiber 1000",
+   "new": "fiber 300"
+  },
+  {
+   "customer": "alice roy",
+   "case": "change",
+   "pred": "prefers_channel",
+   "old": "email",
+   "new": "sms"
+  },
+  {
+   "customer": "alice roy",
+   "case": "unchanged",
+   "pred": "lives_in",
+   "new": "pimpri",
+   "typo": true
+  },
+  {
+   "customer": "rahul shah",
+   "case": "change",
+   "pred": "has_router",
+   "old": "ax3000",
+   "new": "ax1800"
+  },
+  {
+   "customer": "rahul sharma",
+   "case": "change",
+   "pred": "has_router",
+   "old": "ax1800",
+   "new": "pml hub 6 pro"
+  },
+  {
+   "customer": "rahul sharma",
+   "case": "change",
+   "pred": "prefers_channel",
+   "old": "email",
+   "new": "phone"
+  },
+  {
+   "customer": "rahul sharma",
+   "case": "multi",
+   "pred": "owns_device",
+   "old": "smart tv",
+   "new": "laptop"
+  },
+  {
+   "customer": "priya nair",
+   "case": "change",
+   "pred": "on_plan",
+   "old": "fiber 1000",
+   "new": "fiber 300"
+  },
+  {
+   "customer": "priya nair",
+   "case": "change",
+   "pred": "has_router",
+   "old": "ax5400",
+   "new": "pml hub 6"
+  },
+  {
+   "customer": "priya nair",
+   "case": "change",
+   "pred": "prefers_channel",
+   "old": "whatsapp",
+   "new": "sms"
+  },
+  {
+   "customer": "priya naik",
+   "case": "unchanged",
+   "pred": "on_plan",
+   "new": "fiber 100",
+   "typo": false
+  },
+  {
+   "customer": "arjun mehta",
+   "case": "change",
+   "pred": "lives_in",
+   "old": "mysuru",
+   "new": "nashik"
+  },
+  {
+   "customer": "arjun mehta",
+   "case": "change",
+   "pred": "prefers_channel",
+   "old": "whatsapp",
+   "new": "phone"
+  },
+  {
+   "customer": "arjun mehta",
+   "case": "unchanged",
+   "pred": "lives_in",
+   "new": "nashik",
+   "typo": false
+  },
+  {
+   "customer": "arjun mehra",
+   "case": "unchanged",
+   "pred": "lives_in",
+   "new": "navi mumbai",
+   "typo": false
+  },
+  {
+   "customer": "dev malhotra",
+   "case": "cross_agent",
+   "pred": "on_plan",
+   "new": "fiber 1000",
+   "old": "fiber 300"
+  },
+  {
+   "customer": "esha iyer",
+   "case": "cross_agent",
+   "pred": "on_plan",
+   "new": "basic 50",
+   "old": "fiber 100"
+  },
+  {
+   "customer": "gita pillai",
+   "case": "cross_agent",
+   "pred": "on_plan",
+   "new": "fiber 1000",
+   "old": "fiber 100"
+  },
+  {
+   "customer": "hari kumar",
+   "case": "cross_agent",
+   "pred": "on_plan",
+   "new": "fiber 300",
+   "old": "fiber 100"
+  },
+  {
+   "customer": "jaya reddy",
+   "case": "cross_agent",
+   "pred": "on_plan",
+   "new": "fiber 1000",
+   "old": "basic 50"
+  },
+  {
+   "customer": "kabir singh",
+   "case": "cross_agent",
+   "pred": "on_plan",
+   "new": "basic 50",
+   "old": "fiber 100"
+  },
+  {
+   "customer": "lata joshi",
+   "case": "cross_agent",
+   "pred": "on_plan",
+   "new": "fiber 300",
+   "old": "basic 50"
+  },
+  {
+   "customer": "neha kapoor",
+   "case": "cross_agent",
+   "pred": "on_plan",
+   "new": "basic 50",
+   "old": "fiber 300"
+  },
+  {
+   "customer": "pooja bhat",
+   "case": "cross_agent",
+   "pred": "on_plan",
+   "new": "fiber 300",
+   "old": "fiber 100"
+  },
+  {
+   "customer": "ritu saxena",
+   "case": "cross_agent",
+   "pred": "on_plan",
+   "new": "fiber 300",
+   "old": "fiber 1000"
+  },
+  {
+   "customer": "sanjay patil",
+   "case": "cross_agent",
+   "pred": "on_plan",
+   "new": "fiber 1000",
+   "old": "fiber 300"
+  },
+  {
+   "customer": "eshan ghosh",
+   "case": "cross_agent",
+   "pred": "on_plan",
+   "new": "fiber 100",
+   "old": "fiber 1000"
+  },
+  {
+   "customer": "fatima sheikh",
+   "case": "cross_agent",
+   "pred": "on_plan",
+   "new": "fiber 300",
+   "old": "fiber 1000"
+  },
+  {
+   "customer": "gaurav chawla",
+   "case": "cross_agent",
+   "pred": "on_plan",
+   "new": "fiber 100",
+   "old": "basic 50"
+  },
+  {
+   "customer": "rahul shah",
+   "case": "cross_agent",
+   "pred": "on_plan",
+   "new": "fiber 1000",
+   "old": "basic 50"
+  },
+  {
+   "customer": "priya naik",
+   "case": "cross_agent",
+   "pred": "on_plan",
+   "new": "fiber 100",
+   "old": "fiber 300"
+  }
+ ],
+ "issue_clusters": {
+  "evening_drops": [
+   "My wifi keeps dropping every evening.",
+   "The connection cuts out at night, it's really annoying.",
+   "Every evening the internet disconnects for a few minutes."
+  ],
+  "slow": [
+   "My internet has been really slow for two days.",
+   "Speeds are crawling, pages take forever to load.",
+   "I'm getting a fraction of the speed I pay for."
+  ],
+  "no_internet": [
+   "There's no internet at all since this morning.",
+   "The internet is completely down at my place.",
+   "Nothing connects, the internet is totally dead."
+  ],
+  "reboots": [
+   "My router keeps restarting by itself.",
+   "The router reboots on its own every few hours.",
+   "My router randomly switches off and comes back on."
+  ],
+  "latency": [
+   "Online games lag terribly, the ping is through the roof.",
+   "Video calls freeze and games lag constantly.",
+   "Latency spikes make online gaming impossible."
+  ],
+  "weak_range": [
+   "Wifi barely reaches my bedroom.",
+   "The signal is weak in the far rooms of the flat.",
+   "Rooms away from the router get almost no wifi."
+  ]
+ },
+ "facts": [
+  {
+   "customer": "bob menon",
+   "pred": "lives_in",
+   "value": "pimpri"
+  },
+  {
+   "customer": "bob menon",
+   "pred": "on_plan",
+   "value": "fiber 1000"
+  },
+  {
+   "customer": "bob menon",
+   "pred": "prefers_channel",
+   "value": "sms"
+  },
+  {
+   "customer": "carol dsouza",
+   "pred": "lives_in",
+   "value": "thane"
+  },
+  {
+   "customer": "carol dsouza",
+   "pred": "on_plan",
+   "value": "fiber 300"
+  },
+  {
+   "customer": "carol dsouza",
+   "pred": "has_router",
+   "value": "ax3000"
+  },
+  {
+   "customer": "carol dsouza",
+   "pred": "prefers_channel",
+   "value": "phone"
+  },
+  {
+   "customer": "dev malhotra",
+   "pred": "lives_in",
+   "value": "mysuru"
+  },
+  {
+   "customer": "dev malhotra",
+   "pred": "on_plan",
+   "value": "fiber 1000"
+  },
+  {
+   "customer": "dev malhotra",
+   "pred": "has_router",
+   "value": "pml hub 6 pro"
+  },
+  {
+   "customer": "dev malhotra",
+   "pred": "prefers_channel",
+   "value": "whatsapp"
+  },
+  {
+   "customer": "esha iyer",
+   "pred": "lives_in",
+   "value": "pune"
+  },
+  {
+   "customer": "esha iyer",
+   "pred": "on_plan",
+   "value": "basic 50"
+  },
+  {
+   "customer": "esha iyer",
+   "pred": "has_router",
+   "value": "ax1800"
+  },
+  {
+   "customer": "esha iyer",
+   "pred": "prefers_channel",
+   "value": "sms"
+  },
+  {
+   "customer": "farhan khan",
+   "pred": "lives_in",
+   "value": "hyderabad"
+  },
+  {
+   "customer": "farhan khan",
+   "pred": "on_plan",
+   "value": "basic 50"
+  },
+  {
+   "customer": "farhan khan",
+   "pred": "has_router",
+   "value": "pml hub 6"
+  },
+  {
+   "customer": "gita pillai",
+   "pred": "lives_in",
+   "value": "thane"
+  },
+  {
+   "customer": "gita pillai",
+   "pred": "on_plan",
+   "value": "fiber 1000"
+  },
+  {
+   "customer": "hari kumar",
+   "pred": "lives_in",
+   "value": "thane"
+  },
+  {
+   "customer": "hari kumar",
+   "pred": "on_plan",
+   "value": "fiber 300"
+  },
+  {
+   "customer": "hari kumar",
+   "pred": "prefers_channel",
+   "value": "email"
+  },
+  {
+   "customer": "ishaan verma",
+   "pred": "lives_in",
+   "value": "pimpri"
+  },
+  {
+   "customer": "ishaan verma",
+   "pred": "on_plan",
+   "value": "fiber 100"
+  },
+  {
+   "customer": "ishaan verma",
+   "pred": "has_router",
+   "value": "pml hub 6 pro"
+  },
+  {
+   "customer": "jaya reddy",
+   "pred": "lives_in",
+   "value": "thane"
+  },
+  {
+   "customer": "jaya reddy",
+   "pred": "on_plan",
+   "value": "fiber 1000"
+  },
+  {
+   "customer": "jaya reddy",
+   "pred": "has_router",
+   "value": "ax3000"
+  },
+  {
+   "customer": "kabir singh",
+   "pred": "lives_in",
+   "value": "bengaluru"
+  },
+  {
+   "customer": "kabir singh",
+   "pred": "on_plan",
+   "value": "basic 50"
+  },
+  {
+   "customer": "kabir singh",
+   "pred": "has_router",
+   "value": "ax3000"
+  },
+  {
+   "customer": "kabir singh",
+   "pred": "prefers_channel",
+   "value": "phone"
+  },
+  {
+   "customer": "lata joshi",
+   "pred": "lives_in",
+   "value": "secunderabad"
+  },
+  {
+   "customer": "lata joshi",
+   "pred": "on_plan",
+   "value": "fiber 300"
+  },
+  {
+   "customer": "lata joshi",
+   "pred": "has_router",
+   "value": "ax5400"
+  },
+  {
+   "customer": "lata joshi",
+   "pred": "prefers_channel",
+   "value": "sms"
+  },
+  {
+   "customer": "manav gupta",
+   "pred": "lives_in",
+   "value": "bengaluru"
+  },
+  {
+   "customer": "manav gupta",
+   "pred": "on_plan",
+   "value": "fiber 100"
+  },
+  {
+   "customer": "manav gupta",
+   "pred": "has_router",
+   "value": "ax3000"
+  },
+  {
+   "customer": "manav gupta",
+   "pred": "prefers_channel",
+   "value": "sms"
+  },
+  {
+   "customer": "neha kapoor",
+   "pred": "lives_in",
+   "value": "pimpri"
+  },
+  {
+   "customer": "neha kapoor",
+   "pred": "on_plan",
+   "value": "basic 50"
+  },
+  {
+   "customer": "neha kapoor",
+   "pred": "has_router",
+   "value": "pml hub 6"
+  },
+  {
+   "customer": "neha kapoor",
+   "pred": "prefers_channel",
+   "value": "whatsapp"
+  },
+  {
+   "customer": "omar siddiqui",
+   "pred": "lives_in",
+   "value": "pune"
+  },
+  {
+   "customer": "omar siddiqui",
+   "pred": "on_plan",
+   "value": "fiber 100"
+  },
+  {
+   "customer": "omar siddiqui",
+   "pred": "has_router",
+   "value": "pml hub 6 pro"
+  },
+  {
+   "customer": "omar siddiqui",
+   "pred": "prefers_channel",
+   "value": "whatsapp"
+  },
+  {
+   "customer": "pooja bhat",
+   "pred": "lives_in",
+   "value": "nashik"
+  },
+  {
+   "customer": "pooja bhat",
+   "pred": "on_plan",
+   "value": "fiber 300"
+  },
+  {
+   "customer": "pooja bhat",
+   "pred": "has_router",
+   "value": "ax3000"
+  },
+  {
+   "customer": "pooja bhat",
+   "pred": "prefers_channel",
+   "value": "whatsapp"
+  },
+  {
+   "customer": "qasim ali",
+   "pred": "lives_in",
+   "value": "hyderabad"
+  },
+  {
+   "customer": "qasim ali",
+   "pred": "on_plan",
+   "value": "fiber 100"
+  },
+  {
+   "customer": "qasim ali",
+   "pred": "has_router",
+   "value": "ax5400"
+  },
+  {
+   "customer": "qasim ali",
+   "pred": "prefers_channel",
+   "value": "email"
+  },
+  {
+   "customer": "ritu saxena",
+   "pred": "lives_in",
+   "value": "mumbai"
+  },
+  {
+   "customer": "ritu saxena",
+   "pred": "on_plan",
+   "value": "fiber 300"
+  },
+  {
+   "customer": "ritu saxena",
+   "pred": "has_router",
+   "value": "ax1800"
+  },
+  {
+   "customer": "ritu saxena",
+   "pred": "prefers_channel",
+   "value": "phone"
+  },
+  {
+   "customer": "sanjay patil",
+   "pred": "lives_in",
+   "value": "pimpri"
+  },
+  {
+   "customer": "sanjay patil",
+   "pred": "on_plan",
+   "value": "fiber 1000"
+  },
+  {
+   "customer": "sanjay patil",
+   "pred": "prefers_channel",
+   "value": "phone"
+  },
+  {
+   "customer": "tara banerjee",
+   "pred": "lives_in",
+   "value": "pune"
+  },
+  {
+   "customer": "tara banerjee",
+   "pred": "on_plan",
+   "value": "basic 50"
+  },
+  {
+   "customer": "tara banerjee",
+   "pred": "has_router",
+   "value": "pml hub 6 pro"
+  },
+  {
+   "customer": "tara banerjee",
+   "pred": "prefers_channel",
+   "value": "email"
+  },
+  {
+   "customer": "uday rao",
+   "pred": "lives_in",
+   "value": "mumbai"
+  },
+  {
+   "customer": "uday rao",
+   "pred": "on_plan",
+   "value": "basic 50"
+  },
+  {
+   "customer": "vikram desai",
+   "pred": "lives_in",
+   "value": "thane"
+  },
+  {
+   "customer": "vikram desai",
+   "pred": "on_plan",
+   "value": "fiber 300"
+  },
+  {
+   "customer": "vikram desai",
+   "pred": "prefers_channel",
+   "value": "phone"
+  },
+  {
+   "customer": "wasim akhtar",
+   "pred": "lives_in",
+   "value": "hyderabad"
+  },
+  {
+   "customer": "wasim akhtar",
+   "pred": "on_plan",
+   "value": "fiber 300"
+  },
+  {
+   "customer": "wasim akhtar",
+   "pred": "has_router",
+   "value": "pml hub 6"
+  },
+  {
+   "customer": "yamini krishnan",
+   "pred": "lives_in",
+   "value": "mysuru"
+  },
+  {
+   "customer": "yamini krishnan",
+   "pred": "on_plan",
+   "value": "fiber 300"
+  },
+  {
+   "customer": "yamini krishnan",
+   "pred": "has_router",
+   "value": "pml hub 6"
+  },
+  {
+   "customer": "yamini krishnan",
+   "pred": "prefers_channel",
+   "value": "phone"
+  },
+  {
+   "customer": "zoya mirza",
+   "pred": "lives_in",
+   "value": "secunderabad"
+  },
+  {
+   "customer": "zoya mirza",
+   "pred": "on_plan",
+   "value": "fiber 100"
+  },
+  {
+   "customer": "zoya mirza",
+   "pred": "has_router",
+   "value": "ax5400"
+  },
+  {
+   "customer": "zoya mirza",
+   "pred": "prefers_channel",
+   "value": "sms"
+  },
+  {
+   "customer": "aditi kulkarni",
+   "pred": "lives_in",
+   "value": "secunderabad"
+  },
+  {
+   "customer": "aditi kulkarni",
+   "pred": "on_plan",
+   "value": "fiber 300"
+  },
+  {
+   "customer": "aditi kulkarni",
+   "pred": "prefers_channel",
+   "value": "phone"
+  },
+  {
+   "customer": "bhavna shetty",
+   "pred": "lives_in",
+   "value": "mumbai"
+  },
+  {
+   "customer": "bhavna shetty",
+   "pred": "on_plan",
+   "value": "fiber 1000"
+  },
+  {
+   "customer": "bhavna shetty",
+   "pred": "has_router",
+   "value": "ax1800"
+  },
+  {
+   "customer": "bhavna shetty",
+   "pred": "prefers_channel",
+   "value": "phone"
+  },
+  {
+   "customer": "chirag jain",
+   "pred": "lives_in",
+   "value": "pimpri"
+  },
+  {
+   "customer": "chirag jain",
+   "pred": "on_plan",
+   "value": "fiber 1000"
+  },
+  {
+   "customer": "chirag jain",
+   "pred": "has_router",
+   "value": "ax5400"
+  },
+  {
+   "customer": "chirag jain",
+   "pred": "prefers_channel",
+   "value": "sms"
+  },
+  {
+   "customer": "divya menon",
+   "pred": "lives_in",
+   "value": "nashik"
+  },
+  {
+   "customer": "divya menon",
+   "pred": "on_plan",
+   "value": "fiber 300"
+  },
+  {
+   "customer": "divya menon",
+   "pred": "has_router",
+   "value": "pml hub 6 pro"
+  },
+  {
+   "customer": "divya menon",
+   "pred": "prefers_channel",
+   "value": "whatsapp"
+  },
+  {
+   "customer": "eshan ghosh",
+   "pred": "lives_in",
+   "value": "navi mumbai"
+  },
+  {
+   "customer": "eshan ghosh",
+   "pred": "on_plan",
+   "value": "fiber 100"
+  },
+  {
+   "customer": "eshan ghosh",
+   "pred": "has_router",
+   "value": "pml hub 6 pro"
+  },
+  {
+   "customer": "eshan ghosh",
+   "pred": "prefers_channel",
+   "value": "whatsapp"
+  },
+  {
+   "customer": "fatima sheikh",
+   "pred": "lives_in",
+   "value": "pune"
+  },
+  {
+   "customer": "fatima sheikh",
+   "pred": "on_plan",
+   "value": "fiber 300"
+  },
+  {
+   "customer": "fatima sheikh",
+   "pred": "has_router",
+   "value": "pml hub 6"
+  },
+  {
+   "customer": "fatima sheikh",
+   "pred": "prefers_channel",
+   "value": "email"
+  },
+  {
+   "customer": "gaurav chawla",
+   "pred": "lives_in",
+   "value": "hyderabad"
+  },
+  {
+   "customer": "gaurav chawla",
+   "pred": "on_plan",
+   "value": "fiber 100"
+  },
+  {
+   "customer": "gaurav chawla",
+   "pred": "has_router",
+   "value": "ax5400"
+  },
+  {
+   "customer": "gaurav chawla",
+   "pred": "prefers_channel",
+   "value": "sms"
+  },
+  {
+   "customer": "hema subramanian",
+   "pred": "lives_in",
+   "value": "thane"
+  },
+  {
+   "customer": "hema subramanian",
+   "pred": "on_plan",
+   "value": "basic 50"
+  },
+  {
+   "customer": "hema subramanian",
+   "pred": "prefers_channel",
+   "value": "email"
+  },
+  {
+   "customer": "alice rao",
+   "pred": "lives_in",
+   "value": "mysuru"
+  },
+  {
+   "customer": "alice rao",
+   "pred": "on_plan",
+   "value": "fiber 300"
+  },
+  {
+   "customer": "alice rao",
+   "pred": "has_router",
+   "value": "ax5400"
+  },
+  {
+   "customer": "alice rao",
+   "pred": "prefers_channel",
+   "value": "whatsapp"
+  },
+  {
+   "customer": "alice roy",
+   "pred": "lives_in",
+   "value": "pimpri"
+  },
+  {
+   "customer": "alice roy",
+   "pred": "on_plan",
+   "value": "fiber 300"
+  },
+  {
+   "customer": "alice roy",
+   "pred": "has_router",
+   "value": "ax3000"
+  },
+  {
+   "customer": "alice roy",
+   "pred": "prefers_channel",
+   "value": "sms"
+  },
+  {
+   "customer": "rahul shah",
+   "pred": "lives_in",
+   "value": "mumbai"
+  },
+  {
+   "customer": "rahul shah",
+   "pred": "on_plan",
+   "value": "fiber 1000"
+  },
+  {
+   "customer": "rahul shah",
+   "pred": "has_router",
+   "value": "ax1800"
+  },
+  {
+   "customer": "rahul shah",
+   "pred": "prefers_channel",
+   "value": "whatsapp"
+  },
+  {
+   "customer": "rahul sharma",
+   "pred": "lives_in",
+   "value": "hyderabad"
+  },
+  {
+   "customer": "rahul sharma",
+   "pred": "on_plan",
+   "value": "basic 50"
+  },
+  {
+   "customer": "rahul sharma",
+   "pred": "has_router",
+   "value": "pml hub 6 pro"
+  },
+  {
+   "customer": "rahul sharma",
+   "pred": "prefers_channel",
+   "value": "phone"
+  },
+  {
+   "customer": "priya nair",
+   "pred": "lives_in",
+   "value": "navi mumbai"
+  },
+  {
+   "customer": "priya nair",
+   "pred": "on_plan",
+   "value": "fiber 300"
+  },
+  {
+   "customer": "priya nair",
+   "pred": "has_router",
+   "value": "pml hub 6"
+  },
+  {
+   "customer": "priya nair",
+   "pred": "prefers_channel",
+   "value": "sms"
+  },
+  {
+   "customer": "priya naik",
+   "pred": "lives_in",
+   "value": "navi mumbai"
+  },
+  {
+   "customer": "priya naik",
+   "pred": "on_plan",
+   "value": "fiber 100"
+  },
+  {
+   "customer": "priya naik",
+   "pred": "has_router",
+   "value": "pml hub 6 pro"
+  },
+  {
+   "customer": "priya naik",
+   "pred": "prefers_channel",
+   "value": "whatsapp"
+  },
+  {
+   "customer": "arjun mehta",
+   "pred": "lives_in",
+   "value": "nashik"
+  },
+  {
+   "customer": "arjun mehta",
+   "pred": "on_plan",
+   "value": "fiber 1000"
+  },
+  {
+   "customer": "arjun mehta",
+   "pred": "has_router",
+   "value": "pml hub 6"
+  },
+  {
+   "customer": "arjun mehta",
+   "pred": "prefers_channel",
+   "value": "phone"
+  },
+  {
+   "customer": "arjun mehra",
+   "pred": "lives_in",
+   "value": "navi mumbai"
+  },
+  {
+   "customer": "arjun mehra",
+   "pred": "on_plan",
+   "value": "fiber 300"
+  },
+  {
+   "customer": "arjun mehra",
+   "pred": "has_router",
+   "value": "pml hub 6 pro"
+  },
+  {
+   "customer": "arjun mehra",
+   "pred": "prefers_channel",
+   "value": "email"
+  },
+  {
+   "customer": "bob menon",
+   "pred": "owns_device",
+   "value": "smart tv"
+  },
+  {
+   "customer": "carol dsouza",
+   "pred": "owns_device",
+   "value": "iphone"
+  },
+  {
+   "customer": "carol dsouza",
+   "pred": "owns_device",
+   "value": "xbox"
+  },
+  {
+   "customer": "dev malhotra",
+   "pred": "owns_device",
+   "value": "smart tv"
+  },
+  {
+   "customer": "dev malhotra",
+   "pred": "owns_device",
+   "value": "xbox"
+  },
+  {
+   "customer": "dev malhotra",
+   "pred": "owns_device",
+   "value": "ipad"
+  },
+  {
+   "customer": "esha iyer",
+   "pred": "owns_device",
+   "value": "ipad"
+  },
+  {
+   "customer": "esha iyer",
+   "pred": "owns_device",
+   "value": "xbox"
+  },
+  {
+   "customer": "farhan khan",
+   "pred": "owns_device",
+   "value": "desktop pc"
+  },
+  {
+   "customer": "gita pillai",
+   "pred": "owns_device",
+   "value": "smart tv"
+  },
+  {
+   "customer": "gita pillai",
+   "pred": "owns_device",
+   "value": "ipad"
+  },
+  {
+   "customer": "hari kumar",
+   "pred": "owns_device",
+   "value": "echo dot"
+  },
+  {
+   "customer": "hari kumar",
+   "pred": "owns_device",
+   "value": "xbox"
+  },
+  {
+   "customer": "ishaan verma",
+   "pred": "owns_device",
+   "value": "ps5"
+  },
+  {
+   "customer": "jaya reddy",
+   "pred": "owns_device",
+   "value": "smart tv"
+  },
+  {
+   "customer": "jaya reddy",
+   "pred": "owns_device",
+   "value": "ipad"
+  },
+  {
+   "customer": "kabir singh",
+   "pred": "owns_device",
+   "value": "ipad"
+  },
+  {
+   "customer": "kabir singh",
+   "pred": "owns_device",
+   "value": "desktop pc"
+  },
+  {
+   "customer": "kabir singh",
+   "pred": "owns_device",
+   "value": "xbox"
+  },
+  {
+   "customer": "lata joshi",
+   "pred": "owns_device",
+   "value": "echo dot"
+  },
+  {
+   "customer": "lata joshi",
+   "pred": "owns_device",
+   "value": "android phone"
+  },
+  {
+   "customer": "lata joshi",
+   "pred": "owns_device",
+   "value": "smart tv"
+  },
+  {
+   "customer": "neha kapoor",
+   "pred": "owns_device",
+   "value": "desktop pc"
+  },
+  {
+   "customer": "neha kapoor",
+   "pred": "owns_device",
+   "value": "smart tv"
+  },
+  {
+   "customer": "neha kapoor",
+   "pred": "owns_device",
+   "value": "laptop"
+  },
+  {
+   "customer": "omar siddiqui",
+   "pred": "owns_device",
+   "value": "iphone"
+  },
+  {
+   "customer": "pooja bhat",
+   "pred": "owns_device",
+   "value": "smart tv"
+  },
+  {
+   "customer": "pooja bhat",
+   "pred": "owns_device",
+   "value": "android phone"
+  },
+  {
+   "customer": "pooja bhat",
+   "pred": "owns_device",
+   "value": "ipad"
+  },
+  {
+   "customer": "qasim ali",
+   "pred": "owns_device",
+   "value": "ps5"
+  },
+  {
+   "customer": "qasim ali",
+   "pred": "owns_device",
+   "value": "smart tv"
+  },
+  {
+   "customer": "qasim ali",
+   "pred": "owns_device",
+   "value": "ipad"
+  },
+  {
+   "customer": "ritu saxena",
+   "pred": "owns_device",
+   "value": "laptop"
+  },
+  {
+   "customer": "ritu saxena",
+   "pred": "owns_device",
+   "value": "ps5"
+  },
+  {
+   "customer": "sanjay patil",
+   "pred": "owns_device",
+   "value": "android phone"
+  },
+  {
+   "customer": "sanjay patil",
+   "pred": "owns_device",
+   "value": "smart tv"
+  },
+  {
+   "customer": "tara banerjee",
+   "pred": "owns_device",
+   "value": "laptop"
+  },
+  {
+   "customer": "tara banerjee",
+   "pred": "owns_device",
+   "value": "ipad"
+  },
+  {
+   "customer": "uday rao",
+   "pred": "owns_device",
+   "value": "iphone"
+  },
+  {
+   "customer": "uday rao",
+   "pred": "owns_device",
+   "value": "android phone"
+  },
+  {
+   "customer": "vikram desai",
+   "pred": "owns_device",
+   "value": "ps5"
+  },
+  {
+   "customer": "vikram desai",
+   "pred": "owns_device",
+   "value": "desktop pc"
+  },
+  {
+   "customer": "wasim akhtar",
+   "pred": "owns_device",
+   "value": "smart tv"
+  },
+  {
+   "customer": "wasim akhtar",
+   "pred": "owns_device",
+   "value": "laptop"
+  },
+  {
+   "customer": "yamini krishnan",
+   "pred": "owns_device",
+   "value": "laptop"
+  },
+  {
+   "customer": "yamini krishnan",
+   "pred": "owns_device",
+   "value": "xbox"
+  },
+  {
+   "customer": "zoya mirza",
+   "pred": "owns_device",
+   "value": "iphone"
+  },
+  {
+   "customer": "zoya mirza",
+   "pred": "owns_device",
+   "value": "desktop pc"
+  },
+  {
+   "customer": "aditi kulkarni",
+   "pred": "owns_device",
+   "value": "laptop"
+  },
+  {
+   "customer": "aditi kulkarni",
+   "pred": "owns_device",
+   "value": "desktop pc"
+  },
+  {
+   "customer": "bhavna shetty",
+   "pred": "owns_device",
+   "value": "xbox"
+  },
+  {
+   "customer": "bhavna shetty",
+   "pred": "owns_device",
+   "value": "laptop"
+  },
+  {
+   "customer": "bhavna shetty",
+   "pred": "owns_device",
+   "value": "ps5"
+  },
+  {
+   "customer": "divya menon",
+   "pred": "owns_device",
+   "value": "iphone"
+  },
+  {
+   "customer": "divya menon",
+   "pred": "owns_device",
+   "value": "ps5"
+  },
+  {
+   "customer": "eshan ghosh",
+   "pred": "owns_device",
+   "value": "android phone"
+  },
+  {
+   "customer": "eshan ghosh",
+   "pred": "owns_device",
+   "value": "ps5"
+  },
+  {
+   "customer": "eshan ghosh",
+   "pred": "owns_device",
+   "value": "iphone"
+  },
+  {
+   "customer": "fatima sheikh",
+   "pred": "owns_device",
+   "value": "ipad"
+  },
+  {
+   "customer": "fatima sheikh",
+   "pred": "owns_device",
+   "value": "xbox"
+  },
+  {
+   "customer": "hema subramanian",
+   "pred": "owns_device",
+   "value": "desktop pc"
+  },
+  {
+   "customer": "hema subramanian",
+   "pred": "owns_device",
+   "value": "echo dot"
+  },
+  {
+   "customer": "hema subramanian",
+   "pred": "owns_device",
+   "value": "ipad"
+  },
+  {
+   "customer": "alice rao",
+   "pred": "owns_device",
+   "value": "ipad"
+  },
+  {
+   "customer": "alice roy",
+   "pred": "owns_device",
+   "value": "android phone"
+  },
+  {
+   "customer": "alice roy",
+   "pred": "owns_device",
+   "value": "ps5"
+  },
+  {
+   "customer": "rahul shah",
+   "pred": "owns_device",
+   "value": "xbox"
+  },
+  {
+   "customer": "rahul shah",
+   "pred": "owns_device",
+   "value": "android phone"
+  },
+  {
+   "customer": "rahul sharma",
+   "pred": "owns_device",
+   "value": "smart tv"
+  },
+  {
+   "customer": "rahul sharma",
+   "pred": "owns_device",
+   "value": "xbox"
+  },
+  {
+   "customer": "rahul sharma",
+   "pred": "owns_device",
+   "value": "laptop"
+  },
+  {
+   "customer": "priya nair",
+   "pred": "owns_device",
+   "value": "ipad"
+  },
+  {
+   "customer": "priya nair",
+   "pred": "owns_device",
+   "value": "laptop"
+  },
+  {
+   "customer": "priya naik",
+   "pred": "owns_device",
+   "value": "echo dot"
+  },
+  {
+   "customer": "priya naik",
+   "pred": "owns_device",
+   "value": "ipad"
+  }
+ ]
+}

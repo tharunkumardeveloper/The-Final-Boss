@@ -1,0 +1,84 @@
+{
+ "billing": {
+  "dev malhotra": "fiber 300",
+  "esha iyer": "fiber 100",
+  "gita pillai": "fiber 100",
+  "hari kumar": "fiber 100",
+  "jaya reddy": "basic 50",
+  "kabir singh": "fiber 100",
+  "lata joshi": "basic 50",
+  "neha kapoor": "fiber 300",
+  "pooja bhat": "fiber 100",
+  "ritu saxena": "fiber 1000",
+  "sanjay patil": "fiber 300",
+  "eshan ghosh": "fiber 1000",
+  "fatima sheikh": "fiber 1000",
+  "gaurav chawla": "basic 50",
+  "rahul shah": "basic 50",
+  "priya naik": "fiber 300"
+ },
+ "outages": [
+  {
+   "name": "substation failure in gachibowli",
+   "area": "hyderabad",
+   "cities": [
+    "hyderabad"
+   ]
+  },
+  {
+   "name": "flooded junction box in andheri",
+   "area": "mumbai",
+   "cities": [
+    "mumbai"
+   ]
+  },
+  {
+   "name": "fiber cut on fc road",
+   "area": "pune",
+   "cities": [
+    "pune"
+   ]
+  },
+  {
+   "name": "road works cut in chinchwad",
+   "area": "pimpri",
+   "cities": [
+    "pimpri"
+   ]
+  }
+ ],
+ "diagnostics": {
+  "dev malhotra": "firmware crash loop",
+  "esha iyer": "bufferbloat under load",
+  "gita pillai": "channel congestion on 2.4 ghz",
+  "hari kumar": "weak signal in far rooms",
+  "jaya reddy": "bufferbloat under load",
+  "kabir singh": "optical signal loss",
+  "lata joshi": "weak signal in far rooms",
+  "neha kapoor": "optical signal loss",
+  "pooja bhat": "channel congestion on 2.4 ghz",
+  "qasim ali": "high line attenuation",
+  "ritu saxena": "high line attenuation",
+  "sanjay patil": "channel congestion on 2.4 ghz",
+  "tara banerjee": "high line attenuation",
+  "uday rao": "firmware crash loop",
+  "yamini krishnan": "channel congestion on 2.4 ghz",
+  "aditi kulkarni": "weak signal in far rooms",
+  "bhavna shetty": "firmware crash loop",
+  "chirag jain": "optical signal loss",
+  "divya menon": "firmware crash loop",
+  "eshan ghosh": "weak signal in far rooms",
+  "fatima sheikh": "high line attenuation",
+  "gaurav chawla": "firmware crash loop",
+  "hema subramanian": "firmware crash loop",
+  "rahul shah": "weak signal in far rooms",
+  "rahul sharma": "weak signal in far rooms",
+  "priya naik": "optical signal loss"
+ },
+ "outage_by_area": {
+  "hyderabad": "substation failure in gachibowli",
+  "mumbai": "flooded junction box in andheri",
+  "pune": "fiber cut on fc road",
+  "pimpri": "road works cut in chinchwad"
+ }
+}

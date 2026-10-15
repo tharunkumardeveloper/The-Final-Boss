@@ -1,0 +1,1927 @@
+[
+ {
+  "type": "current",
+  "question": "Which plan is Alice Rao on?",
+  "gold": [
+   "fiber 300"
+  ],
+  "asked_by": "intake",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 0
+ },
+ {
+  "type": "current",
+  "question": "Where does Bhavna Shetty live now?",
+  "gold": [
+   "mumbai"
+  ],
+  "asked_by": "intake",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 1
+ },
+ {
+  "type": "current",
+  "question": "What is the status of Kabir Singh's ticket PML-2047?",
+  "gold": [
+   "resolved"
+  ],
+  "asked_by": "intake",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 2
+ },
+ {
+  "type": "current",
+  "question": "What is the status of Fatima Sheikh's ticket PML-2067?",
+  "gold": [
+   "resolved"
+  ],
+  "asked_by": "intake",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 3
+ },
+ {
+  "type": "current",
+  "question": "What is the status of Qasim Ali's ticket PML-2052?",
+  "gold": [
+   "resolved"
+  ],
+  "asked_by": "intake",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 4
+ },
+ {
+  "type": "current",
+  "question": "How does Bhavna Shetty want to be contacted now?",
+  "gold": [
+   "phone"
+  ],
+  "asked_by": "intake",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 5
+ },
+ {
+  "type": "current",
+  "question": "What is the status of Uday Rao's ticket PML-2057?",
+  "gold": [
+   "resolved"
+  ],
+  "asked_by": "intake",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 6
+ },
+ {
+  "type": "current",
+  "question": "Where does Ritu Saxena live now?",
+  "gold": [
+   "mumbai"
+  ],
+  "asked_by": "intake",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 7
+ },
+ {
+  "type": "current",
+  "question": "What is the status of Sanjay Patil's ticket PML-2055?",
+  "gold": [
+   "resolved"
+  ],
+  "asked_by": "intake",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 8
+ },
+ {
+  "type": "current",
+  "question": "Which plan is Vikram Desai on?",
+  "gold": [
+   "fiber 300"
+  ],
+  "asked_by": "intake",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 9
+ },
+ {
+  "type": "current",
+  "question": "Which city does Alice Rao live in?",
+  "gold": [
+   "mysuru"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": true,
+  "i": 10
+ },
+ {
+  "type": "current",
+  "question": "Which city does Alice Roy live in?",
+  "gold": [
+   "pimpri"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": true,
+  "i": 11
+ },
+ {
+  "type": "current",
+  "question": "Which city does Rahul Shah live in?",
+  "gold": [
+   "mumbai"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": true,
+  "i": 12
+ },
+ {
+  "type": "current",
+  "question": "Which city does Rahul Sharma live in?",
+  "gold": [
+   "hyderabad"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": true,
+  "i": 13
+ },
+ {
+  "type": "current",
+  "question": "Which city does Priya Nair live in?",
+  "gold": [
+   "navi mumbai"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": true,
+  "i": 14
+ },
+ {
+  "type": "current",
+  "question": "Which city does Priya Naik live in?",
+  "gold": [
+   "navi mumbai"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": true,
+  "i": 15
+ },
+ {
+  "type": "current",
+  "question": "Which city does Arjun Mehta live in?",
+  "gold": [
+   "nashik"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": true,
+  "i": 16
+ },
+ {
+  "type": "current",
+  "question": "Which city does Arjun Mehra live in?",
+  "gold": [
+   "navi mumbai"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": true,
+  "i": 17
+ },
+ {
+  "type": "world_time",
+  "question": "Which contact channel did Manav Gupta prefer on 2026-09-23?",
+  "gold": [
+   "sms"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 18
+ },
+ {
+  "type": "world_time",
+  "question": "Where did Zoya Mirza actually live on 2026-09-20?",
+  "gold": [
+   "secunderabad"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 19
+ },
+ {
+  "type": "world_time",
+  "question": "Where did Bhavna Shetty actually live on 2026-09-21?",
+  "gold": [
+   "mumbai"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 20
+ },
+ {
+  "type": "world_time",
+  "question": "Where did Uday Rao actually live on 2026-09-17?",
+  "gold": [
+   "mumbai"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 21
+ },
+ {
+  "type": "world_time",
+  "question": "Where did Ritu Saxena actually live on 2026-09-21?",
+  "gold": [
+   "mumbai"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 22
+ },
+ {
+  "type": "world_time",
+  "question": "Which contact channel did Neha Kapoor prefer on 2026-09-21?",
+  "gold": [
+   "whatsapp"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 23
+ },
+ {
+  "type": "world_time",
+  "question": "Where did Alice Rao actually live on 2026-09-25?",
+  "gold": [
+   "mysuru"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 24
+ },
+ {
+  "type": "world_time",
+  "question": "Where did Uday Rao actually live on 2026-09-23?",
+  "gold": [
+   "mumbai"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 25
+ },
+ {
+  "type": "world_time",
+  "question": "Where did Uday Rao actually live on 2026-09-08?",
+  "gold": [
+   "hyderabad"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 26
+ },
+ {
+  "type": "world_time",
+  "question": "Which plan was Alice Rao on on 2026-09-13?",
+  "gold": [
+   "fiber 1000"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 27
+ },
+ {
+  "type": "world_time",
+  "question": "Where did Esha Iyer actually live on 2026-09-12?",
+  "gold": [
+   "bengaluru"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 28
+ },
+ {
+  "type": "world_time",
+  "question": "Which plan was Divya Menon on on 2026-09-10?",
+  "gold": [
+   "fiber 1000"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 29
+ },
+ {
+  "type": "world_time",
+  "question": "Where did Dev Malhotra actually live on 2026-09-20?",
+  "gold": [
+   "mysuru"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 30
+ },
+ {
+  "type": "world_time",
+  "question": "Which router did Divya Menon have on 2026-09-19?",
+  "gold": [
+   "pml hub 6 pro"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 31
+ },
+ {
+  "type": "world_time",
+  "question": "Where did Tara Banerjee actually live on 2026-09-13?",
+  "gold": [
+   "mumbai"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 32
+ },
+ {
+  "type": "world_time",
+  "question": "Where did Yamini Krishnan actually live on 2026-09-24?",
+  "gold": [
+   "mysuru"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 33
+ },
+ {
+  "type": "world_time",
+  "question": "Which contact channel did Rahul Sharma prefer on 2026-09-10?",
+  "gold": [
+   "email"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 34
+ },
+ {
+  "type": "world_time",
+  "question": "Where did Pooja Bhat actually live on 2026-09-09?",
+  "gold": [
+   "navi mumbai"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 35
+ },
+ {
+  "type": "belief_time",
+  "question": "On 2026-09-15, which plan did our records list for Priya Nair?",
+  "gold": [
+   "fiber 1000"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 36
+ },
+ {
+  "type": "belief_time",
+  "question": "On 2026-09-10, which router did our records list for Neha Kapoor?",
+  "gold": [
+   "ax1800"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 37
+ },
+ {
+  "type": "belief_time",
+  "question": "On 2026-09-26, which city did our records list for Bhavna Shetty?",
+  "gold": [
+   "mumbai"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 38
+ },
+ {
+  "type": "belief_time",
+  "question": "On 2026-09-16, which plan did our records list for Aditi Kulkarni?",
+  "gold": [
+   "basic 50"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 39
+ },
+ {
+  "type": "belief_time",
+  "question": "On 2026-09-22, which city did our records list for Wasim Akhtar?",
+  "gold": [
+   "mumbai"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 40
+ },
+ {
+  "type": "belief_time",
+  "question": "On 2026-09-27, which city did our records list for Gita Pillai?",
+  "gold": [
+   "thane"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 41
+ },
+ {
+  "type": "belief_time",
+  "question": "On 2026-09-12, which plan did our records list for Farhan Khan?",
+  "gold": [
+   "fiber 1000"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 42
+ },
+ {
+  "type": "belief_time",
+  "question": "On 2026-09-16, which router did our records list for Wasim Akhtar?",
+  "gold": [
+   "pml hub 6 pro"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 43
+ },
+ {
+  "type": "belief_time",
+  "question": "On 2026-09-17, which city did our records list for Uday Rao?",
+  "gold": [
+   "hyderabad"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 44
+ },
+ {
+  "type": "belief_time",
+  "question": "On 2026-09-12, which contact channel did our records list for Manav Gupta?",
+  "gold": [
+   "phone"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 45
+ },
+ {
+  "type": "belief_time",
+  "question": "On 2026-09-28, which city did our records list for Wasim Akhtar?",
+  "gold": [
+   "hyderabad"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 46
+ },
+ {
+  "type": "belief_time",
+  "question": "On 2026-09-14, which plan did our records list for Omar Siddiqui?",
+  "gold": [
+   "basic 50"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 47
+ },
+ {
+  "type": "belief_time",
+  "question": "On 2026-09-11, which router did our records list for Rahul Shah?",
+  "gold": [
+   "ax3000"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 48
+ },
+ {
+  "type": "belief_time",
+  "question": "On 2026-09-13, which plan did our records list for Yamini Krishnan?",
+  "gold": [
+   "basic 50"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 49
+ },
+ {
+  "type": "belief_time",
+  "question": "On 2026-09-10, which contact channel did our records list for Rahul Sharma?",
+  "gold": [
+   "email"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 50
+ },
+ {
+  "type": "belief_time",
+  "question": "On 2026-09-25, which city did our records list for Dev Malhotra?",
+  "gold": [
+   "mysuru"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 51
+ },
+ {
+  "type": "belief_time",
+  "question": "On 2026-09-09, which plan did our records list for Bob Menon?",
+  "gold": [
+   "fiber 100"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 52
+ },
+ {
+  "type": "belief_time",
+  "question": "On 2026-09-15, which contact channel did our records list for Bhavna Shetty?",
+  "gold": [
+   "email"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 53
+ },
+ {
+  "type": "completeness",
+  "question": "Which devices does Pooja Bhat own?",
+  "gold": [
+   "android phone",
+   "ipad",
+   "smart tv"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 54
+ },
+ {
+  "type": "completeness",
+  "question": "Which devices does Uday Rao own?",
+  "gold": [
+   "android phone",
+   "iphone"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 55
+ },
+ {
+  "type": "completeness",
+  "question": "Which devices does Priya Naik own?",
+  "gold": [
+   "echo dot",
+   "ipad"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 56
+ },
+ {
+  "type": "completeness",
+  "question": "Which devices does Rahul Shah own?",
+  "gold": [
+   "android phone",
+   "xbox"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 57
+ },
+ {
+  "type": "completeness",
+  "question": "Which devices does Bhavna Shetty own?",
+  "gold": [
+   "laptop",
+   "ps5",
+   "xbox"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 58
+ },
+ {
+  "type": "completeness",
+  "question": "Which devices does Jaya Reddy own?",
+  "gold": [
+   "ipad",
+   "smart tv"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 59
+ },
+ {
+  "type": "completeness",
+  "question": "Which devices does Yamini Krishnan own?",
+  "gold": [
+   "laptop",
+   "xbox"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 60
+ },
+ {
+  "type": "completeness",
+  "question": "Which devices does Divya Menon own?",
+  "gold": [
+   "iphone",
+   "ps5"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 61
+ },
+ {
+  "type": "completeness",
+  "question": "Which devices does Kabir Singh own?",
+  "gold": [
+   "desktop pc",
+   "ipad",
+   "xbox"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 62
+ },
+ {
+  "type": "completeness",
+  "question": "Which devices does Vikram Desai own?",
+  "gold": [
+   "desktop pc",
+   "ps5"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 63
+ },
+ {
+  "type": "completeness",
+  "question": "Which devices does Hari Kumar own?",
+  "gold": [
+   "echo dot",
+   "xbox"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 64
+ },
+ {
+  "type": "completeness",
+  "question": "Which devices does Priya Nair own?",
+  "gold": [
+   "ipad",
+   "laptop"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 65
+ },
+ {
+  "type": "completeness",
+  "question": "Which devices does Alice Roy own?",
+  "gold": [
+   "android phone",
+   "ps5"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 66
+ },
+ {
+  "type": "completeness",
+  "question": "Which devices does Wasim Akhtar own?",
+  "gold": [
+   "laptop",
+   "smart tv"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 67
+ },
+ {
+  "type": "completeness",
+  "question": "Which devices does Rahul Sharma own?",
+  "gold": [
+   "laptop",
+   "smart tv",
+   "xbox"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 68
+ },
+ {
+  "type": "completeness",
+  "question": "Which devices does Fatima Sheikh own?",
+  "gold": [
+   "ipad",
+   "xbox"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 69
+ },
+ {
+  "type": "completeness",
+  "question": "Which devices does Aditi Kulkarni own?",
+  "gold": [
+   "desktop pc",
+   "laptop"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 70
+ },
+ {
+  "type": "completeness",
+  "question": "Which devices does Lata Joshi own?",
+  "gold": [
+   "android phone",
+   "echo dot",
+   "smart tv"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 71
+ },
+ {
+  "type": "disagreement",
+  "question": "Which plan is Esha Iyer on, and is it disputed?",
+  "gold": [
+   "basic 50"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": true,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 72
+ },
+ {
+  "type": "disagreement",
+  "question": "Which plan is Dev Malhotra on, and is it disputed?",
+  "gold": [
+   "fiber 1000"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": true,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 73
+ },
+ {
+  "type": "disagreement",
+  "question": "Which plan is Lata Joshi on, and is it disputed?",
+  "gold": [
+   "fiber 300"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": true,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 74
+ },
+ {
+  "type": "disagreement",
+  "question": "Which plan is Hari Kumar on, and is it disputed?",
+  "gold": [
+   "fiber 300"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": true,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 75
+ },
+ {
+  "type": "disagreement",
+  "question": "Which plan is Gaurav Chawla on, and is it disputed?",
+  "gold": [
+   "fiber 100"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": true,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 76
+ },
+ {
+  "type": "disagreement",
+  "question": "Which plan is Jaya Reddy on, and is it disputed?",
+  "gold": [
+   "fiber 1000"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": true,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 77
+ },
+ {
+  "type": "disagreement",
+  "question": "Which plan is Sanjay Patil on, and is it disputed?",
+  "gold": [
+   "fiber 1000"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": true,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 78
+ },
+ {
+  "type": "disagreement",
+  "question": "Which plan is Eshan Ghosh on, and is it disputed?",
+  "gold": [
+   "fiber 100"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": true,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 79
+ },
+ {
+  "type": "disagreement",
+  "question": "Which plan is Rahul Shah on, and is it disputed?",
+  "gold": [
+   "fiber 1000"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": true,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 80
+ },
+ {
+  "type": "disagreement",
+  "question": "Which plan is Ritu Saxena on, and is it disputed?",
+  "gold": [
+   "fiber 300"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": true,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 81
+ },
+ {
+  "type": "disagreement",
+  "question": "Which plan is Fatima Sheikh on, and is it disputed?",
+  "gold": [
+   "fiber 300"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": true,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 82
+ },
+ {
+  "type": "disagreement",
+  "question": "Which plan is Pooja Bhat on, and is it disputed?",
+  "gold": [
+   "fiber 300"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": true,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 83
+ },
+ {
+  "type": "disagreement",
+  "question": "Which plan is Priya Naik on, and is it disputed?",
+  "gold": [
+   "fiber 100"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": true,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 84
+ },
+ {
+  "type": "disagreement",
+  "question": "Which plan is Neha Kapoor on, and is it disputed?",
+  "gold": [
+   "basic 50"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": true,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 85
+ },
+ {
+  "type": "disagreement",
+  "question": "Which plan is Kabir Singh on, and is it disputed?",
+  "gold": [
+   "basic 50"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": true,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 86
+ },
+ {
+  "type": "disagreement",
+  "question": "Which plan is Gita Pillai on, and is it disputed?",
+  "gold": [
+   "fiber 1000"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": true,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 87
+ },
+ {
+  "type": "handoff",
+  "question": "What router does Manav Gupta have?",
+  "gold": [
+   "ax3000"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 88
+ },
+ {
+  "type": "handoff",
+  "question": "How should I contact Priya Naik?",
+  "gold": [
+   "whatsapp"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 89
+ },
+ {
+  "type": "handoff",
+  "question": "What router does Kabir Singh have?",
+  "gold": [
+   "ax3000"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 90
+ },
+ {
+  "type": "handoff",
+  "question": "What router does Gaurav Chawla have?",
+  "gold": [
+   "ax5400"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 91
+ },
+ {
+  "type": "handoff",
+  "question": "How should I contact Divya Menon?",
+  "gold": [
+   "whatsapp"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 92
+ },
+ {
+  "type": "handoff",
+  "question": "How should I contact Hari Kumar?",
+  "gold": [
+   "email"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 93
+ },
+ {
+  "type": "handoff",
+  "question": "What router does Tara Banerjee have?",
+  "gold": [
+   "pml hub 6 pro"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 94
+ },
+ {
+  "type": "handoff",
+  "question": "How should I contact Vikram Desai?",
+  "gold": [
+   "phone"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 95
+ },
+ {
+  "type": "handoff",
+  "question": "How should I contact Carol Dsouza?",
+  "gold": [
+   "phone"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 96
+ },
+ {
+  "type": "handoff",
+  "question": "What router does Yamini Krishnan have?",
+  "gold": [
+   "pml hub 6"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 97
+ },
+ {
+  "type": "handoff",
+  "question": "How should I contact Chirag Jain?",
+  "gold": [
+   "sms"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 98
+ },
+ {
+  "type": "handoff",
+  "question": "What router does Carol Dsouza have?",
+  "gold": [
+   "ax3000"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 99
+ },
+ {
+  "type": "handoff",
+  "question": "What router does Alice Rao have?",
+  "gold": [
+   "ax5400"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 100
+ },
+ {
+  "type": "handoff",
+  "question": "How should I contact Arjun Mehra?",
+  "gold": [
+   "email"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 101
+ },
+ {
+  "type": "handoff",
+  "question": "What router does Pooja Bhat have?",
+  "gold": [
+   "ax3000"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 102
+ },
+ {
+  "type": "handoff",
+  "question": "What router does Alice Roy have?",
+  "gold": [
+   "ax3000"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 103
+ },
+ {
+  "type": "handoff",
+  "question": "What router does Fatima Sheikh have?",
+  "gold": [
+   "pml hub 6"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 104
+ },
+ {
+  "type": "handoff",
+  "question": "What router does Arjun Mehra have?",
+  "gold": [
+   "pml hub 6 pro"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 105
+ },
+ {
+  "type": "multi_hop",
+  "question": "Which outage might be affecting Ritu Saxena?",
+  "gold": [
+   "flooded junction box in andheri"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 106
+ },
+ {
+  "type": "multi_hop",
+  "question": "Which outage might be affecting Qasim Ali?",
+  "gold": [
+   "substation failure in gachibowli"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 107
+ },
+ {
+  "type": "multi_hop",
+  "question": "Which outage might be affecting Neha Kapoor?",
+  "gold": [
+   "road works cut in chinchwad"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 108
+ },
+ {
+  "type": "multi_hop",
+  "question": "Which outage might be affecting Tara Banerjee?",
+  "gold": [
+   "fiber cut on fc road"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 109
+ },
+ {
+  "type": "multi_hop",
+  "question": "Which outage might be affecting Sanjay Patil?",
+  "gold": [
+   "road works cut in chinchwad"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 110
+ },
+ {
+  "type": "multi_hop",
+  "question": "Which outage might be affecting Chirag Jain?",
+  "gold": [
+   "road works cut in chinchwad"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 111
+ },
+ {
+  "type": "multi_hop",
+  "question": "Which outage might be affecting Bob Menon?",
+  "gold": [
+   "road works cut in chinchwad"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 112
+ },
+ {
+  "type": "multi_hop",
+  "question": "Which customers might be affected by the substation failure in gachibowli?",
+  "gold": [
+   "farhan khan",
+   "gaurav chawla",
+   "qasim ali",
+   "rahul sharma",
+   "wasim akhtar"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 113
+ },
+ {
+  "type": "multi_hop",
+  "question": "Which customers might be affected by the flooded junction box in andheri?",
+  "gold": [
+   "bhavna shetty",
+   "rahul shah",
+   "ritu saxena",
+   "uday rao"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 114
+ },
+ {
+  "type": "multi_hop",
+  "question": "Which customers might be affected by the fiber cut on fc road?",
+  "gold": [
+   "esha iyer",
+   "fatima sheikh",
+   "omar siddiqui",
+   "tara banerjee"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 115
+ },
+ {
+  "type": "multi_hop",
+  "question": "Which customers might be affected by the road works cut in chinchwad?",
+  "gold": [
+   "alice roy",
+   "bob menon",
+   "chirag jain",
+   "ishaan verma",
+   "neha kapoor",
+   "sanjay patil"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 116
+ },
+ {
+  "type": "multi_hop",
+  "question": "Which city does the customer with ticket PML-2051 live in?",
+  "gold": [
+   "nashik"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 117
+ },
+ {
+  "type": "multi_hop",
+  "question": "Which city does the customer with ticket PML-2056 live in?",
+  "gold": [
+   "pune"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 118
+ },
+ {
+  "type": "multi_hop",
+  "question": "Which city does the customer with ticket PML-2067 live in?",
+  "gold": [
+   "pune"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 119
+ },
+ {
+  "type": "multi_hop",
+  "question": "What router does the owner of ticket PML-2053 have?",
+  "gold": [
+   "ax1800"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 120
+ },
+ {
+  "type": "multi_hop",
+  "question": "Which plan is the customer with ticket PML-2052 on?",
+  "gold": [
+   "fiber 100"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 121
+ },
+ {
+  "type": "multi_hop",
+  "question": "Which plan is the customer with ticket PML-2065 on?",
+  "gold": [
+   "fiber 300"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 122
+ },
+ {
+  "type": "multi_hop",
+  "question": "Which city does the customer with ticket PML-2066 live in?",
+  "gold": [
+   "navi mumbai"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 123
+ },
+ {
+  "type": "procedural",
+  "question": "Which fix has worked before for evening wifi drops?",
+  "gold": [
+   "change wifi channel"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 124
+ },
+ {
+  "type": "procedural",
+  "question": "Which fix has worked before for gaming lag and high latency?",
+  "gold": [
+   "enable qos"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 125
+ },
+ {
+  "type": "procedural",
+  "question": "Which fix has worked before for no internet at all?",
+  "gold": [
+   "replace fiber cable"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 126
+ },
+ {
+  "type": "procedural",
+  "question": "Which fix has worked before for the router rebooting by itself?",
+  "gold": [
+   "firmware update"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 127
+ },
+ {
+  "type": "procedural",
+  "question": "Which fix has worked before for slow speeds?",
+  "gold": [
+   "reset line profile"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 128
+ },
+ {
+  "type": "procedural",
+  "question": "Which fix has worked before for weak wifi in far rooms?",
+  "gold": [
+   "add mesh extender"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 129
+ },
+ {
+  "type": "procedural",
+  "question": "What fixed Chirag Jain's ticket PML-2064?",
+  "gold": [
+   "change wifi channel"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 130
+ },
+ {
+  "type": "procedural",
+  "question": "What fixed Priya Naik's ticket PML-2072?",
+  "gold": [
+   "replace fiber cable"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 131
+ },
+ {
+  "type": "procedural",
+  "question": "What fixed Chirag Jain's ticket PML-2063?",
+  "gold": [
+   "replace fiber cable"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 132
+ },
+ {
+  "type": "procedural",
+  "question": "What fixed Eshan Ghosh's ticket PML-2066?",
+  "gold": [
+   "add mesh extender"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 133
+ },
+ {
+  "type": "procedural",
+  "question": "What fixed Sanjay Patil's ticket PML-2055?",
+  "gold": [
+   "change wifi channel"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 134
+ },
+ {
+  "type": "procedural",
+  "question": "What fixed Jaya Reddy's ticket PML-2046?",
+  "gold": [
+   "firmware update"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 135
+ },
+ {
+  "type": "procedural",
+  "question": "Which fixes were tried on ticket PML-2070?",
+  "gold": [
+   "add mesh extender",
+   "move router"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 136
+ },
+ {
+  "type": "procedural",
+  "question": "Which fixes were tried on ticket PML-2071?",
+  "gold": [
+   "move router"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 137
+ },
+ {
+  "type": "procedural",
+  "question": "Which fixes were tried on ticket PML-2045?",
+  "gold": [
+   "enable qos",
+   "restart router"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 138
+ },
+ {
+  "type": "procedural",
+  "question": "Which fixes were tried on ticket PML-2042?",
+  "gold": [
+   "restart router"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 139
+ },
+ {
+  "type": "procedural",
+  "question": "Which fixes were tried on ticket PML-2051?",
+  "gold": [
+   "replace fiber cable",
+   "restart router"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 140
+ },
+ {
+  "type": "procedural",
+  "question": "Which fixes were tried on ticket PML-2067?",
+  "gold": [
+   "reset line profile"
+  ],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": false,
+  "collision": false,
+  "i": 141
+ },
+ {
+  "type": "unknown",
+  "question": "What router does Bob Menon have?",
+  "gold": [],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": true,
+  "collision": false,
+  "i": 142
+ },
+ {
+  "type": "unknown",
+  "question": "What router does Gita Pillai have?",
+  "gold": [],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": true,
+  "collision": false,
+  "i": 143
+ },
+ {
+  "type": "unknown",
+  "question": "What router does Hari Kumar have?",
+  "gold": [],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": true,
+  "collision": false,
+  "i": 144
+ },
+ {
+  "type": "unknown",
+  "question": "What router does Sanjay Patil have?",
+  "gold": [],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": true,
+  "collision": false,
+  "i": 145
+ },
+ {
+  "type": "unknown",
+  "question": "What router does Uday Rao have?",
+  "gold": [],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": true,
+  "collision": false,
+  "i": 146
+ },
+ {
+  "type": "unknown",
+  "question": "What is the status of Bob Menon's ticket?",
+  "gold": [],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": true,
+  "collision": false,
+  "i": 147
+ },
+ {
+  "type": "unknown",
+  "question": "What is the status of Carol Dsouza's ticket?",
+  "gold": [],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": true,
+  "collision": false,
+  "i": 148
+ },
+ {
+  "type": "unknown",
+  "question": "What is the status of Farhan Khan's ticket?",
+  "gold": [],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": true,
+  "collision": false,
+  "i": 149
+ },
+ {
+  "type": "unknown",
+  "question": "Which city does Alice Rai live in?",
+  "gold": [],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": true,
+  "collision": false,
+  "i": 150
+ },
+ {
+  "type": "unknown",
+  "question": "Which city does Ivan Shah live in?",
+  "gold": [],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": true,
+  "collision": false,
+  "i": 151
+ },
+ {
+  "type": "unknown",
+  "question": "Which city does Rahul Shetty live in?",
+  "gold": [],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": true,
+  "collision": false,
+  "i": 152
+ },
+ {
+  "type": "unknown",
+  "question": "Which city does Meera Iyer live in?",
+  "gold": [],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": true,
+  "collision": false,
+  "i": 153
+ },
+ {
+  "type": "unknown",
+  "question": "Which outage affects Bengaluru?",
+  "gold": [],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": true,
+  "collision": false,
+  "i": 154
+ },
+ {
+  "type": "unknown",
+  "question": "Which outage affects Thane?",
+  "gold": [],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": true,
+  "collision": false,
+  "i": 155
+ },
+ {
+  "type": "unknown",
+  "question": "What is Bob Menon's email address?",
+  "gold": [],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": true,
+  "collision": false,
+  "i": 156
+ },
+ {
+  "type": "unknown",
+  "question": "What is Carol Dsouza's email address?",
+  "gold": [],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": true,
+  "collision": false,
+  "i": 157
+ },
+ {
+  "type": "unknown",
+  "question": "What fixed ticket PML-2042?",
+  "gold": [],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": true,
+  "collision": false,
+  "i": 158
+ },
+ {
+  "type": "unknown",
+  "question": "What fixed ticket PML-2048?",
+  "gold": [],
+  "asked_by": "resolver",
+  "expect_conflict": false,
+  "expect_unknown": true,
+  "collision": false,
+  "i": 159
+ }
+]

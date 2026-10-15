@@ -1,0 +1,69 @@
+{
+  "note": "FalkorDB Cloud free tier, ap-south-1; client in India, ~24 ms RTT per query; writes include local fastembed embedding of message + entities.",
+  "concurrency": [
+    {
+      "graphs": 1,
+      "writer_threads": 8,
+      "reader_threads": 2,
+      "writes": 200,
+      "writes_per_s": 18.3,
+      "write_p50_ms": 352.8,
+      "write_p95_ms": 700.7,
+      "reads": 63,
+      "read_p50_ms": 310.1,
+      "read_p95_ms": 484.2,
+      "duplicate_entities": 0,
+      "duplicate_active_facts": 0,
+      "customers_with_0_active_city": 0,
+      "customers_with_2plus_active_city": 0
+    },
+    {
+      "graphs": 4,
+      "writer_threads": 8,
+      "reader_threads": 2,
+      "writes": 200,
+      "writes_per_s": 23.7,
+      "write_p50_ms": 346.8,
+      "write_p95_ms": 411.4,
+      "reads": 65,
+      "read_p50_ms": 272.5,
+      "read_p95_ms": 355.0,
+      "duplicate_entities": 0,
+      "duplicate_active_facts": 0,
+      "customers_with_0_active_city": 0,
+      "customers_with_2plus_active_city": 0
+    }
+  ],
+  "scale": [
+    {
+      "customers": 200,
+      "facts": 1090,
+      "nodes": 1577,
+      "load_s": 0.9,
+      "recall_p50_ms": 178.2,
+      "recall_p95_ms": 254.5,
+      "breakdown_p50_ms": {
+        "known entities": 42.7,
+        "vector seeds": 47.4,
+        "retrieve facts": 56.4
+      }
+    },
+    {
+      "customers": 2000,
+      "facts": 10903,
+      "nodes": 14990,
+      "load_s": 11.1,
+      "recall_p50_ms": 210.4,
+      "recall_p95_ms": 278.5,
+      "breakdown_p50_ms": {
+        "known entities": 71.2,
+        "vector seeds": 41.8,
+        "retrieve facts": 57.1
+      }
+    },
+    {
+      "customers": 10000,
+      "error": "command not allowed when used memory > 'maxmemory'."
+    }
+  ]
+}

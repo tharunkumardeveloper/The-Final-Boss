@@ -1,0 +1,10558 @@
+{
+ "summary": {
+  "turns": 556,
+  "planted": 306,
+  "recovered": 282,
+  "missed": 24,
+  "extra_facts": 2,
+  "dropped": 0,
+  "errors": [
+   {
+    "type": "pick_up",
+    "customer": "dev malhotra",
+    "at": "2026-09-14T15:00:00",
+    "ticket": "PML-2041",
+    "error": "ticket was never opened"
+   },
+   {
+    "type": "pick_up",
+    "customer": "tara banerjee",
+    "at": "2026-09-14T15:00:00",
+    "ticket": "PML-2056",
+    "error": "ticket was never opened"
+   },
+   {
+    "type": "pick_up",
+    "customer": "chirag jain",
+    "at": "2026-09-15T15:00:00",
+    "ticket": "PML-2063",
+    "error": "ticket was never opened"
+   },
+   {
+    "type": "try_fix",
+    "customer": "dev malhotra",
+    "at": "2026-09-15T16:00:00",
+    "ticket": "PML-2041",
+    "error": "ticket was never opened"
+   },
+   {
+    "type": "try_fix",
+    "customer": "tara banerjee",
+    "at": "2026-09-15T16:00:00",
+    "ticket": "PML-2056",
+    "error": "ticket was never opened"
+   },
+   {
+    "type": "try_fix",
+    "customer": "dev malhotra",
+    "at": "2026-09-16T16:00:00",
+    "ticket": "PML-2041",
+    "error": "ticket was never opened"
+   },
+   {
+    "type": "try_fix",
+    "customer": "tara banerjee",
+    "at": "2026-09-16T16:00:00",
+    "ticket": "PML-2056",
+    "error": "ticket was never opened"
+   },
+   {
+    "type": "try_fix",
+    "customer": "chirag jain",
+    "at": "2026-09-16T16:00:00",
+    "ticket": "PML-2063",
+    "error": "ticket was never opened"
+   },
+   {
+    "type": "pick_up",
+    "customer": "ritu saxena",
+    "at": "2026-09-17T15:00:00",
+    "ticket": "PML-2053",
+    "error": "ticket was never opened"
+   },
+   {
+    "type": "try_fix",
+    "customer": "chirag jain",
+    "at": "2026-09-17T16:00:00",
+    "ticket": "PML-2063",
+    "error": "ticket was never opened"
+   },
+   {
+    "type": "try_fix",
+    "customer": "ritu saxena",
+    "at": "2026-09-19T16:00:00",
+    "ticket": "PML-2053",
+    "error": "ticket was never opened"
+   },
+   {
+    "type": "pick_up",
+    "customer": "pooja bhat",
+    "at": "2026-09-28T15:00:00",
+    "ticket": "PML-2051",
+    "error": "ticket was never opened"
+   },
+   {
+    "type": "try_fix",
+    "customer": "pooja bhat",
+    "at": "2026-09-29T16:00:00",
+    "ticket": "PML-2051",
+    "error": "ticket was never opened"
+   },
+   {
+    "type": "try_fix",
+    "customer": "pooja bhat",
+    "at": "2026-09-30T16:00:00",
+    "ticket": "PML-2051",
+    "error": "ticket was never opened"
+   }
+  ]
+ },
+ "events": [
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "at": "2026-09-01T10:00:00",
+   "text": "My place is in Pimpri.",
+   "expect": [
+    [
+     "lives_in",
+     "pimpri"
+    ]
+   ],
+   "got": [
+    [
+     "neha kapoor",
+     "lives_in",
+     "pimpri"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "at": "2026-09-01T10:00:00",
+   "text": "Our flat is in Nashik.",
+   "expect": [
+    [
+     "lives_in",
+     "nashik"
+    ]
+   ],
+   "got": [
+    [
+     "zoya mirza",
+     "lives_in",
+     "nashik"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "at": "2026-09-01T10:00:00",
+   "text": "My place is in Pimpri.",
+   "expect": [
+    [
+     "lives_in",
+     "pimpri"
+    ]
+   ],
+   "got": [
+    [
+     "alice roy",
+     "lives_in",
+     "pimpri"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul shah",
+   "at": "2026-09-01T10:00:00",
+   "text": "We're based in Mumbai.",
+   "expect": [
+    [
+     "lives_in",
+     "mumbai"
+    ]
+   ],
+   "got": [
+    [
+     "rahul shah",
+     "lives_in",
+     "mumbai"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "at": "2026-09-01T10:02:00",
+   "text": "We pay for Basic 50.",
+   "expect": [
+    [
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "got": [
+    [
+     "neha kapoor",
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "at": "2026-09-01T10:02:00",
+   "text": "I'm on the Fiber 100 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "got": [
+    [
+     "zoya mirza",
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "at": "2026-09-01T10:02:00",
+   "text": "We pay for Fiber 300.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "got": [
+    [
+     "alice roy",
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul shah",
+   "at": "2026-09-01T10:02:00",
+   "text": "My plan is Fiber 1000.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "got": [
+    [
+     "rahul shah",
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "at": "2026-09-01T10:04:00",
+   "text": "My router is an AX1800.",
+   "expect": [
+    [
+     "has_router",
+     "ax1800"
+    ]
+   ],
+   "got": [
+    [
+     "neha kapoor",
+     "has_router",
+     "ax1800"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "at": "2026-09-01T10:04:00",
+   "text": "I use the AX5400 router.",
+   "expect": [
+    [
+     "has_router",
+     "ax5400"
+    ]
+   ],
+   "got": [
+    [
+     "zoya mirza",
+     "has_router",
+     "ax5400"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "at": "2026-09-01T10:04:00",
+   "text": "My router is an AX3000.",
+   "expect": [
+    [
+     "has_router",
+     "ax3000"
+    ]
+   ],
+   "got": [
+    [
+     "alice roy",
+     "has_router",
+     "ax3000"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul shah",
+   "at": "2026-09-01T10:04:00",
+   "text": "I use the AX3000 router.",
+   "expect": [
+    [
+     "has_router",
+     "ax3000"
+    ]
+   ],
+   "got": [
+    [
+     "rahul shah",
+     "has_router",
+     "ax3000"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "at": "2026-09-01T10:06:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "at": "2026-09-01T10:06:00",
+   "text": "Good morning!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "at": "2026-09-01T10:06:00",
+   "text": "Please reach me by email.",
+   "expect": [
+    [
+     "prefers_channel",
+     "email"
+    ]
+   ],
+   "got": [
+    [
+     "alice roy",
+     "prefers_channel",
+     "email"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul shah",
+   "at": "2026-09-01T10:06:00",
+   "text": "Please reach me by WhatsApp.",
+   "expect": [
+    [
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "got": [
+    [
+     "rahul shah",
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "at": "2026-09-01T10:08:00",
+   "text": "SMS works best for me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "got": [
+    [
+     "neha kapoor",
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "at": "2026-09-01T10:08:00",
+   "text": "Sorry, I was away for a bit.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "at": "2026-09-01T10:08:00",
+   "text": "My Android phone is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "android phone"
+    ]
+   ],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": [
+    [
+     "owns_device",
+     "android phone"
+    ]
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "rahul shah",
+   "at": "2026-09-01T10:08:00",
+   "text": "My Xbox is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "got": [
+    [
+     "rahul shah",
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "at": "2026-09-01T10:10:00",
+   "text": "I also have a desktop PC on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "desktop pc"
+    ]
+   ],
+   "got": [
+    [
+     "neha kapoor",
+     "owns_device",
+     "desktop pc"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "at": "2026-09-01T10:10:00",
+   "text": "SMS works best for me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "got": [
+    [
+     "zoya mirza",
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "at": "2026-09-01T10:10:00",
+   "text": "My PS5 is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "ps5"
+    ]
+   ],
+   "got": [
+    [
+     "alice roy",
+     "owns_device",
+     "ps5"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul shah",
+   "at": "2026-09-01T10:10:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "at": "2026-09-01T10:12:00",
+   "text": "I also have a smart TV on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "got": [
+    [
+     "neha kapoor",
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "at": "2026-09-01T10:12:00",
+   "text": "My iPhone is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "iphone"
+    ]
+   ],
+   "got": [
+    [
+     "zoya mirza",
+     "owns_device",
+     "iphone"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "at": "2026-09-01T10:12:00",
+   "text": "ok thx",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul shah",
+   "at": "2026-09-01T10:12:00",
+   "text": "I also have a Android phone on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "android phone"
+    ]
+   ],
+   "got": [
+    [
+     "rahul shah",
+     "owns_device",
+     "android phone"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "at": "2026-09-01T10:14:00",
+   "text": "My desktop PC is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "desktop pc"
+    ]
+   ],
+   "got": [
+    [
+     "zoya mirza",
+     "owns_device",
+     "desktop pc"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "bob menon",
+   "at": "2026-09-02T10:00:00",
+   "text": "ok thx",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "ishaan verma",
+   "at": "2026-09-02T10:00:00",
+   "text": "I live in Pimpri.",
+   "expect": [
+    [
+     "lives_in",
+     "pimpri"
+    ]
+   ],
+   "got": [
+    [
+     "ishaan verma",
+     "lives_in",
+     "pimpri"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "at": "2026-09-02T10:00:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "at": "2026-09-02T10:00:00",
+   "text": "I live in Mysuru.",
+   "expect": [
+    [
+     "lives_in",
+     "mysuru"
+    ]
+   ],
+   "got": [
+    [
+     "arjun mehta",
+     "lives_in",
+     "mysuru"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "bob menon",
+   "at": "2026-09-02T10:02:00",
+   "text": "We're based in Pimpri.",
+   "expect": [
+    [
+     "lives_in",
+     "pimpri"
+    ]
+   ],
+   "got": [
+    [
+     "bob menon",
+     "lives_in",
+     "pimpri"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "ishaan verma",
+   "at": "2026-09-02T10:02:00",
+   "text": "I'm usually free after 6pm.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "at": "2026-09-02T10:02:00",
+   "text": "My place is in Hyderabad.",
+   "expect": [
+    [
+     "lives_in",
+     "hyderabad"
+    ]
+   ],
+   "got": [
+    [
+     "rahul sharma",
+     "lives_in",
+     "hyderabad"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "at": "2026-09-02T10:02:00",
+   "text": "We pay for Fiber 1000.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "got": [
+    [
+     "arjun mehta",
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "bob menon",
+   "at": "2026-09-02T10:04:00",
+   "text": "My plan is Fiber 100.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "got": [
+    [
+     "bob menon",
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "ishaan verma",
+   "at": "2026-09-02T10:04:00",
+   "text": "I'm on the Fiber 100 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "got": [
+    [
+     "ishaan verma",
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "at": "2026-09-02T10:04:00",
+   "text": "We pay for Basic 50.",
+   "expect": [
+    [
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "got": [
+    [
+     "rahul sharma",
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "at": "2026-09-02T10:04:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "bob menon",
+   "at": "2026-09-02T10:06:00",
+   "text": "ok thx",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "ishaan verma",
+   "at": "2026-09-02T10:06:00",
+   "text": "I use the AX5400 router.",
+   "expect": [
+    [
+     "has_router",
+     "ax5400"
+    ]
+   ],
+   "got": [
+    [
+     "ishaan verma",
+     "has_router",
+     "ax5400"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "at": "2026-09-02T10:06:00",
+   "text": "My router is an AX1800.",
+   "expect": [
+    [
+     "has_router",
+     "ax1800"
+    ]
+   ],
+   "got": [
+    [
+     "rahul sharma",
+     "has_router",
+     "ax1800"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "at": "2026-09-02T10:06:00",
+   "text": "The router at home is the PML Hub 6 model.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6"
+    ]
+   ],
+   "got": [
+    [
+     "arjun mehta",
+     "has_router",
+     "pml hub 6"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "bob menon",
+   "at": "2026-09-02T10:08:00",
+   "text": "SMS is the best way to reach me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "got": [
+    [
+     "bob menon",
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "at": "2026-09-02T10:08:00",
+   "text": "Please reach me by email.",
+   "expect": [
+    [
+     "prefers_channel",
+     "email"
+    ]
+   ],
+   "got": [
+    [
+     "rahul sharma",
+     "prefers_channel",
+     "email"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "at": "2026-09-02T10:08:00",
+   "text": "WhatsApp is the best way to reach me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "got": [
+    [
+     "arjun mehta",
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "bob menon",
+   "at": "2026-09-02T10:10:00",
+   "text": "We use a smart TV at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "got": [
+    [
+     "bob menon",
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "at": "2026-09-02T10:10:00",
+   "text": "My smart TV is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "got": [
+    [
+     "rahul sharma",
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "at": "2026-09-02T10:10:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "at": "2026-09-02T10:12:00",
+   "text": "I also have a Xbox on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "got": [
+    [
+     "rahul sharma",
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "at": "2026-09-03T10:00:00",
+   "text": "My place is in Navi Mumbai.",
+   "expect": [
+    [
+     "lives_in",
+     "navi mumbai"
+    ]
+   ],
+   "got": [
+    [
+     "pooja bhat",
+     "lives_in",
+     "navi mumbai"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "at": "2026-09-03T10:00:00",
+   "text": "Our flat is in Nashik.",
+   "expect": [
+    [
+     "lives_in",
+     "nashik"
+    ]
+   ],
+   "got": [
+    [
+     "divya menon",
+     "lives_in",
+     "nashik"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "at": "2026-09-03T10:02:00",
+   "text": "My plan is Fiber 300.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "got": [
+    [
+     "pooja bhat",
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "at": "2026-09-03T10:02:00",
+   "text": "I'm on the Fiber 1000 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "got": [
+    [
+     "divya menon",
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "at": "2026-09-03T10:04:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "at": "2026-09-03T10:04:00",
+   "text": "The router at home is the AX1800 model.",
+   "expect": [
+    [
+     "has_router",
+     "ax1800"
+    ]
+   ],
+   "got": [
+    [
+     "divya menon",
+     "has_router",
+     "ax1800"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "at": "2026-09-03T10:06:00",
+   "text": "The router at home is the AX3000 model.",
+   "expect": [
+    [
+     "has_router",
+     "ax3000"
+    ]
+   ],
+   "got": [
+    [
+     "pooja bhat",
+     "has_router",
+     "ax3000"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "at": "2026-09-03T10:06:00",
+   "text": "Okay, I'll wait for your update.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "at": "2026-09-03T10:08:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "at": "2026-09-03T10:08:00",
+   "text": "Please reach me by WhatsApp.",
+   "expect": [
+    [
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "got": [
+    [
+     "divya menon",
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "at": "2026-09-03T10:10:00",
+   "text": "WhatsApp is the best way to reach me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "got": [
+    [
+     "pooja bhat",
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "at": "2026-09-03T10:10:00",
+   "text": "We use a iPhone at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "iphone"
+    ]
+   ],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": [
+    [
+     "owns_device",
+     "iphone"
+    ]
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "at": "2026-09-03T10:12:00",
+   "text": "We use a smart TV at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": [
+    [
+     "owns_device",
+     "smart tv"
+    ]
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "at": "2026-09-03T10:12:00",
+   "text": "My PS5 is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "ps5"
+    ]
+   ],
+   "got": [
+    [
+     "divya menon",
+     "owns_device",
+     "ps5"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "at": "2026-09-03T10:14:00",
+   "text": "We use a Android phone at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "android phone"
+    ]
+   ],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": [
+    [
+     "owns_device",
+     "android phone"
+    ]
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "farhan khan",
+   "at": "2026-09-04T10:00:00",
+   "text": "Our flat is in Hyderabad.",
+   "expect": [
+    [
+     "lives_in",
+     "hyderabad"
+    ]
+   ],
+   "got": [
+    [
+     "farhan khan",
+     "lives_in",
+     "hyderabad"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "at": "2026-09-04T10:00:00",
+   "text": "Our flat is in Secunderabad.",
+   "expect": [
+    [
+     "lives_in",
+     "secunderabad"
+    ]
+   ],
+   "got": [
+    [
+     "lata joshi",
+     "lives_in",
+     "secunderabad"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "manav gupta",
+   "at": "2026-09-04T10:00:00",
+   "text": "My place is in Bengaluru.",
+   "expect": [
+    [
+     "lives_in",
+     "bengaluru"
+    ]
+   ],
+   "got": [
+    [
+     "manav gupta",
+     "lives_in",
+     "bengaluru"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "at": "2026-09-04T10:00:00",
+   "text": "I live in Pimpri.",
+   "expect": [
+    [
+     "lives_in",
+     "pimpri"
+    ]
+   ],
+   "got": [
+    [
+     "sanjay patil",
+     "lives_in",
+     "pimpri"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "at": "2026-09-04T10:00:00",
+   "text": "My place is in Hyderabad.",
+   "expect": [
+    [
+     "lives_in",
+     "hyderabad"
+    ]
+   ],
+   "got": [
+    [
+     "uday rao",
+     "lives_in",
+     "hyderabad"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "at": "2026-09-04T10:00:00",
+   "text": "Our flat is in Pune.",
+   "expect": [
+    [
+     "lives_in",
+     "pune"
+    ]
+   ],
+   "got": [
+    [
+     "yamini krishnan",
+     "lives_in",
+     "pune"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "at": "2026-09-04T10:00:00",
+   "text": "My place is in Pimpri.",
+   "expect": [
+    [
+     "lives_in",
+     "pimpri"
+    ]
+   ],
+   "got": [
+    [
+     "chirag jain",
+     "lives_in",
+     "pimpri"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice rao",
+   "at": "2026-09-04T10:00:00",
+   "text": "My place is in Thane.",
+   "expect": [
+    [
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "got": [
+    [
+     "alice rao",
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehra",
+   "at": "2026-09-04T10:00:00",
+   "text": "My place is in Navi Mumbai.",
+   "expect": [
+    [
+     "lives_in",
+     "navi mumbai"
+    ]
+   ],
+   "got": [
+    [
+     "arjun mehra",
+     "lives_in",
+     "navi mumbai"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "farhan khan",
+   "at": "2026-09-04T10:02:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "at": "2026-09-04T10:02:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "manav gupta",
+   "at": "2026-09-04T10:02:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "at": "2026-09-04T10:02:00",
+   "text": "My plan is Fiber 1000.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "got": [
+    [
+     "sanjay patil",
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "at": "2026-09-04T10:02:00",
+   "text": "I'm on the Basic 50 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "got": [
+    [
+     "uday rao",
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "at": "2026-09-04T10:02:00",
+   "text": "Okay, I'll wait for your update.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "at": "2026-09-04T10:02:00",
+   "text": "Okay, I'll wait for your update.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice rao",
+   "at": "2026-09-04T10:02:00",
+   "text": "We pay for Fiber 1000.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "got": [
+    [
+     "alice rao",
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehra",
+   "at": "2026-09-04T10:02:00",
+   "text": "My plan is Fiber 300.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "got": [
+    [
+     "arjun mehra",
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "farhan khan",
+   "at": "2026-09-04T10:04:00",
+   "text": "I'm on the Fiber 1000 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "got": [
+    [
+     "farhan khan",
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "at": "2026-09-04T10:04:00",
+   "text": "My plan is Fiber 300.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "got": [
+    [
+     "lata joshi",
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "manav gupta",
+   "at": "2026-09-04T10:04:00",
+   "text": "My plan is Fiber 100.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "got": [
+    [
+     "manav gupta",
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "at": "2026-09-04T10:04:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "at": "2026-09-04T10:04:00",
+   "text": "I also have a iPhone on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "iphone"
+    ]
+   ],
+   "got": [
+    [
+     "uday rao",
+     "owns_device",
+     "iphone"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "at": "2026-09-04T10:04:00",
+   "text": "We pay for Basic 50.",
+   "expect": [
+    [
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "got": [
+    [
+     "yamini krishnan",
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "at": "2026-09-04T10:04:00",
+   "text": "I'm on the Fiber 100 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "got": [
+    [
+     "chirag jain",
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice rao",
+   "at": "2026-09-04T10:04:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehra",
+   "at": "2026-09-04T10:04:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "farhan khan",
+   "at": "2026-09-04T10:06:00",
+   "text": "The router at home is the PML Hub 6 model.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6"
+    ]
+   ],
+   "got": [
+    [
+     "farhan khan",
+     "has_router",
+     "pml hub 6"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "at": "2026-09-04T10:06:00",
+   "text": "I use the AX5400 router.",
+   "expect": [
+    [
+     "has_router",
+     "ax5400"
+    ]
+   ],
+   "got": [
+    [
+     "lata joshi",
+     "has_router",
+     "ax5400"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "manav gupta",
+   "at": "2026-09-04T10:06:00",
+   "text": "The router at home is the AX3000 model.",
+   "expect": [
+    [
+     "has_router",
+     "ax3000"
+    ]
+   ],
+   "got": [
+    [
+     "manav gupta",
+     "has_router",
+     "ax3000"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "at": "2026-09-04T10:06:00",
+   "text": "Please reach me by phone.",
+   "expect": [
+    [
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "got": [
+    [
+     "sanjay patil",
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "at": "2026-09-04T10:06:00",
+   "text": "My Android phone is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "android phone"
+    ]
+   ],
+   "got": [
+    [
+     "uday rao",
+     "owns_device",
+     "android phone"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "at": "2026-09-04T10:06:00",
+   "text": "I use the PML Hub 6 router.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6"
+    ]
+   ],
+   "got": [
+    [
+     "yamini krishnan",
+     "has_router",
+     "pml hub 6"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "at": "2026-09-04T10:06:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice rao",
+   "at": "2026-09-04T10:06:00",
+   "text": "My router is an AX5400.",
+   "expect": [
+    [
+     "has_router",
+     "ax5400"
+    ]
+   ],
+   "got": [
+    [
+     "alice rao",
+     "has_router",
+     "ax5400"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehra",
+   "at": "2026-09-04T10:06:00",
+   "text": "The router at home is the PML Hub 6 Pro model.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "got": [
+    [
+     "arjun mehra",
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "farhan khan",
+   "at": "2026-09-04T10:08:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "at": "2026-09-04T10:08:00",
+   "text": "SMS is the best way to reach me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "got": [
+    [
+     "lata joshi",
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "manav gupta",
+   "at": "2026-09-04T10:08:00",
+   "text": "Phone works best for me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "got": [
+    [
+     "manav gupta",
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "at": "2026-09-04T10:08:00",
+   "text": "I also have a Android phone on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "android phone"
+    ]
+   ],
+   "got": [
+    [
+     "sanjay patil",
+     "owns_device",
+     "android phone"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "at": "2026-09-04T10:08:00",
+   "text": "Okay, I'll wait for your update.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "at": "2026-09-04T10:08:00",
+   "text": "SMS is the best way to reach me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "got": [
+    [
+     "yamini krishnan",
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "at": "2026-09-04T10:08:00",
+   "text": "My router is an AX5400.",
+   "expect": [
+    [
+     "has_router",
+     "ax5400"
+    ]
+   ],
+   "got": [
+    [
+     "chirag jain",
+     "has_router",
+     "ax5400"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice rao",
+   "at": "2026-09-04T10:08:00",
+   "text": "WhatsApp works best for me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "got": [
+    [
+     "alice rao",
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehra",
+   "at": "2026-09-04T10:08:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "at": "2026-09-04T10:10:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "at": "2026-09-04T10:10:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "at": "2026-09-04T10:10:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "at": "2026-09-04T10:10:00",
+   "text": "SMS works best for me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "got": [
+    [
+     "chirag jain",
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice rao",
+   "at": "2026-09-04T10:10:00",
+   "text": "My iPad is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "got": [
+    [
+     "alice rao",
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehra",
+   "at": "2026-09-04T10:10:00",
+   "text": "Email is the best way to reach me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "email"
+    ]
+   ],
+   "got": [
+    [
+     "arjun mehra",
+     "prefers_channel",
+     "email"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "at": "2026-09-04T10:12:00",
+   "text": "My Echo Dot is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "echo dot"
+    ]
+   ],
+   "got": [
+    [
+     "lata joshi",
+     "owns_device",
+     "echo dot"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "at": "2026-09-04T10:12:00",
+   "text": "We use a smart TV at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": [
+    [
+     "owns_device",
+     "smart tv"
+    ]
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "at": "2026-09-04T10:12:00",
+   "text": "We use a laptop at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "laptop"
+    ]
+   ],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": [
+    [
+     "owns_device",
+     "laptop"
+    ]
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "at": "2026-09-04T10:14:00",
+   "text": "My Android phone is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "android phone"
+    ]
+   ],
+   "got": [
+    [
+     "lata joshi",
+     "owns_device",
+     "android phone"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "carol dsouza",
+   "at": "2026-09-05T10:00:00",
+   "text": "I live in Thane.",
+   "expect": [
+    [
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "got": [
+    [
+     "carol dsouza",
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "at": "2026-09-05T10:00:00",
+   "text": "I live in Bengaluru.",
+   "expect": [
+    [
+     "lives_in",
+     "bengaluru"
+    ]
+   ],
+   "got": [
+    [
+     "kabir singh",
+     "lives_in",
+     "bengaluru"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "vikram desai",
+   "at": "2026-09-05T10:00:00",
+   "text": "Our flat is in Thane.",
+   "expect": [
+    [
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "got": [
+    [
+     "vikram desai",
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "hema subramanian",
+   "at": "2026-09-05T10:00:00",
+   "text": "My place is in Thane.",
+   "expect": [
+    [
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "got": [
+    [
+     "hema subramanian",
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "carol dsouza",
+   "at": "2026-09-05T10:02:00",
+   "text": "I'm on the Fiber 300 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "got": [
+    [
+     "carol dsouza",
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "at": "2026-09-05T10:02:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "vikram desai",
+   "at": "2026-09-05T10:02:00",
+   "text": "My plan is Fiber 100.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "got": [
+    [
+     "vikram desai",
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "hema subramanian",
+   "at": "2026-09-05T10:02:00",
+   "text": "My plan is Basic 50.",
+   "expect": [
+    [
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "got": [
+    [
+     "hema subramanian",
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "carol dsouza",
+   "at": "2026-09-05T10:04:00",
+   "text": "My router is an AX3000.",
+   "expect": [
+    [
+     "has_router",
+     "ax3000"
+    ]
+   ],
+   "got": [
+    [
+     "carol dsouza",
+     "has_router",
+     "ax3000"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "at": "2026-09-05T10:04:00",
+   "text": "My plan is Basic 50.",
+   "expect": [
+    [
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "got": [
+    [
+     "kabir singh",
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "vikram desai",
+   "at": "2026-09-05T10:04:00",
+   "text": "Phone is the best way to reach me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "got": [
+    [
+     "vikram desai",
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "hema subramanian",
+   "at": "2026-09-05T10:04:00",
+   "text": "Email works best for me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "email"
+    ]
+   ],
+   "got": [
+    [
+     "hema subramanian",
+     "prefers_channel",
+     "email"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "carol dsouza",
+   "at": "2026-09-05T10:06:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "at": "2026-09-05T10:06:00",
+   "text": "The router at home is the AX3000 model.",
+   "expect": [
+    [
+     "has_router",
+     "ax3000"
+    ]
+   ],
+   "got": [
+    [
+     "kabir singh",
+     "has_router",
+     "ax3000"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "vikram desai",
+   "at": "2026-09-05T10:06:00",
+   "text": "I'm usually free after 6pm.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "hema subramanian",
+   "at": "2026-09-05T10:06:00",
+   "text": "My desktop PC is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "desktop pc"
+    ]
+   ],
+   "got": [
+    [
+     "hema subramanian",
+     "owns_device",
+     "desktop pc"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "carol dsouza",
+   "at": "2026-09-05T10:08:00",
+   "text": "Please reach me by phone.",
+   "expect": [
+    [
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "got": [
+    [
+     "carol dsouza",
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "at": "2026-09-05T10:08:00",
+   "text": "ok thx",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "vikram desai",
+   "at": "2026-09-05T10:08:00",
+   "text": "I also have a PS5 on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "ps5"
+    ]
+   ],
+   "got": [
+    [
+     "vikram desai",
+     "owns_device",
+     "ps5"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "hema subramanian",
+   "at": "2026-09-05T10:08:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "carol dsouza",
+   "at": "2026-09-05T10:10:00",
+   "text": "We use a iPhone at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "iphone"
+    ]
+   ],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": [
+    [
+     "owns_device",
+     "iphone"
+    ]
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "at": "2026-09-05T10:10:00",
+   "text": "Phone is the best way to reach me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "got": [
+    [
+     "kabir singh",
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "vikram desai",
+   "at": "2026-09-05T10:10:00",
+   "text": "We use a desktop PC at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "desktop pc"
+    ]
+   ],
+   "got": [
+    [
+     "vikram desai",
+     "owns_device",
+     "desktop pc"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "hema subramanian",
+   "at": "2026-09-05T10:10:00",
+   "text": "My Echo Dot is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "echo dot"
+    ]
+   ],
+   "got": [
+    [
+     "hema subramanian",
+     "owns_device",
+     "echo dot"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "carol dsouza",
+   "at": "2026-09-05T10:12:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "at": "2026-09-05T10:12:00",
+   "text": "I also have a iPad on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "got": [
+    [
+     "kabir singh",
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "hema subramanian",
+   "at": "2026-09-05T10:12:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "carol dsouza",
+   "at": "2026-09-05T10:14:00",
+   "text": "My Xbox is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "got": [
+    [
+     "carol dsouza",
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "at": "2026-09-05T10:14:00",
+   "text": "My desktop PC is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "desktop pc"
+    ]
+   ],
+   "got": [
+    [
+     "kabir singh",
+     "owns_device",
+     "desktop pc"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "at": "2026-09-06T10:00:00",
+   "text": "I live in Hyderabad.",
+   "expect": [
+    [
+     "lives_in",
+     "hyderabad"
+    ]
+   ],
+   "got": [
+    [
+     "dev malhotra",
+     "lives_in",
+     "hyderabad"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "omar siddiqui",
+   "at": "2026-09-06T10:00:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "at": "2026-09-06T10:00:00",
+   "text": "We're based in Hyderabad.",
+   "expect": [
+    [
+     "lives_in",
+     "hyderabad"
+    ]
+   ],
+   "got": [
+    [
+     "qasim ali",
+     "lives_in",
+     "hyderabad"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "at": "2026-09-06T10:00:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "at": "2026-09-06T10:00:00",
+   "text": "I live in Mumbai.",
+   "expect": [
+    [
+     "lives_in",
+     "mumbai"
+    ]
+   ],
+   "got": [
+    [
+     "tara banerjee",
+     "lives_in",
+     "mumbai"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "fatima sheikh",
+   "at": "2026-09-06T10:00:00",
+   "text": "My place is in Pune.",
+   "expect": [
+    [
+     "lives_in",
+     "pune"
+    ]
+   ],
+   "got": [
+    [
+     "fatima sheikh",
+     "lives_in",
+     "pune"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "at": "2026-09-06T10:00:00",
+   "text": "I live in Navi Mumbai.",
+   "expect": [
+    [
+     "lives_in",
+     "navi mumbai"
+    ]
+   ],
+   "got": [
+    [
+     "priya naik",
+     "lives_in",
+     "navimumbai"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": [
+    [
+     "lives_in",
+     "navi mumbai"
+    ]
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "at": "2026-09-06T10:02:00",
+   "text": "Okay, I'll wait for your update.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "omar siddiqui",
+   "at": "2026-09-06T10:02:00",
+   "text": "I live in Pune.",
+   "expect": [
+    [
+     "lives_in",
+     "pune"
+    ]
+   ],
+   "got": [
+    [
+     "omar siddiqui",
+     "lives_in",
+     "pune"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "at": "2026-09-06T10:02:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "at": "2026-09-06T10:02:00",
+   "text": "Our flat is in Bengaluru.",
+   "expect": [
+    [
+     "lives_in",
+     "bengaluru"
+    ]
+   ],
+   "got": [
+    [
+     "ritu saxena",
+     "lives_in",
+     "bengaluru"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "at": "2026-09-06T10:02:00",
+   "text": "ok thx",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "fatima sheikh",
+   "at": "2026-09-06T10:02:00",
+   "text": "My plan is Fiber 300.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "got": [
+    [
+     "fatima sheikh",
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "at": "2026-09-06T10:02:00",
+   "text": "My plan is Fiber 100.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "got": [
+    [
+     "priya naik",
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "at": "2026-09-06T10:04:00",
+   "text": "My plan is Fiber 1000.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "got": [
+    [
+     "dev malhotra",
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "omar siddiqui",
+   "at": "2026-09-06T10:04:00",
+   "text": "I'm on the Basic 50 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "got": [
+    [
+     "omar siddiqui",
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "at": "2026-09-06T10:04:00",
+   "text": "My plan is Fiber 100.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "got": [
+    [
+     "qasim ali",
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "at": "2026-09-06T10:04:00",
+   "text": "My plan is Fiber 300.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "got": [
+    [
+     "ritu saxena",
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "at": "2026-09-06T10:04:00",
+   "text": "I'm on the Basic 50 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "got": [
+    [
+     "tara banerjee",
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "fatima sheikh",
+   "at": "2026-09-06T10:04:00",
+   "text": "My router is an PML Hub 6.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6"
+    ]
+   ],
+   "got": [
+    [
+     "fatima sheikh",
+     "has_router",
+     "pml hub 6"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "at": "2026-09-06T10:04:00",
+   "text": "I use the PML Hub 6 Pro router.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "got": [
+    [
+     "priya naik",
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "at": "2026-09-06T10:06:00",
+   "text": "I use the PML Hub 6 Pro router.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "got": [
+    [
+     "dev malhotra",
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "omar siddiqui",
+   "at": "2026-09-06T10:06:00",
+   "text": "The router at home is the PML Hub 6 Pro model.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "got": [
+    [
+     "omar siddiqui",
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "at": "2026-09-06T10:06:00",
+   "text": "My router is an AX5400.",
+   "expect": [
+    [
+     "has_router",
+     "ax5400"
+    ]
+   ],
+   "got": [
+    [
+     "qasim ali",
+     "has_router",
+     "ax5400"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "at": "2026-09-06T10:06:00",
+   "text": "The router at home is the AX1800 model.",
+   "expect": [
+    [
+     "has_router",
+     "ax1800"
+    ]
+   ],
+   "got": [
+    [
+     "ritu saxena",
+     "has_router",
+     "ax1800"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "at": "2026-09-06T10:06:00",
+   "text": "I use the PML Hub 6 Pro router.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "got": [
+    [
+     "tara banerjee",
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "fatima sheikh",
+   "at": "2026-09-06T10:06:00",
+   "text": "Email is the best way to reach me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "email"
+    ]
+   ],
+   "got": [
+    [
+     "fatima sheikh",
+     "prefers_channel",
+     "email"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "at": "2026-09-06T10:06:00",
+   "text": "WhatsApp works best for me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "got": [
+    [
+     "priya naik",
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "at": "2026-09-06T10:08:00",
+   "text": "Please reach me by WhatsApp.",
+   "expect": [
+    [
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "got": [
+    [
+     "dev malhotra",
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "omar siddiqui",
+   "at": "2026-09-06T10:08:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "at": "2026-09-06T10:08:00",
+   "text": "Please reach me by email.",
+   "expect": [
+    [
+     "prefers_channel",
+     "email"
+    ]
+   ],
+   "got": [
+    [
+     "qasim ali",
+     "prefers_channel",
+     "email"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "at": "2026-09-06T10:08:00",
+   "text": "Phone works best for me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "got": [
+    [
+     "ritu saxena",
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "at": "2026-09-06T10:08:00",
+   "text": "Email works best for me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "email"
+    ]
+   ],
+   "got": [
+    [
+     "tara banerjee",
+     "prefers_channel",
+     "email"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "fatima sheikh",
+   "at": "2026-09-06T10:08:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "at": "2026-09-06T10:08:00",
+   "text": "We use a Echo Dot at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "echo dot"
+    ]
+   ],
+   "got": [
+    [
+     "priya naik",
+     "owns_device",
+     "echo dot"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "at": "2026-09-06T10:10:00",
+   "text": "We use a smart TV at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "got": [
+    [
+     "dev malhotra",
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "omar siddiqui",
+   "at": "2026-09-06T10:10:00",
+   "text": "WhatsApp is the best way to reach me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "got": [
+    [
+     "omar siddiqui",
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "at": "2026-09-06T10:10:00",
+   "text": "My PS5 is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "ps5"
+    ]
+   ],
+   "got": [
+    [
+     "qasim ali",
+     "owns_device",
+     "ps5"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "at": "2026-09-06T10:10:00",
+   "text": "I also have a laptop on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "laptop"
+    ]
+   ],
+   "got": [
+    [
+     "ritu saxena",
+     "owns_device",
+     "laptop"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "at": "2026-09-06T10:10:00",
+   "text": "I also have a laptop on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "laptop"
+    ]
+   ],
+   "got": [
+    [
+     "tara banerjee",
+     "owns_device",
+     "laptop"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "fatima sheikh",
+   "at": "2026-09-06T10:10:00",
+   "text": "We use a iPad at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "at": "2026-09-06T10:10:00",
+   "text": "Hi there!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "at": "2026-09-06T10:12:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "at": "2026-09-06T10:12:00",
+   "text": "My smart TV is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "got": [
+    [
+     "qasim ali",
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "at": "2026-09-06T10:12:00",
+   "text": "We use a iPad at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "fatima sheikh",
+   "at": "2026-09-06T10:12:00",
+   "text": "We use a Xbox at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "got": [
+    [
+     "fatima sheikh",
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "at": "2026-09-06T10:12:00",
+   "text": "I also have a iPad on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "got": [
+    [
+     "priya naik",
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "at": "2026-09-06T10:14:00",
+   "text": "We use a Xbox at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "got": [
+    [
+     "dev malhotra",
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "at": "2026-09-06T10:14:00",
+   "text": "Okay, I'll wait for your update.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "at": "2026-09-07T10:00:00",
+   "text": "Sorry, I was away for a bit.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "at": "2026-09-07T10:00:00",
+   "text": "My place is in Pune.",
+   "expect": [
+    [
+     "lives_in",
+     "pune"
+    ]
+   ],
+   "got": [
+    [
+     "gita pillai",
+     "lives_in",
+     "pune"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "at": "2026-09-07T10:00:00",
+   "text": "We're based in Hyderabad.",
+   "expect": [
+    [
+     "lives_in",
+     "hyderabad"
+    ]
+   ],
+   "got": [
+    [
+     "hari kumar",
+     "lives_in",
+     "hyderabad"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "jaya reddy",
+   "at": "2026-09-07T10:00:00",
+   "text": "Okay, I'll wait for your update.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "wasim akhtar",
+   "at": "2026-09-07T10:00:00",
+   "text": "I live in Mumbai.",
+   "expect": [
+    [
+     "lives_in",
+     "mumbai"
+    ]
+   ],
+   "got": [
+    [
+     "wasim akhtar",
+     "lives_in",
+     "mumbai"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "at": "2026-09-07T10:00:00",
+   "text": "Our flat is in Secunderabad.",
+   "expect": [
+    [
+     "lives_in",
+     "secunderabad"
+    ]
+   ],
+   "got": [
+    [
+     "aditi kulkarni",
+     "lives_in",
+     "secunderabad"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "at": "2026-09-07T10:00:00",
+   "text": "My place is in Pune.",
+   "expect": [
+    [
+     "lives_in",
+     "pune"
+    ]
+   ],
+   "got": [
+    [
+     "bhavna shetty",
+     "lives_in",
+     "pune"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "at": "2026-09-07T10:00:00",
+   "text": "Our flat is in Navi Mumbai.",
+   "expect": [
+    [
+     "lives_in",
+     "navi mumbai"
+    ]
+   ],
+   "got": [
+    [
+     "eshan ghosh",
+     "lives_in",
+     "navi mumbai"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "at": "2026-09-07T10:00:00",
+   "text": "Our flat is in Hyderabad.",
+   "expect": [
+    [
+     "lives_in",
+     "hyderabad"
+    ]
+   ],
+   "got": [
+    [
+     "gaurav chawla",
+     "lives_in",
+     "hyderabad"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "at": "2026-09-07T10:00:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "at": "2026-09-07T10:02:00",
+   "text": "We're based in Bengaluru.",
+   "expect": [
+    [
+     "lives_in",
+     "bengaluru"
+    ]
+   ],
+   "got": [
+    [
+     "esha iyer",
+     "lives_in",
+     "bengaluru"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "at": "2026-09-07T10:02:00",
+   "text": "My plan is Fiber 1000.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "got": [
+    [
+     "gita pillai",
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "at": "2026-09-07T10:02:00",
+   "text": "I'm on the Fiber 300 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "got": [
+    [
+     "hari kumar",
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "jaya reddy",
+   "at": "2026-09-07T10:02:00",
+   "text": "My place is in Thane.",
+   "expect": [
+    [
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "got": [
+    [
+     "jaya reddy",
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "wasim akhtar",
+   "at": "2026-09-07T10:02:00",
+   "text": "My plan is Fiber 300.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "got": [
+    [
+     "wasim akhtar",
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "at": "2026-09-07T10:02:00",
+   "text": "I'm on the Basic 50 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "got": [
+    [
+     "aditi kulkarni",
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "at": "2026-09-07T10:02:00",
+   "text": "My plan is Fiber 1000.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "got": [
+    [
+     "bhavna shetty",
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "at": "2026-09-07T10:02:00",
+   "text": "I'm on the Fiber 100 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "got": [
+    [
+     "eshan ghosh",
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "at": "2026-09-07T10:02:00",
+   "text": "My plan is Fiber 100.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "got": [
+    [
+     "gaurav chawla",
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "at": "2026-09-07T10:02:00",
+   "text": "Our flat is in Navi Mumbai.",
+   "expect": [
+    [
+     "lives_in",
+     "navi mumbai"
+    ]
+   ],
+   "got": [
+    [
+     "priya nair",
+     "lives_in",
+     "navi mumbai"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "at": "2026-09-07T10:04:00",
+   "text": "I'm on the Basic 50 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "got": [
+    [
+     "esha iyer",
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "at": "2026-09-07T10:04:00",
+   "text": "We use a smart TV at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "got": [
+    [
+     "gita pillai",
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "at": "2026-09-07T10:04:00",
+   "text": "Please reach me by email.",
+   "expect": [
+    [
+     "prefers_channel",
+     "email"
+    ]
+   ],
+   "got": [
+    [
+     "hari kumar",
+     "prefers_channel",
+     "email"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "jaya reddy",
+   "at": "2026-09-07T10:04:00",
+   "text": "I'm on the Fiber 1000 plan.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "got": [
+    [
+     "jaya reddy",
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "wasim akhtar",
+   "at": "2026-09-07T10:04:00",
+   "text": "My router is an PML Hub 6 Pro.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "got": [
+    [
+     "wasim akhtar",
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "at": "2026-09-07T10:04:00",
+   "text": "Please reach me by phone.",
+   "expect": [
+    [
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "got": [
+    [
+     "aditi kulkarni",
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "at": "2026-09-07T10:04:00",
+   "text": "My router is an AX1800.",
+   "expect": [
+    [
+     "has_router",
+     "ax1800"
+    ]
+   ],
+   "got": [
+    [
+     "bhavna shetty",
+     "has_router",
+     "ax1800"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "at": "2026-09-07T10:04:00",
+   "text": "The router at home is the PML Hub 6 Pro model.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "got": [
+    [
+     "eshan ghosh",
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "at": "2026-09-07T10:04:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "at": "2026-09-07T10:04:00",
+   "text": "We pay for Fiber 1000.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "got": [
+    [
+     "priya nair",
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "at": "2026-09-07T10:06:00",
+   "text": "My router is an AX1800.",
+   "expect": [
+    [
+     "has_router",
+     "ax1800"
+    ]
+   ],
+   "got": [
+    [
+     "esha iyer",
+     "has_router",
+     "ax1800"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "at": "2026-09-07T10:06:00",
+   "text": "We use a iPad at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "got": [
+    [
+     "gita pillai",
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "at": "2026-09-07T10:06:00",
+   "text": "My Echo Dot is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "echo dot"
+    ]
+   ],
+   "got": [
+    [
+     "hari kumar",
+     "owns_device",
+     "echo dot"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "jaya reddy",
+   "at": "2026-09-07T10:06:00",
+   "text": "The router at home is the AX3000 model.",
+   "expect": [
+    [
+     "has_router",
+     "ax3000"
+    ]
+   ],
+   "got": [
+    [
+     "jaya reddy",
+     "has_router",
+     "ax3000"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "wasim akhtar",
+   "at": "2026-09-07T10:06:00",
+   "text": "Okay, I'll wait for your update.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "at": "2026-09-07T10:06:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "at": "2026-09-07T10:06:00",
+   "text": "Email is the best way to reach me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "email"
+    ]
+   ],
+   "got": [
+    [
+     "bhavna shetty",
+     "prefers_channel",
+     "email"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "at": "2026-09-07T10:06:00",
+   "text": "Please reach me by WhatsApp.",
+   "expect": [
+    [
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "got": [
+    [
+     "eshan ghosh",
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "at": "2026-09-07T10:06:00",
+   "text": "My router is an AX5400.",
+   "expect": [
+    [
+     "has_router",
+     "ax5400"
+    ]
+   ],
+   "got": [
+    [
+     "gaurav chawla",
+     "has_router",
+     "ax5400"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "at": "2026-09-07T10:06:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "at": "2026-09-07T10:08:00",
+   "text": "SMS works best for me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "got": [
+    [
+     "esha iyer",
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "at": "2026-09-07T10:08:00",
+   "text": "Sorry, I was away for a bit.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "at": "2026-09-07T10:08:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "jaya reddy",
+   "at": "2026-09-07T10:08:00",
+   "text": "ok thx",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "wasim akhtar",
+   "at": "2026-09-07T10:08:00",
+   "text": "I also have a smart TV on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "got": [
+    [
+     "wasim akhtar",
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "at": "2026-09-07T10:08:00",
+   "text": "We use a laptop at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "laptop"
+    ]
+   ],
+   "got": [
+    [
+     "aditi kulkarni",
+     "owns_device",
+     "laptop"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "at": "2026-09-07T10:08:00",
+   "text": "I'm usually free after 6pm.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "at": "2026-09-07T10:08:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "at": "2026-09-07T10:08:00",
+   "text": "Please reach me by SMS.",
+   "expect": [
+    [
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "got": [
+    [
+     "gaurav chawla",
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "at": "2026-09-07T10:08:00",
+   "text": "My router is an AX5400.",
+   "expect": [
+    [
+     "has_router",
+     "ax5400"
+    ]
+   ],
+   "got": [
+    [
+     "priya nair",
+     "has_router",
+     "ax5400"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "at": "2026-09-07T10:10:00",
+   "text": "My iPad is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "got": [
+    [
+     "esha iyer",
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "at": "2026-09-07T10:10:00",
+   "text": "ok thx",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "at": "2026-09-07T10:10:00",
+   "text": "My Xbox is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "got": [
+    [
+     "hari kumar",
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "jaya reddy",
+   "at": "2026-09-07T10:10:00",
+   "text": "I also have a smart TV on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "got": [
+    [
+     "jaya reddy",
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "wasim akhtar",
+   "at": "2026-09-07T10:10:00",
+   "text": "My laptop is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "laptop"
+    ]
+   ],
+   "got": [
+    [
+     "wasim akhtar",
+     "owns_device",
+     "laptop"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "at": "2026-09-07T10:10:00",
+   "text": "I also have a desktop PC on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "desktop pc"
+    ]
+   ],
+   "got": [
+    [
+     "aditi kulkarni",
+     "owns_device",
+     "desktop pc"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "at": "2026-09-07T10:10:00",
+   "text": "My Xbox is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "got": [
+    [
+     "bhavna shetty",
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "at": "2026-09-07T10:10:00",
+   "text": "My Android phone is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "android phone"
+    ]
+   ],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": [
+    [
+     "owns_device",
+     "android phone"
+    ]
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "at": "2026-09-07T10:10:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "at": "2026-09-07T10:10:00",
+   "text": "WhatsApp works best for me.",
+   "expect": [
+    [
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "got": [
+    [
+     "priya nair",
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "at": "2026-09-07T10:12:00",
+   "text": "I also have a Xbox on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "got": [
+    [
+     "esha iyer",
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "at": "2026-09-07T10:12:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "at": "2026-09-07T10:12:00",
+   "text": "We use a PS5 at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "ps5"
+    ]
+   ],
+   "got": [
+    [
+     "eshan ghosh",
+     "owns_device",
+     "ps5"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "at": "2026-09-07T10:12:00",
+   "text": "I also have a iPad on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "got": [
+    [
+     "priya nair",
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "at": "2026-09-07T10:14:00",
+   "text": "I also have a laptop on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "laptop"
+    ]
+   ],
+   "got": [
+    [
+     "bhavna shetty",
+     "owns_device",
+     "laptop"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "at": "2026-09-07T10:14:00",
+   "text": "My laptop is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "laptop"
+    ]
+   ],
+   "got": [
+    [
+     "priya nair",
+     "owns_device",
+     "laptop"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "bob menon",
+   "at": "2026-09-09T10:00:00",
+   "text": "I'm usually free after 6pm.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "ishaan verma",
+   "at": "2026-09-09T10:00:00",
+   "text": "Hi there!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "at": "2026-09-09T10:00:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "at": "2026-09-09T10:00:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "at": "2026-09-09T10:00:00",
+   "text": "Sorry, I was away for a bit.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "ishaan verma",
+   "at": "2026-09-09T10:02:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "at": "2026-09-09T10:02:00",
+   "text": "There's no internet at all since this morning.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [
+    [
+     "neha kapoor",
+     "reported_issue",
+     "no internet"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": "pml-2049",
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "at": "2026-09-09T10:02:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "at": "2026-09-09T10:02:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "at": "2026-09-09T10:04:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "at": "2026-09-09T10:04:00",
+   "text": "Wifi barely reaches my bedroom.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [
+    [
+     "rahul sharma",
+     "reported_issue",
+     "weak wifi in bedroom"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": "pml-2071",
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "at": "2026-09-10T10:00:00",
+   "text": "Every evening the internet disconnects for a few minutes.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [
+    [
+     "pooja bhat",
+     "reported_issue",
+     "evening internet disconnects"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": "pml-2050",
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "at": "2026-09-10T10:00:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "at": "2026-09-10T10:00:00",
+   "text": "The router reboots on its own every few hours.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [
+    [
+     "divya menon",
+     "reported_issue",
+     "router reboots on its own every few hours"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": "pml-2065",
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "at": "2026-09-10T10:02:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "at": "2026-09-10T10:02:00",
+   "text": "I'm usually free after 6pm.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "at": "2026-09-10T10:02:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "pick_up",
+   "customer": "neha kapoor",
+   "at": "2026-09-10T15:00:00",
+   "ticket": "PML-2049",
+   "observations": [
+    "Billing system: neha kapoor is on plan fiber 300",
+    "Outage feed: road works cut in chinchwad affects pimpri",
+    "Router diagnostic for neha kapoor: optical signal loss"
+   ],
+   "suggestions": []
+  },
+  {
+   "type": "pick_up",
+   "customer": "rahul sharma",
+   "at": "2026-09-10T15:00:00",
+   "ticket": "PML-2071",
+   "observations": [
+    "Outage feed: substation failure in gachibowli affects hyderabad",
+    "Router diagnostic for rahul sharma: weak signal in far rooms"
+   ],
+   "suggestions": []
+  },
+  {
+   "type": "turn",
+   "customer": "farhan khan",
+   "at": "2026-09-11T10:00:00",
+   "text": "Good morning!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "manav gupta",
+   "at": "2026-09-11T10:00:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "at": "2026-09-11T10:00:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul shah",
+   "at": "2026-09-11T10:00:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "at": "2026-09-11T10:00:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "farhan khan",
+   "at": "2026-09-11T10:02:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "at": "2026-09-11T10:02:00",
+   "text": "ok thx",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul shah",
+   "at": "2026-09-11T10:02:00",
+   "text": "The signal is weak in the far rooms of the flat.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [
+    [
+     "rahul shah",
+     "reported_issue",
+     "weak wifi in bedroom"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": "pml-2070",
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "at": "2026-09-11T10:02:00",
+   "text": "Good morning!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "at": "2026-09-11T10:04:00",
+   "text": "The router reboots on its own every few hours.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [
+    [
+     "uday rao",
+     "reported_issue",
+     "router reboots on its own every few hours"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": "pml-2057",
+   "missed": []
+  },
+  {
+   "type": "pick_up",
+   "customer": "pooja bhat",
+   "at": "2026-09-11T15:00:00",
+   "ticket": "PML-2050",
+   "observations": [
+    "Billing system: pooja bhat is on plan fiber 100",
+    "Router diagnostic for pooja bhat: channel congestion on 2.4 ghz"
+   ],
+   "suggestions": []
+  },
+  {
+   "type": "pick_up",
+   "customer": "divya menon",
+   "at": "2026-09-11T15:00:00",
+   "ticket": "PML-2065",
+   "observations": [
+    "Router diagnostic for divya menon: firmware crash loop"
+   ],
+   "suggestions": []
+  },
+  {
+   "type": "try_fix",
+   "customer": "neha kapoor",
+   "at": "2026-09-11T16:00:00",
+   "ticket": "PML-2049",
+   "fix": "restart router",
+   "worked": false
+  },
+  {
+   "type": "try_fix",
+   "customer": "rahul sharma",
+   "at": "2026-09-11T16:00:00",
+   "ticket": "PML-2071",
+   "fix": "move router",
+   "worked": false
+  },
+  {
+   "type": "turn",
+   "customer": "carol dsouza",
+   "at": "2026-09-12T10:00:00",
+   "text": "Okay, I'll wait for your update.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "at": "2026-09-12T10:00:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "carol dsouza",
+   "at": "2026-09-12T10:02:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "at": "2026-09-12T10:02:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "at": "2026-09-12T10:04:00",
+   "text": "The connection cuts out at night, it's really annoying.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [
+    [
+     "yamini krishnan",
+     "reported_issue",
+     "night connection cuts"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": "pml-2059",
+   "missed": []
+  },
+  {
+   "type": "pick_up",
+   "customer": "uday rao",
+   "at": "2026-09-12T15:00:00",
+   "ticket": "PML-2057",
+   "observations": [
+    "Outage feed: substation failure in gachibowli affects hyderabad",
+    "Router diagnostic for uday rao: firmware crash loop"
+   ],
+   "suggestions": []
+  },
+  {
+   "type": "pick_up",
+   "customer": "rahul shah",
+   "at": "2026-09-12T15:00:00",
+   "ticket": "PML-2070",
+   "observations": [
+    "Billing system: rahul shah is on plan basic 50",
+    "Outage feed: flooded junction box in andheri affects mumbai",
+    "Router diagnostic for rahul shah: weak signal in far rooms"
+   ],
+   "suggestions": []
+  },
+  {
+   "type": "try_fix",
+   "customer": "pooja bhat",
+   "at": "2026-09-12T16:00:00",
+   "ticket": "PML-2050",
+   "fix": "restart router",
+   "worked": false
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "at": "2026-09-13T10:00:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "at": "2026-09-13T10:00:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "at": "2026-09-13T10:00:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "at": "2026-09-13T10:00:00",
+   "text": "Okay, I'll wait for your update.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "fatima sheikh",
+   "at": "2026-09-13T10:00:00",
+   "text": "My internet has been really slow for two days.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [
+    [
+     "fatima sheikh",
+     "reported_issue",
+     "slow internet"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": "pml-2067",
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "hema subramanian",
+   "at": "2026-09-13T10:00:00",
+   "text": "The router reboots on its own every few hours.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [
+    [
+     "hema subramanian",
+     "reported_issue",
+     "router reboots on its own every few hours"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": "pml-2069",
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "at": "2026-09-13T10:00:00",
+   "text": "Sorry, I was away for a bit.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehra",
+   "at": "2026-09-13T10:00:00",
+   "text": "ok thx",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "at": "2026-09-13T10:02:00",
+   "text": "My router keeps restarting by itself.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": [
+    [
+     "reported_issue",
+     null
+    ]
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "at": "2026-09-13T10:02:00",
+   "text": "Nothing connects, the internet is totally dead.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [
+    [
+     "kabir singh",
+     "reported_issue",
+     "slow internet"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": "pml-2047",
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "at": "2026-09-13T10:02:00",
+   "text": "My wifi keeps dropping every evening.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [
+    [
+     "sanjay patil",
+     "reported_issue",
+     "evening internet disconnects"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": "pml-2055",
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "at": "2026-09-13T10:02:00",
+   "text": "I'm getting a fraction of the speed I pay for.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": [
+    [
+     "reported_issue",
+     null
+    ]
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "fatima sheikh",
+   "at": "2026-09-13T10:02:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "hema subramanian",
+   "at": "2026-09-13T10:02:00",
+   "text": "I'm usually free after 6pm.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "at": "2026-09-13T10:02:00",
+   "text": "There's no internet at all since this morning.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [
+    [
+     "priya naik",
+     "reported_issue",
+     "no internet"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": "pml-2072",
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehra",
+   "at": "2026-09-13T10:02:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "at": "2026-09-13T10:04:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "pick_up",
+   "customer": "yamini krishnan",
+   "at": "2026-09-13T15:00:00",
+   "ticket": "PML-2059",
+   "observations": [
+    "Outage feed: fiber cut on fc road affects pune",
+    "Router diagnostic for yamini krishnan: channel congestion on 2.4 ghz"
+   ],
+   "suggestions": []
+  },
+  {
+   "type": "try_fix",
+   "customer": "pooja bhat",
+   "at": "2026-09-13T16:00:00",
+   "ticket": "PML-2050",
+   "fix": "change wifi channel",
+   "worked": true
+  },
+  {
+   "type": "try_fix",
+   "customer": "uday rao",
+   "at": "2026-09-13T16:00:00",
+   "ticket": "PML-2057",
+   "fix": "factory reset",
+   "worked": false
+  },
+  {
+   "type": "try_fix",
+   "customer": "rahul shah",
+   "at": "2026-09-13T16:00:00",
+   "ticket": "PML-2070",
+   "fix": "move router",
+   "worked": false
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "at": "2026-09-14T10:00:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "omar siddiqui",
+   "at": "2026-09-14T10:00:00",
+   "text": "Good morning!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "vikram desai",
+   "at": "2026-09-14T10:00:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "at": "2026-09-14T10:00:00",
+   "text": "The internet is completely down at my place.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": [
+    [
+     "reported_issue",
+     null
+    ]
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "at": "2026-09-14T10:00:00",
+   "text": "The signal is weak in the far rooms of the flat.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [
+    [
+     "eshan ghosh",
+     "reported_issue",
+     "weak wifi in bedroom"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": "pml-2066",
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice rao",
+   "at": "2026-09-14T10:00:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "at": "2026-09-14T10:02:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "vikram desai",
+   "at": "2026-09-14T10:02:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "at": "2026-09-14T10:02:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "at": "2026-09-14T10:02:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice rao",
+   "at": "2026-09-14T10:02:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "at": "2026-09-14T10:04:00",
+   "text": "Wifi barely reaches my bedroom.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [
+    [
+     "lata joshi",
+     "reported_issue",
+     "weak wifi in bedroom"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": "pml-2048",
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "at": "2026-09-14T10:04:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "pick_up",
+   "customer": "dev malhotra",
+   "at": "2026-09-14T15:00:00",
+   "ticket": "PML-2041",
+   "error": "ticket was never opened"
+  },
+  {
+   "type": "pick_up",
+   "customer": "kabir singh",
+   "at": "2026-09-14T15:00:00",
+   "ticket": "PML-2047",
+   "observations": [
+    "Billing system: kabir singh is on plan fiber 100",
+    "Router diagnostic for kabir singh: optical signal loss"
+   ],
+   "suggestions": [
+    {
+     "issue": "slow internet",
+     "fix": "change wifi channel",
+     "worked_before": 1,
+     "for_issue": "evening internet disconnects",
+     "distance": 0.23
+    }
+   ]
+  },
+  {
+   "type": "pick_up",
+   "customer": "sanjay patil",
+   "at": "2026-09-14T15:00:00",
+   "ticket": "PML-2055",
+   "observations": [
+    "Billing system: sanjay patil is on plan fiber 300",
+    "Outage feed: road works cut in chinchwad affects pimpri",
+    "Router diagnostic for sanjay patil: channel congestion on 2.4 ghz"
+   ],
+   "suggestions": [
+    {
+     "issue": "evening internet disconnects",
+     "fix": "change wifi channel",
+     "worked_before": 1,
+     "for_issue": "evening internet disconnects",
+     "distance": 0.0
+    }
+   ]
+  },
+  {
+   "type": "pick_up",
+   "customer": "tara banerjee",
+   "at": "2026-09-14T15:00:00",
+   "ticket": "PML-2056",
+   "error": "ticket was never opened"
+  },
+  {
+   "type": "pick_up",
+   "customer": "fatima sheikh",
+   "at": "2026-09-14T15:00:00",
+   "ticket": "PML-2067",
+   "observations": [
+    "Billing system: fatima sheikh is on plan fiber 1000",
+    "Outage feed: fiber cut on fc road affects pune",
+    "Router diagnostic for fatima sheikh: high line attenuation"
+   ],
+   "suggestions": [
+    {
+     "issue": "slow internet",
+     "fix": "change wifi channel",
+     "worked_before": 1,
+     "for_issue": "evening internet disconnects",
+     "distance": 0.23
+    }
+   ]
+  },
+  {
+   "type": "pick_up",
+   "customer": "hema subramanian",
+   "at": "2026-09-14T15:00:00",
+   "ticket": "PML-2069",
+   "observations": [
+    "Router diagnostic for hema subramanian: firmware crash loop"
+   ],
+   "suggestions": []
+  },
+  {
+   "type": "pick_up",
+   "customer": "priya naik",
+   "at": "2026-09-14T15:00:00",
+   "ticket": "PML-2072",
+   "observations": [
+    "Billing system: priya naik is on plan fiber 300",
+    "Router diagnostic for priya naik: optical signal loss"
+   ],
+   "suggestions": [
+    {
+     "issue": "no internet",
+     "fix": "change wifi channel",
+     "worked_before": 1,
+     "for_issue": "evening internet disconnects",
+     "distance": 0.234
+    }
+   ]
+  },
+  {
+   "type": "try_fix",
+   "customer": "uday rao",
+   "at": "2026-09-14T16:00:00",
+   "ticket": "PML-2057",
+   "fix": "firmware update",
+   "worked": true
+  },
+  {
+   "type": "try_fix",
+   "customer": "rahul shah",
+   "at": "2026-09-14T16:00:00",
+   "ticket": "PML-2070",
+   "fix": "add mesh extender",
+   "worked": true
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "at": "2026-09-15T10:00:00",
+   "text": "I'm usually free after 6pm.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "jaya reddy",
+   "at": "2026-09-15T10:00:00",
+   "text": "Video calls freeze and games lag constantly.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [
+    [
+     "jaya reddy",
+     "reported_issue",
+     "video call freezing"
+    ],
+    [
+     "jaya reddy",
+     "reported_issue",
+     "game lag"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": "pml-2045",
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "at": "2026-09-15T10:00:00",
+   "text": "My internet has been really slow for two days.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [
+    [
+     "qasim ali",
+     "reported_issue",
+     "slow internet"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": "pml-2052",
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "at": "2026-09-15T10:00:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "at": "2026-09-15T10:02:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "jaya reddy",
+   "at": "2026-09-15T10:02:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "at": "2026-09-15T10:02:00",
+   "text": "Good morning!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "at": "2026-09-15T10:02:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "at": "2026-09-15T10:04:00",
+   "text": "Video calls freeze and games lag constantly.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [
+    [
+     "esha iyer",
+     "reported_issue",
+     "video call freezing"
+    ],
+    [
+     "esha iyer",
+     "reported_issue",
+     "game lag"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": "pml-2042",
+   "missed": []
+  },
+  {
+   "type": "pick_up",
+   "customer": "lata joshi",
+   "at": "2026-09-15T15:00:00",
+   "ticket": "PML-2048",
+   "observations": [
+    "Billing system: lata joshi is on plan basic 50",
+    "Router diagnostic for lata joshi: weak signal in far rooms"
+   ],
+   "suggestions": [
+    {
+     "issue": "weak wifi in bedroom",
+     "fix": "add mesh extender",
+     "worked_before": 1,
+     "for_issue": "weak wifi in bedroom",
+     "distance": 0.0
+    }
+   ]
+  },
+  {
+   "type": "pick_up",
+   "customer": "chirag jain",
+   "at": "2026-09-15T15:00:00",
+   "ticket": "PML-2063",
+   "error": "ticket was never opened"
+  },
+  {
+   "type": "pick_up",
+   "customer": "eshan ghosh",
+   "at": "2026-09-15T15:00:00",
+   "ticket": "PML-2066",
+   "observations": [
+    "Billing system: eshan ghosh is on plan fiber 1000",
+    "Router diagnostic for eshan ghosh: weak signal in far rooms"
+   ],
+   "suggestions": [
+    {
+     "issue": "weak wifi in bedroom",
+     "fix": "add mesh extender",
+     "worked_before": 1,
+     "for_issue": "weak wifi in bedroom",
+     "distance": 0.0
+    }
+   ]
+  },
+  {
+   "type": "try_fix",
+   "customer": "dev malhotra",
+   "at": "2026-09-15T16:00:00",
+   "ticket": "PML-2041",
+   "error": "ticket was never opened"
+  },
+  {
+   "type": "try_fix",
+   "customer": "kabir singh",
+   "at": "2026-09-15T16:00:00",
+   "ticket": "PML-2047",
+   "fix": "restart router",
+   "worked": false
+  },
+  {
+   "type": "try_fix",
+   "customer": "sanjay patil",
+   "at": "2026-09-15T16:00:00",
+   "ticket": "PML-2055",
+   "fix": "restart router",
+   "worked": false
+  },
+  {
+   "type": "try_fix",
+   "customer": "tara banerjee",
+   "at": "2026-09-15T16:00:00",
+   "ticket": "PML-2056",
+   "error": "ticket was never opened"
+  },
+  {
+   "type": "try_fix",
+   "customer": "hema subramanian",
+   "at": "2026-09-15T16:00:00",
+   "ticket": "PML-2069",
+   "fix": "factory reset",
+   "worked": false
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "at": "2026-09-16T10:00:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "at": "2026-09-16T10:00:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "at": "2026-09-16T10:00:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "wasim akhtar",
+   "at": "2026-09-16T10:00:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "at": "2026-09-16T10:00:00",
+   "text": "The router reboots on its own every few hours.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [
+    [
+     "gaurav chawla",
+     "reported_issue",
+     "router reboots on its own every few hours"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": "pml-2068",
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "at": "2026-09-16T10:02:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "at": "2026-09-16T10:02:00",
+   "text": "The signal is weak in the far rooms of the flat.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [
+    [
+     "hari kumar",
+     "reported_issue",
+     "weak wifi in bedroom"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": "pml-2044",
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "at": "2026-09-16T10:02:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "at": "2026-09-16T10:02:00",
+   "text": "ok thx",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "at": "2026-09-16T10:04:00",
+   "text": "Every evening the internet disconnects for a few minutes.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [
+    [
+     "gita pillai",
+     "reported_issue",
+     "evening internet disconnects"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": "pml-2043",
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "at": "2026-09-16T10:04:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "at": "2026-09-16T10:04:00",
+   "text": "I'm getting a fraction of the speed I pay for.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": [
+    [
+     "reported_issue",
+     null
+    ]
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "at": "2026-09-16T10:04:00",
+   "text": "ok thx",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "pick_up",
+   "customer": "esha iyer",
+   "at": "2026-09-16T15:00:00",
+   "ticket": "PML-2042",
+   "observations": [
+    "Billing system: esha iyer is on plan fiber 100",
+    "Router diagnostic for esha iyer: bufferbloat under load"
+   ],
+   "suggestions": []
+  },
+  {
+   "type": "pick_up",
+   "customer": "jaya reddy",
+   "at": "2026-09-16T15:00:00",
+   "ticket": "PML-2045",
+   "observations": [
+    "Billing system: jaya reddy is on plan basic 50",
+    "Router diagnostic for jaya reddy: bufferbloat under load"
+   ],
+   "suggestions": []
+  },
+  {
+   "type": "pick_up",
+   "customer": "qasim ali",
+   "at": "2026-09-16T15:00:00",
+   "ticket": "PML-2052",
+   "observations": [
+    "Outage feed: substation failure in gachibowli affects hyderabad",
+    "Router diagnostic for qasim ali: high line attenuation"
+   ],
+   "suggestions": [
+    {
+     "issue": "slow internet",
+     "fix": "change wifi channel",
+     "worked_before": 1,
+     "for_issue": "evening internet disconnects",
+     "distance": 0.23
+    },
+    {
+     "issue": "slow internet",
+     "fix": "add mesh extender",
+     "worked_before": 1,
+     "for_issue": "weak wifi in bedroom",
+     "distance": 0.261
+    }
+   ]
+  },
+  {
+   "type": "try_fix",
+   "customer": "dev malhotra",
+   "at": "2026-09-16T16:00:00",
+   "ticket": "PML-2041",
+   "error": "ticket was never opened"
+  },
+  {
+   "type": "try_fix",
+   "customer": "kabir singh",
+   "at": "2026-09-16T16:00:00",
+   "ticket": "PML-2047",
+   "fix": "replace fiber cable",
+   "worked": true
+  },
+  {
+   "type": "try_fix",
+   "customer": "lata joshi",
+   "at": "2026-09-16T16:00:00",
+   "ticket": "PML-2048",
+   "fix": "move router",
+   "worked": false
+  },
+  {
+   "type": "try_fix",
+   "customer": "sanjay patil",
+   "at": "2026-09-16T16:00:00",
+   "ticket": "PML-2055",
+   "fix": "change wifi channel",
+   "worked": true
+  },
+  {
+   "type": "try_fix",
+   "customer": "tara banerjee",
+   "at": "2026-09-16T16:00:00",
+   "ticket": "PML-2056",
+   "error": "ticket was never opened"
+  },
+  {
+   "type": "try_fix",
+   "customer": "chirag jain",
+   "at": "2026-09-16T16:00:00",
+   "ticket": "PML-2063",
+   "error": "ticket was never opened"
+  },
+  {
+   "type": "try_fix",
+   "customer": "fatima sheikh",
+   "at": "2026-09-16T16:00:00",
+   "ticket": "PML-2067",
+   "fix": "reset line profile",
+   "worked": true
+  },
+  {
+   "type": "try_fix",
+   "customer": "hema subramanian",
+   "at": "2026-09-16T16:00:00",
+   "ticket": "PML-2069",
+   "fix": "firmware update",
+   "worked": true
+  },
+  {
+   "type": "try_fix",
+   "customer": "priya naik",
+   "at": "2026-09-16T16:00:00",
+   "ticket": "PML-2072",
+   "fix": "replace fiber cable",
+   "worked": true
+  },
+  {
+   "type": "turn",
+   "customer": "bob menon",
+   "at": "2026-09-17T10:00:00",
+   "text": "Moved my plan to Fiber 1000 today.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "got": [
+    [
+     "bob menon",
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "ishaan verma",
+   "at": "2026-09-17T10:00:00",
+   "text": "Your technician swapped my router for a PML Hub 6 Pro today.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "got": [
+    [
+     "ishaan verma",
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "at": "2026-09-17T10:00:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "at": "2026-09-17T10:00:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "at": "2026-09-17T10:00:00",
+   "text": "I switched my plan to Fiber 300 today.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "got": [
+    [
+     "divya menon",
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "bob menon",
+   "at": "2026-09-17T10:02:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "ishaan verma",
+   "at": "2026-09-17T10:02:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "at": "2026-09-17T10:02:00",
+   "text": "Rooms away from the router get almost no wifi.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [
+    [
+     "aditi kulkarni",
+     "reported_issue",
+     "weak wifi in bedroom"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": "pml-2060",
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "at": "2026-09-17T10:02:00",
+   "text": "My router randomly switches off and comes back on.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [
+    [
+     "bhavna shetty",
+     "reported_issue",
+     "router reboots on its own every few hours"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": "pml-2061",
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "at": "2026-09-17T10:02:00",
+   "text": "ok thx",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "ishaan verma",
+   "at": "2026-09-17T10:04:00",
+   "text": "My PS5 is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "ps5"
+    ]
+   ],
+   "got": [
+    [
+     "ishaan verma",
+     "owns_device",
+     "ps5"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "at": "2026-09-17T10:04:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "at": "2026-09-17T10:04:00",
+   "text": "Your technician swapped my router for a PML Hub 6 Pro today.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "got": [
+    [
+     "divya menon",
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "at": "2026-09-17T10:06:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "pick_up",
+   "customer": "gita pillai",
+   "at": "2026-09-17T15:00:00",
+   "ticket": "PML-2043",
+   "observations": [
+    "Billing system: gita pillai is on plan fiber 100",
+    "Outage feed: fiber cut on fc road affects pune",
+    "Router diagnostic for gita pillai: channel congestion on 2.4 ghz"
+   ],
+   "suggestions": [
+    {
+     "issue": "evening internet disconnects",
+     "fix": "change wifi channel",
+     "worked_before": 2,
+     "for_issue": "evening internet disconnects",
+     "distance": 0.0
+    },
+    {
+     "issue": "evening internet disconnects",
+     "fix": "reset line profile",
+     "worked_before": 1,
+     "for_issue": "slow internet",
+     "distance": 0.23
+    },
+    {
+     "issue": "evening internet disconnects",
+     "fix": "replace fiber cable",
+     "worked_before": 1,
+     "for_issue": "slow internet",
+     "distance": 0.23
+    }
+   ]
+  },
+  {
+   "type": "pick_up",
+   "customer": "hari kumar",
+   "at": "2026-09-17T15:00:00",
+   "ticket": "PML-2044",
+   "observations": [
+    "Billing system: hari kumar is on plan fiber 100",
+    "Outage feed: substation failure in gachibowli affects hyderabad",
+    "Router diagnostic for hari kumar: weak signal in far rooms"
+   ],
+   "suggestions": [
+    {
+     "issue": "weak wifi in bedroom",
+     "fix": "add mesh extender",
+     "worked_before": 1,
+     "for_issue": "weak wifi in bedroom",
+     "distance": 0.0
+    },
+    {
+     "issue": "weak wifi in bedroom",
+     "fix": "reset line profile",
+     "worked_before": 1,
+     "for_issue": "slow internet",
+     "distance": 0.261
+    },
+    {
+     "issue": "weak wifi in bedroom",
+     "fix": "replace fiber cable",
+     "worked_before": 1,
+     "for_issue": "slow internet",
+     "distance": 0.261
+    }
+   ]
+  },
+  {
+   "type": "pick_up",
+   "customer": "ritu saxena",
+   "at": "2026-09-17T15:00:00",
+   "ticket": "PML-2053",
+   "error": "ticket was never opened"
+  },
+  {
+   "type": "pick_up",
+   "customer": "gaurav chawla",
+   "at": "2026-09-17T15:00:00",
+   "ticket": "PML-2068",
+   "observations": [
+    "Billing system: gaurav chawla is on plan basic 50",
+    "Outage feed: substation failure in gachibowli affects hyderabad",
+    "Router diagnostic for gaurav chawla: firmware crash loop"
+   ],
+   "suggestions": [
+    {
+     "issue": "router reboots on its own every few hours",
+     "fix": "firmware update",
+     "worked_before": 2,
+     "for_issue": "router reboots on its own every few hours",
+     "distance": -0.0
+    }
+   ]
+  },
+  {
+   "type": "try_fix",
+   "customer": "esha iyer",
+   "at": "2026-09-17T16:00:00",
+   "ticket": "PML-2042",
+   "fix": "restart router",
+   "worked": false
+  },
+  {
+   "type": "try_fix",
+   "customer": "jaya reddy",
+   "at": "2026-09-17T16:00:00",
+   "ticket": "PML-2045",
+   "fix": "restart router",
+   "worked": false
+  },
+  {
+   "type": "try_fix",
+   "customer": "qasim ali",
+   "at": "2026-09-17T16:00:00",
+   "ticket": "PML-2052",
+   "fix": "restart router",
+   "worked": false
+  },
+  {
+   "type": "try_fix",
+   "customer": "chirag jain",
+   "at": "2026-09-17T16:00:00",
+   "ticket": "PML-2063",
+   "error": "ticket was never opened"
+  },
+  {
+   "type": "try_fix",
+   "customer": "eshan ghosh",
+   "at": "2026-09-17T16:00:00",
+   "ticket": "PML-2066",
+   "fix": "add mesh extender",
+   "worked": true
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "at": "2026-09-18T10:00:00",
+   "text": "Hi there!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "at": "2026-09-18T10:00:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "at": "2026-09-18T10:00:00",
+   "text": "Sorry, I was away for a bit.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "at": "2026-09-18T10:02:00",
+   "text": "Quick update: I actually moved to Nashik on September 15, sorry for not telling you earlier.",
+   "expect": [
+    [
+     "lives_in",
+     "nashik"
+    ]
+   ],
+   "got": [
+    [
+     "pooja bhat",
+     "lives_in",
+     "nashik"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "at": "2026-09-18T10:02:00",
+   "text": "I moved to Secunderabad today.",
+   "expect": [
+    [
+     "lives_in",
+     "secunderabad"
+    ]
+   ],
+   "got": [
+    [
+     "zoya mirza",
+     "lives_in",
+     "secunderabad"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "at": "2026-09-18T10:02:00",
+   "text": "Okay, I'll wait for your update.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "at": "2026-09-18T10:04:00",
+   "text": "Actually, please use SMS from now on instead.",
+   "expect": [
+    [
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "got": [
+    [
+     "alice roy",
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "pick_up",
+   "customer": "aditi kulkarni",
+   "at": "2026-09-18T15:00:00",
+   "ticket": "PML-2060",
+   "observations": [
+    "Router diagnostic for aditi kulkarni: weak signal in far rooms"
+   ],
+   "suggestions": [
+    {
+     "issue": "weak wifi in bedroom",
+     "fix": "add mesh extender",
+     "worked_before": 2,
+     "for_issue": "weak wifi in bedroom",
+     "distance": 0.0
+    },
+    {
+     "issue": "weak wifi in bedroom",
+     "fix": "reset line profile",
+     "worked_before": 1,
+     "for_issue": "slow internet",
+     "distance": 0.261
+    },
+    {
+     "issue": "weak wifi in bedroom",
+     "fix": "replace fiber cable",
+     "worked_before": 1,
+     "for_issue": "slow internet",
+     "distance": 0.261
+    }
+   ]
+  },
+  {
+   "type": "pick_up",
+   "customer": "bhavna shetty",
+   "at": "2026-09-18T15:00:00",
+   "ticket": "PML-2061",
+   "observations": [
+    "Outage feed: fiber cut on fc road affects pune",
+    "Router diagnostic for bhavna shetty: firmware crash loop"
+   ],
+   "suggestions": [
+    {
+     "issue": "router reboots on its own every few hours",
+     "fix": "firmware update",
+     "worked_before": 2,
+     "for_issue": "router reboots on its own every few hours",
+     "distance": -0.0
+    }
+   ]
+  },
+  {
+   "type": "try_fix",
+   "customer": "hari kumar",
+   "at": "2026-09-18T16:00:00",
+   "ticket": "PML-2044",
+   "fix": "move router",
+   "worked": false
+  },
+  {
+   "type": "try_fix",
+   "customer": "jaya reddy",
+   "at": "2026-09-18T16:00:00",
+   "ticket": "PML-2045",
+   "fix": "enable qos",
+   "worked": true
+  },
+  {
+   "type": "try_fix",
+   "customer": "qasim ali",
+   "at": "2026-09-18T16:00:00",
+   "ticket": "PML-2052",
+   "fix": "reset line profile",
+   "worked": true
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "at": "2026-09-19T10:00:00",
+   "text": "Your technician swapped my router for a PML Hub 6 today.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6"
+    ]
+   ],
+   "got": [
+    [
+     "neha kapoor",
+     "has_router",
+     "pml hub 6"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "at": "2026-09-19T10:00:00",
+   "text": "We replaced the router with a PML Hub 6 Pro this morning.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "got": [
+    [
+     "rahul sharma",
+     "has_router",
+     "pml hub 6 pro"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "at": "2026-09-19T10:02:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "at": "2026-09-19T10:02:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "at": "2026-09-19T10:04:00",
+   "text": "Switch my contact preference to WhatsApp, please.",
+   "expect": [
+    [
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "got": [
+    [
+     "neha kapoor",
+     "prefers_channel",
+     "whatsapp"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "at": "2026-09-19T10:04:00",
+   "text": "From now on please reach me by phone, not the old way.",
+   "expect": [
+    [
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "got": [
+    [
+     "rahul sharma",
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "at": "2026-09-19T10:06:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "try_fix",
+   "customer": "gita pillai",
+   "at": "2026-09-19T16:00:00",
+   "ticket": "PML-2043",
+   "fix": "change wifi channel",
+   "worked": true
+  },
+  {
+   "type": "try_fix",
+   "customer": "hari kumar",
+   "at": "2026-09-19T16:00:00",
+   "ticket": "PML-2044",
+   "fix": "add mesh extender",
+   "worked": true
+  },
+  {
+   "type": "try_fix",
+   "customer": "ritu saxena",
+   "at": "2026-09-19T16:00:00",
+   "ticket": "PML-2053",
+   "error": "ticket was never opened"
+  },
+  {
+   "type": "try_fix",
+   "customer": "gaurav chawla",
+   "at": "2026-09-19T16:00:00",
+   "ticket": "PML-2068",
+   "fix": "firmware update",
+   "worked": true
+  },
+  {
+   "type": "turn",
+   "customer": "carol dsouza",
+   "at": "2026-09-20T10:00:00",
+   "text": "Sorry, I was away for a bit.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "farhan khan",
+   "at": "2026-09-20T10:00:00",
+   "text": "I switched my plan to Basic 50 today.",
+   "expect": [
+    [
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "got": [
+    [
+     "farhan khan",
+     "on_plan",
+     "basic 50"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "at": "2026-09-20T10:00:00",
+   "text": "ok thx",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "fatima sheikh",
+   "at": "2026-09-20T10:00:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "at": "2026-09-20T10:00:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "at": "2026-09-20T10:00:00",
+   "text": "As of today we live in Nashik.",
+   "expect": [
+    [
+     "lives_in",
+     "nashik"
+    ]
+   ],
+   "got": [
+    [
+     "arjun mehta",
+     "lives_in",
+     "nashik"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "farhan khan",
+   "at": "2026-09-20T10:02:00",
+   "text": "We use a desktop PC at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "desktop pc"
+    ]
+   ],
+   "got": [
+    [
+     "farhan khan",
+     "owns_device",
+     "desktop pc"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "at": "2026-09-20T10:02:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "fatima sheikh",
+   "at": "2026-09-20T10:02:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "at": "2026-09-20T10:02:00",
+   "text": "From now on please reach me by phone, not the old way.",
+   "expect": [
+    [
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "got": [
+    [
+     "arjun mehta",
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "farhan khan",
+   "at": "2026-09-20T10:04:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "at": "2026-09-20T10:04:00",
+   "text": "Hi there!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "at": "2026-09-20T10:06:00",
+   "text": "Hi there!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "try_fix",
+   "customer": "aditi kulkarni",
+   "at": "2026-09-20T16:00:00",
+   "ticket": "PML-2060",
+   "fix": "add mesh extender",
+   "worked": true
+  },
+  {
+   "type": "try_fix",
+   "customer": "bhavna shetty",
+   "at": "2026-09-20T16:00:00",
+   "ticket": "PML-2061",
+   "fix": "firmware update",
+   "worked": true
+  },
+  {
+   "type": "turn",
+   "customer": "manav gupta",
+   "at": "2026-09-21T10:00:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "at": "2026-09-21T10:00:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "at": "2026-09-21T10:00:00",
+   "text": "Forgot to mention, I've been living in Mumbai since September 13.",
+   "expect": [
+    [
+     "lives_in",
+     "mumbai"
+    ]
+   ],
+   "got": [
+    [
+     "uday rao",
+     "lives_in",
+     "mumbai"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "at": "2026-09-21T10:00:00",
+   "text": "I also have a iPhone on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "iphone"
+    ]
+   ],
+   "got": [
+    [
+     "eshan ghosh",
+     "owns_device",
+     "iphone"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul shah",
+   "at": "2026-09-21T10:00:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "manav gupta",
+   "at": "2026-09-21T10:02:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "at": "2026-09-21T10:02:00",
+   "text": "We've just shifted to Pune, today actually.",
+   "expect": [
+    [
+     "lives_in",
+     "pune"
+    ]
+   ],
+   "got": [
+    [
+     "tara banerjee",
+     "lives_in",
+     "pune"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "at": "2026-09-21T10:02:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "at": "2026-09-21T10:02:00",
+   "text": "Hi there!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul shah",
+   "at": "2026-09-21T10:02:00",
+   "text": "I got a new AX1800 router today.",
+   "expect": [
+    [
+     "has_router",
+     "ax1800"
+    ]
+   ],
+   "got": [
+    [
+     "rahul shah",
+     "has_router",
+     "ax1800"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "manav gupta",
+   "at": "2026-09-21T10:04:00",
+   "text": "Switch my contact preference to SMS, please.",
+   "expect": [
+    [
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "got": [
+    [
+     "manav gupta",
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "at": "2026-09-21T10:04:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "at": "2026-09-21T10:04:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "at": "2026-09-22T10:00:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "at": "2026-09-22T10:00:00",
+   "text": "Forgot to mention, I've been living in Mysuru since September 16.",
+   "expect": [
+    [
+     "lives_in",
+     "mysuru"
+    ]
+   ],
+   "got": [
+    [
+     "yamini krishnan",
+     "lives_in",
+     "mysuru"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "hema subramanian",
+   "at": "2026-09-22T10:00:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "at": "2026-09-22T10:02:00",
+   "text": "I also have a smart TV on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "got": [
+    [
+     "lata joshi",
+     "owns_device",
+     "smart tv"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "at": "2026-09-22T10:02:00",
+   "text": "Moved my plan to Fiber 300 today.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "got": [
+    [
+     "yamini krishnan",
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "at": "2026-09-22T10:04:00",
+   "text": "Actually, please use phone from now on instead.",
+   "expect": [
+    [
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "got": [
+    [
+     "yamini krishnan",
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "at": "2026-09-22T10:06:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "at": "2026-09-22T10:08:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "at": "2026-09-22T10:10:00",
+   "text": "We use a Xbox at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "got": [
+    [
+     "yamini krishnan",
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "at": "2026-09-23T10:00:00",
+   "text": "We relocated to Mysuru back on September 17, should have told you then.",
+   "expect": [
+    [
+     "lives_in",
+     "mysuru"
+    ]
+   ],
+   "got": [
+    [
+     "dev malhotra",
+     "lives_in",
+     "mysuru"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "at": "2026-09-23T10:00:00",
+   "text": "Forgot to mention, I've been living in Pune since September 17.",
+   "expect": [
+    [
+     "lives_in",
+     "pune"
+    ]
+   ],
+   "got": [
+    [
+     "esha iyer",
+     "lives_in",
+     "pune"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "at": "2026-09-23T10:00:00",
+   "text": "As of today we live in Thane.",
+   "expect": [
+    [
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "got": [
+    [
+     "hari kumar",
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "omar siddiqui",
+   "at": "2026-09-23T10:00:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "at": "2026-09-23T10:00:00",
+   "text": "We use a iPad at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "at": "2026-09-23T10:00:00",
+   "text": "Forgot to mention, I've been living in Mumbai since September 20.",
+   "expect": [
+    [
+     "lives_in",
+     "mumbai"
+    ]
+   ],
+   "got": [
+    [
+     "ritu saxena",
+     "lives_in",
+     "mumbai"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "at": "2026-09-23T10:00:00",
+   "text": "ok thx",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "vikram desai",
+   "at": "2026-09-23T10:00:00",
+   "text": "I switched my plan to Fiber 300 today.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "got": [
+    [
+     "vikram desai",
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "at": "2026-09-23T10:00:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice rao",
+   "at": "2026-09-23T10:00:00",
+   "text": "As of today we live in Mysuru.",
+   "expect": [
+    [
+     "lives_in",
+     "mysuru"
+    ]
+   ],
+   "got": [
+    [
+     "alice rao",
+     "lives_in",
+     "mysuru"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehra",
+   "at": "2026-09-23T10:00:00",
+   "text": "Sorry, I was away for a bit.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "at": "2026-09-23T10:02:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "at": "2026-09-23T10:02:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "at": "2026-09-23T10:02:00",
+   "text": "ok thx",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "omar siddiqui",
+   "at": "2026-09-23T10:02:00",
+   "text": "I changed to the Fiber 100 plan this morning.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "got": [
+    [
+     "omar siddiqui",
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "at": "2026-09-23T10:02:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "at": "2026-09-23T10:02:00",
+   "text": "Good morning!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "at": "2026-09-23T10:02:00",
+   "text": "Hi there!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "vikram desai",
+   "at": "2026-09-23T10:02:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "at": "2026-09-23T10:02:00",
+   "text": "Moved my plan to Fiber 1000 today.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "got": [
+    [
+     "chirag jain",
+     "on_plan",
+     "fiber 1000"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice rao",
+   "at": "2026-09-23T10:02:00",
+   "text": "Moved my plan to Fiber 300 today.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "got": [
+    [
+     "alice rao",
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehra",
+   "at": "2026-09-23T10:02:00",
+   "text": "I'm usually free after 6pm.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "at": "2026-09-23T10:04:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "at": "2026-09-23T10:04:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "omar siddiqui",
+   "at": "2026-09-23T10:04:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "at": "2026-09-23T10:04:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "vikram desai",
+   "at": "2026-09-23T10:04:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "at": "2026-09-23T10:04:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice rao",
+   "at": "2026-09-23T10:04:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "ishaan verma",
+   "at": "2026-09-24T10:00:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "at": "2026-09-24T10:00:00",
+   "text": "Forgot to mention, I've been living in Mumbai since September 19.",
+   "expect": [
+    [
+     "lives_in",
+     "mumbai"
+    ]
+   ],
+   "got": [
+    [
+     "bhavna shetty",
+     "lives_in",
+     "mumbai"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "divya menon",
+   "at": "2026-09-24T10:00:00",
+   "text": "Hi there!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "at": "2026-09-24T10:00:00",
+   "text": "I changed to the Fiber 300 plan this morning.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "got": [
+    [
+     "priya nair",
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "ishaan verma",
+   "at": "2026-09-24T10:02:00",
+   "text": "ok thx",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "at": "2026-09-24T10:02:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "at": "2026-09-24T10:02:00",
+   "text": "I'm usually free after 6pm.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "at": "2026-09-24T10:04:00",
+   "text": "From now on please reach me by phone, not the old way.",
+   "expect": [
+    [
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "got": [
+    [
+     "bhavna shetty",
+     "prefers_channel",
+     "phone"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "at": "2026-09-24T10:04:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "at": "2026-09-24T10:06:00",
+   "text": "I also have a PS5 on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "ps5"
+    ]
+   ],
+   "got": [
+    [
+     "bhavna shetty",
+     "owns_device",
+     "ps5"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "at": "2026-09-24T10:06:00",
+   "text": "We replaced the router with a PML Hub 6 this morning.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6"
+    ]
+   ],
+   "got": [
+    [
+     "priya nair",
+     "has_router",
+     "pml hub 6"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "at": "2026-09-24T10:08:00",
+   "text": "Actually, please use SMS from now on instead.",
+   "expect": [
+    [
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "got": [
+    [
+     "priya nair",
+     "prefers_channel",
+     "sms"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "at": "2026-09-25T10:00:00",
+   "text": "Quick update: I actually moved to Thane on September 17, sorry for not telling you earlier.",
+   "expect": [
+    [
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "got": [
+    [
+     "gita pillai",
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "jaya reddy",
+   "at": "2026-09-25T10:00:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "at": "2026-09-25T10:00:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "at": "2026-09-25T10:02:00",
+   "text": "Hi there!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "at": "2026-09-25T10:02:00",
+   "text": "Moved my plan to Fiber 300 today.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "got": [
+    [
+     "aditi kulkarni",
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "at": "2026-09-25T10:04:00",
+   "text": "ok thx",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "at": "2026-09-26T10:00:00",
+   "text": "Good morning!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "wasim akhtar",
+   "at": "2026-09-26T10:00:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "at": "2026-09-26T10:00:00",
+   "text": "Good morning!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "at": "2026-09-26T10:02:00",
+   "text": "I also have a laptop on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "laptop"
+    ]
+   ],
+   "got": [
+    [
+     "neha kapoor",
+     "owns_device",
+     "laptop"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "wasim akhtar",
+   "at": "2026-09-26T10:02:00",
+   "text": "Sorry, I was away for a bit.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "at": "2026-09-26T10:02:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "neha kapoor",
+   "at": "2026-09-26T10:04:00",
+   "text": "ok thx",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "wasim akhtar",
+   "at": "2026-09-26T10:04:00",
+   "text": "Forgot to mention, I've been living in Hyderabad since September 18.",
+   "expect": [
+    [
+     "lives_in",
+     "hyderabad"
+    ]
+   ],
+   "got": [
+    [
+     "wasim akhtar",
+     "lives_in",
+     "hyderabad"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "wasim akhtar",
+   "at": "2026-09-26T10:06:00",
+   "text": "We replaced the router with a PML Hub 6 this morning.",
+   "expect": [
+    [
+     "has_router",
+     "pml hub 6"
+    ]
+   ],
+   "got": [
+    [
+     "wasim akhtar",
+     "has_router",
+     "pml hub 6"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "bob menon",
+   "at": "2026-09-27T10:00:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "at": "2026-09-27T10:00:00",
+   "text": "I also have a Xbox on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "got": [
+    [
+     "kabir singh",
+     "owns_device",
+     "xbox"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "at": "2026-09-27T10:00:00",
+   "text": "Hi there!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "at": "2026-09-27T10:00:00",
+   "text": "Like I said, I'm in Pimpri now.",
+   "expect": [
+    [
+     "lives_in",
+     "pimpri"
+    ]
+   ],
+   "got": [
+    [
+     "alice roy",
+     "lives_in",
+     "pimpri"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "at": "2026-09-27T10:00:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "at": "2026-09-27T10:00:00",
+   "text": "Like I said, I'm in Nashik now.",
+   "expect": [
+    [
+     "lives_in",
+     "nashik"
+    ]
+   ],
+   "got": [
+    [
+     "arjun mehta",
+     "lives_in",
+     "nashik"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "kabir singh",
+   "at": "2026-09-27T10:02:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "at": "2026-09-27T10:02:00",
+   "text": "There's no internet at all since this morning.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": [
+    [
+     "reported_issue",
+     null
+    ]
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "at": "2026-09-27T10:02:00",
+   "text": "My neighbour just switched to Ping Me Later as well.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "at": "2026-09-27T10:02:00",
+   "text": "My laptop is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "laptop"
+    ]
+   ],
+   "got": [
+    [
+     "rahul sharma",
+     "owns_device",
+     "laptop"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "at": "2026-09-27T10:02:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "at": "2026-09-27T10:04:00",
+   "text": "My iPad is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "got": [
+    [
+     "pooja bhat",
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice roy",
+   "at": "2026-09-27T10:04:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul sharma",
+   "at": "2026-09-27T10:04:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehta",
+   "at": "2026-09-27T10:04:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "at": "2026-09-27T10:06:00",
+   "text": "Like I said, I'm in Nasik now.",
+   "expect": [
+    [
+     "lives_in",
+     "nashik"
+    ]
+   ],
+   "got": [
+    [
+     "pooja bhat",
+     "lives_in",
+     "nasik"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": [
+    [
+     "lives_in",
+     "nashik"
+    ]
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "pooja bhat",
+   "at": "2026-09-27T10:08:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "at": "2026-09-28T10:00:00",
+   "text": "ok thx",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "at": "2026-09-28T10:00:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "fatima sheikh",
+   "at": "2026-09-28T10:00:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "at": "2026-09-28T10:02:00",
+   "text": "Wifi barely reaches my bedroom.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [
+    [
+     "uday rao",
+     "reported_issue",
+     "weak wifi in bedroom"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": "pml-2058",
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "at": "2026-09-28T10:02:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "fatima sheikh",
+   "at": "2026-09-28T10:02:00",
+   "text": "Hi there!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "uday rao",
+   "at": "2026-09-28T10:04:00",
+   "text": "Like I said, I'm in Mumbia now.",
+   "expect": [
+    [
+     "lives_in",
+     "mumbai"
+    ]
+   ],
+   "got": [
+    [
+     "uday rao",
+     "lives_in",
+     "mumbia"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": [
+    [
+     "lives_in",
+     "mumbai"
+    ]
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "zoya mirza",
+   "at": "2026-09-28T10:04:00",
+   "text": "Still living in Secunderabad, same as before.",
+   "expect": [
+    [
+     "lives_in",
+     "secunderabad"
+    ]
+   ],
+   "got": [
+    [
+     "zoya mirza",
+     "lives_in",
+     "secunderabad"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "pick_up",
+   "customer": "pooja bhat",
+   "at": "2026-09-28T15:00:00",
+   "ticket": "PML-2051",
+   "error": "ticket was never opened"
+  },
+  {
+   "type": "turn",
+   "customer": "carol dsouza",
+   "at": "2026-09-29T10:00:00",
+   "text": "Hi there!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "farhan khan",
+   "at": "2026-09-29T10:00:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "at": "2026-09-29T10:00:00",
+   "text": "Good morning!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "at": "2026-09-29T10:00:00",
+   "text": "Sorry, I was away for a bit.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "farhan khan",
+   "at": "2026-09-29T10:02:00",
+   "text": "Okay, I'll wait for your update.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "lata joshi",
+   "at": "2026-09-29T10:02:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "eshan ghosh",
+   "at": "2026-09-29T10:02:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "pick_up",
+   "customer": "uday rao",
+   "at": "2026-09-29T15:00:00",
+   "ticket": "PML-2058",
+   "observations": [
+    "Router diagnostic for uday rao: firmware crash loop"
+   ],
+   "suggestions": [
+    {
+     "issue": "weak wifi in bedroom",
+     "fix": "add mesh extender",
+     "worked_before": 4,
+     "for_issue": "weak wifi in bedroom",
+     "distance": 0.0
+    },
+    {
+     "issue": "weak wifi in bedroom",
+     "fix": "reset line profile",
+     "worked_before": 2,
+     "for_issue": "slow internet",
+     "distance": 0.261
+    },
+    {
+     "issue": "weak wifi in bedroom",
+     "fix": "replace fiber cable",
+     "worked_before": 1,
+     "for_issue": "slow internet",
+     "distance": 0.261
+    }
+   ]
+  },
+  {
+   "type": "try_fix",
+   "customer": "pooja bhat",
+   "at": "2026-09-29T16:00:00",
+   "ticket": "PML-2051",
+   "error": "ticket was never opened"
+  },
+  {
+   "type": "turn",
+   "customer": "manav gupta",
+   "at": "2026-09-30T10:00:00",
+   "text": "Sorry, I was away for a bit.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "at": "2026-09-30T10:00:00",
+   "text": "Good morning!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "at": "2026-09-30T10:00:00",
+   "text": "Good morning!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "hema subramanian",
+   "at": "2026-09-30T10:00:00",
+   "text": "My iPad is connected too.",
+   "expect": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "got": [
+    [
+     "hema subramanian",
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "at": "2026-09-30T10:00:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "manav gupta",
+   "at": "2026-09-30T10:02:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "yamini krishnan",
+   "at": "2026-09-30T10:02:00",
+   "text": "Is there a way to check my data usage?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "at": "2026-09-30T10:02:00",
+   "text": "Every evening the internet disconnects for a few minutes.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [
+    [
+     "chirag jain",
+     "reported_issue",
+     "connection drops"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": "pml-2064",
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "hema subramanian",
+   "at": "2026-09-30T10:02:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "at": "2026-09-30T10:02:00",
+   "text": "Again, it's Fiber 100 I'm paying for.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "got": [
+    [
+     "priya naik",
+     "on_plan",
+     "fiber 100"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "chirag jain",
+   "at": "2026-09-30T10:04:00",
+   "text": "Thanks for the quick reply.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya naik",
+   "at": "2026-09-30T10:04:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "try_fix",
+   "customer": "pooja bhat",
+   "at": "2026-09-30T16:00:00",
+   "ticket": "PML-2051",
+   "error": "ticket was never opened"
+  },
+  {
+   "type": "try_fix",
+   "customer": "uday rao",
+   "at": "2026-09-30T16:00:00",
+   "ticket": "PML-2058",
+   "fix": "move router",
+   "worked": false
+  },
+  {
+   "type": "turn",
+   "customer": "esha iyer",
+   "at": "2026-10-01T10:00:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "at": "2026-10-01T10:00:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "at": "2026-10-01T10:00:00",
+   "text": "Hi there!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "vikram desai",
+   "at": "2026-10-01T10:00:00",
+   "text": "ok thx",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul shah",
+   "at": "2026-10-01T10:00:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehra",
+   "at": "2026-10-01T10:00:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "qasim ali",
+   "at": "2026-10-01T10:02:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "at": "2026-10-01T10:02:00",
+   "text": "I'm usually free after 6pm.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "vikram desai",
+   "at": "2026-10-01T10:02:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "rahul shah",
+   "at": "2026-10-01T10:02:00",
+   "text": "Good morning!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "arjun mehra",
+   "at": "2026-10-01T10:02:00",
+   "text": "Again, we're still in Navi Mumbai.",
+   "expect": [
+    [
+     "lives_in",
+     "navi mumbai"
+    ]
+   ],
+   "got": [
+    [
+     "arjun mehra",
+     "lives_in",
+     "navi mumbai"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "tara banerjee",
+   "at": "2026-10-01T10:04:00",
+   "text": "Still living in Puen, same as before.",
+   "expect": [
+    [
+     "lives_in",
+     "pune"
+    ]
+   ],
+   "got": [
+    [
+     "tara banerjee",
+     "lives_in",
+     "puen"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": [
+    [
+     "lives_in",
+     "pune"
+    ]
+   ]
+  },
+  {
+   "type": "pick_up",
+   "customer": "chirag jain",
+   "at": "2026-10-01T15:00:00",
+   "ticket": "PML-2064",
+   "observations": [
+    "Outage feed: road works cut in chinchwad affects pimpri",
+    "Router diagnostic for chirag jain: optical signal loss"
+   ],
+   "suggestions": [
+    {
+     "issue": "connection drops",
+     "fix": "change wifi channel",
+     "worked_before": 3,
+     "for_issue": "evening internet disconnects",
+     "distance": 0.228
+    },
+    {
+     "issue": "connection drops",
+     "fix": "reset line profile",
+     "worked_before": 2,
+     "for_issue": "slow internet",
+     "distance": 0.269
+    },
+    {
+     "issue": "connection drops",
+     "fix": "replace fiber cable",
+     "worked_before": 1,
+     "for_issue": "slow internet",
+     "distance": 0.269
+    }
+   ]
+  },
+  {
+   "type": "try_fix",
+   "customer": "uday rao",
+   "at": "2026-10-01T16:00:00",
+   "ticket": "PML-2058",
+   "fix": "add mesh extender",
+   "worked": true
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "at": "2026-10-02T10:00:00",
+   "text": "We use a iPad at home as well.",
+   "expect": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "omar siddiqui",
+   "at": "2026-10-02T10:00:00",
+   "text": "I also have a iPhone on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "iphone"
+    ]
+   ],
+   "got": [
+    [
+     "omar siddiqui",
+     "owns_device",
+     "iphone"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "at": "2026-10-02T10:00:00",
+   "text": "Latency spikes make online gaming impossible.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [
+    [
+     "ritu saxena",
+     "reported_issue",
+     "latency spikes"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": "pml-2054",
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "at": "2026-10-02T10:00:00",
+   "text": "Like I said, I'm in Pimpri now.",
+   "expect": [
+    [
+     "lives_in",
+     "pimpri"
+    ]
+   ],
+   "got": [
+    [
+     "sanjay patil",
+     "lives_in",
+     "pimpri"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "at": "2026-10-02T10:00:00",
+   "text": "As I told you, my plan is fiber 300.",
+   "expect": [
+    [
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "got": [
+    [
+     "aditi kulkarni",
+     "on_plan",
+     "fiber 300"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "at": "2026-10-02T10:00:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "priya nair",
+   "at": "2026-10-02T10:00:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "at": "2026-10-02T10:02:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "omar siddiqui",
+   "at": "2026-10-02T10:02:00",
+   "text": "Can you send me last month's invoice?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "at": "2026-10-02T10:02:00",
+   "text": "Okay, I'll wait for your update.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "sanjay patil",
+   "at": "2026-10-02T10:02:00",
+   "text": "pls send the bill asap",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "aditi kulkarni",
+   "at": "2026-10-02T10:02:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "bhavna shetty",
+   "at": "2026-10-02T10:02:00",
+   "text": "Nothing connects, the internet is totally dead.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [
+    [
+     "bhavna shetty",
+     "reported_issue",
+     "no internet"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": "pml-2062",
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "dev malhotra",
+   "at": "2026-10-02T10:04:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "omar siddiqui",
+   "at": "2026-10-02T10:04:00",
+   "text": "Good morning!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "ritu saxena",
+   "at": "2026-10-02T10:04:00",
+   "text": "I also have a PS5 on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "ps5"
+    ]
+   ],
+   "got": [
+    [
+     "ritu saxena",
+     "owns_device",
+     "ps5"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "try_fix",
+   "customer": "chirag jain",
+   "at": "2026-10-02T16:00:00",
+   "ticket": "PML-2064",
+   "fix": "restart router",
+   "worked": false
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "at": "2026-10-03T10:00:00",
+   "text": "Again, we're still in Tahne.",
+   "expect": [
+    [
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "got": [
+    [
+     "hari kumar",
+     "lives_in",
+     "tahne"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": [
+    [
+     "lives_in",
+     "thane"
+    ]
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "jaya reddy",
+   "at": "2026-10-03T10:00:00",
+   "text": "The router reboots on its own every few hours.",
+   "expect": [
+    [
+     "reported_issue",
+     null
+    ]
+   ],
+   "got": [
+    [
+     "jaya reddy",
+     "reported_issue",
+     "router reboots on its own every few hours"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": "pml-2046",
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "alice rao",
+   "at": "2026-10-03T10:00:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "hari kumar",
+   "at": "2026-10-03T10:02:00",
+   "text": "When is my bill due this month?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "jaya reddy",
+   "at": "2026-10-03T10:02:00",
+   "text": "I also have a iPad on the wifi.",
+   "expect": [
+    [
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "got": [
+    [
+     "jaya reddy",
+     "owns_device",
+     "ipad"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "jaya reddy",
+   "at": "2026-10-03T10:04:00",
+   "text": "Good morning!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "jaya reddy",
+   "at": "2026-10-03T10:06:00",
+   "text": "Again, we're still in Tahne.",
+   "expect": [
+    [
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "got": [
+    [
+     "jaya reddy",
+     "lives_in",
+     "tahne"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": [
+    [
+     "lives_in",
+     "thane"
+    ]
+   ]
+  },
+  {
+   "type": "pick_up",
+   "customer": "ritu saxena",
+   "at": "2026-10-03T15:00:00",
+   "ticket": "PML-2054",
+   "observations": [
+    "Billing system: ritu saxena is on plan fiber 1000",
+    "Outage feed: flooded junction box in andheri affects mumbai",
+    "Router diagnostic for ritu saxena: high line attenuation"
+   ],
+   "suggestions": [
+    {
+     "issue": "latency spikes",
+     "fix": "reset line profile",
+     "worked_before": 2,
+     "for_issue": "slow internet",
+     "distance": 0.245
+    },
+    {
+     "issue": "latency spikes",
+     "fix": "replace fiber cable",
+     "worked_before": 1,
+     "for_issue": "slow internet",
+     "distance": 0.245
+    },
+    {
+     "issue": "latency spikes",
+     "fix": "change wifi channel",
+     "worked_before": 3,
+     "for_issue": "evening internet disconnects",
+     "distance": 0.279
+    }
+   ]
+  },
+  {
+   "type": "pick_up",
+   "customer": "bhavna shetty",
+   "at": "2026-10-03T15:00:00",
+   "ticket": "PML-2062",
+   "observations": [
+    "Outage feed: flooded junction box in andheri affects mumbai",
+    "Router diagnostic for bhavna shetty: firmware crash loop"
+   ],
+   "suggestions": [
+    {
+     "issue": "no internet",
+     "fix": "replace fiber cable",
+     "worked_before": 1,
+     "for_issue": "no internet",
+     "distance": 0.0
+    },
+    {
+     "issue": "no internet",
+     "fix": "reset line profile",
+     "worked_before": 2,
+     "for_issue": "slow internet",
+     "distance": 0.219
+    },
+    {
+     "issue": "no internet",
+     "fix": "change wifi channel",
+     "worked_before": 3,
+     "for_issue": "evening internet disconnects",
+     "distance": 0.234
+    }
+   ]
+  },
+  {
+   "type": "try_fix",
+   "customer": "chirag jain",
+   "at": "2026-10-03T16:00:00",
+   "ticket": "PML-2064",
+   "fix": "change wifi channel",
+   "worked": true
+  },
+  {
+   "type": "pick_up",
+   "customer": "jaya reddy",
+   "at": "2026-10-04T15:00:00",
+   "ticket": "PML-2046",
+   "observations": [
+    "Billing system: jaya reddy is on plan basic 50",
+    "Router diagnostic for jaya reddy: bufferbloat under load"
+   ],
+   "suggestions": [
+    {
+     "issue": "router reboots on its own every few hours",
+     "fix": "firmware update",
+     "worked_before": 4,
+     "for_issue": "router reboots on its own every few hours",
+     "distance": -0.0
+    }
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "at": "2026-10-05T10:00:00",
+   "text": "Great, appreciate it.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "wasim akhtar",
+   "at": "2026-10-05T10:00:00",
+   "text": "Do you have any offers on annual plans?",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "at": "2026-10-05T10:00:00",
+   "text": "Hi there!",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "at": "2026-10-05T10:02:00",
+   "text": "Like I said, I'm in Thane now.",
+   "expect": [
+    [
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "got": [
+    [
+     "gita pillai",
+     "lives_in",
+     "thane"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "wasim akhtar",
+   "at": "2026-10-05T10:02:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "at": "2026-10-05T10:02:00",
+   "text": "Again, we're still in Hydrabad.",
+   "expect": [
+    [
+     "lives_in",
+     "hyderabad"
+    ]
+   ],
+   "got": [
+    [
+     "gaurav chawla",
+     "lives_in",
+     "hydrabad"
+    ]
+   ],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": [
+    [
+     "lives_in",
+     "hyderabad"
+    ]
+   ]
+  },
+  {
+   "type": "turn",
+   "customer": "gita pillai",
+   "at": "2026-10-05T10:04:00",
+   "text": "I work from home most days.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "turn",
+   "customer": "gaurav chawla",
+   "at": "2026-10-05T10:04:00",
+   "text": "My sister in Delhi uses Ping Me Later too.",
+   "expect": [],
+   "got": [],
+   "dropped": [],
+   "ticket_opened": null,
+   "missed": []
+  },
+  {
+   "type": "try_fix",
+   "customer": "jaya reddy",
+   "at": "2026-10-05T16:00:00",
+   "ticket": "PML-2046",
+   "fix": "factory reset",
+   "worked": false
+  },
+  {
+   "type": "try_fix",
+   "customer": "ritu saxena",
+   "at": "2026-10-05T16:00:00",
+   "ticket": "PML-2054",
+   "fix": "enable qos",
+   "worked": true
+  },
+  {
+   "type": "try_fix",
+   "customer": "bhavna shetty",
+   "at": "2026-10-05T16:00:00",
+   "ticket": "PML-2062",
+   "fix": "replace fiber cable",
+   "worked": true
+  },
+  {
+   "type": "try_fix",
+   "customer": "jaya reddy",
+   "at": "2026-10-06T16:00:00",
+   "ticket": "PML-2046",
+   "fix": "firmware update",
+   "worked": true
+  }
+ ]
+}
