@@ -123,3 +123,14 @@ describe('field dispatch', async () => {
     expect(renderToString(<Canvas view={net} focus="kevin" />)).not.toContain('stroke-dasharray="3 5"')
   })
 })
+
+describe('query glow layer', async () => {
+  const { TouchLayer } = await import('../components/console/TouchLayer')
+  const { recordTouch } = await import('../lib/touch')
+  const marks = [{ id: 'olt-1', keys: ['olt-1'], x: 10, y: 10, r: 14 }]
+  it('rings only what a query just touched', () => {
+    expect(renderToString(<svg><TouchLayer marks={marks} /></svg>)).not.toContain('<circle')
+    recordTouch({ id: 'x', type: 'cypher', sim_time: null, wall: 0, data: { name: 'lab: line test', ms: 3, rows: 1, seek: ['olt-1'], found: [] } } as never)
+    expect(renderToString(<svg><TouchLayer marks={marks} /></svg>)).toContain('<circle')
+  })
+})

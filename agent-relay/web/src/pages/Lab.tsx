@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { Wordmark } from '../components/Brand'
 import { ConsoleNav } from '../components/console/ConsoleNav'
@@ -15,7 +15,7 @@ import { titleCase } from '../lib/format'
 import { BOT } from '../lib/brand'
 import { useRelayStream } from '../lib/stream'
 import { useTenant } from '../lib/tenant'
-import { touchOf, useTouchTick } from '../lib/touch'
+import { TouchLayer } from '../components/console/TouchLayer'
 import type { Customer, LabHome, LabManual, LabMessage, LabOlt, LabPreset, LabProcedure, LabRun, LabStep, LabView, RelayEvent } from '../lib/types'
 
 const SPRING = { type: 'spring', stiffness: 380, damping: 32 } as const
@@ -81,9 +81,12 @@ export function useDispatch(run?: LabRun): Dispatch | null {
     const ids = [arrive, until].filter((t) => t > Date.now()).map((t) => setTimeout(() => force((n) => n + 1), t - Date.now() + 30))
     return () => ids.forEach(clearTimeout)
   }, [arrive, until])
-  if (!act || !run || (until && Date.now() > until)) return null
+  const gone = !act || !run || (until > 0 && Date.now() > until)
   const stage = verified ? (verified.status === 'ok' ? 'done' : 'failed') : Date.now() < arrive ? 'enroute' : 'onsite'
-  return { action: String(act.data.action), customer: run.customer, name: run.name, tech: run.technician, at: act.at, ms, arrive, verified, stage }
+  return useMemo(() => gone || !act || !run ? null
+    : { action: String(act.data.action), customer: run.customer, name: run.name, tech: run.technician, at: act.at, ms, arrive, verified, stage },
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [gone, act?.at, verified?.i, stage, run?.customer, run?.technician])
 }
 
 function Van({ x, y, color }: { x: number; y: number; color: string }) {
@@ -144,10 +147,9 @@ export function FieldDispatch({ d, view }: { d: Dispatch; view: NonNullable<LabV
 // ---------------------------------------------------------------- the network canvas
 
 /** The network as the container allows: left to right when there's room, top to bottom when narrow. Never cut. */
-export function Canvas({ view, focus, dispatch }: { view: NonNullable<LabView['network']>; focus: string | null; dispatch?: Dispatch | null }) {
+export const Canvas = memo(function Canvas({ view, focus, dispatch }: { view: NonNullable<LabView['network']>; focus: string | null; dispatch?: Dispatch | null }) {
   const box = useRef<HTMLDivElement>(null)
   const [width, setWidth] = useState(720)
-  useTouchTick()
   useEffect(() => {
     const el = box.current
     if (!el) return
@@ -228,7 +230,6 @@ export function Canvas({ view, focus, dispatch }: { view: NonNullable<LabView['n
     <div ref={box} className="w-full">
       <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} className="mx-auto block max-w-full" role="img" aria-label={`Network for ${view.pop.label}`}>
         <defs>
-          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3.5" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
         </defs>
         {cores.map((l, i) => (
           <g key={l.id}>{wire(pos.pop, pos.core[i], l.link === 'cut' ? 'cut' : !l.active ? 'standby' : 'up', 3)}
@@ -253,7 +254,7 @@ export function Canvas({ view, focus, dispatch }: { view: NonNullable<LabView['n
                   <path d={curve(pos.spl[s.id], p)} fill="none" stroke={h.state === 'dark' || h.state === 'flapping' ? C.bad : 'rgb(255 255 255 / 0.08)'} strokeWidth="1" />
                   {bad && <circle cx={p.x} cy={p.y} r="8" fill={color} opacity="0.5" className="lab-alarm" />}
                   <rect x={p.x - sz / 2} y={p.y - sz / 2} width={sz} height={sz} rx="4" fill={color} fillOpacity={bad ? 0.95 : 0.85}
-                    stroke={me ? 'white' : 'none'} strokeWidth="2" filter={bad ? 'url(#glow)' : undefined}>
+                    stroke={me ? 'white' : 'none'} strokeWidth="2">
                     <title>{`${h.name} · port ${h.port} · ${HOME_WORD[h.state]}${h.rx != null ? ` · ${h.rx} dBm` : ''}`}</title>
                   </rect>
                   {h.customer && <text x={p.x} y={p.y + (me ? 22 : 19)} textAnchor="middle" className={`text-[9.5px] font-semibold ${me ? 'fill-white' : 'fill-white/70'}`}>{h.name.split(' ')[0]}</text>}
@@ -264,14 +265,16 @@ export function Canvas({ view, focus, dispatch }: { view: NonNullable<LabView['n
         ))}
         {cores.map((l, i) => (
           <g key={`c-${l.id}`}>
-            <circle cx={pos.core[i].x} cy={pos.core[i].y} r="20" fill="rgb(var(--ink))" stroke={l.status === 'up' ? C.ok : C.bad} strokeWidth="2" filter="url(#glow)" />
+            <circle cx={pos.core[i].x} cy={pos.core[i].y} r="26" fill={l.status === 'up' ? C.ok : C.bad} opacity="0.12" />
+            <circle cx={pos.core[i].x} cy={pos.core[i].y} r="20" fill="rgb(var(--ink))" stroke={l.status === 'up' ? C.ok : C.bad} strokeWidth="2" />
             <text x={pos.core[i].x} y={pos.core[i].y + 4} textAnchor="middle" className="fill-white text-[9.5px] font-semibold">CORE</text>
             <text x={pos.core[i].x} y={pos.core[i].y + 34} textAnchor="middle" className="fill-white/70 text-[10.5px]">
               {l.label.replace('Core ', '')} · {l.link === 'cut' ? 'cut' : l.active ? l.role : 'standby'}</text>
           </g>
         ))}
         <g>
-          <circle cx={pos.pop.x} cy={pos.pop.y} r="25" fill="rgb(var(--ink))" stroke={C.ok} strokeWidth="2.5" filter="url(#glow)" />
+          <circle cx={pos.pop.x} cy={pos.pop.y} r="32" fill={C.ok} opacity="0.12" />
+          <circle cx={pos.pop.x} cy={pos.pop.y} r="25" fill="rgb(var(--ink))" stroke={C.ok} strokeWidth="2.5" />
           <text x={pos.pop.x} y={pos.pop.y + 4} textAnchor="middle" className="fill-white text-[11px] font-semibold">HUB</text>
           <text x={pos.pop.x} y={pos.pop.y + 40} textAnchor="middle" className="fill-white/80 text-[11px]">{view.pop.label.replace(' POP', '')} hub</text>
         </g>
@@ -313,18 +316,18 @@ export function Canvas({ view, focus, dispatch }: { view: NonNullable<LabView['n
             </g>
           )
         })()}
-        {/* what live Cypher just read: the resolver measuring this line, node by node */}
-        {[...cores.map((l, i) => [pos.core[i], l.id] as const), [pos.pop, view.pop.id] as const,
-          ...view.olts.map((o) => [pos.olt[o.id], o.id] as const), ...view.splitters.map((x) => [pos.spl[x.id], x.id] as const),
-          ...view.homes.map((h) => [pos.home[h.id], h.id, h.customer, h.box, h.account] as const)].map(([p, ...keys]) => {
-          const t = p && touchOf(...keys)
-          return t && <circle key={`t-${keys[0]}`} cx={p.x} cy={p.y} r={14 + (1 - t.glow) * 14} fill="none" stroke={t.write ? 'rgb(134 239 172)' : 'rgb(125 211 252)'}
-            strokeOpacity={t.glow} strokeWidth={2.5} pointerEvents="none" />
-        })}
+        {/* what live Cypher just read: the resolver measuring this line, node by node (its own layer, see TouchLayer) */}
+        <TouchLayer grow={14} marks={[
+          ...cores.map((l, i) => ({ id: l.id, keys: [l.id], x: pos.core[i].x, y: pos.core[i].y, r: 14 })),
+          { id: view.pop.id, keys: [view.pop.id], x: pos.pop.x, y: pos.pop.y, r: 14 },
+          ...view.olts.filter((o) => pos.olt[o.id]).map((o) => ({ id: o.id, keys: [o.id], x: pos.olt[o.id].x, y: pos.olt[o.id].y, r: 14 })),
+          ...view.splitters.filter((x) => pos.spl[x.id]).map((x) => ({ id: x.id, keys: [x.id], x: pos.spl[x.id].x, y: pos.spl[x.id].y, r: 14 })),
+          ...view.homes.filter((h) => pos.home[h.id]).map((h) => ({ id: h.id, keys: [h.id, h.customer, h.box, h.account], x: pos.home[h.id].x, y: pos.home[h.id].y, r: 14 })),
+        ]} />
       </svg>
     </div>
   )
-}
+})
 
 function EveningChart({ o }: { o: LabOlt }) {
   const hot = o.free_peak_mbps < 300

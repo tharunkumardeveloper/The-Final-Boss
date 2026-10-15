@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { api } from '../../lib/api'
 import { titleCase } from '../../lib/format'
-import { touchOf, useTouchTick } from '../../lib/touch'
+import { TouchLayer } from './TouchLayer'
 import type { FailResult, NetNode, Network, RelayEvent } from '../../lib/types'
 
 const W = 900, H = 820, PAD = 70
@@ -39,7 +39,6 @@ export function NetworkMap({ tenant, subscribe, onHub, hubCustomers }: {
   onHub?: (city: string) => void; hubCustomers?: (city: string) => number
 }) {
   const [net, setNet] = useState<Network>()
-  useTouchTick()
   const [sel, setSel] = useState<string>()
   const [result, setResult] = useState<FailResult & { action: 'fail' | 'restore' }>()
   const [busy, setBusy] = useState(false)
@@ -102,7 +101,6 @@ export function NetworkMap({ tenant, subscribe, onHub, hubCustomers }: {
             <div className="lab-grid overflow-hidden rounded-[1.75rem] bg-ink p-3 text-white shadow-lift">
               <svg viewBox={`0 0 ${W} ${H}`} className="mx-auto block h-auto w-full max-w-[860px]" role="img" aria-label="Network map">
                 <defs>
-                  <filter id="net-glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="4" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
                 </defs>
                 {net.edges.map((e) => {
                   const a = pos[e.source], b = pos[e.target]
@@ -111,14 +109,12 @@ export function NetworkMap({ tenant, subscribe, onHub, hubCustomers }: {
                   const core = dst?.kind === 'backbone'
                   const down = src?.status === 'down' || dst?.status === 'down'
                   const hot = onPath.has(e.source) && onPath.has(e.target)
-                  const ta = touchOf(e.source), tb = touchOf(e.target), walked = ta && tb ? Math.min(ta.glow, tb.glow) : 0
                   const d = core ? `M${a.x} ${a.y} Q${(a.x + b.x) / 2} ${Math.min(a.y, b.y) - 40} ${b.x} ${b.y}` : `M${a.x} ${a.y} L${b.x} ${b.y}`
                   const color = down ? 'rgb(var(--danger))' : hot ? 'rgb(var(--conflict))' : core ? 'rgb(var(--signal))' : 'rgb(255 255 255 / 0.18)'
                   return (
                     <g key={e.id}>
                       <path d={d} fill="none" stroke={color} strokeOpacity={core ? 0.25 : 1} strokeWidth={core ? 5 : 1} />
                       {core && <path d={d} fill="none" stroke={color} strokeWidth={1.6} className={down ? '' : 'lab-flow'} strokeDasharray={down ? '5 5' : undefined} />}
-                      {walked > 0 && <path d={d} fill="none" stroke="rgb(125 211 252)" strokeOpacity={walked} strokeWidth={3} />}
                     </g>
                   )
                 })}
@@ -133,10 +129,10 @@ export function NetworkMap({ tenant, subscribe, onHub, hubCustomers }: {
                     <g key={n.id} role="button" tabIndex={0} aria-label={`${n.label}, ${n.status}`} className="cursor-pointer outline-none"
                       onClick={() => setSel(n.id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setSel(n.id) }}>
                       {down && <circle cx={p.x} cy={p.y} r={r + 6} fill="rgb(var(--danger) / 0.5)" className="lab-alarm" />}
-                      {(() => { const t = touchOf(n.id, n.label); return t && <circle cx={p.x} cy={p.y} r={r + 4 + (1 - t.glow) * 10} fill="rgb(125 211 252 / 0.25)" stroke="rgb(125 211 252)" strokeOpacity={t.glow} fillOpacity={t.glow} strokeWidth={2} /> })()}
+                      {n.kind !== 'olt' && <circle cx={p.x} cy={p.y} r={r + 6} fill={color} opacity="0.12" />}
                       {n.kind === 'backbone'
-                        ? <rect x={p.x - r} y={p.y - r} width={2 * r} height={2 * r} rx={5} transform={`rotate(45 ${p.x} ${p.y})`} fill="rgb(var(--ink))" stroke={color} strokeWidth={2} filter="url(#net-glow)" />
-                        : <circle cx={p.x} cy={p.y} r={r} fill={n.kind === 'pop' ? 'rgb(var(--ink))' : color} stroke={n.kind === 'pop' ? color : 'none'} strokeWidth={2} filter={n.kind === 'pop' ? 'url(#net-glow)' : undefined} />}
+                        ? <rect x={p.x - r} y={p.y - r} width={2 * r} height={2 * r} rx={5} transform={`rotate(45 ${p.x} ${p.y})`} fill="rgb(var(--ink))" stroke={color} strokeWidth={2} />
+                        : <circle cx={p.x} cy={p.y} r={r} fill={n.kind === 'pop' ? 'rgb(var(--ink))' : color} stroke={n.kind === 'pop' ? color : 'none'} strokeWidth={2} />}
                       {chosen && <circle cx={p.x} cy={p.y} r={r + 5} fill="none" stroke="white" strokeWidth={1.5} />}
                       {n.kind === 'pop' && people > 0 && <text x={p.x} y={p.y + 3.5} textAnchor="middle" className="fill-white text-[10px] font-semibold num">{people}</text>}
                       {n.kind !== 'olt' && <text x={p.x} y={p.y + r + 13} textAnchor="middle" className={`text-[11px] ${n.kind === 'backbone' ? 'fill-white font-semibold' : 'fill-white/75'}`}>{n.kind === 'backbone' ? n.label : n.label.replace(' POP', '')}</text>}
@@ -144,6 +140,10 @@ export function NetworkMap({ tenant, subscribe, onHub, hubCustomers }: {
                     </g>
                   )
                 })}
+                <TouchLayer grow={10}
+                  links={net.edges.filter((e) => pos[e.source] && pos[e.target]).map((e) => ({ id: e.id, a: e.source, b: e.target,
+                    d: `M${pos[e.source].x} ${pos[e.source].y} L${pos[e.target].x} ${pos[e.target].y}` }))}
+                  marks={net.nodes.filter((n) => pos[n.id]).map((n) => ({ id: n.id, keys: [n.id, n.label], x: pos[n.id].x, y: pos[n.id].y, r: n.kind === 'olt' ? 7 : 16 }))} />
               </svg>
               <p className="px-2 pb-1 text-[11px] text-white/55">Diamonds: backbone cores. Circles: city hubs, at their real position, sized by customers and how critical they are (number: customers). Small dots: area exchanges. Red: down. Amber: an affected customer's path. Light blue: a node or link a live Cypher query just read. Click any node, then simulate a failure.</p>
               {plan && <p className="px-2 pb-1 text-[11px] text-ink-3 num">Cable plan (<code className="font-mono">algo.MSF</code> over cable km): {plan.links} of {plan.all_links} links, {Math.round(plan.km).toLocaleString()} of {Math.round(plan.all_km).toLocaleString()} km, still connect every node; the rest is redundancy.</p>}
