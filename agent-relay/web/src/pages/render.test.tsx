@@ -134,3 +134,27 @@ describe('query glow layer', async () => {
     expect(renderToString(<svg><TouchLayer marks={marks} /></svg>)).toContain('<circle')
   })
 })
+
+describe('agent team visuals', async () => {
+  const { Constellation, CrossingCard, SharedBars } = await import('./Sharing')
+  const data = {  // the shape /sharing returns for mem:pml
+    agents: [
+      { agent: 'intake', role: 'r', trust: 0.9, wrote: 114, consulted: 118, consulted_from_others: 9, uses: 120, reuse_pct: 8 },
+      { agent: 'resolver', role: 'r', trust: 0.6, wrote: 33, consulted: 39, consulted_from_others: 37, uses: 40, reuse_pct: 95 },
+      { agent: 'noc', role: 'r', trust: 0.8, wrote: 3, consulted: 1, consulted_from_others: 1, uses: 1, reuse_pct: 100 }],
+    flows: [{ from: 'intake', to: 'resolver', facts: 37 }, { from: 'resolver', to: 'intake', facts: 8 }],
+    top_shared: [{ fact_id: 'f1', sentence: 'Alice lives in Mumbai', writer: 'intake', readers: ['resolver'], uses: 4 }],
+  }
+  const text = (el: JSX.Element) => renderToString(el).replace(/<!-- -->/g, '')
+  it('draws the team around shared memory, with a live dot', () => {
+    const t = text(<Constellation data={data} pulse={{ from: 'intake', to: 'resolver', at: 1 }} pick={() => {}} />)
+    expect(t).toContain('Shared memory')
+    expect(t).toContain('95% from others')
+    expect(t).toContain('animateMotion')
+  })
+  it('crossings and shared facts are drawn, not tabled', () => {
+    expect(text(<ul><CrossingCard r={{ reader: 'resolver', writer: 'intake', fact_id: 'f1', subject: 'alice rao', sentence: 'Alice lives in Mumbai', uses: 2, last: null }} fresh /></ul>))
+      .toContain('<animate')
+    expect(text(<SharedBars rows={data.top_shared} />)).toContain('written by')
+  })
+})

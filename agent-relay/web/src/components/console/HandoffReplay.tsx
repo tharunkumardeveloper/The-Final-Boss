@@ -20,6 +20,22 @@ function FactChip({ f, tone }: { f: { predicate: string; value: string; writer?:
   )
 }
 
+const LANE_TONE: Record<string, string> = { customer: 'rgb(var(--ink))', intake: '#14A39A', graph: 'rgb(var(--ink))', resolver: '#3D6FB6' }
+
+/** A drawn arrow across a lane: into memory (a write, green) or out of it (a read, blue). */
+function Arrow({ dir, color, label }: { dir: 'left' | 'right'; color: string; label: string }) {
+  return (
+    <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      style={{ originX: dir === 'right' ? 0 : 1 }} className="flex h-full items-center gap-1.5">
+      {dir === 'left' && <svg viewBox="0 0 8 10" className="h-2.5 w-2 shrink-0" aria-hidden="true"><path d="M8 0 0 5 8 10z" fill={color} /></svg>}
+      <span className="h-[3px] flex-1 rounded-full" style={{ background: color }} />
+      <span className="shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold text-white" style={{ background: color }}>{label}</span>
+      <span className="h-[3px] flex-1 rounded-full" style={{ background: color }} />
+      {dir === 'right' && <svg viewBox="0 0 8 10" className="h-2.5 w-2 shrink-0" aria-hidden="true"><path d="M0 0 8 5 0 10z" fill={color} /></svg>}
+    </motion.div>
+  )
+}
+
 export function Row({ e }: { e: CaseEvent }) {
   if (e.kind === 'handoff') {
     return (
@@ -56,8 +72,14 @@ export function Row({ e }: { e: CaseEvent }) {
               <p className="mt-1 text-[10.5px] text-ink-3">written by {[...new Set(e.facts!.map((f) => AGENT[f.writer ?? ''] ?? f.writer))].join(', ')}, never asked again</p>
             </div>
           )}
+          {e.kind === 'write' && LANES[i] === lane({ ...e, kind: 'say' }) && (
+            <Arrow dir={i < 2 ? 'right' : 'left'} color="#3E8E5E" label={`writes ${e.facts!.length}`} />
+          )}
           {i === 3 && e.kind === 'read' && (
-            <p className="rounded-2xl bg-surface px-3 py-2 text-[12px] text-ink-2 hairline">Used {e.facts!.length} fact{e.facts!.length === 1 ? '' : 's'} from shared memory to work the case</p>
+            <div className="space-y-1">
+              <Arrow dir="right" color="#2F8FC9" label={`reads ${e.facts!.length}`} />
+              <p className="text-[11px] text-ink-3">used to work the case, never asked again</p>
+            </div>
           )}
         </div>
       ))}
@@ -129,7 +151,11 @@ export function HandoffReplay({ tenant, subscribe }: { tenant: string; subscribe
         </p>
       )}
       <div className="mt-4 grid grid-cols-4 gap-x-0 rounded-t-2xl bg-sunk/60 text-[11px] font-medium uppercase tracking-[0.12em] text-ink-3">
-        {LANES.map((l) => <p key={l} className={`px-2 py-2 ${l === 'graph' ? 'text-current' : ''}`}>{LANE_NAME[l]}</p>)}
+        {LANES.map((l) => (
+          <p key={l} className={`flex items-center gap-1.5 px-2 py-2 ${l === 'graph' ? 'text-current' : ''}`}>
+            <i className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: LANE_TONE[l] }} />{LANE_NAME[l]}
+          </p>
+        ))}
       </div>
       <div ref={box} className="scroll-thin max-h-[560px] overflow-y-auto rounded-b-2xl ring-1 ring-line/[0.06]">
         <div className="grid grid-cols-4 gap-y-1 py-2">
