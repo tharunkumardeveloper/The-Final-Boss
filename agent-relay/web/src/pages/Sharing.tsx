@@ -13,7 +13,6 @@ import { AnimatePresence, motion } from 'framer-motion'
 
 const AGENTS = ['intake', 'resolver', 'noc']
 const NAME: Record<string, string> = { intake: BOT, resolver: 'Resolver', noc: 'Network ops' }
-const ROLE: Record<string, string> = { intake: 'talks to customers, writes down what they say', resolver: 'works the ticket on the network', noc: 'watches the network, warns customers first' }
 const TONE: Record<string, string> = { intake: '#14A39A', resolver: '#3D6FB6', noc: '#C47F0E' }
 const INITIAL: Record<string, string> = { intake: 'F', resolver: 'R', noc: 'N' }
 const name = (a: string) => NAME[a] ?? titleCase(a)
@@ -128,29 +127,6 @@ export function CrossingCard({ r, fresh }: { r: Crossing; fresh: boolean }) {
   )
 }
 
-/** Most shared facts as bars: length = uses, colour = who wrote it, dots = who used it. */
-export function SharedBars({ rows }: { rows: Sharing['top_shared'] }) {
-  const max = Math.max(1, ...rows.map((f) => f.uses))
-  if (!rows.length) return <p className="rounded-2xl bg-sunk/50 p-4 text-sm text-ink-3">Nothing shared yet.</p>
-  return (
-    <ul className="space-y-2.5">
-      {rows.map((f, i) => (
-        <li key={f.fact_id} className="group">
-          <div className="flex items-baseline justify-between gap-3 text-[12.5px]">
-            <span className="min-w-0 truncate text-ink" title={f.sentence}>{f.sentence}</span>
-            <span className="flex shrink-0 items-center gap-1">{f.readers.map((r) => <Avatar key={r} agent={r} size={16} />)}<span className="ml-1 font-semibold num">{f.uses}×</span></span>
-          </div>
-          <div className="mt-1 h-2.5 overflow-hidden rounded-full bg-sunk">
-            <motion.div className="h-full rounded-full" style={{ background: tone(f.writer) }}
-              initial={{ width: 0 }} animate={{ width: `${(100 * f.uses) / max}%` }} transition={{ duration: 0.8, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }} />
-          </div>
-          <p className="mt-0.5 text-[10px] text-ink-3">written by {name(f.writer)} · used by {f.readers.map(name).join(', ')}</p>
-        </li>
-      ))}
-    </ul>
-  )
-}
-
 /** "Who on the team has worked on this before?": a traversal technician -> tickets -> issue / router / fix. */
 function Experts({ tenant }: { tenant: string }) {
   const [topic, setTopic] = useState('router reboots')
@@ -162,8 +138,8 @@ function Experts({ tenant }: { tenant: string }) {
   }
   useEffect(() => { search() }, [tenant])  // eslint-disable-line react-hooks/exhaustive-deps
   return (
-    <section className="rounded-[1.75rem] bg-surface p-5 hairline">
-      <h2 className="font-display text-xl font-semibold">Who has worked on this before?</h2>
+    <section>
+      <h2 className="sr-only">Who has worked on this before?</h2>
       <p className="mt-1 text-xs text-ink-3">A walk through the graph: technician → tickets they worked → the issue, router or fix those tickets were about.</p>
       <form onSubmit={search} className="mt-4 flex gap-2">
         <label htmlFor="expert-topic" className="sr-only">Topic</label>
@@ -171,7 +147,7 @@ function Experts({ tenant }: { tenant: string }) {
         <button className="btn-primary text-sm" disabled={busy}>{busy ? 'Walking…' : 'Find'}</button>
       </form>
       {rows && (
-        <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+        <ul className="mt-3 grid gap-2">
           {rows.map((r, i) => {
             const pct = r.tickets ? (100 * r.resolved) / r.tickets : 0, c = 2 * Math.PI * 20
             return (
@@ -247,52 +223,38 @@ export default function SharingPage() {
 
   const total = data?.flows.reduce((t, f) => t + f.facts, 0) ?? 0
   const filterLabel = picked.writer ? `${name(picked.writer)} → ${name(picked.reader!)}` : picked.reader ? `used by ${name(picked.reader)}` : null
+  const [tab, setTab] = useState<'crossings' | 'experts'>('crossings')
 
+  // One screen on a desktop: the team and the replay on the left, the record on the right; each part scrolls inside.
   return (
-    <div className="min-h-[100dvh]">
-      <header className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
+    <div className="flex min-h-[100dvh] flex-col xl:h-[100dvh]">
+      <header className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
         <Link to="/console"><Wordmark sub="Agent team" /></Link>
         <ConsoleNav />
       </header>
-      <main className="mx-auto max-w-7xl px-4 pb-20 sm:px-6">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div className="max-w-2xl">
-            <p className="eyebrow">Track 02 · agent coordination</p>
-            <h1 className="mt-1 font-display text-3xl font-semibold tracking-[-0.02em] sm:text-4xl">Three agents. No messages. One memory.</h1>
-            <p className="mt-2 text-sm text-ink-2">
-              Nobody here messages anybody. Each agent writes what it learns into the graph and reads what the others wrote; every use is
-              recorded as <code className="font-mono text-xs">(:Agent)-[:CONSULTED]-&gt;(:Fact)</code>.
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <span className={`chip ${status === 'live' ? 'bg-current-tint text-current' : 'bg-conflict-tint text-conflict'}`}>
-              <i className={`h-1.5 w-1.5 rounded-full ${status === 'live' ? 'bg-current animate-breathe' : 'bg-conflict'}`} />{status === 'live' ? 'Live' : 'Reconnecting'} · mem:{tenant}</span>
-            <button className="btn-primary text-sm" disabled={busy} onClick={handoff}>{busy ? 'Starting…' : 'Show me a handoff'}</button>
-          </div>
-        </div>
-        {note && <p className="mt-4 rounded-xl bg-signal-tint px-4 py-2 text-sm text-signal-deep" role="status">{note}</p>}
-        {error && <p className="mt-6 text-sm text-danger" role="alert">Couldn't load sharing data. Is the API running?</p>}
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 pb-3 sm:px-6">
+        <h1 className="font-display text-xl font-semibold tracking-[-0.01em]" title="Each agent writes what it learns into the graph and reads what the others wrote; every use is a CONSULTED edge.">
+          Three agents. No messages. One memory.</h1>
+        <span className="chip bg-ink text-paper num">{total} facts crossed between agents</span>
+        <span className={`chip ${status === 'live' ? 'bg-current-tint text-current' : 'bg-conflict-tint text-conflict'}`}>
+          <i className={`h-1.5 w-1.5 rounded-full ${status === 'live' ? 'bg-current animate-breathe' : 'bg-conflict'}`} />{status === 'live' ? 'Live' : 'Reconnecting'} · mem:{tenant}</span>
+        <button className="btn-primary ml-auto !py-1.5 text-sm" disabled={busy} onClick={handoff}>{busy ? 'Starting…' : 'Show me a handoff'}</button>
+      </div>
+      {(note || error) && (
+        <p className={`mx-4 mb-3 rounded-xl px-4 py-2 text-sm sm:mx-6 ${error ? 'bg-danger-tint text-danger' : 'bg-signal-tint text-signal-deep'}`} role="status">
+          {error ? "Couldn't load sharing data. Is the API running?" : note}</p>
+      )}
 
-        {data && (
-          <section className="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
-            <div className="rounded-[1.75rem] bg-surface p-3 hairline">
-              <Constellation data={data} pulse={pulse} picked={picked.writer ? undefined : picked.reader} pick={pickAgent} />
-              <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 pb-2 text-[11px] text-ink-3">
-                <span className="flex items-center gap-1.5"><i className="h-1 w-5 rounded bg-[#3E8E5E]" />writes a fact</span>
-                <span className="flex items-center gap-1.5"><i className="h-1 w-5 rounded border-t-2 border-dotted border-[#2F8FC9]" />reads another agent's fact</span>
-                <span className="flex items-center gap-1.5"><i className="h-3 w-3 rounded-full border-[3px] border-ink-3/40" />ring: share of what it used that came from others</span>
-                <span>Click an agent to filter</span>
+      <main className="grid min-h-0 flex-1 gap-4 px-4 pb-4 sm:px-6 xl:grid-cols-[minmax(0,1fr)_400px]">
+        <div className="flex min-h-0 flex-col gap-4">
+          {data && (
+            <section className="flex shrink-0 flex-col gap-2 rounded-[1.75rem] bg-surface p-3 hairline md:flex-row md:items-center" aria-label="The agent team">
+              <div className="min-w-0 md:w-[58%] xl:max-h-[38vh] [&>svg]:max-h-[38vh]">
+                <Constellation data={data} pulse={pulse} picked={picked.writer ? undefined : picked.reader} pick={pickAgent} />
               </div>
-            </div>
-            <aside className="flex flex-col gap-3">
-              <div className="rounded-2xl bg-ink p-4 text-paper">
-                <p className="text-[11px] uppercase tracking-[0.14em] text-paper/50">Facts that crossed between agents</p>
-                <p className="mt-1 font-display text-4xl font-semibold num">{total}</p>
-                <p className="text-xs text-paper/60">each one asked once, never again</p>
-              </div>
-              <div className="rounded-2xl bg-surface p-4 hairline">
-                <p className="eyebrow">Who used whose facts</p>
-                <ul className="mt-2 space-y-1.5">
+              <div className="flex min-w-0 flex-1 flex-col gap-2">
+                <p className="eyebrow">Who used whose facts · click to filter</p>
+                <ul className="space-y-1">
                   {data.flows.map((f) => {
                     const on = picked.writer === f.from && picked.reader === f.to
                     return (
@@ -308,42 +270,41 @@ export default function SharingPage() {
                   })}
                   {data.flows.length === 0 && <li className="text-xs text-ink-3">Nothing has crossed yet. Press “Show me a handoff”.</li>}
                 </ul>
-              </div>
-              {data.agents.filter((a) => AGENTS.includes(a.agent)).map((a) => (
-                <p key={a.agent} className="flex items-start gap-2 text-[11.5px] text-ink-2"><Avatar agent={a.agent} size={18} /><span><strong className="font-semibold text-ink">{name(a.agent)}</strong> {ROLE[a.agent] ?? a.role}</span></p>
-              ))}
-            </aside>
-          </section>
-        )}
-
-        <HandoffReplay tenant={tenant} subscribe={subscribe} />
-
-        {data && (
-          <section className="mt-10 grid gap-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
-            <div className="rounded-[1.75rem] bg-surface p-5 hairline">
-              <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <div>
-                  <h2 className="font-display text-xl font-semibold">Knowledge crossings</h2>
-                  <p className="mt-1 text-xs text-ink-3">Every fact one agent wrote and another used, newest first. New ones light up as they happen.</p>
+                <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-[10.5px] text-ink-3">
+                  <span className="flex items-center gap-1.5"><i className="h-1 w-4 rounded bg-[#3E8E5E]" />writes a fact</span>
+                  <span className="flex items-center gap-1.5"><i className="h-1 w-4 border-t-2 border-dotted border-[#2F8FC9]" />reads another agent's fact</span>
+                  <span>ring: share it used from others</span>
                 </div>
-                {filterLabel && <button className="chip bg-ink text-paper" onClick={() => setPicked({})}>{filterLabel} · show all ✕</button>}
               </div>
-              <ul className="scroll-thin mt-4 grid max-h-[560px] gap-2 overflow-y-auto pr-1 sm:grid-cols-2">
-                <AnimatePresence initial={false}>
-                  {feed.map((r) => <CrossingCard key={`${r.reader}:${r.fact_id}`} r={r} fresh={fresh.has(`${r.reader}:${r.fact_id}:${r.uses}`)} />)}
-                </AnimatePresence>
-                {feed.length === 0 && <li className="rounded-2xl bg-sunk/50 p-4 text-sm text-ink-3 sm:col-span-2">Nothing here yet. Press “Show me a handoff”.</li>}
-              </ul>
-            </div>
-            <div className="rounded-[1.75rem] bg-surface p-5 hairline">
-              <h2 className="font-display text-xl font-semibold">Most shared facts</h2>
-              <p className="mb-4 mt-1 text-xs text-ink-3">Bar colour: the agent that wrote it. Dots: the agents that used it.</p>
-              <SharedBars rows={data.top_shared} />
-            </div>
-          </section>
-        )}
+            </section>
+          )}
+          <div className="flex min-h-[460px] flex-1 flex-col xl:min-h-0"><HandoffReplay tenant={tenant} subscribe={subscribe} /></div>
+        </div>
 
-        <div className="mt-6"><Experts tenant={tenant} /></div>
+        <aside className="flex min-h-[520px] flex-col rounded-[1.75rem] bg-surface p-4 hairline xl:min-h-0">
+          <div className="flex shrink-0 items-center justify-between gap-2">
+            <div role="tablist" aria-label="Record" className="inline-flex rounded-full bg-sunk/70 p-0.5">
+              {([['crossings', 'Knowledge crossings'], ['experts', 'Who has worked on this?']] as const).map(([k, label]) => (
+                <button key={k} role="tab" aria-selected={tab === k} onClick={() => setTab(k)}
+                  className={`rounded-full px-3 py-1 text-[11.5px] ${tab === k ? 'bg-ink font-medium text-paper' : 'text-ink-2'}`}>{label}</button>
+              ))}
+            </div>
+            {tab === 'crossings' && filterLabel && <button className="chip bg-ink text-paper" onClick={() => setPicked({})}>{filterLabel} ✕</button>}
+          </div>
+          <div className="scroll-thin mt-3 min-h-0 flex-1 overflow-y-auto pr-1" role="tabpanel">
+            {tab === 'crossings' ? (
+              <>
+                <p className="mb-2 text-[11px] text-ink-3">Every fact one agent wrote and another used, newest first. New ones light up live.</p>
+                <ul className="grid gap-2">
+                  <AnimatePresence initial={false}>
+                    {feed.map((r) => <CrossingCard key={`${r.reader}:${r.fact_id}`} r={r} fresh={fresh.has(`${r.reader}:${r.fact_id}:${r.uses}`)} />)}
+                  </AnimatePresence>
+                  {feed.length === 0 && <li className="rounded-2xl bg-sunk/50 p-4 text-sm text-ink-3">Nothing here yet. Press “Show me a handoff”.</li>}
+                </ul>
+              </>
+            ) : <Experts tenant={tenant} />}
+          </div>
+        </aside>
       </main>
     </div>
   )

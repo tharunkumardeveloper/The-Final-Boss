@@ -6,107 +6,116 @@ import { predicateLabel, ticketLabel, titleCase, when } from '../../lib/format'
 import { splitGuides } from '../Guides'
 import type { CaseEvent, CaseStory, RelayEvent, Ticket } from '../../lib/types'
 
-const LANES = ['customer', 'intake', 'graph', 'resolver'] as const
-const LANE_NAME: Record<string, string> = { customer: 'Customer', intake: `${BOT} (intake)`, graph: 'Shared memory · FalkorDB', resolver: 'Resolver' }
+// four stations, left to right: the case travels between them
+const ST = ['customer', 'intake', 'graph', 'resolver'] as const
+type Station = (typeof ST)[number]
+const SX: Record<Station, number> = { customer: 70, intake: 250, graph: 430, resolver: 610 }
+const LABEL: Record<Station, string> = { customer: 'Customer', intake: BOT, graph: 'Shared memory', resolver: 'Resolver' }
+const TONE: Record<Station, string> = { customer: '#0F1B2D', intake: '#14A39A', graph: '#0F1B2D', resolver: '#3D6FB6' }
+const WRITE = '#3E8E5E', READ = '#2F8FC9'
 const AGENT: Record<string, string> = { intake: BOT, resolver: 'Resolver', noc: 'Network ops' }
-const lane = (e: CaseEvent) => (e.kind === 'write' || e.kind === 'read' ? 'graph' : e.who === 'noc' ? 'resolver' : e.who)
-const SPRING = { type: 'spring', stiffness: 360, damping: 30 } as const
+const at = (who: string): Station => (who === 'customer' ? 'customer' : who === 'intake' ? 'intake' : 'resolver')
 
-function FactChip({ f, tone }: { f: { predicate: string; value: string; writer?: string }; tone: string }) {
+/** Where a step moves: from which station to which, and in what colour. */
+function move(e: CaseEvent): { from: Station; to: Station; color: string; label: string } {
+  const n = e.facts?.length ?? 0
+  if (e.kind === 'write') return { from: at(e.who), to: 'graph', color: WRITE, label: `writes ${n} fact${n === 1 ? '' : 's'}` }
+  if (e.kind === 'read') return { from: 'graph', to: at(e.who), color: READ, label: `reads ${n} fact${n === 1 ? '' : 's'}` }
+  if (e.kind === 'handoff') return { from: 'intake', to: 'resolver', color: '#C47F0E', label: 'hands over the ticket' }
+  const from = at(e.who)
+  return { from, to: from === 'customer' ? 'intake' : 'customer', color: TONE[from], label: from === 'customer' ? 'says' : 'replies' }
+}
+
+const Y = 70
+const lift = (a: Station, b: Station) => (Math.abs(SX[a] - SX[b]) > 200 ? 62 : 30) * (SX[a] < SX[b] ? 1 : -1)
+const arc = (a: Station, b: Station) => `M${SX[a]} ${Y} Q${(SX[a] + SX[b]) / 2} ${Y - lift(a, b)} ${SX[b]} ${Y}`
+
+/** The diagram: four stations; the current step travels as a token, and every step so far stays drawn as a trail. */
+function Stage({ events, cur }: { events: CaseEvent[]; cur: number }) {
+  const e = events[cur]
+  const m = e ? move(e) : null
+  const trail = new Map(events.slice(0, cur).map((x) => { const k = move(x); return [`${k.from}>${k.to}>${k.color}`, k] as const }))
   return (
-    <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11.5px] ${tone}`}>
-      <span className="opacity-70">{predicateLabel(f.predicate).toLowerCase()}</span><span className="font-semibold">{titleCase(String(f.value))}</span>
-    </span>
+    <svg viewBox="0 0 680 150" className="h-auto w-full" role="img" aria-label="The case moving between the customer, the agents and shared memory">
+      {[...trail.entries()].map(([k, t]) => <path key={k} d={arc(t.from, t.to)} fill="none" stroke={t.color} strokeOpacity="0.2" strokeWidth="3" />)}
+      {ST.map((s) => {
+        const on = !!m && (m.from === s || m.to === s)
+        return (
+          <g key={s}>
+            {s === 'graph'
+              ? <g><ellipse cx={SX[s]} cy={Y - 14} rx="34" ry="9" fill={TONE[s]} /><path d={`M${SX[s] - 34} ${Y - 14}v30a34 9 0 0 0 68 0v-30`} fill={TONE[s]} />
+                <ellipse cx={SX[s]} cy={Y - 14} rx="34" ry="9" fill="none" stroke="rgb(var(--signal))" strokeOpacity={on ? 1 : 0.4} strokeWidth={on ? 2 : 1} /></g>
+              : <circle cx={SX[s]} cy={Y} r="24" fill={TONE[s]} stroke={on ? 'rgb(var(--signal))' : 'transparent'} strokeWidth="3" />}
+            <text x={SX[s]} y={Y + 5} textAnchor="middle" className="fill-white text-[12px] font-semibold">{s === 'graph' ? 'DB' : LABEL[s][0]}</text>
+            <text x={SX[s]} y={Y + 46} textAnchor="middle" className={`text-[11.5px] ${on ? 'fill-ink font-semibold' : 'fill-ink-3'}`}>{LABEL[s]}</text>
+          </g>
+        )
+      })}
+      {m && (
+        <g key={e!.id}>
+          <motion.path d={arc(m.from, m.to)} fill="none" stroke={m.color} strokeWidth="3" strokeLinecap="round"
+            initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }} />
+          <circle r="7" fill={m.color}><animateMotion dur="0.6s" path={arc(m.from, m.to)} fill="freeze" /></circle>
+          <text x={(SX[m.from] + SX[m.to]) / 2} y={lift(m.from, m.to) > 0 ? Y - lift(m.from, m.to) / 2 - 10 : Y - lift(m.from, m.to) / 2 + 18}
+            textAnchor="middle" className="text-[11px] font-semibold" fill={m.color}>{m.label}</text>
+        </g>
+      )}
+    </svg>
   )
 }
 
-const LANE_TONE: Record<string, string> = { customer: 'rgb(var(--ink))', intake: '#14A39A', graph: 'rgb(var(--ink))', resolver: '#3D6FB6' }
-
-/** A drawn arrow across a lane: into memory (a write, green) or out of it (a read, blue). */
-function Arrow({ dir, color, label }: { dir: 'left' | 'right'; color: string; label: string }) {
+/** The proof for one step: the words said, or the facts with their ids, writer and time, as stored in the graph. */
+function Proof({ e, active, onClick }: { e: CaseEvent; active: boolean; onClick: () => void }) {
+  const m = move(e)
+  const who = e.kind === 'say' ? (e.who === 'customer' ? 'Customer' : AGENT[e.who] ?? e.who)
+    : e.kind === 'handoff' ? `${AGENT[e.who] ?? e.who} → ${AGENT[e.to ?? ''] ?? e.to}` : `${AGENT[e.who] ?? e.who} ${m.label}`
   return (
-    <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-      style={{ originX: dir === 'right' ? 0 : 1 }} className="flex h-full items-center gap-1.5">
-      {dir === 'left' && <svg viewBox="0 0 8 10" className="h-2.5 w-2 shrink-0" aria-hidden="true"><path d="M8 0 0 5 8 10z" fill={color} /></svg>}
-      <span className="h-[3px] flex-1 rounded-full" style={{ background: color }} />
-      <span className="shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold text-white" style={{ background: color }}>{label}</span>
-      <span className="h-[3px] flex-1 rounded-full" style={{ background: color }} />
-      {dir === 'right' && <svg viewBox="0 0 8 10" className="h-2.5 w-2 shrink-0" aria-hidden="true"><path d="M0 0 8 5 0 10z" fill={color} /></svg>}
-    </motion.div>
+    <li>
+      <button onClick={onClick} aria-current={active ? 'step' : undefined}
+        className={`w-full rounded-xl px-3 py-2 text-left transition duration-300 ${active ? 'bg-ink text-paper shadow-lift' : 'hover:bg-sunk/70'}`}>
+        <p className="flex items-center gap-2 text-[11px]">
+          <i className="h-2 w-2 shrink-0 rounded-full" style={{ background: m.color }} />
+          <span className="font-semibold">{who}</span>
+          <span className={`ml-auto shrink-0 num ${active ? 'text-paper/60' : 'text-ink-3'}`}>{e.at ? when(e.at) : ''}</span>
+        </p>
+        {e.kind === 'say' && <p className={`mt-1 line-clamp-2 text-[12.5px] ${active ? '' : 'text-ink-2'}`}>“{splitGuides(e.text ?? '').text}”</p>}
+        {e.kind === 'handoff' && <p className={`mt-1 text-[12px] ${active ? 'text-paper/80' : 'text-ink-2'}`}>No message passed between them: the ticket is a node in the graph{e.note ? ` (${e.note})` : ''}.</p>}
+        {(e.kind === 'write' || e.kind === 'read') && (
+          <ul className="mt-1 space-y-0.5">
+            {e.facts!.map((f) => (
+              <li key={f.id} className="flex flex-wrap items-baseline gap-x-1.5 text-[12px]">
+                <span className={active ? 'text-paper/70' : 'text-ink-3'}>{predicateLabel(f.predicate).toLowerCase()}</span>
+                <span className="font-semibold">{titleCase(String(f.value))}</span>
+                <span className={`font-mono text-[10px] ${active ? 'text-paper/50' : 'text-ink-3'}`}>{f.id}{e.kind === 'read' && f.writer ? ` · written by ${AGENT[f.writer] ?? f.writer}` : ''}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </button>
+    </li>
   )
 }
 
-export function Row({ e }: { e: CaseEvent }) {
-  if (e.kind === 'handoff') {
-    return (
-      <div className="col-span-4 my-1 flex items-center gap-3 rounded-2xl bg-ink px-4 py-2.5 text-sm text-paper">
-        <span className="font-semibold">{AGENT[e.who] ?? e.who}</span>
-        <svg viewBox="0 0 60 12" className="h-3 w-14 shrink-0" aria-hidden="true"><path d="M0 6h54m-6-5 6 5-6 5" fill="none" stroke="currentColor" strokeWidth="1.6" /></svg>
-        <span className="font-semibold">{AGENT[e.to ?? ''] ?? e.to}</span>
-        <span className="text-paper/60">handed over the ticket{e.note ? `: ${e.note}` : ''}. No message passed between them; the ticket lives in the graph.</span>
-      </div>
-    )
-  }
-  const col = LANES.indexOf(lane(e) as (typeof LANES)[number])
-  return (
-    <>
-      {LANES.map((l, i) => (
-        <div key={l} className={`min-h-[2rem] border-l border-line/[0.07] px-2 py-1.5 ${i === 0 ? 'border-l-0' : ''}`}>
-          {i === col && e.kind === 'say' && (
-            <p className={`rounded-2xl px-3 py-2 text-[13px] leading-snug ${e.who === 'customer' ? 'bg-ink text-paper' : e.who === 'resolver' ? 'bg-signal-tint text-ink' : 'bg-sunk text-ink'}`}>
-              {splitGuides(e.text ?? '').text}
-            </p>
-          )}
-          {i === col && e.kind === 'write' && (
-            <div className="rounded-2xl bg-current-tint/60 p-2">
-              <p className="mb-1 text-[10.5px] font-medium uppercase tracking-[0.12em] text-current">← written by {AGENT[e.who] ?? e.who}</p>
-              <div className="flex flex-wrap gap-1">{e.facts!.map((f) => <FactChip key={f.id} f={f} tone="bg-surface text-ink hairline" />)}</div>
-            </div>
-          )}
-          {i === col && e.kind === 'read' && (
-            <div className="rounded-2xl bg-signal-tint p-2 ring-1 ring-signal/40">
-              <p className="mb-1 text-[10.5px] font-medium uppercase tracking-[0.12em] text-signal-deep">read by {AGENT[e.who] ?? e.who} →</p>
-              <div className="flex flex-wrap gap-1">
-                {e.facts!.map((f) => <FactChip key={f.id} f={f} tone="bg-surface text-ink ring-1 ring-signal/40" />)}
-              </div>
-              <p className="mt-1 text-[10.5px] text-ink-3">written by {[...new Set(e.facts!.map((f) => AGENT[f.writer ?? ''] ?? f.writer))].join(', ')}, never asked again</p>
-            </div>
-          )}
-          {e.kind === 'write' && LANES[i] === lane({ ...e, kind: 'say' }) && (
-            <Arrow dir={i < 2 ? 'right' : 'left'} color="#3E8E5E" label={`writes ${e.facts!.length}`} />
-          )}
-          {i === 3 && e.kind === 'read' && (
-            <div className="space-y-1">
-              <Arrow dir="right" color="#2F8FC9" label={`reads ${e.facts!.length}`} />
-              <p className="text-[11px] text-ink-3">used to work the case, never asked again</p>
-            </div>
-          )}
-        </div>
-      ))}
-    </>
-  )
-}
-
-/** A case replayed step by step from the graph: messages, facts written, the handoff, facts another agent read. */
+/** One real case replayed from the graph: a diagram of where it went, and the record behind every step. */
 export function HandoffReplay({ tenant, subscribe }: { tenant: string; subscribe: (fn: (e: RelayEvent) => void) => () => void }) {
   const [tickets, setTickets] = useState<Ticket[]>([])
   const [ticket, setTicket] = useState<string>()
   const [story, setStory] = useState<CaseStory>()
-  const [shown, setShown] = useState(0)
+  const [cur, setCur] = useState(0)
   const [playing, setPlaying] = useState(false)
-  const box = useRef<HTMLDivElement>(null)
+  const list = useRef<HTMLOListElement>(null)
   const timer = useRef<ReturnType<typeof setTimeout>>()
 
   const loadTickets = useCallback(() => api.tickets(tenant).then((ts) => {
-    const list = [...ts].sort((a, b) => (b.opened_at ?? '').localeCompare(a.opened_at ?? ''))
-    setTickets(list)
-    setTicket((t) => t ?? list[0]?.ticket)
+    const sorted = [...ts].sort((a, b) => (b.opened_at ?? '').localeCompare(a.opened_at ?? ''))
+    setTickets(sorted)
+    setTicket((t) => t ?? sorted[0]?.ticket)
   }).catch(() => {}), [tenant])
   const loadStory = useCallback((play: boolean) => {
     if (!ticket) return
     api.story(tenant, ticket).then((s) => {
       setStory(s)
-      if (play) { setShown(0); setPlaying(true) } else setShown(s.events.length)
+      if (play) { setCur(0); setPlaying(true) } else setCur(s.events.length - 1)
     }).catch(() => setStory(undefined))
   }, [tenant, ticket])
   useEffect(() => { loadTickets() }, [loadTickets])
@@ -118,60 +127,58 @@ export function HandoffReplay({ tenant, subscribe }: { tenant: string; subscribe
     }
   }), [subscribe, loadTickets, loadStory])
 
+  const n = story?.events.length ?? 0
   useEffect(() => {
-    if (!playing || !story) return
-    if (shown >= story.events.length) { setPlaying(false); return }
-    const id = setTimeout(() => setShown((n) => n + 1), story.events[shown]?.kind === 'say' ? 900 : 650)
+    if (!playing) return
+    if (cur >= n - 1) { setPlaying(false); return }
+    const id = setTimeout(() => setCur((c) => c + 1), 1400)
     return () => clearTimeout(id)
-  }, [playing, shown, story])
-  useEffect(() => { box.current?.scrollTo({ top: box.current.scrollHeight, behavior: 'smooth' }) }, [shown])
+  }, [playing, cur, n])
+  useEffect(() => { list.current?.querySelector('[aria-current="step"]')?.scrollIntoView({ block: 'nearest', behavior: 'smooth' }) }, [cur])
 
-  const events = story?.events.slice(0, shown) ?? []
-  const crossings = story?.events.filter((e) => e.kind === 'read').reduce((n, e) => n + (e.facts?.length ?? 0), 0) ?? 0
+  const events = story?.events ?? []
+  const writes = events.filter((e) => e.kind === 'write').reduce((t, e) => t + (e.facts?.length ?? 0), 0)
+  const reads = events.filter((e) => e.kind === 'read').reduce((t, e) => t + (e.facts?.length ?? 0), 0)
 
   return (
-    <section className="mt-10 rounded-[1.75rem] bg-surface p-5 hairline">
-      <div className="flex flex-wrap items-end justify-between gap-3">
+    <section className="flex min-h-0 flex-col rounded-[1.75rem] bg-surface p-4 hairline" aria-label="Watch a handoff">
+      <div className="flex shrink-0 flex-wrap items-center justify-between gap-2">
         <div>
-          <h2 className="font-display text-xl font-semibold">Watch a handoff</h2>
-          <p className="mt-1 max-w-2xl text-sm text-ink-3">One real case, replayed from the graph. Green: a fact an agent wrote. Teal: a fact another agent read. That crossing is the shared memory at work.</p>
+          <h2 className="font-display text-lg font-semibold">Watch a handoff</h2>
+          {story && <p className="text-[11px] text-ink-3 num">{ticketLabel(story.ticket)} · {titleCase(story.issues[0] ?? 'issue')} · {story.status} · {writes} facts written, {reads} read by another agent</p>}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           <label htmlFor="case" className="sr-only">Case</label>
-          <select id="case" className="field !w-auto !py-2 text-sm" value={ticket ?? ''} onChange={(e) => setTicket(e.target.value)}>
+          <select id="case" className="field !w-auto !py-1.5 text-xs" value={ticket ?? ''} onChange={(e) => setTicket(e.target.value)}>
             {tickets.map((t) => <option key={t.ticket} value={t.ticket}>{ticketLabel(t.ticket)} · {titleCase(t.customer)} · {t.status}</option>)}
             {!tickets.length && <option value="">No cases yet</option>}
           </select>
-          <button className="btn-primary !py-2 text-sm" disabled={!story} onClick={() => loadStory(true)}>{playing ? 'Playing…' : 'Replay'}</button>
+          <button className="btn-ghost !px-2.5 !py-1.5 text-xs hairline" disabled={!n || cur === 0} onClick={() => { setPlaying(false); setCur((c) => Math.max(0, c - 1)) }} aria-label="Previous step">‹</button>
+          <button className="btn-primary !px-3 !py-1.5 text-xs" disabled={!n} onClick={() => { if (cur >= n - 1) setCur(0); setPlaying((p) => !p) }}>{playing ? 'Pause' : cur >= n - 1 ? 'Replay' : 'Play'}</button>
+          <button className="btn-ghost !px-2.5 !py-1.5 text-xs hairline" disabled={!n || cur >= n - 1} onClick={() => { setPlaying(false); setCur((c) => Math.min(n - 1, c + 1)) }} aria-label="Next step">›</button>
         </div>
       </div>
-      {story && (
-        <p className="mt-3 text-xs text-ink-3 num">
-          {ticketLabel(story.ticket)} · {titleCase(story.issues[0] ?? 'issue')} · {story.status} · {story.events.length} steps · {crossings} fact{crossings === 1 ? '' : 's'} crossed between agents
-        </p>
+      {!story ? (
+        <p className="mt-6 rounded-2xl bg-sunk/50 p-6 text-center text-sm text-ink-3">No case yet. Press “Show me a handoff”, or report a problem in the customer chat.</p>
+      ) : (
+        <div className="mt-2 grid min-h-0 flex-1 gap-3 md:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+          <div className="flex flex-col justify-center">
+            <Stage events={events} cur={cur} />
+            <input type="range" min={0} max={Math.max(0, n - 1)} value={cur} aria-label="Step"
+              onChange={(e) => { setPlaying(false); setCur(Number(e.target.value)) }} className="mt-1 w-full accent-[rgb(var(--signal))]" />
+            <p className="mt-1 text-center text-[11px] text-ink-3 num">step {Math.min(cur + 1, n)} of {n} · each step is a node or edge in FalkorDB, listed on the right</p>
+          </div>
+          <ol ref={list} className="scroll-thin max-h-[320px] min-h-0 space-y-1 overflow-y-auto pr-1 md:max-h-none" aria-label="The record behind each step">
+            <AnimatePresence initial={false}>
+              {events.slice(0, cur + 1).map((e, i) => (
+                <motion.div key={e.id} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}>
+                  <Proof e={e} active={i === cur} onClick={() => { setPlaying(false); setCur(i) }} />
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </ol>
+        </div>
       )}
-      <div className="mt-4 grid grid-cols-4 gap-x-0 rounded-t-2xl bg-sunk/60 text-[11px] font-medium uppercase tracking-[0.12em] text-ink-3">
-        {LANES.map((l) => (
-          <p key={l} className={`flex items-center gap-1.5 px-2 py-2 ${l === 'graph' ? 'text-current' : ''}`}>
-            <i className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: LANE_TONE[l] }} />{LANE_NAME[l]}
-          </p>
-        ))}
-      </div>
-      <div ref={box} className="scroll-thin max-h-[560px] overflow-y-auto rounded-b-2xl ring-1 ring-line/[0.06]">
-        <div className="grid grid-cols-4 gap-y-1 py-2">
-          <AnimatePresence initial={false}>
-            {events.map((e) => (
-              <motion.div key={e.id} className="contents" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={SPRING}>
-                <Row e={e} />
-              </motion.div>
-            ))}
-          </AnimatePresence>
-          {!story && <p className="col-span-4 px-4 py-8 text-center text-sm text-ink-3">No case yet. Report a problem in the customer chat and it shows up here, live.</p>}
-          {story && events.length > 0 && events.length === story.events.length && (
-            <p className="col-span-4 px-4 pt-2 text-center text-[11px] text-ink-3">last step {when(events[events.length - 1].at)}</p>
-          )}
-        </div>
-      </div>
     </section>
   )
 }

@@ -136,7 +136,7 @@ describe('query glow layer', async () => {
 })
 
 describe('agent team visuals', async () => {
-  const { Constellation, CrossingCard, SharedBars } = await import('./Sharing')
+  const { Constellation, CrossingCard } = await import('./Sharing')
   const data = {  // the shape /sharing returns for mem:pml
     agents: [
       { agent: 'intake', role: 'r', trust: 0.9, wrote: 114, consulted: 118, consulted_from_others: 9, uses: 120, reuse_pct: 8 },
@@ -152,9 +152,17 @@ describe('agent team visuals', async () => {
     expect(t).toContain('95% from others')
     expect(t).toContain('animateMotion')
   })
-  it('crossings and shared facts are drawn, not tabled', () => {
+  it('crossings are drawn, not tabled', () => {
     expect(text(<ul><CrossingCard r={{ reader: 'resolver', writer: 'intake', fact_id: 'f1', subject: 'alice rao', sentence: 'Alice lives in Mumbai', uses: 2, last: null }} fresh /></ul>))
       .toContain('<animate')
-    expect(text(<SharedBars rows={data.top_shared} />)).toContain('written by')
+  })
+})
+
+describe('handoff replay', async () => {
+  const { HandoffReplay } = await import('../components/console/HandoffReplay')
+  it('renders with no case yet', () => {
+    const html = renderToString(<HandoffReplay tenant="pml" subscribe={() => () => {}} />)
+    expect(html).toContain('Watch a handoff')
+    expect(html).toContain('No case yet')
   })
 })
