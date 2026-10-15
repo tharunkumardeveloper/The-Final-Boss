@@ -340,8 +340,8 @@ export default function TenantsPage() {
                     <p className="font-semibold text-ink">2 · Look in FalkorDB Browser while it's paused</p>
                     <p className="mt-0.5">Open FalkorDB Browser (the database's own tool: FalkorDB Cloud console → Browser, or localhost:3000), connect to the same instance, pick each graph and run:</p>
                     <div className="mt-1.5 flex items-start gap-2">
-                      <code className="min-w-0 flex-1 break-all rounded-lg bg-ink px-2 py-1.5 font-mono text-[11px] text-paper">{browserQuery(canary?.token ?? word ?? '<word>')}</code>
-                      <button className="btn-ghost !px-2 !py-1 text-[11px] hairline" onClick={() => copy(browserQuery(canary?.token ?? word))}>Copy</button>
+                      <code className="min-w-0 flex-1 break-all rounded-lg bg-ink px-2 py-1.5 font-mono text-[11px] text-paper">{browserQuery(canary?.token || word || '<your word>')}</code>
+                      <button className="btn-ghost !px-2 !py-1 text-[11px] hairline" onClick={() => copy(browserQuery(canary?.token || word || '<your word>'))}>Copy</button>
                     </div>
                     <p className="mt-1.5">It should return rows in <code className="font-mono text-[11px]">{regions?.find((r) => r.tenant === victim)?.graph ?? 'the victim'}</code> and nothing in {regions?.filter((r) => r.tenant !== victim).map((r) => r.graph).join(', ')}.</p>
                     {canary && <p className="mt-1.5 text-[11.5px]">Server receipt for the write: fact <code className="font-mono">{canary.facts?.join(', ')}</code>, read back from <code className="font-mono">{canary.graph}</code> as {canary.read_back?.map((x) => <code key={x} className="mr-1 font-mono">{x}</code>)}</p>}
