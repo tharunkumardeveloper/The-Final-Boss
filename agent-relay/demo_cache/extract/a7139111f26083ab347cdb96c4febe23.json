@@ -1,0 +1,1 @@
+{"facts": [{"about_customer": true, "object": "pune", "predicate": "lives_in", "subject": "alice rao", "valid_from": null}, {"about_customer": true, "object": "email", "predicate": "prefers_channel", "subject": "alice rao", "valid_from": null}]}

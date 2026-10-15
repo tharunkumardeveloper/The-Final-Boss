@@ -1,0 +1,1 @@
+{"facts": [{"about_customer": true, "object": "bengaluru", "predicate": "lives_in", "subject": "chitra iyer", "valid_from": null}, {"about_customer": true, "object": "fiber 100", "predicate": "on_plan", "subject": "chitra iyer", "valid_from": null}, {"about_customer": true, "object": "macbook", "predicate": "owns_device", "subject": "chitra iyer", "valid_from": null}]}

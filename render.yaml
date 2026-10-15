@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: relay-api
+    runtime: python
+    plan: free                      # 512 MB RAM (the API uses ~300 MB), sleeps after 15 min idle; the web app shows a wake-up screen
+    region: singapore               # closest Render region to FalkorDB Cloud ap-south-1 (Mumbai)
+    rootDir: agent-relay            # the repo root is one level up
+    buildCommand: pip install -r requirements.txt && python -m relay.warm
+    startCommand: uvicorn api.main:app --host 0.0.0.0 --port $PORT --timeout-graceful-shutdown 5
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.10
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      # FalkorDB Cloud (the only database)
+      - key: FALKOR_HOST
+        sync: false
+      - key: FALKOR_PORT
+        sync: false
+      - key: FALKOR_USER
+        sync: false
+      - key: FALKOR_PASS
+        sync: false
+      # models: Groq first (each key is its own free quota), Gemini as the fallback
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_API_KEY_2
+        sync: false
+      - key: GROQ_API_KEY_3
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      # the web app's URL, e.g. https://relay-web.vercel.app (comma-separate several)
+      - key: CORS_ORIGINS
+        sync: false
+      # tenant keys are HMACs with this secret; Render generates it once and keeps it across deploys
+      - key: RELAY_TENANT_SECRET
+        generateValue: true
+      # 1 = the demo web app is handed every tenant's key so you can switch regions; 0 for a real deployment
+      - key: RELAY_DEMO_KEYS
+        value: "1"

@@ -354,10 +354,7 @@ cd web && npm install && npm run dev     # web app (VITE_API_URL=http://localhos
 model on every key in turn (key 1, 2, … 5), then the next Groq model, then Gemini. Each key has its own
 row and live status on the Usage page; replies are cached per model, so a cached answer is reused whichever key made it.
 
-**Pictures in the chat**: when a game, a show or film, a streaming platform or a physical thing (a router, fiber, a
-PS5) comes up, in the message, in what was learned from it, or in the reply, the bubble shows the lead image of its
-Wikipedia article: one per topic per chat, at most two per reply, no key needed, cached per topic
-([`relay/images.py`](relay/images.py); `python -m relay.images warm` fetches the known titles once).
+**Pictures in the chat**: instructions come with a drawn guide card (where the model sticker is, what the LOS light means, restarting the box, router placement, checking the fibre cable). A message carries `[guide:key]` and the chat shows the card ([`web/src/components/Guides.tsx`](web/src/components/Guides.tsx); drop a photo in `web/public/guides/` and set `photo` to use your own).
 
 **Renaming the company or the bot**: edit [`brand.json`](brand.json) (company, tagline, bot name, bot tagline). The
 backend reads it at start (prompts, catalogue text, outage notices; the catalogue reseeds itself because its version
@@ -368,7 +365,27 @@ without a catalogue entry is a yes, followed by "what's the exact address?".
 
 Tests: `python -m tests.test_core`, `test_api`, `test_round2`, `test_kb`, `test_sharing`, `test_network`, `test_experts`, `test_browser_names`, `test_open_facts`, `test_profile`, `test_transcript`, `test_anomaly`, `test_pallavi`, `test_raj`, `test_intake_spec`, `test_labels`, `test_schema`, `test_time_edges`, `test_udf`, `test_outage_feed`, `test_mcp`, `check_sim_noc`, `check_outage`; web: `cd web && npm test`. Region graphs are seeded on first use; the benchmark tenants (`pml-bench`, `nimbus`, `life-locomo`) refuse resets and the simulator.
 
-Deploy: `render.yaml` (API on Render) and `web/vercel.json` (web on Vercel).
+### Deploy (free)
+
+| Piece | Host | Free tier, and what it means here |
+|---|---|---|
+| API | **Render** (`render.yaml` at the repo root) | 512 MB RAM; the API uses about 300 MB with the embedding model loaded. Sleeps after 15 min idle and wakes in about a minute; the web app shows a wake-up screen meanwhile |
+| Web app | **Vercel** (`web/vercel.json`) | Static Vite build with SPA rewrites |
+| Database | **FalkorDB Cloud** free | 100 MB; one graph per tenant |
+| Models | **Groq** + **Gemini** free keys | Daily quotas; `demo_cache/` is copied into the reply cache at build time, so the demo story replays without spending any |
+
+1. Push this repository to GitHub (public).
+2. **Render**: New → Blueprint → pick the repository. Fill in `FALKOR_HOST`, `FALKOR_PORT`, `FALKOR_USER`, `FALKOR_PASS`,
+   `GROQ_API_KEY` (and `_2`, `_3` if you have more) and `GEMINI_API_KEY`. `RELAY_TENANT_SECRET` is generated for you.
+   Leave `CORS_ORIGINS` as `*` for now. Wait until `https://<service>.onrender.com/health` answers.
+3. **Vercel**: Add New → Project → the same repository. Root Directory `agent-relay/web`, environment variable
+   `VITE_API_URL=https://<service>.onrender.com` (the WebSocket URL is derived from it). Deploy.
+4. Back on Render, set `CORS_ORIGINS=https://<project>.vercel.app` and redeploy.
+5. Open the Vercel URL. The first visit after a quiet spell wakes the API.
+
+Memory lives in FalkorDB, so nothing is lost when the free API sleeps; only a resolver run that is in progress at that
+moment stops. `RELAY_DEMO_KEYS=1` hands the demo web app every tenant's key so you can switch regions; set it to `0` and
+give each tenant its own key (`python -c "from relay.tenancy import key_for; print(key_for('pml'))"`) for a real deployment.
 
 ### Use Relay from any AI client (MCP)
 

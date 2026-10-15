@@ -1,0 +1,1 @@
+{"facts": [{"subject": "farhan shaikh", "predicate": "lives_in", "object": "mumbai", "about_customer": true, "valid_from": null}, {"subject": "farhan shaikh", "predicate": "on_plan", "object": "fiber 300", "about_customer": true, "valid_from": null}, {"subject": "farhan shaikh", "predicate": "prefers_channel", "object": "phone", "about_customer": true, "valid_from": null}]}

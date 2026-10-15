@@ -1,0 +1,1 @@
+{"facts": [{"about_customer": true, "subject": "alice rao", "predicate": "owns_device", "object": "ps5", "valid_from": null}, {"about_customer": true, "subject": "alice rao", "predicate": "owns_device", "object": "work laptop", "valid_from": null}]}
