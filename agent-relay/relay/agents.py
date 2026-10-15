@@ -68,6 +68,16 @@ def _learned(facts, retired=()):
 class Intake:
     id = "intake"
 
+    @staticmethod
+    def _ready_for_resolver(tenant, customer, ticket, log=None):
+        """Hand over only once intake knows who and where (spec: no troubleshooting before identity). In a live
+        chat that means a line on the network graph; the ticket waits open until then and goes on a later turn."""
+        from . import lab  # lazy: lab imports this module
+        info = next((t for t in tickets(tenant, log) if t["ticket"] == ticket), None)
+        if not info or info["status"] != "open":
+            return False  # already picked up, or closed
+        return not lab.lab_on(tenant) or lab.has_line(tenant, customer)
+
     def handle(self, tenant, *, customer, session_id, text, at, ticket_id=None, reply_llm=False, greeted=False,
                country=None, speak=True, log=None):
         """One customer message. Learns facts; opens a ticket and hands it to the resolver on a new issue.
@@ -121,19 +131,19 @@ class Intake:
             events.emit(tenant, "handoff", {"ticket": opened.upper(), "from": self.id, "to": "resolver", "note": issues[0],
                                             "customer": c, "issue_type": kind, "priority": "normal",
                                             "context_nodes": [f"Customer:{c}", f"Session:{session_id}"]}, to_ms(at))
-            if reply_llm:
-                _at, _tenant, _opened, _sid = to_ms(at), tenant, opened, session_id
-                def _auto_pickup():
-                    try:
-                        converse.summarize_session(_tenant, _sid, log=[])
-                    except Exception as e:
-                        print(f"session summary after handoff: {e}")
-                    try:
-                        Resolver().pick_up(_tenant, ticket=_opened, at=_at + 3000, log=[],
-                                           chat_session_id=_sid)
-                    except Exception as e:
-                        print(f"auto-pickup {_opened}: {e}")
-                threading.Thread(target=_auto_pickup, daemon=True).start()
+        waiting = opened or (ticket if not request else None)
+        if reply_llm and waiting and self._ready_for_resolver(tenant, c, waiting, log):
+            _at, _tenant, _t, _sid = to_ms(at), tenant, waiting, session_id
+            def _auto_pickup():
+                try:
+                    converse.summarize_session(_tenant, _sid, log=[])
+                except Exception as e:
+                    print(f"session summary after handoff: {e}")
+                try:
+                    Resolver().pick_up(_tenant, ticket=_t, at=_at + 3000, log=[], chat_session_id=_sid)
+                except Exception as e:
+                    print(f"auto-pickup {_t}: {e}")
+            threading.Thread(target=_auto_pickup, daemon=True).start()
         learned = _learned(res["facts"], res.get("retired", []))
         learned += [f"order {o['order_id']} for {o['plan']} is {o['status']} (installation within {o['eta_hours']} hours"
                     + ")" for o in res.get("orders", [])]
@@ -150,7 +160,8 @@ class Intake:
         if ticket or opened:  # the ticket node carries what intake learned this turn (priority, details)
             db.run(tenant, "ticket profile", Q.TICKET_PROFILE, {"t": ticket or opened}, log)
         db.run(tenant, "link sessions", Q.LINK_SESSIONS, {"c": c}, log)
-        if res.get("extraction_failed") and reply:
+        if res.get("extraction_failed") and reply and not any(
+                "note-taking is paused" in tx for sp, tx, _, _ in converse.session_turns(tenant, session_id, log) if sp == "agent"):
             reply += " (Heads up: my note-taking is paused for a few minutes, so I may ask you to repeat that later.)"
         reply_eid = None
         if reply_llm and speak:  # the agent's side of the conversation is episodic memory too

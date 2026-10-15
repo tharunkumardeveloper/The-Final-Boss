@@ -166,6 +166,7 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
   onWho?: (who: string | null) => void; onChips?: (chips: Chip[]) => void; memoryWidth?: number; side?: 'memory' | 'tickets' | 'none'
   typeRef?: { current: ((text: string) => void) | null }; country?: string }) {
   const reduce = useReducedMotion()
+  const [openedAt] = useState(() => new Date().toISOString())  // the on-screen greetings carry the time the chat opened
   const [who, setWho] = useState<string | null>(null)
   const [session, setSession] = useState<string>()
   const [history, setHistory] = useState<ConversationSession[]>([])
@@ -204,7 +205,7 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
   // "Not right? Change it": back to asking, keeping what was said so far on screen
   const rename = () => {
     setWho(null); clear()
-    setIntro((l) => [...l, { id: `ask-${Date.now()}`, speaker: 'intake', text: 'No problem. What should I call you?' }])
+    setIntro((l) => [...l, { id: `ask-${Date.now()}`, speaker: 'intake', at: new Date().toISOString(), text: 'No problem. What should I call you?' }])
     input.current?.focus()
   }
   useEffect(clear, [tenant]) // a region is its own desk and graph: keep the person, load that desk's history for them
@@ -390,7 +391,7 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
                 </div>
               </div>
             )}
-            <Bubble l={{ id: 'hi', speaker: 'intake', text: `Hey, I'm ${BOT} from ${COMPANY}. ${BOT_TAGLINE} Tell me once and I'll remember it, so nobody here ever asks you twice. What should I call you?` }} customer="" flying={[]} />
+            <Bubble l={{ id: 'hi', speaker: 'intake', at: openedAt, text: `Hey, I'm ${BOT} from ${COMPANY}. ${BOT_TAGLINE} Tell me once and I'll remember it, so nobody here ever asks you twice. What should I call you?` }} customer="" flying={[]} />
             {intro.map((l) => <Bubble key={l.id} l={l} customer={who ?? ''} flying={[]} />)}
             {!who && customers.length > 0 && intro.length === 0 && (
               <p className="px-1 text-xs text-ink-3">Demo customers: {customers.slice(0, 4).map((c, i) => (
@@ -407,7 +408,7 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
                   </div>
                 )}
                 {!loading && (
-                  <Bubble customer={who} flying={[]} onRename={rename} l={{ id: 'greet', speaker: 'intake', mark: first(who), rename: true, text: last
+                  <Bubble customer={who} flying={[]} onRename={rename} l={{ id: 'greet', speaker: 'intake', at: openedAt, mark: first(who), rename: true, text: last
                     ? `Welcome back, ${first(who)}! Last time: ${(last.summary ?? last.messages[last.messages.length - 1]?.text ?? '').replace(/\.$/, '')}. What's up today?`
                     : `Lovely to meet you, ${first(who)}. What's acting up today? Wifi sulking, a move, a plan question, I'm all ears.` }} />
                 )}

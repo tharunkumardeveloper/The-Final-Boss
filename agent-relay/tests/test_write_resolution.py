@@ -5,6 +5,7 @@
 5. an open invoice request doesn't swallow a new fault: the fault opens its own ticket
 6. a topic word in a name slot ("for slow speeds") is not an unknown person; "for Kevin" still is
 3. recall's fact cap drops the farthest facts first, never a 1-hop fact for a far one
+8. a live chat hands a ticket to the resolver only once the customer's line is known (no troubleshooting before identity)
 7. the fix that worked is its own edge (ticket fixed_by fix), apart from everything tried; lab fixes use the team's names"""
 from relay import queries as Q
 from relay import agents, db, lab, llm, memory, retrieve, tools
@@ -129,6 +130,17 @@ def fixed_by_names_the_fix_that_worked():
     assert lab.FIX_NAME["dispatch_technician_home"] == "replace fiber cable"
 
 
+def resolver_waits_for_the_line():
+    c = "dharani k"
+    say(c, (c, "has_ticket", "t-8"), ("t-8", "has_status", "open"), ("t-8", "ticket_about", "no internet"))
+    assert not lab.has_line(T, c)
+    assert not agents.Intake._ready_for_resolver(T, c, "t-8"), "no line yet: the ticket waits for intake"
+    say(c, (c, "lives_in", "thane"))
+    assert lab.has_line(T, c) and agents.Intake._ready_for_resolver(T, c, "t-8"), "line known: hand over"
+    say(c, ("t-8", "has_status", "in progress"))
+    assert not agents.Intake._ready_for_resolver(T, c, "t-8"), "already picked up: no second pickup"
+
+
 if __name__ == "__main__":
     db.reset(T)
     try:
@@ -139,6 +151,7 @@ if __name__ == "__main__":
         fault_after_request_gets_its_own_ticket()
         topic_words_are_not_names()
         fixed_by_names_the_fix_that_worked()
+        resolver_waits_for_the_line()
         print("test_write_resolution: all passed")
     finally:
         db.graph(T).delete()

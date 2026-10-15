@@ -349,8 +349,14 @@ def plan_turn(tenant, *, customer, text, learned, ticket, history, first_turn, p
     notes, network = dig(tenant, customer, facts, ticket, at, log)
     plan.notes += notes
     if network and network["down"]:  # spec issue 13: an outage is said plainly, no home troubleshooting
-        plan.fixed = " ".join(plan.prefix + [f"I can see a known outage at {', '.join(network['down'])}, which serves your "
-                                             "area, and our team is on it. You'll get a message here as soon as it's back."])
+        where = ", ".join(network["down"])
+        told = any(f"known outage at {where}" in tx for sp, tx in history if sp != "customer")
+        if not told:
+            plan.fixed = " ".join(plan.prefix + [f"I can see a known outage at {where}, which serves your area, and our "
+                                                 "team is on it. You'll get a message here as soon as it's back."])
+        else:  # asked again ("fix it", "when?"): the ETA and what to expect, not the same sentence
+            plan.fixed = (f"The outage at {where} is still being repaired; outages like this are usually fixed within "
+                          "about 4 hours. Nothing to do on your side; your connection comes back on its own and I'll message you here.")
         return plan
     if network and any(x.startswith("lives in") for x in learned):
         plan.prefix.append(f"Found your line on our {network['olt'].replace(' OLT', '')} exchange.")

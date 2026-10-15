@@ -9,6 +9,7 @@ import json
 import os
 import re
 import threading
+import time
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
@@ -66,7 +67,15 @@ def _save(name, data):
     _DIR.mkdir(parents=True, exist_ok=True)
     tmp = _DIR / f"{name}.{os.getpid()}.{threading.get_ident()}.tmp"
     tmp.write_text(json.dumps(data, indent=1), encoding="utf-8")
-    os.replace(tmp, _DIR / name)
+    for attempt in range(10):  # Windows refuses the swap while another process is reading or writing the file
+        try:
+            os.replace(tmp, _DIR / name)
+            return
+        except PermissionError:
+            if attempt == 9:
+                tmp.unlink(missing_ok=True)  # the ledger is a record, never worth crashing a run for
+                return
+            time.sleep(0.05 * (attempt + 1))
 
 
 def _day():
@@ -217,12 +226,19 @@ def has_key(provider):
     return bool({"gemini": config.GEMINI_API_KEY, "sarvam": config.SARVAM_API_KEY}.get(provider, True))
 
 
+STALE_S = 10 * 60  # a model shown as available but not heard from in this long gets re-checked
+
+
 def due_for_check():
-    """Benched models whose provider-stated recovery time has passed: worth one real 1-token check."""
+    """Models worth one real 1-token check: benched ones whose provider-stated recovery time has passed, and
+    "available" ones we haven't heard from in STALE_S. The same keys are used by other processes (the eval, a
+    local run, another deploy), so a quota can run out without this server ever seeing a refusal."""
     with _lock:
         day = dict(_day())
-    return [n for n, m in day.items() if (m.get("exhausted") or m.get("limited_until")) and not exhausted(n)
-            and any(n in ms for ms in config.ROUTES.values())]
+    routed = {n for ms in config.ROUTES.values() for n in ms}
+    back = [n for n, m in day.items() if (m.get("exhausted") or m.get("limited_until")) and not exhausted(n)]
+    stale = [n for n, m in day.items() if not exhausted(n) and _now() - (m.get("checked_at") or _now()) > STALE_S]
+    return sorted(set(back + stale) & routed)
 
 
 def snapshot():
