@@ -249,7 +249,27 @@ Known issue at the time (fixed in Phase 17): an unknown person could be answered
 | Robustness | A query retries when FalkorDB Cloud drops the connection; the usage ledger retries its file swap on Windows; the Usage tab re-checks any model not heard from in 10 minutes, so quota used by another process shows up |
 | Tests | `tests/test_contract.py` (all four outcomes, hops, both clocks, argument checks, depth cap, grounding scope), extended `test_api`, `test_mcp` and web render tests |
 
-Known gaps: the new screens are checked by render tests and builds, not yet clicked through in a browser; the "now vs then" demo needs a customer who has moved; the network contrast is on the map tab only; "How I know" appears only when the reply repeats a fact's value.
+Known gaps at the time: the "now vs then" demo needs a customer who has moved; "How I know" appears only when the reply repeats a fact's value.
+
+### Phase 19: Procedural fix, screens fitted to one view, and isolation you can verify yourself
+| Item | What changed |
+|---|---|
+| Procedural (fix 8) | The only question type where Relay lost (44% vs 50%). Split first, no LLM: the right fix was in context for 13/18. Causes: the lab named fixes its own way ("wifi channel change" vs the team's "change wifi channel"), the graph recorded every fix tried but not which one worked, the lab improvised extra fixes on the scripted benchmark, plurals ("slow speeds") didn't link, and a question naming no one never started from the issue it asked about. Fixes: one name per fix; a `ticket -[fixed_by]-> fix` fact written only when a fix works; the benchmark loader marks its tenant scripted so the lab stays off; phrases also try their singular; a question naming no customer or ticket seeds from the issue or fix it names. Result: context 18/18, answers 17/17 vs B1 11/17 (procedural slice) |
+| Memory screen | The page scrolls instead of being locked to the window; the graph gets a fixed tall height; the time bar sits under it; Two clocks moved to a side tab (Ask · Inspect · Tickets · Two clocks). Every control checked against the live API: graph, 2-hop focus, card, history, Ask (outcome and hops), Show me contrasts, tool catalogue (unknown name returns `unknown_entity` with no tool query), Cypher Profile |
+| Network screen | One desktop screen: compact header with the scoreboard as pills, a thin steps strip, three columns that scroll inside themselves (faults · network · resolver), the evening charts and operator tools folded, the resolver trace and the customer's phone as tabs; the region map tab gets the "Show me" outage demo beside it |
+| Field dispatch | When the resolver sends people (home technician, street cable crew, backbone team), a van drives from the hub to the exact place on the diagram (the home box, the cut feeder, the cut hub link), pulses while repairing, and shows a check when the re-measurement passes or turns red if not. A panel under the diagram, only while a crew is out: who went where, a route bar, Dispatched → En route → On site → Verified |
+| Break it no longer hangs | "Waiting for Alice" was the resolver waiting for a customer reply that nobody types on the Break-it screen. A Break-it customer is now simulated: it answers the guided check, gives a street address, mobile and slot (written as the customer's facts in the graph), and confirms the fix, through the same path a chat takes. Talk mode is unchanged (a person typing switches it off). A full damaged-fibre case runs in 36 s: guided check, visit details, technician booked and dispatched, verified, graded, procedural memory saved, customer confirms |
+| Smooth animations | Three causes found and fixed: link and cut pieces were components defined inside the diagram's render, so every redraw rebuilt them and restarted their CSS animations; the dispatch timer re-rendered the whole page 10 times a second; and every live query event redrew the entire diagram while blur filters made each redraw expensive. Now the links are built once, the van glides on its own (framer-motion), the query glow lives in its own small layer (`TouchLayer`), the diagram and region map are memoized, and the blur filters are replaced by a soft halo |
+| Talk mode | The break button names the person you are chatting as (or says to introduce yourself, or that you have no line yet), never the page's default customer |
+| Agent team screen | Rebuilt as one screen. A constellation: the three agents around Shared memory · FalkorDB, write arrows into memory and read arrows out of it sized by facts, each agent's ring showing how much of what it used came from others; a live CONSULTED edge sends a dot writer → memory → reader. Watch a handoff became a four-station diagram (Customer → intake → Shared memory → Resolver) where each step travels as a token, with the record beside it: the words said, each fact with its id and writer, the handoff as a graph node; play, pause, step, scrubber, case picker. Knowledge crossings and the expert search are tabs. Display-only sections (most shared facts, role blurbs) removed |
+| Tenants screen: the canary test | Replaces the split before/after drawing. One drawn FalkorDB instance with a walled island per region (sized by real node counts). A unique marker (a fake customer "canary <word>" with an address) is planted in one region's graph; every region then hunts for it four ways: its own live stream, its agent tool (`recall_customer`), raw Cypher on its graph, and its key against the victim's graph (drawn as a packet stopping at the wall with 403). A verdict matrix: the victim's column is the control and must find it (gold), every other column must find nothing (green). Also no key → 401 and a forged key → 403. Then the canary is removed and the server reports what is left |
+| Verify it outside the page | The tester can type their own secret word (no recording could know it); the test pauses after planting so it can be checked in FalkorDB Browser with the queries shown (a table query and one that draws the canary as a graph: customer, address, the Fact behind it, the Episode it came from, its Session); every request is a receipt with status, timing, the server's response and Copy as curl; the plant response carries the fact id and a read-back from the graph |
+| Control caught a real bug | The first version counted 0 events on the victim's own stream: the write's events arrived before the plant request returned the token. A blind probe would have passed every region; messages are now buffered and counted after the token is known |
+| Canary endpoints | `POST /api/tenants/{t}/canary` (own key only, no model call, optional word 4–16 letters or digits, sweeps any leftover canary first) and `DELETE /api/tenants/{t}/canary/{token}` (removes the entity, address, fact, episode and session, then counts what is left) |
+| Validated | From a plain terminal against the real graphs, Europe as the victim: plant 200 with fact id and read-back; India's key on Europe's graph 403; India's own graph 0 rows; Europe's own graph 2 rows; a bad word 422; removed, 0 left. Through the page's own sequence over HTTP and WebSocket: 6 regions × 4 checks plus no key and forged key all as expected. Also confirmed by the owner in FalkorDB Browser (`zq8tharun` in the victim graph only) |
+| Tests | `tests/test_canary.py` (control sees it, the other tenant never does, own word, bad word refused, nothing left), more checks in `tests/test_write_resolution.py` (fixed_by, the resolver waits for the line, plural issue linking), web render tests for the dispatch panel, the van, the query glow layer, the agent team visuals and the handoff replay (33 web tests) |
+
+Known gaps: none of the screens in this phase were clicked through by us in a browser (the browser extension was not connected); they are checked by builds, render tests and the live API. "Where does kevin zzz live?" links to Kevin through the unique-first-name rule while the tool catalogue calls the same name unknown.
 
 ## 3. Architecture
 
@@ -305,11 +325,17 @@ python -m tests.test_anomaly               # "police officer" data request, name
 python -m tests.test_pallavi               # Chicago prospect on the India desk: address, US prices, booking
 python -m tests.test_raj                   # unknown customer with a problem: identity first, live digging
 python -m tests.test_scoring               # benchmark scoring
+python -m tests.test_recall                # 2-round-trip recall, unknown people abstain, ranking parity with the old recall
+python -m tests.test_procedural            # procedures as FIRST/NEXT paths, decided from the graph, failures recorded
+python -m tests.test_write_resolution      # write-path fixes the evaluation found (pickup, typos, caps, plans, fixed_by)
+python -m tests.test_contract              # the four answer outcomes, hops, tool argument checks
+python -m tests.test_canary                # the Tenants page's canary test
+python -m tests.test_network               # network model, readings, failures
 uvicorn api.main:app --port 8000           # API
 cd web && npm install && npm run dev       # web (VITE_API_URL=http://localhost:8000), or npm run dev:mock
 ```
 
-Last full run: 16 of 18 backend checks passed. `test_profile` could not run (every model out of quota) and `test_transcript` failed on a test expectation that was then corrected; both need a rerun once model quota is back. The web app builds and its 18 tests pass.
+Most recent runs: `test_recall`, `test_procedural`, `test_write_resolution`, `test_contract`, `test_canary`, `test_network`, `test_schema`, `test_status`, `test_mcp` pass; `test_core` and `test_api` pass when model quota is available (they failed only while every model was out). The older LLM-heavy scenario tests (`test_profile`, `test_transcript`, `test_intake_spec` and the replays) have not been rerun on the latest code. The web app builds and its 33 tests pass.
 
 ## 6. Results
 
@@ -386,6 +412,9 @@ Differentiation and demo depth rise: a worldwide company with region graphs, ope
 ### Update after Phase 10
 Track coverage and demo quality rise: the intake agent follows a written spec, its questions and their answers are memory every agent can see, identity is a graph match, tickets carry the full handoff, and the chat shows the graph work as it happens. Model quota is now the main operational risk: planned replies need no model, but extraction does. Estimate: **≈ 8/10 now**.
 
+### Update after Phase 19
+The last losing question type (procedural) now wins, every screen fits a desktop view, and the two weakest demo screens became the strongest proofs: the Agent team page shows coordination as it happens in the graph with the record beside each step, and the Tenants page is a canary test anyone can verify outside our UI (their own word, FalkorDB Browser, curl). Animations are smooth under load. Still open: a same-model full rerun of the 160 questions on the final code, determinism and LoCoMo runs, the video, and a browser click-through by us. Estimate: **≈ 9/10**.
+
 ### Update after Phase 18
 The evaluation drove the work: seven root causes fixed, each measured, and the ablations show the graph features earn their keep (two clocks ≈ +19 points, multi-hop ≈ +9). The judges' published principles (answer shapes, path with the answer, a fixed tool catalogue with checked arguments, names resolved before reasoning) are now visible on screen. Still open: a same-model before/after headline, determinism and LoCoMo runs, a browser click-through. Estimate: **≈ 9/10**.
 
@@ -400,21 +429,15 @@ Track coverage and differentiation rise most: the resolver now acts on a network
 
 ## 8. What's missing, in priority order
 
-1. **Fix what the evaluation found**: typos creating new entities (25%), abstention precision (52%), multi-hop (28%), the billing pickup returning empty observations; then rerun the scaled set on the current code, and run the k-sweep, ablations, variance, OOD extraction and LoCoMo QA.
-2. **Recall speed**: the graph is still 259 ms p50 vs 45 ms for the vector store; most of the rest is per-turn writes (~40 queries a chat turn).
-3. **Protect the API further**: tenant keys are enforced (Phase 15); still missing are rate limiting on `/chat` and an operator-only key for reset and route edits on the public demo.
-4. **Demo video (3 min) and blog post.**
-5. **Speed up writes and linking:**
-   - writes: batch the episode and facts into fewer round trips, and cache embeddings;
-   - linking: replace the per-question scan of every name with a full-text index;
-   - fix the 2.2 s first-call warm-up.
-6. **Human-in-the-loop for conflicts:** a "confirm value" action in the console. It turns trust ranking into a learning signal, so trust becomes dynamic instead of fixed per agent.
-7. **Retirement scope:** currently a customer's "no longer" only retires facts the same agent recorded. Decide whether the customer's word should also retire a tool's claim (likely yes for personal facts).
+1. **Demo video (3 min)**, recorded on the deployed site after a Render redeploy, and the submission write-up.
+2. **One clean rerun of the 160 questions on the final code with a single answer model** (the 91% vs 50% headline mixes the fixes with a model change). Then the k-sweep, determinism runs, out-of-distribution extraction and LoCoMo QA.
+3. **A browser click-through of every screen** (Memory, Network with Break it and dispatch, Agent team, Tenants canary test) on the deployed site.
+4. **Speed**: retrieval is about 216 ms p50 vs 46 ms for the vector store, and a chat turn still runs about 40 queries, mostly writes; batch the episode and facts into fewer round trips.
+5. **Protect the public demo**: rate limiting on `/chat` and an operator-only key for reset and route edits; `RELAY_DEMO_KEYS=0` for a real deployment.
+6. **Human-in-the-loop for conflicts:** a "confirm value" action, so trust becomes a learned signal instead of fixed per agent.
+7. **Retirement scope:** decide whether a customer's "no longer" should also retire a tool's claim.
 8. **Memory growth:** a retention or compaction policy for old episodes; the free tier caps out around 15–75K nodes.
-9. **Persist usage counters** (they reset when Render redeploys); seed them from Groq headers.
-10. **Richer procedural memory:** ordered fix steps (`NEXT` edges) learned from resolved tickets, not just "fix resolves issue".
-11. **Screenshots in the README** (text and numbers were refreshed in Phase 9).
-12. **Reply guard gaps**: delivery times, discounts and device counts stated without a plan name are not checked.
-13. **Spec gaps**: confirm-before-update for contradictions; switching the chat to the account of the person someone calls for.
-14. **Quota resilience**: a last-resort extraction model (allam-2-7b) so chats keep learning when Groq and Gemini are out.
-15. **Outage feed end times**: give simulated outages an end, and retire `affects` facts the feed no longer reports.
+9. **Persist usage counters** across redeploys.
+10. **Reply guard gaps**: delivery times, discounts and device counts stated without a plan name are not checked.
+11. **Spec gaps**: confirm-before-update for contradictions; switching the chat to the account of the person someone calls for.
+12. **Small consistency fix:** Ask links "kevin zzz" to Kevin by first name while the tool catalogue calls it unknown; make Ask strict on extra unknown name words.
