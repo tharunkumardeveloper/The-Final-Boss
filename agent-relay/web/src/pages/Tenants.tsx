@@ -238,6 +238,9 @@ export default function TenantsPage() {
   const vName = regions?.find((r) => r.tenant === victim)?.name ?? victim
   const STEPS: [Stage, string][] = [['listen', 'Every region listens'], ['plant', `Plant in ${vName}`], ['verify', 'You check it'], ['hunt', 'Every region hunts'], ['clean', 'Remove it'], ['done', 'Verdict']]
   const order: Stage[] = ['idle', 'listen', 'plant', 'verify', 'hunt', 'clean', 'done']
+  // the same canary as a picture: the fake customer, its address, and the edge between them, drawn by the Browser
+  const graphQuery = (tok: string) => `MATCH p = (c:Entity)-[r]-(x) WHERE c.name_key = 'canary ${tok}' RETURN p`
+  const tokenNow = canary?.token || word || '<your word>'
   const browserQuery = (tok: string) => `MATCH (n:Entity) WHERE n.name_key CONTAINS '${tok}' RETURN n.name_key, labels(n)`
   const copy = (x: string) => { try { navigator.clipboard.writeText(x) } catch { /* no clipboard */ } }
 
@@ -343,7 +346,12 @@ export default function TenantsPage() {
                       <code className="min-w-0 flex-1 break-all rounded-lg bg-ink px-2 py-1.5 font-mono text-[11px] text-paper">{browserQuery(canary?.token || word || '<your word>')}</code>
                       <button className="btn-ghost !px-2 !py-1 text-[11px] hairline" onClick={() => copy(browserQuery(canary?.token || word || '<your word>'))}>Copy</button>
                     </div>
-                    <p className="mt-1.5">It should return rows in <code className="font-mono text-[11px]">{regions?.find((r) => r.tenant === victim)?.graph ?? 'the victim'}</code> and nothing in {regions?.filter((r) => r.tenant !== victim).map((r) => r.graph).join(', ')}.</p>
+                    <p className="mt-2">To see it drawn as a graph (the customer, its address, the fact behind it, the message it came from, its session):</p>
+                    <div className="mt-1 flex items-start gap-2">
+                      <code className="min-w-0 flex-1 break-all rounded-lg bg-ink px-2 py-1.5 font-mono text-[11px] text-paper">{graphQuery(tokenNow)}</code>
+                      <button className="btn-ghost !px-2 !py-1 text-[11px] hairline" onClick={() => copy(graphQuery(tokenNow))}>Copy</button>
+                    </div>
+                    <p className="mt-1.5">Both should return rows in <code className="font-mono text-[11px]">{regions?.find((r) => r.tenant === victim)?.graph ?? 'the victim'}</code> and nothing in {regions?.filter((r) => r.tenant !== victim).map((r) => r.graph).join(', ')}.</p>
                     {canary && <p className="mt-1.5 text-[11.5px]">Server receipt for the write: fact <code className="font-mono">{canary.facts?.join(', ')}</code>, read back from <code className="font-mono">{canary.graph}</code> as {canary.read_back?.map((x) => <code key={x} className="mr-1 font-mono">{x}</code>)}</p>}
                   </li>
                   <li className="rounded-xl bg-paper/70 p-3 hairline"><p className="font-semibold text-ink">3 · Re-run any request yourself</p>
