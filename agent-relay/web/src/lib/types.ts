@@ -156,6 +156,10 @@ export type RelayEvent =
 export interface LabCypher { name: string; query: string; ms: number; rows: number }
 export interface LabStep { i: number; kind: 'memory' | 'check' | 'think' | 'act' | 'wait' | 'verify'; title: string; detail: string
   status: 'ok' | 'bad' | 'info' | 'pending'; at: number; cypher: LabCypher[]; data: Record<string, any> }
+/** relay/procedural.py: suggest() returns the full shape; record()/failed() only id + counts. */
+export interface LabProcedure { id: string; successes: number; failures: number; action?: string; steps?: string[]; rate?: number
+  recency?: number; nearest_hops?: number | null; nearby?: number; places?: { at: string; hops: number; times: number }[]
+  confident?: boolean; score?: number }
 export interface LabMessage { text: string; at: number; image?: { src: string; title: string; link?: string } | null }
 export interface LabRun { id: string; customer: string; name: string; ticket: string | null; said: string; symptoms: string[]
   started_at: number; ended_at?: number; status: 'running' | 'resolved' | 'unresolved' | 'handed over' | 'error'

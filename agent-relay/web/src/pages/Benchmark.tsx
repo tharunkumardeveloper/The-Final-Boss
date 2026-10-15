@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { Wordmark } from '../components/Brand'
+import { ConsoleNav } from '../components/console/ConsoleNav'
 import { api } from '../lib/api'
 import { pct, wilson } from '../lib/format'
 import { useTenant } from '../lib/tenant'
@@ -101,9 +102,9 @@ export default function Benchmark() {
 
   return (
     <div className="min-h-[100dvh]">
-      <header className="mx-auto flex max-w-5xl items-center justify-between px-4 py-5 sm:px-6">
+      <header className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-5 sm:px-6">
         <Link to="/console"><Wordmark sub="Benchmark" /></Link>
-        <Link to="/console" className="btn-ghost text-sm">Back to console</Link>
+        <ConsoleNav />
       </header>
       <main className="mx-auto max-w-5xl px-4 pb-20 sm:px-6">
         <h1 className="font-display text-4xl font-semibold tracking-[-0.02em]">Does the graph earn its place?</h1>

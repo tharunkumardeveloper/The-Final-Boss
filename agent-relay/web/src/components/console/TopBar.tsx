@@ -5,7 +5,8 @@ import { when } from '../../lib/format'
 import type { StreamStatus } from '../../lib/stream'
 import type { SimStatus, Stats, UsagePayload } from '../../lib/types'
 import { Wordmark } from '../Brand'
-import { ArrowUpRight, Chart, Database, Pause, Play, Pulse, Rewind } from '../Icons'
+import { Database, Pause, Play, Pulse, Rewind } from '../Icons'
+import { ConsoleNav } from './ConsoleNav'
 import { quotaState } from './useConsole'
 
 const SPEEDS = [[0.5, '½'], [1, '1'], [3, '3'], [8, '8']] as const
@@ -115,16 +116,9 @@ export function TopBar({ tenant, setTenant, stats, sim, setSim, simTime, status,
           </Link>
         )}
         <button className="btn-ghost !py-1.5 text-xs" onClick={openCypher}><Database className="h-4 w-4" />Cypher <span className="num text-ink-3">{cypherCount}</span></button>
-        <Link className="btn !py-1.5 text-xs bg-ink text-paper hover:bg-ink/90" to="/console/graph"><Pulse className="h-4 w-4" />Memory graph</Link>
-        <Link className="btn !py-1.5 text-xs bg-ink text-paper hover:bg-ink/90" to="/console/lab"><Pulse className="h-4 w-4" />Network console</Link>
-        <Link className="btn-ghost !py-1.5 text-xs" to="/console/isolation"><Database className="h-4 w-4" />Isolation audit</Link>
-        <Link className="btn-ghost !py-1.5 text-xs" to="/console/regions"><Chart className="h-4 w-4" />Regions</Link>
-        <Link className="btn-ghost !py-1.5 text-xs" to="/console/db"><Database className="h-4 w-4" />Database</Link>
-        <Link className="btn-ghost !py-1.5 text-xs" to="/console/network"><Database className="h-4 w-4" />Network</Link>
-        <Link className="btn-ghost !py-1.5 text-xs" to="/console/sharing"><Pulse className="h-4 w-4" />Agent team</Link>
-        <Link className="btn-ghost !py-1.5 text-xs" to="/console/benchmark"><Chart className="h-4 w-4" />Benchmark</Link>
-        <Link className="btn-ghost !py-1.5 text-xs" to="/">Portal <ArrowUpRight className="h-3.5 w-3.5" /></Link>
+        {!quota.known && <Link className="btn-ghost !py-1.5 text-xs" to="/console/usage" title="LLM quota by model"><Pulse className="h-4 w-4" />Usage</Link>}
       </div>
+      <ConsoleNav className="w-full" />
     </header>
   )
 }

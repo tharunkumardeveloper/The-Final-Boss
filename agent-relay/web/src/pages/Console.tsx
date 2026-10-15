@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import { KnownList, TimeBar, useReplay } from './Graph'
 import { AskPanel } from '../components/console/AskPanel'
 import { ClockPanel } from '../components/console/ClockPanel'
 import { CypherDrawer } from '../components/console/CypherDrawer'
@@ -28,6 +30,12 @@ export default function Console() {
   const [cypherOpen, setCypherOpen] = useState(false)
   const [communities, setCommunities] = useState<Community[]>()
   const [consolidating, setConsolidating] = useState(false)
+  // Live or Replay, in the URL so /console?mode=replay (and the old /console/graph) opens straight into the replay
+  const [params, setParams] = useSearchParams()
+  const replaying = params.get('mode') === 'replay'
+  const setReplaying = (on: boolean) => setParams((p) => { const n = new URLSearchParams(p); if (on) n.set('mode', 'replay'); else n.delete('mode'); return n })
+  const r = useReplay(c.store, c.version, replaying, () => setReplaying(true))
+  const graph = replaying ? r.graph : c.store
 
   const select = (id: string | null) => {
     setSelected(id)
@@ -51,13 +59,15 @@ export default function Console() {
 
       <div className="grid min-h-0 flex-1 grid-cols-1 gap-3 px-3 pb-3 lg:grid-cols-[300px_minmax(0,1fr)_360px] xl:grid-cols-[340px_minmax(0,1fr)_390px]">
         <aside className="panel flex h-[420px] min-h-0 flex-col overflow-hidden lg:h-auto">
-          <Feed feed={c.feed} customers={c.customers} />
+          {replaying
+            ? <KnownList r={r} label={(id) => r.graph.nodes.get(id)?.label ?? c.store.nodes.get(id)?.label ?? id.replace(/^e:/, '')} onSelect={select} />
+            : <Feed feed={c.feed} customers={c.customers} />}
         </aside>
 
         <main className="flex min-h-0 flex-col gap-3">
-          <section className="panel relative h-[460px] overflow-hidden lg:h-auto lg:flex-1" aria-label="Memory graph">
-            <MemoryGraph store={c.store} version={c.version} highlight={highlight} selected={selected} onSelect={select}
-              focusId={c.view.focus ? entityId(c.view.focus) : null} />
+          <section className="panel relative h-[460px] overflow-hidden lg:h-auto lg:flex-1" aria-label={replaying ? 'Memory graph, replay' : 'Memory graph'}>
+            <MemoryGraph store={graph} version={replaying ? r.rv : c.version} highlight={replaying ? undefined : highlight} selected={selected} onSelect={select}
+              focusId={!replaying && c.view.focus ? entityId(c.view.focus) : null} />
             <div className="absolute left-4 right-28 top-3">
               <GraphControls customers={c.customers} view={c.view} setView={c.setView} following={c.following} />
               <p className="pointer-events-none mt-1.5 text-xs text-ink-3 num">
@@ -95,6 +105,9 @@ export default function Console() {
               <span className="flex items-center gap-1"><i className="h-0.5 w-4 bg-conflict" />conflict</span>
               <span className="flex items-center gap-1"><i className="h-0.5 w-4 bg-signal" />answer path</span>
             </div>
+          </section>
+          <section className="panel shrink-0" aria-label="Time">
+            <TimeBar r={r} on={replaying} setOn={setReplaying} />
           </section>
           <section className="panel h-[250px] shrink-0 overflow-hidden">
             <ClockPanel tenant={tenant} customers={c.customers} subject={clockWho} onSubject={setClockWho} version={c.version} simTime={c.simTime} />

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Wordmark } from '../components/Brand'
+import { ConsoleNav } from '../components/console/ConsoleNav'
 import { Database, Play } from '../components/Icons'
 import { api } from '../lib/api'
 import { useTenant } from '../lib/tenant'
@@ -85,9 +86,9 @@ export default function DatabasePage() {
 
   return (
     <div className="min-h-[100dvh]">
-      <header className="mx-auto flex max-w-[1300px] items-center justify-between px-4 py-5 sm:px-6">
+      <header className="mx-auto flex max-w-[1300px] flex-wrap items-center justify-between gap-3 px-4 py-5 sm:px-6">
         <Link to="/console"><Wordmark sub="Database" /></Link>
-        <Link to="/console" className="btn-ghost text-sm">Back to console</Link>
+        <ConsoleNav />
       </header>
       <main className="mx-auto max-w-[1300px] px-4 pb-20 sm:px-6">
         <div className="flex flex-wrap items-end justify-between gap-4">

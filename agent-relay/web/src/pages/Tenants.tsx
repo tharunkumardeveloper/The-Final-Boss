@@ -1,11 +1,14 @@
 import { motion } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { Wordmark } from '../components/Brand'
 import { Check, Warning } from '../components/Icons'
 import { Boundary, type Shot } from '../components/console/Boundary'
-import { API_URL, WS_URL } from '../lib/api'
+import { ConsoleNav } from '../components/console/ConsoleNav'
+import { api, API_URL, WS_URL } from '../lib/api'
 import { keyFor, knownTenants } from '../lib/keys'
+import { useTenant } from '../lib/tenant'
+import type { Isolation, Region } from '../lib/types'
 
 type Verdict = 'blocked' | 'leaked' | 'ok' | 'running' | 'skipped'
 interface Probe { id: string; what: string; how: string; expect: string; got?: string; verdict: Verdict; note?: string }
@@ -34,8 +37,87 @@ function wsAttempt(tenant: string, key: string): Promise<string> {
   })
 }
 
-/** Red-team the tenant boundary for real: tenant A's key against tenant B's memory, every response shown. */
-export default function IsolationPage() {
+/** One FalkorDB graph per region: what each holds, and proof that a customer's memory lives only in their own. */
+function Regions() {
+  const { tenant, setTenant } = useTenant()
+  const [regions, setRegions] = useState<Region[]>()
+  const [error, setError] = useState(false)
+  const [name, setName] = useState('alice rao')
+  const [iso, setIso] = useState<Isolation>()
+  const [busy, setBusy] = useState(false)
+  useEffect(() => { api.regions().then(setRegions).catch(() => setError(true)) }, [])
+  const check = async (e?: FormEvent) => {
+    e?.preventDefault(); setBusy(true)
+    try { setIso(await api.isolation(name)) } catch { setIso(undefined) } finally { setBusy(false) }
+  }
+
+  return (
+    <section aria-labelledby="regions-h">
+      <h2 id="regions-h" className="font-display text-2xl font-semibold tracking-[-0.01em]">One graph per region</h2>
+      <p className="mt-1 max-w-2xl text-sm text-ink-2">
+        Each region's customers, agents' memory, catalogue and network live in their own FalkorDB graph on one instance
+        (multigraph). Nothing is filtered by a tenant column: isolation is structural, so EU memory can't leak into an India query.
+      </p>
+      {error && <p className="mt-4 text-sm text-danger" role="alert">Couldn't load regions. Is the API running?</p>}
+      <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {regions?.map((r) => (
+          <article key={r.code} className={`rounded-2xl bg-surface p-5 hairline ${r.tenant === tenant ? 'ring-2 ring-signal/50' : ''}`}>
+            <div className="flex items-baseline justify-between gap-2">
+              <h3 className="font-display text-lg font-semibold">{r.name}</h3>
+              <code className="font-mono text-[11px] text-ink-3">{r.graph}</code>
+            </div>
+            <p className="mt-1 text-xs text-ink-3">{r.countries.length} countries · {r.cities} cities</p>
+            <p className="mt-2 line-clamp-2 text-xs text-ink-2">{r.countries.join(', ')}</p>
+            {r.stats && (
+              <dl className="mt-4 grid grid-cols-3 gap-2 num">
+                {[['Customers', r.stats.customers], ['Facts', r.stats.facts], ['Nodes', r.stats.nodes]].map(([k, v]) => (
+                  <div key={k as string}><dt className="text-[11px] text-ink-3">{k}</dt><dd className="font-display text-xl font-semibold">{(v as number).toLocaleString()}</dd></div>
+                ))}
+              </dl>
+            )}
+            {r.memory_mb != null && (
+              <div className="mt-3">
+                <div className="h-1.5 overflow-hidden rounded-full bg-sunk" role="meter" aria-label="Graph memory against the 100 MB free tier"
+                  aria-valuenow={r.memory_mb} aria-valuemin={0} aria-valuemax={100}>
+                  <div className="h-full rounded-full bg-signal-deep" style={{ width: `${Math.max(1, Math.min(100, r.memory_mb))}%` }} />
+                </div>
+                <p className="mt-1 text-[11px] text-ink-3 num">{r.memory_mb < 1 ? 'under 1' : r.memory_mb} MB of the 100 MB free tier (GRAPH.MEMORY USAGE)</p>
+              </div>
+            )}
+            <button className="btn-ghost mt-4 !px-0 text-sm" onClick={() => setTenant(r.tenant)} disabled={r.tenant === tenant}>
+              {r.tenant === tenant ? 'Current workspace' : 'Work in this region'}
+            </button>
+          </article>
+        ))}
+      </div>
+      <div className="mt-6 rounded-2xl bg-surface p-5 hairline">
+        <h3 className="font-display text-lg font-semibold">Where does this customer live?</h3>
+        <p className="mt-1 text-xs text-ink-3">The same lookup runs against every region graph (operator key). A customer's memory should exist only where they live.</p>
+        <form onSubmit={check} className="mt-4 flex flex-col gap-2 sm:flex-row">
+          <label htmlFor="iso-name" className="sr-only">Customer name</label>
+          <input id="iso-name" className="field flex-1" value={name} onChange={(e) => setName(e.target.value)} />
+          <button className="btn-primary text-sm" disabled={busy}>Check every region</button>
+        </form>
+        {iso && (
+          <>
+            <ul className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {iso.regions.map((r) => (
+                <li key={r.region} className={`flex items-center justify-between rounded-xl px-4 py-3 text-sm ${r.found ? 'bg-current-tint' : 'bg-sunk/60'}`}>
+                  <span><span className="font-medium">{r.name}</span> <code className="font-mono text-[11px] text-ink-3">{r.graph}</code></span>
+                  <span className="num text-ink-2">{r.found ? `${r.facts} facts` : 'not here'}</span>
+                </li>
+              ))}
+            </ul>
+            <pre className="mt-4 overflow-x-auto rounded-xl bg-sunk/60 p-3 font-mono text-[11px] text-ink-2">{iso.query}</pre>
+          </>
+        )}
+      </div>
+    </section>
+  )
+}
+
+/** Tenants & isolation: the region graphs, then a real red-team of the boundary (tenant A's key against tenant B's memory). */
+export default function TenantsPage() {
   const tenants = knownTenants()
   const [attacker, setAttacker] = useState(tenants.includes('pml-eu') ? 'pml-eu' : tenants[1] ?? '')
   const [victim, setVictim] = useState(tenants.includes('pml') ? 'pml' : tenants[0] ?? '')
@@ -109,13 +191,20 @@ export default function IsolationPage() {
 
   return (
     <div className="min-h-[100dvh]">
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-4 py-5 sm:px-6">
-        <Link to="/console"><Wordmark sub="Isolation audit" /></Link>
-        <Link to="/console" className="btn-ghost text-sm">Back to console</Link>
+      <header className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-5 sm:px-6">
+        <Link to="/console"><Wordmark sub="Tenants & isolation" /></Link>
+        <ConsoleNav />
       </header>
       <main className="mx-auto max-w-6xl px-4 pb-20 sm:px-6">
-        <h1 className="font-display text-4xl font-semibold tracking-[-0.02em]">Try to break into another tenant</h1>
-        <p className="mt-2 max-w-3xl text-sm text-ink-2">
+        <h1 className="font-display text-4xl font-semibold tracking-[-0.02em]">Tenants &amp; isolation</h1>
+        <nav aria-label="On this page" className="mt-3 flex flex-wrap gap-2 text-xs">
+          <a href="#regions-h" className="chip bg-surface text-ink-2 hairline hover:bg-sunk">Region graphs</a>
+          <a href="#attack-h" className="chip bg-surface text-ink-2 hairline hover:bg-sunk">Attack the boundary</a>
+        </nav>
+        <div className="mt-8"><Regions /></div>
+
+        <h2 id="attack-h" className="mt-14 font-display text-2xl font-semibold tracking-[-0.01em]">Try to break into another tenant</h2>
+        <p className="mt-1 max-w-3xl text-sm text-ink-2">
           Each region's desk is its own tenant with its own FalkorDB graph and its own key. Pick an attacker and a victim, and this page
           makes real requests from your browser with the attacker's key against the victim's memory. Nothing here is simulated: every
           row shows the response the API actually gave.

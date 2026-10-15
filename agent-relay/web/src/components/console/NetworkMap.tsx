@@ -1,12 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Wordmark } from '../components/Brand'
-import { api } from '../lib/api'
-import { titleCase } from '../lib/format'
-import { useRelayStream } from '../lib/stream'
-import { useTenant } from '../lib/tenant'
-import { touchOf, useTouchTick } from '../lib/touch'
-import type { FailResult, NetNode, Network } from '../lib/types'
+import { api } from '../../lib/api'
+import { titleCase } from '../../lib/format'
+import { touchOf, useTouchTick } from '../../lib/touch'
+import type { FailResult, NetNode, Network, RelayEvent } from '../../lib/types'
 
 const W = 900, H = 820, PAD = 70
 
@@ -36,8 +32,12 @@ function layout(nodes: NetNode[]) {
   return { pos, W, H }
 }
 
-export default function NetworkPage() {
-  const { tenant } = useTenant()
+/** The whole region on a real map, with failure simulation. Shares the page's event stream through `subscribe`.
+ *  `onHub` opens a city's customers in the lab; `hubCustomers` says how many lab customers a city has. */
+export function NetworkMap({ tenant, subscribe, onHub, hubCustomers }: {
+  tenant: string; subscribe: (fn: (e: RelayEvent) => void) => () => void
+  onHub?: (city: string) => void; hubCustomers?: (city: string) => number
+}) {
   const [net, setNet] = useState<Network>()
   useTouchTick()
   const [sel, setSel] = useState<string>()
@@ -54,7 +54,7 @@ export default function NetworkPage() {
     } catch { setError("Couldn't load the network. Is the API running?") }
   }, [tenant, country])
   useEffect(() => { load() }, [load])
-  const status = useRelayStream(tenant, (e) => { if (e.type === 'outage_detected' || e.type === 'outage_resolved') load() }, load)
+  useEffect(() => subscribe((e) => { if (e.type === 'outage_detected' || e.type === 'outage_resolved') load() }), [subscribe, load])
 
   const { pos } = useMemo(() => layout(net?.nodes ?? []), [net])
   const maxB = Math.max(1e-9, ...(net?.nodes ?? []).map((n) => n.betweenness))
@@ -78,15 +78,10 @@ export default function NetworkPage() {
   }
 
   return (
-    <div className="min-h-[100dvh]">
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-4 py-5 sm:px-6">
-        <Link to="/console"><Wordmark sub="Network" /></Link>
-        <Link to="/console" className="btn-ghost text-sm">Back to console</Link>
-      </header>
-      <main className="mx-auto max-w-6xl px-4 pb-20 sm:px-6">
+    <div>
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h1 className="font-display text-4xl font-semibold tracking-[-0.02em]">What breaks if this goes down?</h1>
+            <h2 className="font-display text-2xl font-semibold tracking-[-0.01em]">What breaks if this goes down?</h2>
             <p className="mt-2 max-w-2xl text-sm text-ink-2">
               Backbone, city POPs and area OLTs, stored in FalkorDB next to customer memory. Size shows how critical a node is
               (<code className="font-mono text-xs">algo.betweenness</code>). Fail a node: the NOC agent traverses the graph to every customer
@@ -99,7 +94,6 @@ export default function NetworkPage() {
                 {net.countries.map((c) => <option key={c.iso} value={c.iso}>{c.name}</option>)}
               </select>
             )}
-            <span className={`chip ${status === 'live' ? 'bg-current-tint text-current' : 'bg-conflict-tint text-conflict'}`}>{status === 'live' ? 'Live' : 'Reconnecting'} · mem:{tenant}</span>
           </div>
         </div>
         {error && <p className="mt-6 text-sm text-danger" role="alert">{error}</p>}
@@ -170,6 +164,11 @@ export default function NetworkPage() {
                       {node.status === 'up'
                         ? <button className="btn-primary !bg-danger text-sm" disabled={busy} onClick={() => act('fail')}>Simulate failure</button>
                         : <button className="btn-primary text-sm" disabled={busy} onClick={() => act('restore')}>Restore</button>}
+                      {onHub && node.city && (hubCustomers?.(node.city) ?? 0) > 0 && (
+                        <button className="btn-ghost text-sm hairline" onClick={() => onHub(node.city!)}>
+                          Open {node.city}'s line in the lab
+                        </button>
+                      )}
                     </div>
                   </>
                 ) : <p className="text-sm text-ink-2">Pick a node to see it, or simulate a failure. Try <strong>Core West</strong>: Pune is single-homed on it.</p>}
@@ -197,7 +196,6 @@ export default function NetworkPage() {
             </aside>
           </div>
         )}
-      </main>
     </div>
   )
 }

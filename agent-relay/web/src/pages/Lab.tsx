@@ -2,6 +2,8 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { Wordmark } from '../components/Brand'
+import { ConsoleNav } from '../components/console/ConsoleNav'
+import { NetworkMap } from '../components/console/NetworkMap'
 import { MemoryPanel } from '../components/portal/MemoryPanel'
 import { SupportDesk } from '../components/portal/SupportChat'
 import type { Chip } from '../lib/chips'
@@ -12,7 +14,7 @@ import { BOT } from '../lib/brand'
 import { useRelayStream } from '../lib/stream'
 import { useTenant } from '../lib/tenant'
 import { touchOf, useTouchTick } from '../lib/touch'
-import type { Customer, LabHome, LabManual, LabMessage, LabOlt, LabPreset, LabRun, LabStep, LabView, RelayEvent } from '../lib/types'
+import type { Customer, LabHome, LabManual, LabMessage, LabOlt, LabPreset, LabProcedure, LabRun, LabStep, LabView, RelayEvent } from '../lib/types'
 
 const SPRING = { type: 'spring', stiffness: 380, damping: 32 } as const
 const C = { ok: 'rgb(var(--signal))', bad: 'rgb(var(--danger))', warn: 'rgb(var(--conflict))', idle: 'rgb(255 255 255 / 0.22)', frozen: '#8fa2ff' }
@@ -241,6 +243,42 @@ const TONE: Record<LabStep['status'], string> = {
   ok: 'bg-current-tint text-current', bad: 'bg-danger-tint text-danger', info: 'bg-signal-tint text-signal-deep', pending: 'bg-conflict-tint text-conflict',
 }
 
+const ACTION_LABEL = Object.fromEntries(ACTIONS)
+const HOPS: Record<number, string> = { 0: 'same cabinet', 2: 'same exchange', 4: 'same hub' }
+export const ProcBadge = () => <span className="chip bg-signal-tint !py-0.5 text-[10px] text-signal-deep"><Database className="h-3 w-3" />procedural memory</span>
+
+/** A past procedure from the graph: the path it took, how often it worked, and how close the cases were. */
+export function ProcedureCard({ p }: { p: LabProcedure }) {
+  const total = p.successes + p.failures
+  const rate = p.rate ?? (total ? p.successes / total : 0)
+  return (
+    <div className="mt-2 rounded-xl bg-sunk/60 p-2.5 text-xs">
+      {p.steps && p.steps.length > 0 && (
+        <p className="flex flex-wrap items-center gap-1" aria-label="Past path">
+          {p.steps.map((x, i) => (
+            <span key={i} className="flex items-center gap-1">
+              {i > 0 && <span aria-hidden className="text-ink-3">→</span>}
+              <span className={`rounded-full px-2 py-0.5 text-[10.5px] ${i === p.steps!.length - 1 ? 'bg-ink font-medium text-paper' : 'bg-surface text-ink-2 hairline'}`}>{ACTION_LABEL[x] ?? x.replace(/_/g, ' ')}</span>
+            </span>
+          ))}
+        </p>
+      )}
+      <div className="mt-2 flex items-center gap-2">
+        <div className="flex h-1.5 flex-1 overflow-hidden rounded-full bg-danger/25" role="meter" aria-label="Success rate" aria-valuenow={Math.round(rate * 100)} aria-valuemin={0} aria-valuemax={100}>
+          <div className="h-full bg-current" style={{ width: `${rate * 100}%` }} />
+        </div>
+        <span className="num shrink-0 text-[10.5px] text-ink-2">{Math.round(rate * 100)}% · {p.successes} worked, {p.failures} failed</span>
+      </div>
+      {(p.nearest_hops != null || (p.places?.length ?? 0) > 0) && (
+        <p className="mt-1.5 text-[10.5px] text-ink-3">
+          {p.nearest_hops != null && <>Nearest case: <span className="font-medium text-ink-2">{HOPS[p.nearest_hops] ?? `${p.nearest_hops} hops away`}</span></>}
+          {p.places?.length ? <>{p.nearest_hops != null ? ' · ' : ''}seen at {p.places.slice(0, 4).map((x) => `${x.at.replace(/^e:/, '')}${x.times > 1 ? ` ×${x.times}` : ''}`).join(', ')}</> : null}
+        </p>
+      )}
+    </div>
+  )
+}
+
 function Step({ s, live }: { s: LabStep; live: boolean }) {
   const [open, setOpen] = useState(false)
   const pending = s.status === 'pending' && live
@@ -252,11 +290,13 @@ function Step({ s, live }: { s: LabStep; live: boolean }) {
         <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-ink-3">{KIND[s.kind].label}{s.kind === 'think' && s.data.by ? ` · ${s.data.by === 'rules' ? 'rule engine' : s.data.by.split('/').pop()}` : ''}</p>
         <p className="text-sm font-medium leading-snug text-ink">{s.title}</p>
         {s.detail && <p className="mt-0.5 text-xs leading-relaxed text-ink-2">{s.detail}</p>}
+        {s.data.by === 'procedural memory' && <p className="mt-1"><ProcBadge /></p>}
         {s.kind === 'think' && s.data.by && s.data.by !== 'rules' && (
           <p className={`mt-1 text-[11px] ${s.data.agrees ? 'text-current' : 'text-conflict'}`}>{s.data.agrees ? 'Rule engine agrees' : `Rule engine would say: ${String(s.data.rules?.cause).replace(/_/g, ' ')}`}</p>
         )}
         {more && <p className="mt-1 text-[11px] font-medium text-signal-deep">{open ? 'Hide details' : s.cypher.length ? `Show the ${s.cypher.length > 1 ? 'queries' : 'query'}` : 'Show details'}</p>}
       </button>
+      {s.data.procedure && <ProcedureCard p={s.data.procedure as LabProcedure} />}
       <AnimatePresence initial={false}>
         {open && (
           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
@@ -290,6 +330,7 @@ export function Trace({ run }: { run?: LabRun }) {
         {run.ticket && <span className="chip bg-sunk font-mono text-ink-2">{run.ticket}</span>}
         <span className={`chip ${live ? 'bg-conflict-tint text-conflict' : run.status === 'resolved' ? 'bg-current-tint text-current' : 'bg-danger-tint text-danger'}`}>
           {live && <i className="h-1.5 w-1.5 rounded-full bg-conflict animate-breathe" />}{live ? 'working' : run.status}</span>
+        {run.diagnosis?.by === 'procedural memory' && <ProcBadge />}
       </div>
       {run.said && <p className="mt-1 text-xs text-ink-3">Said: <span className="italic text-ink-2">“{run.said}”</span>{run.symptoms.length > 0 && <> · heard: {run.symptoms.join(', ')}</>}</p>}
       <div ref={box} className="scroll-thin mt-4 max-h-[540px] overflow-y-auto pr-1">
@@ -409,6 +450,11 @@ export default function LabPage() {
   const [params, setParams] = useSearchParams()
   const talk = params.get('talk') === '1'
   const setTalk = (on: boolean) => setParams(on ? { talk: '1' } : {}, { replace: false })
+  // map view: the whole region zoomed out; a hub opens its customers back here in the lab
+  const map = params.get('view') === 'map'
+  const setMap = (on: boolean) => setParams(on ? { view: 'map' } : {}, { replace: false })
+  const inCity = (city: string) => (view?.customers ?? []).filter((c) => c.city.toLowerCase() === city.toLowerCase())
+  const openHub = (city: string) => { const c = inCity(city)[0]; if (c) { setFocus(c.key); setManual((m) => ({ action: m.action })) } setMap(false) }
   const [chips, setChips] = useState<Chip[]>([])
   const [people, setPeople] = useState<Customer[]>([])
   const [breakKey, setBreakKey] = useState('random')
@@ -540,19 +586,32 @@ export default function LabPage() {
 
   return (
     <div className="min-h-[100dvh]">
-      <header className="mx-auto flex max-w-[1400px] items-center justify-between px-4 py-5 sm:px-6">
-        <Link to="/console"><Wordmark sub="Network console" /></Link>
+      <header className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-between gap-3 px-4 py-5 sm:px-6">
+        <Link to="/console"><Wordmark sub="Network" /></Link>
+        <ConsoleNav />
         <div className="flex items-center gap-2">
           <span className={`chip ${status === 'live' ? 'bg-current-tint text-current' : 'bg-conflict-tint text-conflict'}`}>
             <i className={`h-1.5 w-1.5 rounded-full ${status === 'live' ? 'bg-current animate-breathe' : 'bg-conflict'}`} />{status === 'live' ? 'Live' : 'Reconnecting'} · mem:{tenant}</span>
           <button className="btn-primary !py-1.5 text-sm" onClick={() => setTalk(true)}>Talk as a customer</button>
-          <Link to="/console/graph" className="btn-ghost hidden text-sm sm:inline-flex">Memory graph</Link>
-          <Link to="/console/network" className="btn-ghost hidden text-sm sm:inline-flex">Network ops</Link>
-          <Link to="/console" className="btn-ghost text-sm">Console</Link>
         </div>
       </header>
 
-      <main className="mx-auto max-w-[1400px] px-4 pb-20 sm:px-6">
+      <div className="mx-auto max-w-[1400px] px-4 pb-4 sm:px-6">
+        <div role="tablist" aria-label="Network view" className="inline-flex rounded-full bg-surface p-1 hairline">
+          {([[false, 'One line · lab'], [true, 'Whole region · map']] as const).map(([m, label]) => (
+            <button key={label} role="tab" aria-selected={map === m} onClick={() => setMap(m)}
+              className={`rounded-full px-3.5 py-1.5 text-xs transition duration-300 ease-spring ${map === m ? 'bg-ink font-medium text-paper' : 'text-ink-2 hover:bg-sunk'}`}>{label}</button>
+          ))}
+        </div>
+      </div>
+
+      {map ? (
+        <main className="mx-auto max-w-[1400px] px-4 pb-20 sm:px-6" role="tabpanel">
+          {error && <p className="mb-4 rounded-xl bg-danger-tint px-4 py-2 text-sm text-danger" role="alert">{error}</p>}
+          <NetworkMap tenant={tenant} subscribe={subscribe} onHub={openHub} hubCustomers={(city) => inCity(city).length} />
+        </main>
+      ) : (
+      <main className="mx-auto max-w-[1400px] px-4 pb-20 sm:px-6" role="tabpanel">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="max-w-2xl">
             <p className="eyebrow">Resolver agent · diagnose, act, verify</p>
@@ -712,6 +771,7 @@ export default function LabPage() {
           </section>
         </div>
       </main>
+      )}
     </div>
   )
 }

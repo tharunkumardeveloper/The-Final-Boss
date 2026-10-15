@@ -2,6 +2,7 @@ import { BOT } from '../lib/brand'
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { Wordmark } from '../components/Brand'
+import { ConsoleNav } from '../components/console/ConsoleNav'
 import { api } from '../lib/api'
 import { titleCase } from '../lib/format'
 import { useRelayStream } from '../lib/stream'
@@ -140,9 +141,9 @@ export default function SharingPage() {
 
   return (
     <div className="min-h-[100dvh]">
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-4 py-5 sm:px-6">
+      <header className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-5 sm:px-6">
         <Link to="/console"><Wordmark sub="Knowledge sharing" /></Link>
-        <Link to="/console" className="btn-ghost text-sm">Back to console</Link>
+        <ConsoleNav />
       </header>
       <main className="mx-auto max-w-6xl px-4 pb-20 sm:px-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
