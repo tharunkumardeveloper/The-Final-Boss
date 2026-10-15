@@ -6,6 +6,9 @@ import os
 import re
 import threading
 import time
+import uuid
+
+from relay import memory as relay_memory
 from datetime import datetime
 
 from fastapi import Body, FastAPI, HTTPException, WebSocket, WebSocketDisconnect
@@ -536,6 +539,39 @@ def run_query(tenant: str, body: QueryIn):
     cols = [h[1] if isinstance(h, (list, tuple)) else str(h) for h in res.header]
     return {"columns": cols, "rows": [[_plain(v) for v in r] for r in res.result_set[:200]],
             "count": len(res.result_set), "ms": ms}
+
+
+# --- canary test: plant a unique marker in one tenant's graph, hunt for it from every other tenant, then remove it.
+CANARY_SWEEP = """
+MATCH (n) WHERE (n:Entity AND (n.name_key STARTS WITH 'canary ' OR n.name_key ENDS WITH ' canary street')) OR (n:Fact AND n.triple_key CONTAINS 'canary ')
+   OR (n:Episode AND n.session_id STARTS WITH 'canary-') OR (n:Session AND n.session_id STARTS WITH 'canary-')
+WITH n LIMIT 200 DETACH DELETE n RETURN count(*)
+"""
+
+
+@app.post("/api/tenants/{tenant}/canary")
+def plant_canary(tenant: str):
+    """Write a unique marker into this tenant's graph only: a customer 'canary <token>' with an address fact. No model call.
+    Any canary left over from an earlier, interrupted test is swept first."""
+    T(tenant)
+    db.run(tenant, "canary: sweep old", CANARY_SWEEP)
+    token = uuid.uuid4().hex[:6]
+    customer, value = f"canary {token}", f"{token} canary street"
+    out = relay_memory.remember(tenant, agent="intake", session_id=f"canary-{token}", customer=customer, at=now_ms(tenant),
+                          text=f"isolation audit: canary {token} planted", facts=[(customer, "address", value)])
+    return {"token": token, "customer": customer, "value": value, "graph": db.key(tenant),
+            "facts": [f.get("fact_id") for f in out.get("facts", []) if isinstance(f, dict)]}
+
+
+@app.delete("/api/tenants/{tenant}/canary/{token}")
+def remove_canary(tenant: str, token: str):
+    """Delete the marker (its entity, fact, episode and session), then count what is left: should be 0."""
+    T(tenant)
+    if not re.fullmatch(r"[0-9a-f]{6}", token):
+        raise HTTPException(400, "bad token")
+    db.run(tenant, "canary: remove", CANARY_SWEEP)
+    left = db.run(tenant, "canary: count left", "MATCH (n:Entity) WHERE n.name_key CONTAINS $t RETURN count(n)", {"t": token}, ro=True)
+    return {"token": token, "left": left[0][0] if left else 0}
 
 
 @app.get("/api/tenants/{tenant}/schema")

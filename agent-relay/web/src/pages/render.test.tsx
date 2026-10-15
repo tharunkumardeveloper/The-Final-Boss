@@ -37,8 +37,8 @@ describe('pages render', () => {
   it('agent team, tenants, database', () => {
     wrap(<Sharing />)
     const t = wrap(<Tenants />)
-    expect(t).toContain('One graph per region')
-    expect(t).toContain('Try to break into another tenant')
+    expect(t).toContain('Plant a secret in one region')
+    expect(t).toContain('Run the canary test')
     wrap(<Database />)
   })
   it('benchmark', () => {
