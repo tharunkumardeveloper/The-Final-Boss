@@ -2,6 +2,7 @@ import re
 import time
 from functools import lru_cache
 
+import redis
 from falkordb import FalkorDB
 
 from . import config, events, queries as Q
@@ -26,7 +27,15 @@ def run(tenant, name, query, params=None, log=None, ro=False):
     params = params or {}
     g = graph(tenant)
     t = time.perf_counter()
-    rows = (g.ro_query(query, params, timeout=config.READ_TIMEOUT_MS) if ro else g.query(query, params)).result_set
+    for attempt in range(3):  # the cloud drops idle links now and then; the pool opens a fresh one on the next call
+        try:
+            rows = (g.ro_query(query, params, timeout=config.READ_TIMEOUT_MS) if ro else g.query(query, params)).result_set
+            break
+        except (redis.exceptions.ConnectionError, redis.exceptions.TimeoutError):
+            # ponytail: a write retried after a drop may already have applied; ours are MERGE-based, so a rerun is a no-op
+            if attempt == 2:
+                raise
+            time.sleep(0.5 * (attempt + 1))
     ms = round((time.perf_counter() - t) * 1000, 1)
     if log is not None:
         log.append({"name": name, "query": query.strip(),
