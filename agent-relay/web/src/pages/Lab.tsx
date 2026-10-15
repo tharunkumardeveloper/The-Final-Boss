@@ -583,7 +583,9 @@ export default function LabPage() {
   const [breakKey, setBreakKey] = useState('random')
   const [pick, setPick] = useState<string>()
   const [side, setSide] = useState<'trace' | 'phone'>('trace')
-  const onWho = useCallback((w: string | null) => { if (w) setFocus(w) }, [])
+  // talk mode acts on whoever you are chatting as, never on the page's default customer
+  const [chatter, setChatter] = useState<string | null>(null)
+  const onWho = useCallback((w: string | null) => { setChatter(w); if (w) setFocus(w) }, [])
   const refreshPeople = useCallback(() => { api.customers(tenant).then(setPeople).catch(() => {}) }, [tenant])
   useEffect(() => { if (talk) refreshPeople() }, [talk, refreshPeople])
   useEffect(() => subscribe((e) => { if (e.type === 'fact_created' && e.data.predicate === 'lives_in') refreshPeople() }), [subscribe, refreshPeople])
@@ -646,7 +648,10 @@ export default function LabPage() {
             {s && s.investigated > 0 && <span className="chip bg-surface !py-1 text-ink-2 hairline num">right {s.correct}/{s.investigated} · fixed & proven {s.fixed}/{s.investigated}</span>}
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            {focus && mine && (
+            {!chatter && <span className="chip bg-surface text-ink-3 hairline">Tell {BOT} who you are to break your line</span>}
+            {chatter && !custs.some((c) => c.key === chatter) && (
+              <span className="chip bg-surface text-ink-3 hairline">{titleCase(chatter.split(' ')[0])} has no line yet · say where you live</span>)}
+            {chatter && focus === chatter && mine && custs.some((c) => c.key === chatter) && (
               <div className="flex items-center gap-1 rounded-full bg-surface p-1 hairline">
                 <label htmlFor="talk-break" className="sr-only">Fault</label>
                 <select id="talk-break" className="rounded-full bg-transparent px-2 py-1 text-xs text-ink-2 outline-none" value={breakKey} onChange={(e) => setBreakKey(e.target.value)}>
@@ -661,7 +666,7 @@ export default function LabPage() {
                       else await api.labInject(tenant, { preset: breakKey, customer: focus, complain: false })
                       await load()
                     } catch (e) { setError(e instanceof Error ? e.message.replace(/^.*"detail":"?|"?}$/g, '') : 'That did not go through.') } finally { setBusy(undefined) }
-                  }}>{busy === 'talk-break' ? 'Breaking…' : `Break ${me?.name.split(' ')[0] ?? ''}'s line`}</button>
+                  }}>{busy === 'talk-break' ? 'Breaking…' : `Break ${titleCase(chatter.split(' ')[0])}'s line`}</button>
               </div>
             )}
             <button className="btn-ghost !py-1.5 text-xs hairline" disabled={!!busy} onClick={heal}>Heal all</button>
