@@ -6,7 +6,7 @@ from . import agents, db, queries as Q, registry as R, retrieve
 
 VERB = {"lives_in": "lives in", "on_plan": "is on", "has_router": "has the router", "prefers_channel": "prefers contact by",
         "has_ticket": "has ticket", "owns_device": "owns", "reported_issue": "reported", "has_status": "status is",
-        "assigned_to": "is assigned to", "ticket_about": "is about", "tried_fix": "tried", "resolves": "resolves",
+        "assigned_to": "is assigned to", "ticket_about": "is about", "tried_fix": "tried", "fixed_by": "was fixed by", "resolves": "resolves",
         "affects": "affects", "moving_to": "is planning to move to", "interested_in": "is interested in",
         "budget": "has a budget of", "household_size": "has a household of", "wants_to_buy": "wants to buy",
         "current_provider": "currently uses", "occupation": "works as", "visit_reason": "came about",

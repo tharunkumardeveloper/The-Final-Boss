@@ -249,7 +249,7 @@ class Resolver:
         customer = info["customer"]
         facts = [(ticket, "tried_fix", fix)]
         if worked:
-            facts += [(fix, "resolves", i) for i in info["issues"]] + [(ticket, "has_status", "resolved")]
+            facts += [(fix, "resolves", i) for i in info["issues"]] + [(ticket, "fixed_by", fix), (ticket, "has_status", "resolved")]
         out = memory.remember(tenant, agent=self.id, session_id=f"work-{ticket}", customer=customer, at=at,
                               text=f"resolver tried '{fix}' on {ticket.upper()}: {'worked' if worked else 'did not work'}",
                               facts=facts, log=log)

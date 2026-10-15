@@ -4,7 +4,8 @@
 4. a customer's legacy plan ("basic 50") is kept; plans to buy still need the catalogue
 5. an open invoice request doesn't swallow a new fault: the fault opens its own ticket
 6. a topic word in a name slot ("for slow speeds") is not an unknown person; "for Kevin" still is
-3. recall's fact cap drops the farthest facts first, never a 1-hop fact for a far one"""
+3. recall's fact cap drops the farthest facts first, never a 1-hop fact for a far one
+7. the fix that worked is its own edge (ticket fixed_by fix), apart from everything tried; lab fixes use the team's names"""
 from relay import queries as Q
 from relay import agents, db, lab, llm, memory, retrieve, tools
 
@@ -115,6 +116,19 @@ def topic_words_are_not_names():
     assert r["unknown"] == ["kevin"] and r["lines"] == []
 
 
+def fixed_by_names_the_fix_that_worked():
+    c = "ravi menon"
+    say(c, (c, "has_ticket", "t-7"), ("t-7", "has_status", "open"), ("t-7", "ticket_about", "evening wifi drops"))
+    r = agents.Resolver()
+    r.try_fix(T, ticket="t-7", fix="restart router", worked=False, at="2026-10-01T12:00:00+05:30")
+    assert active("t-7", "fixed_by") == set(), "a fix that didn't work is tried, not fixed_by"
+    r.try_fix(T, ticket="t-7", fix="change wifi channel", worked=True, at="2026-10-01T13:00:00+05:30")
+    assert active("t-7", "tried_fix") == {"restart router", "change wifi channel"}
+    assert active("t-7", "fixed_by") == {"change wifi channel"}
+    assert lab.FIX_NAME["change_wifi_channel"] == "change wifi channel"  # one name per fix, lab and team alike
+    assert lab.FIX_NAME["dispatch_technician_home"] == "replace fiber cable"
+
+
 if __name__ == "__main__":
     db.reset(T)
     try:
@@ -124,6 +138,7 @@ if __name__ == "__main__":
         legacy_plan_kept()
         fault_after_request_gets_its_own_ticket()
         topic_words_are_not_names()
+        fixed_by_names_the_fix_that_worked()
         print("test_write_resolution: all passed")
     finally:
         db.graph(T).delete()

@@ -19,7 +19,7 @@ export const ticketLabel = (t: string) => t.toUpperCase()
 const PREDICATES: Record<string, string> = {
   lives_in: 'lives in', on_plan: 'is on', has_router: 'has router', prefers_channel: 'prefers',
   has_ticket: 'has ticket', owns_device: 'owns', reported_issue: 'reported', has_status: 'status',
-  assigned_to: 'assigned to', ticket_about: 'is about', tried_fix: 'tried', resolves: 'resolves', affects: 'affects',
+  assigned_to: 'assigned to', ticket_about: 'is about', tried_fix: 'tried', fixed_by: 'was fixed by', resolves: 'resolves', affects: 'affects',
   moving_to: 'moving to', interested_in: 'interested in', budget: 'budget', household_size: 'household of',
   wants_to_buy: 'wants to buy', current_provider: 'currently with',
   awaiting: 'still to tell us their', occupation: 'works as', visit_reason: 'came about', asked_about: 'asked about', requested: 'asked us to', plays_game: 'plays', watches: 'watches', address: 'address:',

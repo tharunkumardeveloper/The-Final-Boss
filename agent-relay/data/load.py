@@ -37,6 +37,15 @@ def load_scenario(tenant, reset=True, progress=None):
         db.reset(tenant)
     intake, resolver = agents.Intake(), agents.Resolver()
     report = []
+    from relay import lab
+    lab.SCRIPTED.add(tenant)  # the benchmark replays a scripted world: the lab must not improvise faults and fixes on top
+    try:
+        return _load(tenant, events, intake, resolver, report, progress)
+    finally:
+        lab.SCRIPTED.discard(tenant)
+
+
+def _load(tenant, events, intake, resolver, report, progress):
     for i, ev in enumerate(events):
         row = {k: ev[k] for k in ("type", "customer", "at")}
         if ev["type"] == "turn":

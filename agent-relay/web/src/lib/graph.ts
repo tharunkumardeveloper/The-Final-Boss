@@ -5,7 +5,7 @@ export const PREDICATE_KINDS: Record<string, [string, string]> = {
   lives_in: ['customer', 'city'], on_plan: ['customer', 'plan'], has_router: ['customer', 'router'],
   prefers_channel: ['customer', 'channel'], has_ticket: ['customer', 'ticket'], owns_device: ['customer', 'device'],
   reported_issue: ['customer', 'issue'], has_status: ['ticket', 'status'], assigned_to: ['ticket', 'agent'],
-  ticket_about: ['ticket', 'issue'], tried_fix: ['ticket', 'fix'], resolves: ['fix', 'issue'], affects: ['outage', 'city'],
+  ticket_about: ['ticket', 'issue'], tried_fix: ['ticket', 'fix'], fixed_by: ['ticket', 'fix'], resolves: ['fix', 'issue'], affects: ['outage', 'city'],
 }
 
 // Entity keys are stored lowercase (tickets arrive as PML-2041, live as e:pml-2041).

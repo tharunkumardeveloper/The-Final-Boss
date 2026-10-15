@@ -22,6 +22,7 @@ ISP = {
     "ticket_about":    ("ticket",   "issue",   "multi",  "semantic",     "trust"),
     "tried_fix":       ("ticket",   "fix",     "multi",  "episodic",     "trust"),
     "resolves":        ("fix",      "issue",   "multi",  "procedural",   "trust"),
+    "fixed_by":        ("ticket",   "fix",     "single", "procedural",   "latest"),  # the tried fix that worked
     "affects":         ("outage",   "city",    "multi",  "semantic",     "trust"),
     # what a prospect or customer is planning or wants: kept apart from what is true now
     "moving_to":        ("customer", "city",     "single", "semantic", "trust"),

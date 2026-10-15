@@ -97,8 +97,8 @@ CAUSES = {  # what the resolver can conclude -> the action that addresses it
 }
 TRUE_CAUSE = {"hub_link_dual": "hub_link_down", "hub_link_single": "hub_link_down"}  # preset -> cause name
 FIX_NAME = {  # procedural memory: the fix as the team would name it
-    "remote_reboot": "remote box restart", "change_wifi_channel": "wifi channel change",
-    "dispatch_technician_home": "home fibre replacement", "dispatch_cable_crew": "street cable repair",
+    "remote_reboot": "remote box restart", "change_wifi_channel": "change wifi channel",  # the team's own fix names
+    "dispatch_technician_home": "replace fiber cable", "dispatch_cable_crew": "street cable repair",
     "reroute_standby": "reroute via standby link", "dispatch_backbone_crew": "hub link repair",
     "upgrade_uplink": "area uplink upgrade", "send_payment_link": "payment reactivation",
 }
@@ -1210,7 +1210,7 @@ def _remember_fix(run, before, after, tried):
                 f"{before['flow_gbps']:g} Gbps, {before['free_peak_mbps']} Mbps free at 9 pm; after: light {after['rx']} dBm, "
                 f"box {after['box']}, login {after['session']}, {after['flow_gbps']:g} Gbps, "
                 f"{after['free_peak_mbps']} Mbps free at 9 pm")
-    facts = [(run.ticket, "tried_fix", fix), (run.ticket, "has_status", "resolved")] + \
+    facts = [(run.ticket, "tried_fix", fix), (run.ticket, "fixed_by", fix), (run.ticket, "has_status", "resolved")] + \
             [(fix, "resolves", norm(i)) for i in issues[:2]]
     memory.remember(run.tenant, agent="resolver", session_id=f"work-{run.ticket}", customer=run.customer, at=_ms(),
                     text=f"resolver verified '{fix}' on {run.ticket.upper()} by re-measuring ({evidence})", facts=facts)
