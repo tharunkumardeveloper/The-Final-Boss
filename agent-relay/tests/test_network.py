@@ -57,5 +57,39 @@ def test_all():
     print("test_network: all checks passed")
 
 
+
+def blast_radius_decides():
+    """The resolver calls the catalogue's affected_by tool before acting on an upstream fault; its answer sets priority."""
+    from relay import lab, memory
+    T = "test-blast-radius"
+    db.reset(T)
+    try:
+        for c in ("alice rao", "bob menon"):
+            memory.remember(T, agent="intake", session_id=f"s-{c}", customer=c, at="2026-10-15T10:00:00+05:30", text="t",
+                            facts=[(c, "lives_in", "mumbai")])
+        lab.ensure(T)
+        m = lab.measure(T, "alice rao")
+        steps = []
+
+        class Run:
+            tenant, customer, ticket = T, "alice rao", None
+            def step(self, *a, **k):
+                steps.append((a, k))
+        others = lab._blast_radius(Run(), "dispatch_cable_crew", m)
+        assert others == ["bob menon"], others
+        (kind, title, detail, *_), kw = steps[0]
+        assert kind == "think" and "Blast radius: 2 customers" in title and "affected_by(node=" in detail
+        assert kw["data"]["priority"] == "high" and kw["data"]["tool"] == "affected_by"
+        assert lab._blast_radius(Run(), "remote_reboot", m) is None, "a fault inside one home has no blast radius"
+    finally:
+        db.graph(T).delete()
+        try:
+            db.client().select_graph("chaos:" + T).delete()
+        except Exception:
+            pass
+
+
 if __name__ == "__main__":
     test_all()
+    blast_radius_decides()
+    print("blast radius: checks passed")

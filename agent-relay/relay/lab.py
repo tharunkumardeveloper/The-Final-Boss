@@ -975,6 +975,7 @@ def investigate(run):
                 run.tell("No rush. I'll book the visit as soon as you send those details.")
                 run.data["status"] = "waiting on customer"
                 return
+        blast = _blast_radius(run, d["action"], m)  # a graph tool decides priority and who to warn, before acting
         tried.append(d["action"])
         run.data["actions"].append(d["action"])
         last = d["action"]
@@ -992,7 +993,7 @@ def investigate(run):
         else:
             run.tell(_say("act", m, action=d["action"], tech=run.data.get("technician"), retry=len(tried) > 1))
         if d["action"] in ("dispatch_cable_crew", "dispatch_backbone_crew"):
-            _notify_area(run, d["action"], m)
+            _notify_area(run, d["action"], m, blast)
         if res["delayed"]:
             run.step("wait", "Waiting for the field job", f"Fast-forwarded: {res['delayed']} s in the lab "
                      f"(about {'2 hours' if d['action'] != 'send_payment_link' else 'a few minutes'} in real life).",
@@ -1188,15 +1189,48 @@ def _say(phase, m, action=None, cause=None, tech=None, before=None, retry=False)
     }.get(action, f"Everything checks out, {first}. You're good to go.")
 
 
-def _notify_area(run, action, m):
-    """Tell the other real customers behind the same fault before they have to complain."""
+# where a fault that isn't in one home sits, and how far below it the customers are (customer -> box -> cabinet -> exchange -> hub)
+UPSTREAM = {"dispatch_cable_crew": ("splitter", 2, "street cabinet"), "upgrade_uplink": ("olt", 3, "exchange"),
+            "reroute_standby": ("pop", 4, "hub"), "dispatch_backbone_crew": ("pop", 4, "hub")}
+
+
+def _blast_radius(run, action, m):
+    """The resolver's graph tool, called mid-decision, before it acts: who else hangs below the failing node. It is the
+    same typed catalogue tool MCP clients get (tools_catalog.affected_by, a bounded traversal returning each path).
+    Its answer decides the ticket's priority (one field job clears everyone behind the node) and who is warned first."""
+    if action not in UPSTREAM:
+        return None
+    from . import tools_catalog  # lazy: the catalogue imports the network module, which imports this one's callers
+    where, depth, word = UPSTREAM[action]
+    node, log = m[where], []
+    out = tools_catalog.call(run.tenant, "affected_by", {"node": node["id"], "depth": depth}, log)
+    people = sorted({r["id"] for r in out["result"] if r["kind"] == "customer"})
+    others = [c for c in people if c != run.customer]
+    if others and run.ticket:
+        memory.remember(run.tenant, agent="resolver", session_id=f"work-{run.ticket}", customer=run.customer, at=_ms(),
+                        text=f"resolver raised {run.ticket.upper()} to high priority: {len(people)} customers are behind "
+                             f"{node['label']}", facts=[(run.ticket, "has_priority", "high")], log=log)
+    decision = (f"high priority: one field job clears all {len(people)}, and the other {len(others)} are warned before they complain"
+                if others else f"normal priority: only {_first(run.customer)} is behind it")
+    run.step("think", f"Blast radius: {len(people)} customer{'s' if len(people) != 1 else ''} behind the {word} {node['label']}",
+             f"Graph tool affected_by(node={node['id']}, depth={depth}): {out['rows']} nodes below it in {out['ms']} ms. "
+             f"Decision: {decision}.", "info", log=log,
+             data={"tool": "affected_by", "args": {"node": node["id"], "depth": depth}, "customers": people,
+                   "priority": "high" if others else "normal", "outcome": out["outcome"]})
+    return others
+
+
+def _notify_area(run, action, m, others=None):
+    """Tell the other real customers behind the same fault before they have to complain: the ones the blast-radius
+    tool found (or, if it didn't run, the same walk below the cabinet or hub)."""
     t = run.tenant
     where = "street cabinet" if action == "dispatch_cable_crew" else "hub"
-    rows = (_q(t, "customers on the cabinet", "MATCH (s:Splitter {node_id:$s})<-[:DROP]-(o:Ont) WHERE o.customer IS NOT NULL "
-               "RETURN o.customer", {"s": m["splitter"]["id"]}, ro=True) if where == "street cabinet" else
-            _q(t, "customers on the hub", "MATCH (:Pop {node_id:$p})<-[:UPLINK]-(:Olt)<-[:PON]-(:Splitter)<-[:DROP]-(o:Ont) "
-               "WHERE o.customer IS NOT NULL RETURN o.customer", {"p": m["pop"]["id"]}, ro=True))
-    others = sorted({r[0] for r in rows} - {run.customer})
+    if others is None:
+        rows = (_q(t, "customers on the cabinet", "MATCH (s:Splitter {node_id:$s})<-[:DROP]-(o:Ont) WHERE o.customer IS NOT NULL "
+                   "RETURN o.customer", {"s": m["splitter"]["id"]}, ro=True) if where == "street cabinet" else
+                _q(t, "customers on the hub", "MATCH (:Pop {node_id:$p})<-[:UPLINK]-(:Olt)<-[:PON]-(:Splitter)<-[:DROP]-(o:Ont) "
+                   "WHERE o.customer IS NOT NULL RETURN o.customer", {"p": m["pop"]["id"]}, ro=True))
+        others = sorted({r[0] for r in rows} - {run.customer})
     for c in others:
         at = _ms()
         memory.remember(t, agent="resolver", session_id=network._session(c, at), customer=c, at=at, facts=[],

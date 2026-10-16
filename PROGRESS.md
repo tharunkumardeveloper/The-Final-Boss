@@ -271,6 +271,15 @@ Known gaps at the time: the "now vs then" demo needs a customer who has moved; "
 
 Known gaps: none of the screens in this phase were clicked through by us in a browser (the browser extension was not connected); they are checked by builds, render tests and the live API. "Where does kevin zzz live?" links to Kevin through the unique-first-name rule while the tool catalogue calls the same name unknown.
 
+### Phase 20: The final measurement, and two fixes the reviewers asked for
+| Item | What changed |
+|---|---|
+| Final measurement | Benchmark graph reloaded on the final code (resumed at the exact event where a killed run stopped; the per-event report for the first part rebuilt from the graph's own episodes and DERIVED facts), all 160 questions answered by one model for both systems, two external checks (out-of-distribution extraction, LoCoMo). Results in section 6 |
+| Abstention gates | Diagnosed first: one linking miss, four grounding misses, one bad stored fact. A near-miss of a customer's name counts as a typo only when that customer was linked; a question asking for a specific relation is answered only if a fact about the subject it names (or its ticket, or a linked ticket's owner) carries it. A first version refused 7 answerable multi-hop questions and was widened before re-scoring. The benchmark now uses the product's answer path. Recall 67% → 94%, precision 100%, 0 false refusals, accuracy 96.2% → 99.4% |
+| A graph algorithm as the resolver's tool, mid-decision | Before acting on a fault upstream of the home (street cabinet, exchange, hub), the resolver calls the catalogue's `affected_by` tool, the same typed tool MCP clients get: a bounded traversal of everything below the failing node. Its answer decides the ticket's priority (high when more than one customer is behind the node, written as a fact) and who is warned before they complain; the trace shows the tool call, its arguments and the decision. Checked end-to-end: a street cable cut with two customers on the cabinet → `affected_by(node=spl-mumbai-andheri, depth=2)`, 18 nodes in 77 ms, 2 customers, priority high, the other customer warned, crew sent, verified |
+| Groq key pool | Up to 12 Groq keys (`GROQ_API_KEY_2..12`), on Render too; the Gemini project is refused by Google (403) and is disabled |
+| Tests | `test_network` (blast radius decides priority, none for a fault inside one home), `test_write_resolution` (both abstention gates, including the multi-hop case that must not be refused) |
+
 ## 3. Architecture
 
 ```
