@@ -406,6 +406,11 @@ def plan_turn(tenant, *, customer, text, learned, ticket, history, first_turn, p
 
     if plan.ask is None and plan.missing:
         plan.ask = plan.missing[0]
+    if (plan.mode == "support" and ticket and plan.ask is None and not plan.missing and not plan.fixed
+            and asked_last in ASKED_ISSUE and lab.has_line(tenant, customer)):
+        # that was the last thing we needed: say the handoff, instead of "what can I help you with?"
+        plan.fixed = (f"Thanks, {_first(customer)}, that's everything I need. I've handed {ticket.upper()} to our "
+                      f"resolver, who's testing your line now and will message you right here.")
     if plan.ask and plan.ask.key == "choice":
         plan.ask = _choice(plans)
     if plan.ask is SALES[0] and _known(now, ("wants_to_buy",)):  # ordered: the install address, where they asked about

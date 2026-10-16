@@ -64,34 +64,55 @@ function AccountPanel({ tenant, who, customer, chips, subscribe, onAsk }: { tena
   )
 }
 
-/** Memory while the customer is talking; their own line once a case is open (a ticket, or the resolver on it).
- *  Either view is one click away in both states. */
+/** The third card. Memory while the customer is talking; once they have a line (a place) and a case (a ticket, or the
+ *  resolver on it), it becomes two tabs and opens on the network lab: their line live, the resolver at work. This is
+ *  what the console's old "Talk as a customer" screen showed, on the home page. */
 function GraphOrLine({ tenant, who, subscribe }: { tenant: string; who: string | null; subscribe: (fn: (e: RelayEvent) => void) => () => void }) {
   const [mode, setMode] = useState<'memory' | 'line'>('memory')
   const [hasCase, setHasCase] = useState(false)
-  const [fresh, setFresh] = useState(false)
-  const auto = useRef(false)  // already switched to their line for this case
-  useEffect(() => {  // a returning customer with a case still open gets the switch straight away
-    setMode('memory'); setFresh(false); setHasCase(false); auto.current = false
-    if (who) api.tickets(tenant).then((ts) => setHasCase(ts.some((t) => t.customer === who && t.status !== 'resolved'))).catch(() => {})
+  const [hasLine, setHasLine] = useState(false)
+  const auto = useRef(false)  // already opened the lab for this case: a manual switch back sticks
+  const checkLine = useCallback(() => {
+    if (who) api.lab(tenant, who).then((v) => setHasLine(v.focus === who && !!v.network)).catch(() => {})
   }, [tenant, who])
+  useEffect(() => {  // a returning customer with a case still open gets the tabs straight away
+    setMode('memory'); setHasCase(false); setHasLine(false); auto.current = false
+    if (!who) return
+    api.tickets(tenant).then((ts) => setHasCase(ts.some((t) => t.customer === who && t.status !== 'resolved'))).catch(() => {})
+    checkLine()
+  }, [tenant, who, checkLine])
   useEffect(() => subscribe((e) => {
-    const c = (e.data as { customer?: string })?.customer?.toLowerCase()
+    const d = e.data as { customer?: string; subject?: string; predicate?: string; speaker?: string; status?: string }
+    const c = (d?.customer ?? d?.subject)?.toLowerCase()
     if (!who || c !== who) return
+    if ((e.type === 'fact_created' || e.type === 'fact_superseded') && (d.predicate === 'lives_in' || d.predicate === 'address')) { setTimeout(checkLine, 600); return }
     // the resolver speaking in their chat is the surest sign it is on the case (its run events can arrive first or not at all)
-    const resolverSpoke = e.type === 'message' && (e.data as { speaker?: string }).speaker === 'resolver'
-    if (e.type === 'ticket_opened' || resolverSpoke || (e.type === 'lab_run' && (e.data as { status?: string }).status === 'running')) {
+    if (e.type === 'ticket_opened' || (e.type === 'message' && d.speaker === 'resolver') || (e.type === 'lab_run' && d.status === 'running')) {
       setHasCase(true)
-      if (e.type === 'ticket_opened' || !auto.current) { auto.current = true; setFresh(true); setMode('line') }  // once per case: toggling back sticks
+      if (e.type !== 'ticket_opened') setHasLine(true)  // the resolver only works on a line it found
     }
-  }), [subscribe, who])
+  }), [subscribe, who, checkLine])
+  const tabs = !!who && hasCase && hasLine
+  useEffect(() => { if (tabs && !auto.current) { auto.current = true; setMode('line') } }, [tabs])
+  const show = tabs ? mode : 'memory'
   return (
-    <div className="h-full min-h-[560px] xl:min-h-0">
-      <Suspense fallback={null}>
-        {mode === 'memory'
-          ? <MyGraph tenant={tenant} who={who} subscribe={subscribe} onLine={who ? () => { setMode('line'); setFresh(false) } : undefined} hasCase={hasCase} fresh={fresh} />
-          : <YourLine tenant={tenant} who={who} subscribe={subscribe} onMemory={() => setMode('memory')} />}
-      </Suspense>
+    <div className="flex h-full min-h-[560px] flex-col gap-2 xl:min-h-0">
+      {tabs && (
+        <div className="flex shrink-0 gap-1 self-start rounded-full bg-surface p-1 hairline" role="tablist" aria-label="Your graphs">
+          {([['line', 'Network lab'], ['memory', 'What we remember']] as const).map(([k, label]) => (
+            <button key={k} role="tab" aria-selected={show === k} onClick={() => setMode(k)}
+              className={`rounded-full px-3 py-1 text-xs font-medium ${show === k ? 'bg-ink text-paper' : 'text-ink-2 hover:bg-paper'}`}>
+              {k === 'line' && <i className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-conflict align-middle" />}{label}</button>
+          ))}
+        </div>
+      )}
+      <div className="min-h-0 flex-1">
+        <Suspense fallback={null}>
+          {show === 'memory'
+            ? <MyGraph tenant={tenant} who={who} subscribe={subscribe} />
+            : <YourLine tenant={tenant} who={who} subscribe={subscribe} />}
+        </Suspense>
+      </div>
     </div>
   )
 }

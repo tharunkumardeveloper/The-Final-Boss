@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { api } from '../../lib/api'
 import type { LabHome, LabView, RelayEvent } from '../../lib/types'
-import { Canvas, EveningChart, FieldDispatch, HOME_COLOR, HOME_WORD, useDispatch } from '../../pages/Lab'
+import { Canvas, EveningChart, FieldDispatch, HOME_COLOR, HOME_WORD, Trace, useDispatch } from '../../pages/Lab'
 
 type Subscribe = (fn: (e: RelayEvent) => void) => () => void
 
@@ -64,6 +64,11 @@ export default function YourLine({ tenant, who, subscribe, onMemory }: { tenant:
         </details>
       )}
       <p className="mt-2 shrink-0 text-[10.5px] text-white/45">Your home is outlined. Neighbours' homes are shown without names.</p>
+      {/* what the resolver is doing on this line, step by step (the old talk page's "Resolver at work") */}
+      <details open className="mt-2 shrink-0 rounded-xl bg-surface px-3 py-2 text-ink">
+        <summary className="cursor-pointer list-none text-xs font-medium text-ink-2">Resolver at work{run ? '' : ' · waiting for a problem'}</summary>
+        <div className="scroll-thin mt-2 max-h-[240px] overflow-y-auto"><Trace run={run} /></div>
+      </details>
     </div>
   )
 }
