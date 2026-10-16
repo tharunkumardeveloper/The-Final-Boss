@@ -17,10 +17,10 @@ import type { LabHome, LabManual, LabMessage, LabOlt, LabPreset, LabProcedure, L
 
 const SPRING = { type: 'spring', stiffness: 380, damping: 32 } as const
 const C = { ok: 'rgb(var(--signal))', bad: 'rgb(var(--danger))', warn: 'rgb(var(--conflict))', idle: 'rgb(255 255 255 / 0.22)', frozen: '#8fa2ff' }
-const HOME_COLOR: Record<LabHome['state'], string> = {
+export const HOME_COLOR: Record<LabHome['state'], string> = {
   ok: C.ok, dark: C.bad, flapping: C.warn, frozen: C.frozen, paused: '#c49bff', offline: C.bad, slow: C.warn, wifi: C.warn,
 }
-const HOME_WORD: Record<LabHome['state'], string> = {
+export const HOME_WORD: Record<LabHome['state'], string> = {
   ok: 'online', dark: 'no light', flapping: 'weak light', frozen: 'box frozen', paused: 'account paused', offline: 'no route', slow: 'slow at night', wifi: 'Wi-Fi interference',
 }
 const ACTIONS: [string, string][] = [
@@ -329,7 +329,7 @@ export const Canvas = memo(function Canvas({ view, focus, dispatch, privateTo }:
   )
 })
 
-function EveningChart({ o }: { o: LabOlt }) {
+export function EveningChart({ o }: { o: LabOlt }) {
   const hot = o.free_peak_mbps < 300
   return (
     <div className="rounded-xl bg-white/[0.04] p-3">
