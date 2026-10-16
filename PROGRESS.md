@@ -339,24 +339,62 @@ Most recent runs: `test_recall`, `test_procedural`, `test_write_resolution`, `te
 
 ## 6. Results
 
-Full numbers, method and caveats: `agent-relay/eval/components.md` (fix log) and `eval/results.md`. All data is synthetic, built from our own templates. 95% Wilson intervals.
+One clean run on the final code: the benchmark graph reloaded with the final engine, all 160 questions answered by **the same model for both systems** (qwen3.8-27b on six Groq keys, one key per question, the same key for Relay and the baseline). Full tables: `agent-relay/eval/results.md`, `eval/components.md`. All benchmark data is synthetic, built from our own templates; the two external checks are below. 95% Wilson intervals; the difference uses a paired bootstrap.
 
-**Scaled set** (40 customers, 556 turns, 160 questions), after the fixes below:
+**Headline (40 customers, 556 turns, 160 questions)**
 
-| System | Accuracy [95% CI] | Evidence recall | Retrieval p50 |
+| | Result |
+|---|---|
+| **Relay** | **96.2%** (154/160) [92–98%] |
+| Vector store (B1) | 61.2% (98/160) [54–68%] |
+| Difference | **+35 points** [+26, +43]; Relay-only right 61, B1-only right 5; exact McNemar p = 2.6 × 10⁻¹³ |
+| Evidence recall (the gold fact was in the context) | Relay 100%, B1 72% |
+| Retrieval latency p50 / p95 | Relay 177 / 624 ms, B1 46 / 58 ms |
+| Same per key | Relay 93–100% on each of the six keys, B1 56–73% |
+
+**By question type** (16–18 each; directional)
+
+| Type | Relay | B1 | Δ |
 |---|---|---|---|
-| **Relay (full)** | **91%** [85–94%] | 96% | 216 ms |
-| Vector store (B1) | 50% [42–58%] | 73% | 46 ms |
-| Relay without the two clocks (A1, 63-question subset) | 71% [59–81%] | 93% | 215 ms |
-| Relay without multi-hop expansion (A2, same subset) | 81% [70–89%] | 82% | 124 ms |
+| disagreement | 100% | 6% | +94 |
+| multi-hop | 100% | 22% | +78 |
+| completeness | 100% | 44% | +56 |
+| procedural | 100% | 50% | +50 |
+| current | 100% | 72% | +28 |
+| handoff | 100% | 83% | +17 |
+| belief time | 100% | 89% | +11 |
+| world time | 100% | 100% | 0 |
+| **unknown (should refuse)** | **67%** | **78%** | **−11** |
 
-On the same subset full Relay scores 90%, so **the two clocks are worth about 19 points and multi-hop expansion about 9**: the graph machinery earns its keep, measured, not assumed.
+**Where Relay still loses: abstention.** Every Relay miss (6 of 6) is a should-refuse question it answered. When Relay refuses it is always right (precision 100%, 12/12; no answerable question refused), but it refuses only 12 of the 18 it should (recall 67%). B1 refuses more of them (78%) at the cost of refusing 14 answerable questions (precision 50%). B1's misses: gold not retrieved 40, wrong value chosen 10, conflict not flagged 7, hallucinated 4.
 
-By type, Relay vs B1: disagreement 100 vs 6, multi-hop 100 vs 28, completeness 100 vs 33, current 100 vs 44, belief time 94 vs 39, handoff 100 vs 67, world time 89 vs 89, unknown 89 vs 89, procedural 44 vs 50 in that run, **17/17 vs 11/17 after fix 8** (scored on the procedural slice of the benchmark, mixed answer models, same model for both systems per question). Abstention: Relay precision 89%, recall 89% (B1: 29% / 89%).
+**Components on the final graph (no LLM calls)**
 
-**Caveat on comparability:** the first scored run (Relay 68.8% vs B1 55.0%) used qwen3.8-27b; Groq's daily caps then forced the final run onto gemini-3.5-flash-lite for both systems. The paired comparison inside each run is fair; the jump from 69% to 91% mixes the fixes with the model change. Each fix was also scored on its own (fix log), mostly on qwen.
+| Component | Result |
+|---|---|
+| Extraction recall, planted facts | 305/306 (99.7%) |
+| Predicate normalisation | 273/273 (100%) |
+| Contradiction handling | 82/85 (96.5%) [90–99%]: change 36/39, multi 16/16, unchanged 14/14, cross-agent 16/16 |
+| Typos resolved to the place on file | 7/8 |
+| Name collisions kept apart | 4/4 |
+| Issue-paraphrase entity resolution | pairwise precision 1.00, recall 0.78 |
 
-**Fix log** (one fix at a time, re-scored after each):
+The load report for this graph was rebuilt from the graph itself for the first 427 events (each customer turn is an Episode and the facts extracted from it hang off it by `DERIVED`); the load ran in two parts after the first process was stopped, resumed at the exact next event with nothing duplicated.
+
+**External check 1: out-of-distribution extraction.** A different model (allam-2-7b) wrote 72 customer messages in its own style (slang, emojis, small talk) for planted facts; our extractor read them. **60/72 recovered (83%) [73–90%]** vs 99.7% on our own templates; predicate accuracy 87%. Router, contact channel, device and reported issue 12/12 each, lives in 11/12, **on plan 1/12**: the writer mostly wrote "I'm all about the fiber 1000 plan, ya know?", which the extractor filed as an interest rather than a subscription (arguably the right reading), and twice invented a plan name. Scored as misses, not excused.
+
+**External check 2: LoCoMo** (Maharana et al. 2024, conversation conv-26, 174 turns, 60 of its own questions, token F1; CC BY-NC 4.0, downloaded at run time).
+
+| System | Mean F1 | F1 ≥ 0.5 | Adversarial (false-premise) questions refused |
+|---|---|---|---|
+| Relay | **0.08** | 7% | **15/15** |
+| B1 | **0.27** | 27% | 4/15 |
+
+**Relay loses this one**, and the reason is structural. Relay keeps facts, not transcripts: from 174 turns of open personal conversation its extraction (built around support-chat predicates) kept only 71 facts (hobbies, likes, plans, relationships), so most details ("what did Caroline research?") never became memory; it answered "unknown" on 30 of 60 questions. The vector store searches the raw text, which still holds them. Token F1 also penalises format: Relay answers dates as `2023-05-07` where the gold says `7 May 2023`. Relay refused every false-premise question; B1 refused 4 of 15. One conversation, so noisy; it is the one datapoint not built on our own data, and it marks the limit of a fact-only memory on open-domain chat.
+
+**Ablations** (earlier run, before fixes 5–8, gemini-flash-lite for every arm, 63-question stratified subset): full Relay 90%, without the two clocks 71%, without multi-hop expansion 81%, B1 51%. Same model in every arm, so the comparison holds, but it has not been rerun on the final code.
+
+**Fix log** (how we got here: one fix at a time, each re-scored on its own before the next, mostly on qwen; the run above supersedes these per-fix numbers):
 
 | # | Root cause found by the evaluation | Metric | Before | After |
 |---|---|---|---|---|
@@ -371,20 +409,16 @@ By type, Relay vs B1: disagreement 100 vs 6, multi-hop 100 vs 28, completeness 1
 
 Belief time was not a two-clock bug: its misses were fix 5. "Unchanged" contradictions needed no separate fix: the guard was right, typos were the cause.
 
-**Components (no LLM calls), final load:** extraction recall 306/306, predicate normalisation 100%, typos mapped 8/8, name collisions kept apart 4/4, cross-agent contradictions 16/16.
-
-**The small 74-question set** (93% vs 43%) is kept for history only; the scaled run is the headline.
-
-**Still open:** a full reload and rerun on the final code (procedural was re-scored on a slice), one ablation baseline (B0) partly scored, determinism re-runs, out-of-distribution extraction, LoCoMo QA.
-
 **Engineering numbers:**
 
 | Measure | Result |
 |---|---|
-| Recall round trips | 5 → **2** (mem:pml, read-only: 194 → 106 ms for "who lives in Pune?") |
+| Recall round trips | 5 → **2** |
 | Concurrent writes | 18.3 / 23.7 writes/s (1 / 4 graphs), 0 duplicates |
 | Simulator | 17/17 planted moments hit |
 | API memory | ~340 MB peak (Render free tier 512 MB) |
+
+**Not run yet:** determinism re-runs (the same questions asked again), the ablations on the final code, the k-sweep of the baseline. Earlier runs (93% vs 43% on 74 questions; 69% vs 55% and 91% vs 50% on 160) are superseded by the run above and kept in `eval/` for history.
 
 ## 7. Evaluator's assessment
 
@@ -412,6 +446,9 @@ Differentiation and demo depth rise: a worldwide company with region graphs, ope
 ### Update after Phase 10
 Track coverage and demo quality rise: the intake agent follows a written spec, its questions and their answers are memory every agent can see, identity is a graph match, tickets carry the full handoff, and the chat shows the graph work as it happens. Model quota is now the main operational risk: planned replies need no model, but extraction does. Estimate: **≈ 8/10 now**.
 
+### Update after the final measurement
+One run on the final code, same model both arms, all 160 questions: Relay 96% vs 61%, +35 points [+26, +43], p ≈ 3 × 10⁻¹³; components 99.7% extraction and 96.5% contradiction handling. Two external checks now exist and are reported as they came out: out-of-distribution extraction 83% (a drop from 99.7%, mostly one ambiguous predicate) and LoCoMo, where Relay loses on F1 (0.08 vs 0.27) because a fact-only memory drops most open-domain detail, while refusing every false-premise question. The two remaining weaknesses are named, not hidden: abstention recall (67%) and open-domain conversation. Evaluation rigor ≈ 9. Estimate: **≈ 9/10**.
+
 ### Update after Phase 19
 The last losing question type (procedural) now wins, every screen fits a desktop view, and the two weakest demo screens became the strongest proofs: the Agent team page shows coordination as it happens in the graph with the record beside each step, and the Tenants page is a canary test anyone can verify outside our UI (their own word, FalkorDB Browser, curl). Animations are smooth under load. Still open: a same-model full rerun of the 160 questions on the final code, determinism and LoCoMo runs, the video, and a browser click-through by us. Estimate: **≈ 9/10**.
 
@@ -430,7 +467,7 @@ Track coverage and differentiation rise most: the resolver now acts on a network
 ## 8. What's missing, in priority order
 
 1. **Demo video (3 min)**, recorded on the deployed site after a Render redeploy, and the submission write-up.
-2. **One clean rerun of the 160 questions on the final code with a single answer model** (the 91% vs 50% headline mixes the fixes with a model change). Then the k-sweep, determinism runs, out-of-distribution extraction and LoCoMo QA.
+2. **Abstention recall (67%)**: Relay's only misses are should-refuse questions it answered; and **open-domain memory**: LoCoMo shows a fact-only memory drops most chit-chat detail (keep episode text as a fallback for questions no fact answers). Then determinism re-runs and the ablations on the final code.
 3. **A browser click-through of every screen** (Memory, Network with Break it and dispatch, Agent team, Tenants canary test) on the deployed site.
 4. **Speed**: retrieval is about 216 ms p50 vs 46 ms for the vector store, and a chat turn still runs about 40 queries, mostly writes; batch the episode and facts into fewer round trips.
 5. **Protect the public demo**: rate limiting on `/chat` and an operator-only key for reset and route edits; `RELAY_DEMO_KEYS=0` for a real deployment.

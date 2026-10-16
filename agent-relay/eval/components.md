@@ -111,7 +111,7 @@ Source: {'report': 'eval/load_report_fix6.json', 'graph': 'pml-bench', 'commit':
 
 ## Components: final
 
-Source: {'report': 'eval/load_report_final.json', 'graph': 'pml-bench', 'commit': 'df56065476e784fe67ad8d0654bf1145556b4c92', 'relay_retrieve_dirty': False, 'relay_dirty': []}
+Source: {'report': 'eval/load_report_final.json', 'graph': 'pml-bench', 'commit': 'e098954cb706044d5c59f326005f54bef96b5acc', 'relay_retrieve_dirty': False, 'relay_dirty': []}
 
 - Extraction recall: 99.7% (305/306) [98%–100%]; extra facts 133, load errors 0
 - Predicate normalisation (extracted fact with the planted value carries the planted predicate): 100.0% (273/273) [99%–100%]
@@ -237,6 +237,36 @@ Why misses happen: retrieval: gold value not in context -> wrong answer: 4; gold
 
 By answer model (all API keys pooled): gemini-3.5-flash-lite 30.0% (3/10) [11%–60%]
 
+## Benchmark: final
+
+Tenant `pml-bench`, 40 customers, 556 customer turns, 160 questions, run `run-20261016-073654`. Provenance: None
+
+Head-to-head on 160 questions: Relay 96.2% (154/160) [92%–98%] vs B1 61.3% (98/160) [54%–68%]; difference +35.0%, paired bootstrap 95% CI [+26.2%, +43.1%]; Relay-only correct 61, B1-only 5, exact McNemar p = 2.6e-13
+
+| Type | n | Relay | B1 | Δ [bootstrap CI] |
+|---|---|---|---|---|
+| belief_time | 18 | 100.0% (18/18) [82%–100%] | 88.9% (16/18) [67%–97%] | +11% [+0%, +28%] |
+| completeness | 18 | 100.0% (18/18) [82%–100%] | 44.4% (8/18) [25%–66%] | +56% [+33%, +78%] |
+| current | 18 | 100.0% (18/18) [82%–100%] | 72.2% (13/18) [49%–88%] | +28% [+11%, +50%] |
+| disagreement | 16 | 100.0% (16/16) [81%–100%] | 6.2% (1/16) [1%–28%] | +94% [+81%, +100%] |
+| handoff | 18 | 100.0% (18/18) [82%–100%] | 83.3% (15/18) [61%–94%] | +17% [+0%, +33%] |
+| multi_hop | 18 | 100.0% (18/18) [82%–100%] | 22.2% (4/18) [9%–45%] | +78% [+56%, +94%] |
+| procedural | 18 | 100.0% (18/18) [82%–100%] | 50.0% (9/18) [29%–71%] | +50% [+28%, +72%] |
+| unknown | 18 | 66.7% (12/18) [44%–84%] | 77.8% (14/18) [55%–91%] | -11% [-39%, +17%] |
+| world_time | 18 | 100.0% (18/18) [82%–100%] | 100.0% (18/18) [82%–100%] | +0% [+0%, +0%] |
+
+**FULL**: accuracy 96.2% (154/160) [92%–98%]. Abstention (18 should-refuse): precision 100.0% (12/12) [76%–100%], recall 66.7% (12/18) [44%–84%].
+
+Why misses happen: answered a should-refuse question (hallucination): 6
+
+By answer model (all API keys pooled): qwen/qwen3.8-27b 96.2% (154/160) [92%–98%]
+
+**B1**: accuracy 61.3% (98/160) [54%–68%]. Abstention (18 should-refuse): precision 50.0% (14/28) [33%–67%], recall 77.8% (14/18) [55%–91%].
+
+Why misses happen: retrieval: gold value not in context -> wrong answer: 27; retrieval: gold value not in context -> refused: 13; gold in context, wrong/incomplete value chosen: 10; gold in context, conflict not flagged: 7; answered a should-refuse question (hallucination): 4; gold in context but model refused: 1
+
+By answer model (all API keys pooled): qwen/qwen3.8-27b 61.3% (98/160) [54%–68%]
+
 ## Small set (74 questions, earlier run)
 
 Relay 93.2% (69/74) [85%–97%]; B1 43.5% (20/46) [30%–58%]; head-to-head Relay 91.3% (42/46) [80%–97%] vs B1 43.5% (20/46) [30%–58%]. Exact McNemar p ≤ 6e-05 for any pairing consistent with these counts. aggregates from README/PROGRESS; per-question rows not kept, so no bootstrap.
@@ -275,7 +305,7 @@ Relay 93.2% (69/74) [85%–97%]; B1 43.5% (20/46) [30%–58%]; head-to-head Rela
 
 ```
 {
- "commit": "df56065476e784fe67ad8d0654bf1145556b4c92",
+ "commit": "e098954cb706044d5c59f326005f54bef96b5acc",
  "relay_retrieve_dirty": false,
  "relay_dirty": []
 }
