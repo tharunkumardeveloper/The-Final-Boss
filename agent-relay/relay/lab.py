@@ -523,7 +523,7 @@ _SYMPTOMS = [
                       r"\b(detect\w*|connect\w*|work\w*|recogni[sz]\w*)\b|\b(not|can'?t|won'?t) (detect\w*|connect\w*)\b"),
 ]
 # asking for someone to come, or for help, on a case that is already open: the resolver takes it, not small talk
-_STILL = re.compile(r"still|didn'?t (help|work|fix)|same (issue|problem)|not (fixed|working)", re.I)
+_STILL = re.compile(r"\bstill\b|\bdidn'?t (help|work|fix)\b|\bsame (issue|problem)\b|\bnot (fixed|working)\b", re.I)
 VISIT_ASK = re.compile(r"\b(send|need|want|get)\b.{0,25}\b(technician|engineer|someone|somebody|men|guy|person|team|visit|"
                        r"assistance|help)\b|\bassist(ance)?\b|\bhelp me\b|\bcome (and )?fix\b", re.I)
 
