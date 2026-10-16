@@ -67,24 +67,26 @@ function AccountPanel({ tenant, who, customer, chips, subscribe, onAsk }: { tena
 /** Memory while the customer is talking; their own line once a case is open (a ticket, or the resolver on it). */
 function GraphOrLine({ tenant, who, subscribe }: { tenant: string; who: string | null; subscribe: (fn: (e: RelayEvent) => void) => () => void }) {
   const [mode, setMode] = useState<'memory' | 'line'>('memory')
-  useEffect(() => { setMode('memory') }, [who])
+  const [hasCase, setHasCase] = useState(false)
+  const [fresh, setFresh] = useState(false)
+  useEffect(() => {  // a returning customer with a case still open gets the switch straight away
+    setMode('memory'); setFresh(false); setHasCase(false)
+    if (who) api.tickets(tenant).then((ts) => setHasCase(ts.some((t) => t.customer === who && t.status !== 'resolved'))).catch(() => {})
+  }, [tenant, who])
   useEffect(() => subscribe((e) => {
     const c = (e.data as { customer?: string })?.customer?.toLowerCase()
-    if (who && c === who && (e.type === 'ticket_opened' || e.type === 'pickup' || (e.type === 'lab_run' && (e.data as { status?: string }).status === 'running'))) setMode('line')
+    if (!who || c !== who) return
+    if (e.type === 'ticket_opened' || (e.type === 'lab_run' && (e.data as { status?: string }).status === 'running')) {
+      setHasCase(true); setFresh(true); setMode('line')  // a case opened: show their line, where the resolver is working
+    }
   }), [subscribe, who])
   return (
-    <div className="flex h-full min-h-[560px] flex-col gap-2 xl:min-h-0">
-      <div role="tablist" aria-label="Your view" className="inline-flex shrink-0 self-start rounded-full bg-surface p-1 hairline">
-        {([['memory', 'What we remember'], ['line', 'Your line']] as const).map(([k, label]) => (
-          <button key={k} role="tab" aria-selected={mode === k} onClick={() => setMode(k)}
-            className={`rounded-full px-3 py-1 text-xs ${mode === k ? 'bg-ink font-medium text-paper' : 'text-ink-2 hover:bg-sunk'}`}>{label}</button>
-        ))}
-      </div>
-      <div className="min-h-0 flex-1" role="tabpanel">
-        <Suspense fallback={null}>
-          {mode === 'memory' ? <MyGraph tenant={tenant} who={who} subscribe={subscribe} /> : <YourLine tenant={tenant} who={who} subscribe={subscribe} />}
-        </Suspense>
-      </div>
+    <div className="h-full min-h-[560px] xl:min-h-0">
+      <Suspense fallback={null}>
+        {mode === 'memory'
+          ? <MyGraph tenant={tenant} who={who} subscribe={subscribe} onLine={hasCase ? () => { setMode('line'); setFresh(false) } : undefined} fresh={fresh} />
+          : <YourLine tenant={tenant} who={who} subscribe={subscribe} onMemory={() => setMode('memory')} />}
+      </Suspense>
     </div>
   )
 }

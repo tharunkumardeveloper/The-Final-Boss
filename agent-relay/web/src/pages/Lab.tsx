@@ -1,13 +1,10 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, Navigate, useSearchParams } from 'react-router-dom'
 import { Wordmark } from '../components/Brand'
 import { ConsoleNav } from '../components/console/ConsoleNav'
 import { NetworkMap } from '../components/console/NetworkMap'
 import { ShowMe } from '../components/console/ShowMe'
-import { MemoryPanel } from '../components/portal/MemoryPanel'
-import { SupportDesk } from '../components/portal/SupportChat'
-import type { Chip } from '../lib/chips'
 import { GuideCard, splitGuides } from '../components/Guides'
 import { Check, Database, Pulse, Sparkle, Warning } from '../components/Icons'
 import { api } from '../lib/api'
@@ -16,7 +13,7 @@ import { BOT } from '../lib/brand'
 import { useRelayStream } from '../lib/stream'
 import { useTenant } from '../lib/tenant'
 import { TouchLayer } from '../components/console/TouchLayer'
-import type { Customer, LabHome, LabManual, LabMessage, LabOlt, LabPreset, LabProcedure, LabRun, LabStep, LabView, RelayEvent } from '../lib/types'
+import type { LabHome, LabManual, LabMessage, LabOlt, LabPreset, LabProcedure, LabRun, LabStep, LabView, RelayEvent } from '../lib/types'
 
 const SPRING = { type: 'spring', stiffness: 380, damping: 32 } as const
 const C = { ok: 'rgb(var(--signal))', bad: 'rgb(var(--danger))', warn: 'rgb(var(--conflict))', idle: 'rgb(255 255 255 / 0.22)', frozen: '#8fa2ff' }
@@ -572,26 +569,16 @@ export default function LabPage() {
   const [manual, setManual] = useState<{ action: string; result?: LabManual; busy?: boolean }>({ action: ACTIONS[0][0] })
   useEffect(() => { if (!focus && view?.focus) setFocus(view.focus) }, [focus, view?.focus])
   useEffect(() => subscribe((e) => { if (e.type === 'lab_run' && e.data.status === 'running') setWaiting(undefined) }), [subscribe])
-  // talk mode: you chat as a customer here, and watch your line, what's extracted and the resolver at the same time
+  // talking as a customer moved to the home page; an old ?talk=1 link lands there
   const [params, setParams] = useSearchParams()
   const talk = params.get('talk') === '1'
-  const setTalk = (on: boolean) => setParams(on ? { talk: '1' } : {}, { replace: false })
   // map view: the whole region zoomed out; a hub opens its customers back here in the lab
   const map = params.get('view') === 'map'
   const setMap = (on: boolean) => setParams(on ? { view: 'map' } : {}, { replace: false })
   const inCity = (city: string) => (view?.customers ?? []).filter((c) => c.city.toLowerCase() === city.toLowerCase())
   const openHub = (city: string) => { const c = inCity(city)[0]; if (c) { setFocus(c.key); setManual((m) => ({ action: m.action })) } setMap(false) }
-  const [chips, setChips] = useState<Chip[]>([])
-  const [people, setPeople] = useState<Customer[]>([])
-  const [breakKey, setBreakKey] = useState('random')
   const [pick, setPick] = useState<string>()
   const [side, setSide] = useState<'trace' | 'phone'>('trace')
-  // talk mode acts on whoever you are chatting as, never on the page's default customer
-  const [chatter, setChatter] = useState<string | null>(null)
-  const onWho = useCallback((w: string | null) => { setChatter(w); if (w) setFocus(w) }, [])
-  const refreshPeople = useCallback(() => { api.customers(tenant).then(setPeople).catch(() => {}) }, [tenant])
-  useEffect(() => { if (talk) refreshPeople() }, [talk, refreshPeople])
-  useEffect(() => subscribe((e) => { if (e.type === 'fact_created' && e.data.predicate === 'lives_in') refreshPeople() }), [subscribe, refreshPeople])
 
   const custs = view?.customers ?? []
   const me = custs.find((c) => c.key === focus)
@@ -637,85 +624,7 @@ export default function LabPage() {
   const chosen = view?.presets.find((p) => p.key === pick)
   const crew = useDispatch(focusRun ?? run)
 
-  if (talk) {
-    const mine = view?.focus === focus ? view : undefined
-    const talkRun = ordered.find((r) => r.customer === focus)
-    const fits = view?.presets.filter((p) => !!focus && p.customers.includes(focus)) ?? []
-    return (
-      <div className="flex min-h-[100dvh] flex-col xl:h-[100dvh]">
-        <header className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
-          <div className="flex items-center gap-4">
-            <Link to="/console"><Wordmark sub="Network console · talking" /></Link>
-            <span className={`chip ${status === 'live' ? 'bg-current-tint text-current' : 'bg-conflict-tint text-conflict'}`}>
-              <i className={`h-1.5 w-1.5 rounded-full ${status === 'live' ? 'bg-current animate-breathe' : 'bg-conflict'}`} />{status === 'live' ? 'Live' : 'Reconnecting'} · mem:{tenant}</span>
-            {s && s.investigated > 0 && <span className="chip bg-surface !py-1 text-ink-2 hairline num">right {s.correct}/{s.investigated} · fixed & proven {s.fixed}/{s.investigated}</span>}
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            {!chatter && <span className="chip bg-surface text-ink-3 hairline">Tell {BOT} who you are to break your line</span>}
-            {chatter && !custs.some((c) => c.key === chatter) && (
-              <span className="chip bg-surface text-ink-3 hairline">{titleCase(chatter.split(' ')[0])} has no line yet · say where you live</span>)}
-            {chatter && focus === chatter && mine && custs.some((c) => c.key === chatter) && (
-              <div className="flex items-center gap-1 rounded-full bg-surface p-1 hairline">
-                <label htmlFor="talk-break" className="sr-only">Fault</label>
-                <select id="talk-break" className="rounded-full bg-transparent px-2 py-1 text-xs text-ink-2 outline-none" value={breakKey} onChange={(e) => setBreakKey(e.target.value)}>
-                  <option value="random">Hidden random fault</option>
-                  {fits.map((p) => <option key={p.key} value={p.key}>{p.title}</option>)}
-                </select>
-                <button className="btn !bg-danger !px-3 !py-1 text-xs text-white hover:!bg-danger/90" disabled={!!busy}
-                  onClick={async () => {
-                    setBusy('talk-break'); setError(undefined)
-                    try {
-                      if (breakKey === 'random') await api.labTrouble(tenant, focus)
-                      else await api.labInject(tenant, { preset: breakKey, customer: focus, complain: false })
-                      await load()
-                    } catch (e) { setError(e instanceof Error ? e.message.replace(/^.*"detail":"?|"?}$/g, '') : 'That did not go through.') } finally { setBusy(undefined) }
-                  }}>{busy === 'talk-break' ? 'Breaking…' : `Break ${titleCase(chatter.split(' ')[0])}'s line`}</button>
-              </div>
-            )}
-            <button className="btn-ghost !py-1.5 text-xs hairline" disabled={!!busy} onClick={heal}>Heal all</button>
-            <button className="btn-primary !py-1.5 text-xs" onClick={() => setTalk(false)}>Close chat</button>
-          </div>
-        </header>
-        {error && <p className="mx-4 mb-2 rounded-xl bg-danger-tint px-4 py-2 text-sm text-danger sm:mx-6" role="alert">{error}</p>}
-        <main className="grid flex-1 grid-cols-1 gap-4 px-4 pb-4 sm:px-6 xl:min-h-0 xl:grid-cols-[380px_minmax(0,1fr)_minmax(0,1.1fr)]">
-          <section aria-label="Chat" className="h-[720px] min-h-0 xl:h-auto">
-            <SupportDesk tenant={tenant} customers={people} subscribe={subscribe} onWho={onWho} onChips={setChips} side="none" />
-          </section>
-          <section aria-label="What was learned and what the resolver is doing" className="scroll-thin flex min-h-0 flex-col gap-4 xl:overflow-y-auto xl:pr-1">
-            <div className="h-[460px] shrink-0">
-              <MemoryPanel who={focus ?? null} customer={people.find((c) => c.key === focus)} chips={chips} tenant={tenant} />
-            </div>
-            <div className="rounded-[1.75rem] bg-surface p-5 hairline">
-              <p className="eyebrow mb-3">Resolver at work{talkRun ? '' : ' · waiting for a problem'}</p>
-              <Trace run={talkRun} />
-            </div>
-          </section>
-          <section aria-label="Network" className="scroll-thin min-h-0 xl:overflow-y-auto">
-            <div className="lab-grid overflow-hidden rounded-[1.5rem] bg-ink p-3 text-white shadow-lift">
-              <div className="flex flex-wrap items-center justify-between gap-2 px-1">
-                <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-white/45">{mine?.network ? `Live network · ${mine.network.pop.label}` : 'Live network'}</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {view?.faults.filter((f) => f.active && f.customer === focus).map((f) => (
-                    <span key={f.id} className={`chip ${f.mitigated ? 'bg-conflict/20 text-conflict' : 'bg-danger/20 text-[#ff9b8f]'}`}><Warning className="h-3 w-3" />{f.title ?? 'Hidden fault'}</span>
-                  ))}
-                </div>
-              </div>
-              <div className="mt-2">
-                {mine?.network ? <Canvas view={mine.network} focus={focus ?? null} dispatch={crew} />
-                  : <p className="py-14 text-center text-sm text-white/45">Say hi in the chat and tell it where you live. Your line shows up here.</p>}
-              </div>
-              <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 px-1 text-[10.5px] text-white/55">
-                {(['ok', 'dark', 'flapping', 'frozen', 'paused', 'slow'] as LabHome['state'][]).map((k) => (
-                  <span key={k} className="inline-flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-[3px]" style={{ background: HOME_COLOR[k] }} />{HOME_WORD[k]}</span>
-                ))}
-              </div>
-              {mine?.network?.olts.map((o) => <div key={o.id} className="mt-3"><EveningChart o={o} /></div>)}
-            </div>
-          </section>
-        </main>
-      </div>
-    )
-  }
+  if (talk) return <Navigate to="/" replace />  // talking as a customer happens on the home page now
 
   // One screen on a desktop: the page never scrolls, each column scrolls inside itself. Smaller screens stack.
   return (
@@ -726,7 +635,6 @@ export default function LabPage() {
         <div className="flex items-center gap-2">
           <span className={`chip ${status === 'live' ? 'bg-current-tint text-current' : 'bg-conflict-tint text-conflict'}`}>
             <i className={`h-1.5 w-1.5 rounded-full ${status === 'live' ? 'bg-current animate-breathe' : 'bg-conflict'}`} />{status === 'live' ? 'Live' : 'Reconnecting'} · mem:{tenant}</span>
-          <button className="btn-primary !py-1.5 text-sm" onClick={() => setTalk(true)}>Talk as a customer</button>
         </div>
       </header>
 

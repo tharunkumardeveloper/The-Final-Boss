@@ -32,7 +32,7 @@ describe('pages render', () => {
   it('network: lab, map and talk mode', () => {
     expect(wrap(<Lab />, '/console/lab')).toContain('Break the network')
     expect(wrap(<Lab />, '/console/lab?view=map')).toContain('Whole region')
-    expect(wrap(<Lab />, '/console/lab?talk=1')).toContain('Close chat')
+    expect(wrap(<Lab />, '/console/lab?talk=1')).not.toContain('Close chat')  // talking as a customer is on the home page now
   })
   it('agent team, tenants, database', () => {
     wrap(<Sharing />)

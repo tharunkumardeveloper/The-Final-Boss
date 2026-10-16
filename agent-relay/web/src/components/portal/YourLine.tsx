@@ -7,7 +7,8 @@ type Subscribe = (fn: (e: RelayEvent) => void) => () => void
 
 /** The customer's own connection while a case is open: their box, street cabinet, exchange and hub, live, with the
  *  resolver's checks lighting up and the crew driving out if one is sent. Other homes are shown without names. */
-export default function YourLine({ tenant, who, subscribe }: { tenant: string; who: string | null; subscribe: Subscribe }) {
+export default function YourLine({ tenant, who, subscribe, onMemory }: { tenant: string; who: string | null; subscribe: Subscribe
+  onMemory?: () => void }) {
   const [view, setView] = useState<LabView>()
   const timer = useRef<ReturnType<typeof setTimeout>>()
   const load = useCallback(() => {
@@ -24,8 +25,13 @@ export default function YourLine({ tenant, who, subscribe }: { tenant: string; w
   const crew = useDispatch(run)
   const last = run?.steps[run.steps.length - 1]
 
-  if (!who) return <p className="p-6 text-center text-sm text-ink-3">Say hi in the chat and your line shows up here.</p>
-  if (!view?.network) return <p className="p-6 text-center text-sm text-ink-3">Tell us where you live in the chat, and your line shows up here.</p>
+  const back = onMemory && <button onClick={onMemory} className="rounded-full bg-white/10 px-3 py-1 text-xs text-white/85 hover:bg-white/15">← Memory graph</button>
+  if (!who || !view?.network) return (
+    <div className="flex h-full flex-col items-center justify-center gap-3 rounded-[1.75rem] bg-surface p-6 text-center text-sm text-ink-3 hairline">
+      {!who ? 'Say hi in the chat and your line shows up here.' : 'Tell us where you live in the chat, and your line shows up here.'}
+      {onMemory && <button onClick={onMemory} className="btn-ghost !py-1 text-xs hairline">← Memory graph</button>}
+    </div>
+  )
   return (
     <div className="lab-grid flex h-full flex-col overflow-hidden rounded-[1.75rem] bg-ink p-4 text-white">
       <div className="flex shrink-0 flex-wrap items-baseline justify-between gap-2">
@@ -33,8 +39,11 @@ export default function YourLine({ tenant, who, subscribe }: { tenant: string; w
           <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-white/45">Your line · {view.network.pop.label.replace(' POP', '')}</p>
           <p className="text-sm text-white/80">Your box → street cabinet → exchange → hub → core</p>
         </div>
-        {run && <span className={`chip ${run.status === 'running' ? 'bg-conflict/20 text-conflict' : run.status === 'resolved' ? 'bg-current/25 text-white' : 'bg-white/10 text-white/80'}`}>
-          {run.status === 'running' ? 'resolver checking' : run.status}</span>}
+        <div className="flex items-center gap-2">
+          {run && <span className={`chip ${run.status === 'running' ? 'bg-conflict/20 text-conflict' : run.status === 'resolved' ? 'bg-current/25 text-white' : 'bg-white/10 text-white/80'}`}>
+            {run.status === 'running' ? 'resolver on it' : run.status}</span>}
+          {back}
+        </div>
       </div>
       {last && run?.status === 'running' && <p className="mt-2 shrink-0 text-xs text-white/70">Now: {last.title}</p>}
       <div className="scroll-thin mt-2 flex min-h-0 flex-1 items-center justify-center overflow-auto">

@@ -1081,10 +1081,36 @@ def _healthy(run, m, network_issue):
             tech = experts.assign(run.tenant, run.ticket, m["olt"]["city"], _ms()) if run.ticket else None
             run.tell(f"Booked. {(tech or 'Our technician').title()} will come {SLOT_LABEL[visit['slot']]} to "
                      f"{visit['address'].title()}. They'll call you before they arrive.")
-            run.data["status"] = "handed over"
+            _home_visit(run, tech, visit)
             return
     run.tell(f"Thanks, {first}. If it acts up again, tell me what you were doing when it happened and I'll dig in.")
     run.data["status"] = "resolved"
+
+
+def _home_visit(run, tech, visit):
+    """Sent help finishes the case: the technician goes (a field job, fast-forwarded like the others, so the crew shows on
+    the customer's line), fixes what is inside the home, the line is measured again, and the case is written as fixed
+    (fixed_by, the ticket resolved, and a resolves fact so the next similar case benefits). The customer has the last word."""
+    who, delay = (tech or "our technician").title(), DELAY["dispatch_technician_home"]
+    run.step("act", ACTION_LABEL["dispatch_technician_home"], f"{who}, {SLOT_LABEL[visit['slot']]}, at {visit['address'].title()}.",
+             "ok", data={"action": "dispatch_technician_home", "delayed": delay})
+    run.step("wait", "Waiting for the field job", f"Fast-forwarded: {delay} s in the lab (about 2 hours in real life).", "pending")
+    time.sleep(delay)
+    after = _read(run, verify=True)
+    issue = (run.said or "the problem inside the home").strip().rstrip(".")
+    fix = "technician home visit"
+    if run.ticket:
+        memory.remember(run.tenant, agent="resolver", session_id=f"work-{run.ticket}", customer=run.customer, at=_ms(),
+                        text=f"{who} visited {run.customer} for {run.ticket.upper()} and fixed it inside the home ({issue}); "
+                             f"line re-measured: light {after['rx']} dBm, box {after['box']}, login {after['session']}",
+                        facts=[(run.ticket, "tried_fix", fix), (run.ticket, "fixed_by", fix), (run.ticket, "has_status", "resolved"),
+                               (fix, "resolves", norm(issue))])
+    run.step("verify", f"{who} fixed it inside the home", f"{issue}; the line is healthy on the re-measure, so the case is "
+             "closed and the fix is saved to procedural memory.", "ok")
+    run.tell(f"{who} has been and fixed it ({issue}), and your line is healthy. Can you check on your side and tell me "
+             f"if it's working now?")
+    run.data["status"] = "resolved"
+    _ask_confirmation(run)
 
 
 def _read(run, verify=False):

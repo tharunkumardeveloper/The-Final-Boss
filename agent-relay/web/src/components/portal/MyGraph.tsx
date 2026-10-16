@@ -10,7 +10,8 @@ import type { Subscribe } from './SupportChat'
 const FACT_EVENTS = new Set(['fact_created', 'fact_corroborated', 'fact_superseded', 'fact_retired', 'ticket_opened', 'ticket_status'])
 
 /** The customer's own memory, as a graph that grows while they chat, with a replay of how it was learned. */
-export default function MyGraph({ tenant, who, subscribe }: { tenant: string; who: string | null; subscribe: Subscribe }) {
+export default function MyGraph({ tenant, who, subscribe, onLine, fresh }: { tenant: string; who: string | null; subscribe: Subscribe
+  onLine?: () => void; fresh?: boolean }) {
   const live = useRef(emptyGraph())
   const replay = useRef(emptyGraph())
   const [version, setVersion] = useState(0)
@@ -65,6 +66,11 @@ export default function MyGraph({ tenant, who, subscribe }: { tenant: string; wh
           <p className="eyebrow">Your memory graph</p>
           <h2 className="mt-1 font-display text-xl font-semibold tracking-[-0.01em]">How we know you, over time</h2>
           <p className="mt-1 text-sm text-ink-3">Grows while you chat. Faded lines used to be true.</p>
+          {onLine && (
+            <button onClick={onLine} className={`mt-2 inline-flex items-center gap-1.5 rounded-full bg-ink px-3 py-1 text-xs font-medium text-paper ${fresh ? 'animate-breathe' : ''}`}>
+              <i className="h-1.5 w-1.5 rounded-full bg-conflict" />Your case is open · see your line →
+            </button>
+          )}
         </div>
         {mode === 'live' ? (
           <button className="btn-primary !py-1.5 text-xs" onClick={start} disabled={!edges.length}><Rewind className="h-4 w-4" />Replay</button>
