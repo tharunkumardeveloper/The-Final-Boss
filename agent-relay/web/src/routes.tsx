@@ -29,6 +29,8 @@ export const MOVED: [string, string, Record<string, string>?][] = [
   ['/console/network', '/console/lab', { view: 'map' }],
   ['/console/regions', '/console/tenants'],
   ['/console/isolation', '/console/tenants'],
+  ['/talk', '/'],
+  ['/console/talk', '/'],
 ]
 
 export function AppRoutes() {

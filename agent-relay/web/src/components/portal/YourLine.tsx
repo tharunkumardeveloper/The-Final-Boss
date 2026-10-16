@@ -25,11 +25,11 @@ export default function YourLine({ tenant, who, subscribe, onMemory }: { tenant:
   const crew = useDispatch(run)
   const last = run?.steps[run.steps.length - 1]
 
-  const back = onMemory && <button onClick={onMemory} className="rounded-full bg-white/10 px-3 py-1 text-xs text-white/85 hover:bg-white/15">← Memory graph</button>
+  const back = onMemory && <button onClick={onMemory} className="rounded-full bg-white/10 px-3 py-1 text-xs text-white/85 hover:bg-white/15">← What we remember</button>
   if (!who || !view?.network) return (
     <div className="flex h-full flex-col items-center justify-center gap-3 rounded-[1.75rem] bg-surface p-6 text-center text-sm text-ink-3 hairline">
       {!who ? 'Say hi in the chat and your line shows up here.' : 'Tell us where you live in the chat, and your line shows up here.'}
-      {onMemory && <button onClick={onMemory} className="btn-ghost !py-1 text-xs hairline">← Memory graph</button>}
+      {onMemory && <button onClick={onMemory} className="btn-ghost !py-1 text-xs hairline">← What we remember</button>}
     </div>
   )
   return (

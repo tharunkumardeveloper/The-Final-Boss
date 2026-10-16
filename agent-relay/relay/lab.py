@@ -1105,8 +1105,13 @@ def _home_visit(run, tech, visit):
                              f"line re-measured: light {after['rx']} dBm, box {after['box']}, login {after['session']}",
                         facts=[(run.ticket, "tried_fix", fix), (run.ticket, "fixed_by", fix), (run.ticket, "has_status", "resolved"),
                                (fix, "resolves", norm(issue))])
-    run.step("verify", f"{who} fixed it inside the home", f"{issue}; the line is healthy on the re-measure, so the case is "
-             "closed and the fix is saved to procedural memory.", "ok")
+    # an in-home fix has no injected fault to grade against: the re-measure only shows the line is still healthy,
+    # so the close rests on the technician's word, never on "verified by re-measurement"
+    graded = bool(run.data.get("fault")) and not problems(after)
+    run.step("verify", f"{who} fixed it inside the home" if graded else f"Technician confirmed fixed: {who}",
+             f"{issue}; " + ("the re-measure proves the fault is gone, so the case is closed" if graded else
+                             "nothing on the line to re-measure against, so the case is closed on the technician's "
+                             "confirmation") + " and the fix is saved to procedural memory.", "ok")
     run.tell(f"{who} has been and fixed it ({issue}), and your line is healthy. Can you check on your side and tell me "
              f"if it's working now?")
     run.data["status"] = "resolved"
@@ -1453,11 +1458,43 @@ def on_chat(tenant, customer, text, opened=None):
         return start(tenant, c, ticket=waiting["ticket"], said=text, followup=True)
     with _lock:
         expected = (tenant, c) in _expected
+    from .agents import open_ticket_for
     if opened or not (expected or (has_line(tenant, c) and (_network_complaint(text) or _visit_ask(tenant, c, text))
                                    and not claimed(tenant, c))):
-        return None  # a new ticket starts the resolver through the normal handoff (start() clears the claim)
-    from .agents import open_ticket_for
+        stalled = None if opened else _stalled_ticket(tenant, c)
+        if not stalled:
+            return None  # a new ticket starts the resolver through the normal handoff (start() clears the claim)
+        # an open case nobody is working: pick it back up from what memory already holds (said=None makes
+        # investigate() read the ticket's issue and intake's facts), so the customer never has to say it again
+        ticket, status = stalled
+        return start(tenant, c, ticket=ticket, picked=status == "in progress")  # an open one is taken first
     return start(tenant, c, ticket=open_ticket_for(tenant, c), said=text)  # an open ticket, or none: still look
+
+
+_IDLE_MS = 10 * 60_000
+
+
+def _stalled_ticket(tenant, customer):
+    """The customer's open fault ticket when no resolver run is working it: never run, or the last run errored or went
+    quiet. A run waiting for the customer or handed to a person is someone's work, so it is left alone."""
+    from .agents import _request_only, tickets
+    if claimed(tenant, customer) or not has_line(tenant, customer):
+        return None
+    mine = [t for t in tickets(tenant) if t["customer"] == customer and t["status"] in ("open", "in progress")
+            and not _request_only(t["issues"])]
+    if not mine:
+        return None
+    ticket, status = mine[0]["ticket"], mine[0]["status"]
+    runs = [r for r in _runs.get(tenant, []) if (r.get("ticket") or "").lower() == ticket.lower()]
+    if not runs:  # includes a restart: runs live in memory, the ticket in the graph
+        return ticket, status
+    r = runs[0]  # newest first
+    if r.get("status") == "error":
+        return ticket, status
+    if r.get("status") in ("waiting on customer", "handed over", "unresolved") or r.get("awaiting"):
+        return None
+    idle = r.get("status") != "running" and (r.get("ended_at") or 0) < _ms() - _IDLE_MS
+    return (ticket, status) if idle else None
 
 
 def resolver_turn(tenant, customer, kind, handled, session_id, text=None):

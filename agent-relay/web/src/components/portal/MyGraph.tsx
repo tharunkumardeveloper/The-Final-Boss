@@ -10,8 +10,8 @@ import type { Subscribe } from './SupportChat'
 const FACT_EVENTS = new Set(['fact_created', 'fact_corroborated', 'fact_superseded', 'fact_retired', 'ticket_opened', 'ticket_status'])
 
 /** The customer's own memory, as a graph that grows while they chat, with a replay of how it was learned. */
-export default function MyGraph({ tenant, who, subscribe, onLine, fresh }: { tenant: string; who: string | null; subscribe: Subscribe
-  onLine?: () => void; fresh?: boolean }) {
+export default function MyGraph({ tenant, who, subscribe, onLine, hasCase, fresh }: { tenant: string; who: string | null; subscribe: Subscribe
+  onLine?: () => void; hasCase?: boolean; fresh?: boolean }) {
   const live = useRef(emptyGraph())
   const replay = useRef(emptyGraph())
   const [version, setVersion] = useState(0)
@@ -63,12 +63,12 @@ export default function MyGraph({ tenant, who, subscribe, onLine, fresh }: { ten
     <section className="flex h-full min-h-[560px] flex-col overflow-hidden rounded-[1.75rem] bg-surface shadow-lift hairline" aria-label="Your memory over time">
       <div className="flex flex-wrap items-start justify-between gap-3 px-5 pt-5">
         <div>
-          <p className="eyebrow">Your memory graph</p>
+          <p className="eyebrow">What we remember</p>
           <h2 className="mt-1 font-display text-xl font-semibold tracking-[-0.01em]">How we know you, over time</h2>
           <p className="mt-1 text-sm text-ink-3">Grows while you chat. Faded lines used to be true.</p>
           {onLine && (
             <button onClick={onLine} className={`mt-2 inline-flex items-center gap-1.5 rounded-full bg-ink px-3 py-1 text-xs font-medium text-paper ${fresh ? 'animate-breathe' : ''}`}>
-              <i className="h-1.5 w-1.5 rounded-full bg-conflict" />Your case is open · see your line →
+              <i className={`h-1.5 w-1.5 rounded-full ${hasCase ? 'bg-conflict' : 'bg-current'}`} />{hasCase ? 'Your case is open · see your line →' : 'Your line →'}
             </button>
           )}
         </div>

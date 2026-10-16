@@ -624,7 +624,8 @@ export default function LabPage() {
   const chosen = view?.presets.find((p) => p.key === pick)
   const crew = useDispatch(focusRun ?? run)
 
-  if (talk) return <Navigate to="/" replace />  // talking as a customer happens on the home page now
+  // talking as a customer happens on the home page now; the rest of the query (?customer=...) goes with it
+  if (talk) { const q = new URLSearchParams(params); q.delete('talk'); const s = q.toString(); return <Navigate to={s ? `/?${s}` : '/'} replace /> }
 
   // One screen on a desktop: the page never scrolls, each column scrolls inside itself. Smaller screens stack.
   return (

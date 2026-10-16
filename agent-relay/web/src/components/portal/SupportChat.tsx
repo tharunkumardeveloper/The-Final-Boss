@@ -167,7 +167,8 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
   typeRef?: { current: ((text: string) => void) | null }; country?: string }) {
   const reduce = useReducedMotion()
   const [openedAt] = useState(() => new Date().toISOString())  // the on-screen greetings carry the time the chat opened
-  const [who, setWho] = useState<string | null>(null)
+  // an old "talk as a customer" link lands here with ?customer=: continue them (their stored session id is read below)
+  const [who, setWho] = useState<string | null>(() => { try { return new URLSearchParams(window.location.search).get('customer')?.trim().toLowerCase() || null } catch { return null } })
   const [session, setSession] = useState<string>()
   const [history, setHistory] = useState<ConversationSession[]>([])
   const [lines, setLines] = useState<Line[]>([])

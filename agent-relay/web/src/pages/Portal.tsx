@@ -64,7 +64,8 @@ function AccountPanel({ tenant, who, customer, chips, subscribe, onAsk }: { tena
   )
 }
 
-/** Memory while the customer is talking; their own line once a case is open (a ticket, or the resolver on it). */
+/** Memory while the customer is talking; their own line once a case is open (a ticket, or the resolver on it).
+ *  Either view is one click away in both states. */
 function GraphOrLine({ tenant, who, subscribe }: { tenant: string; who: string | null; subscribe: (fn: (e: RelayEvent) => void) => () => void }) {
   const [mode, setMode] = useState<'memory' | 'line'>('memory')
   const [hasCase, setHasCase] = useState(false)
@@ -84,7 +85,7 @@ function GraphOrLine({ tenant, who, subscribe }: { tenant: string; who: string |
     <div className="h-full min-h-[560px] xl:min-h-0">
       <Suspense fallback={null}>
         {mode === 'memory'
-          ? <MyGraph tenant={tenant} who={who} subscribe={subscribe} onLine={hasCase ? () => { setMode('line'); setFresh(false) } : undefined} fresh={fresh} />
+          ? <MyGraph tenant={tenant} who={who} subscribe={subscribe} onLine={who ? () => { setMode('line'); setFresh(false) } : undefined} hasCase={hasCase} fresh={fresh} />
           : <YourLine tenant={tenant} who={who} subscribe={subscribe} onMemory={() => setMode('memory')} />}
       </Suspense>
     </div>
