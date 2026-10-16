@@ -71,6 +71,11 @@ SALES = [
 BILLING = [IDENTITY[0]]
 ADDRESS = Slot("location", "customer", ("address",), "What's the exact address for the connection (house, street, area)?",
                SALES[0].words)
+# What intake actually asks a support customer, kept short so it doesn't feel like a form: who they are, where the
+# line is, and the three details the resolver diagnoses from. Plan and router come from billing and the line record;
+# frequency and what they tried are still noted when volunteered, never asked.
+ASKED_IDENTITY = [s for s in IDENTITY if s.key in ("identifier", "area")]
+ASKED_ISSUE = [s for s in ISSUE if s.key in ("started", "scope", "medium")]
 SLOTS = {s.key: s for s in IDENTITY + ISSUE + SALES}  # keys are unique per flow (area = support, location = sales)
 
 DONT_KNOW = _w(r"\b(idk|i don'?t know|dont know|don'?t remember|no idea|not sure|can'?t remember|forgot|no clue)\b")
@@ -378,7 +383,7 @@ def plan_turn(tenant, *, customer, text, learned, ticket, history, first_turn, p
     from . import lab  # lazy: lab imports agents, which imports this module
     if not have & set(IDENTITY[0].preds) and lab.has_line(tenant, customer):
         have.add("account_id")  # their line is in the network graph: that already says whose account this is
-    order = {"support": IDENTITY + (ISSUE if ticket else []), "billing": BILLING, "sales": SALES}.get(plan.mode, [])
+    order = {"support": ASKED_IDENTITY + (ASKED_ISSUE if ticket else []), "billing": BILLING, "sales": SALES}.get(plan.mode, [])
     if plan.mode == "sales" and not (SALES_Q.search(text) or _known(now, ("wants_to_buy", "requested", "lives_in"))):
         order = []  # a prospect browsing plans isn't asked for an address
     plan.missing = [s for s in order if not have & set(s.preds) and s.key not in gave_up]

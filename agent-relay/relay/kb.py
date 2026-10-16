@@ -67,7 +67,8 @@ def _place_index():
                 continue
             idx.setdefault(phrase, (c["region"], c["country"], c["key"], None))
         for a in c["areas"]:
-            idx.setdefault(a["key"], (c["region"], c["country"], c["key"], a["key"]))
+            for phrase in [a["key"], *a.get("aliases", [])]:  # a locality inside an area's exchange counts as that area
+                idx.setdefault(phrase, (c["region"], c["country"], c["key"], a["key"]))
     return sorted(idx.items(), key=lambda kv: -len(kv[0]))
 
 

@@ -43,14 +43,7 @@ def session_one():
     assert re.search(r"city|area", r["reply"], re.I), r["reply"]
     r = chat("Tharun Kumar", "bengaluru, koramangala", sid, at(3))
     assert ("lives_in", "koramangala") in active("tharun kumar")
-    assert "plan" in r["reply"].lower(), r["reply"]
-    r = chat("Tharun Kumar", "no idea", sid, at(4))
-    assert "sticker" in r["reply"].lower(), "the plan hint"
-    r = chat("Tharun Kumar", "it says 300 mbps", sid, at(5))
-    assert ("on_plan", "fiber 300") in active("tharun kumar")
-    assert "router" in r["reply"].lower(), r["reply"]
-    r = chat("Tharun Kumar", "hub 6 pro", sid, at(6))
-    assert ("has_router", "pml hub 6 pro") in active("tharun kumar")
+    assert not re.search(r"which plan|which router", r["reply"], re.I), "plan and router aren't asked any more"
     ticket = next(o for p, o in active("tharun kumar") if p == "has_ticket")
     r = chat("Tharun Kumar", "completely down since this morning, router lights are all off, whole house", sid, at(7))
     tk = active(ticket)

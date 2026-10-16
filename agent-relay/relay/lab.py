@@ -1571,8 +1571,8 @@ def _visit_ask(tenant, customer, text):
 
 
 def details_ready(tenant, customer, ticket):
-    """Intake has finished asking about the problem on this ticket (spec order: when it started, how often, whole home
-    or one device, WiFi or cable, what they tried; an "I don't know" counts as answered). Until then the resolver waits,
+    """Intake has finished asking about the problem on this ticket (when it started, whole home or one device, WiFi or
+    cable; an "I don't know" counts as answered). Until then the resolver waits,
     so it never diagnoses off a bare "my wifi has issues". A Break it customer is simulated: nobody answers intake."""
     c = norm(customer)
     with _lock:
@@ -1583,7 +1583,7 @@ def details_ready(tenant, customer, ticket):
     from . import intake  # lazy: intake imports retrieve, which this module also uses
     have = intake.ticket_facts(tenant, norm(ticket))
     gave_up = {f["object"] for f in retrieve.customer_facts(tenant, c) if f["active"] and f["predicate"] == "doesnt_know"}
-    return all(s.key in gave_up or any(p in have for p in s.preds) for s in intake.ISSUE)
+    return all(s.key in gave_up or any(p in have for p in s.preds) for s in intake.ASKED_ISSUE)
 
 
 def claimed(tenant, customer):
