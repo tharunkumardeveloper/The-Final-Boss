@@ -343,7 +343,7 @@ def chat(tenant: str, body: ChatIn):
         print(f"lab on_chat: {e}")
     speaker = "intake"
     if owner:
-        out["reply"], out["reply_episode_id"] = lab.resolver_turn(tenant, body.customer, owner, handled, sid)
+        out["reply"], out["reply_episode_id"] = lab.resolver_turn(tenant, body.customer, owner, handled, sid, body.text)
         speaker = "resolver"
     shown = None  # instruction pictures travel as [guide:...] markers in the messages instead
     retired = [{"fact_id": r["fact_id"], "subject": r["triple"][0], "predicate": r["triple"][1],

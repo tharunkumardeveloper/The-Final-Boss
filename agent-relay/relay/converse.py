@@ -469,8 +469,10 @@ def _model_reply(tenant, *, customer, text, learned, notes, history, first_turn,
         busy = lab.waiting_kind(tenant, customer) == "busy"
         if busy:  # here the follow-up is real: the resolver is on it
             kept.append("Our resolver is checking your line right now and will message you here.")
+        from .intake import COVERAGE_Q  # lazy: intake imports this module
         known = None if busy else next((n.split(":")[0].replace("We DO serve", "Good news: we serve") + "."
-                                        for n in notes if n.startswith("We DO serve")), None)
+                                        for n in notes if n.startswith("We DO serve")), None) if COVERAGE_Q.search(text or "") \
+            else (f"Your ticket {ticket.upper()} is with our resolver, who will update you right here." if ticket else None)
         reply = " ".join(kept + ([known] if known and known.lower() not in reply.lower() else [])) or (
             "I don't have that detail here, so I've noted it for the team.")
     # Strip any sentence where the bot claims to have rescheduled/confirmed a date — it can't do that

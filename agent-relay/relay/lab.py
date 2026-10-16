@@ -519,7 +519,13 @@ _SYMPTOMS = [
     ("something wrong", r"\b(internet|wi-?fi|connection|net)\b.{0,30}\b(weird|off|wrong|not right|acting up|issues?|problems?)\b"
                         r"|\b(weird|wrong|off|issues?|problems?)\b.{0,30}\b(internet|wi-?fi|connection)\b"),
     ("lights look normal", r"\blights? (look|are|seem) (normal|fine|ok)\b"),
+    ("can't connect", r"\b(ethernet|lan|cable|port|wired)\b.{0,25}\b(not|no|isn'?t|won'?t|doesn'?t|can'?t)\b.{0,15}"
+                      r"\b(detect\w*|connect\w*|work\w*|recogni[sz]\w*)\b|\b(not|can'?t|won'?t) (detect\w*|connect\w*)\b"),
 ]
+# asking for someone to come, or for help, on a case that is already open: the resolver takes it, not small talk
+_STILL = re.compile(r"still|didn'?t (help|work|fix)|same (issue|problem)|not (fixed|working)", re.I)
+VISIT_ASK = re.compile(r"\b(send|need|want|get)\b.{0,25}\b(technician|engineer|someone|somebody|men|guy|person|team|visit|"
+                       r"assistance|help)\b|\bassist(ance)?\b|\bhelp me\b|\bcome (and )?fix\b", re.I)
 
 
 def symptoms(text):
@@ -919,9 +925,11 @@ def investigate(run):
                                     "prefers_channel", "ticket_about", "address", "connection_type", "affected_device",
                                     "frequency", "issue_started", "connection_medium", "tried_fix")]
     sharing.consult(t, "resolver", [f["fact_id"] for f in facts], at=_ms(), log=log)
-    if not run.said:  # the last thing the customer typed, else what intake noted
-        last = _q(t, "last customer message", LAST_SAID, {"c": c}, ro=True)
-        said = [last[0][0]] if last else [f["object"] for f in facts if f["predicate"] in ("reported_issue", "ticket_about")]
+    about = [f["object"] for f in facts if f["predicate"] == "ticket_about" and run.ticket and f["subject"] == run.ticket]
+    if not run.said:  # a picked-up ticket: its own issue; otherwise the last thing the customer typed, else intake's notes
+        last = None if (run.picked and about) else _q(t, "last customer message", LAST_SAID, {"c": c}, ro=True)
+        said = about if run.picked and about else [last[0][0]] if last else \
+            [f["object"] for f in facts if f["predicate"] in ("reported_issue", "ticket_about")]
         run.said = said[0] if said else ""
     heard = " ".join([run.said] + [f["object"] for f in facts if f["predicate"] in ("reported_issue", "ticket_about")])
     run.data["said"], run.data["symptoms"] = run.said, symptoms(heard)
@@ -934,8 +942,9 @@ def investigate(run):
     if network_issue and not run.followup and not _fault_for(t, measure(t, c)):
         _match_complaint(t, c, heard)  # the world's side; the resolver never sees this
     recent = any(r["customer"] == c and r["id"] != run.id and r["started_at"] > _ms() - 30 * 60_000 for r in _runs.get(t, []))
+    on = (f"your ticket {run.ticket.upper()} ({about[0]})" if run.ticket and about else "your case")
     run.tell("Thanks for telling me. I'm taking another look at your line right now." if run.followup or recent else
-             f"Hi {_first(c)}, I'm the resolver on your case. I'm checking your connection from our side right now, "
+             f"Hi {_first(c)}, I'm the resolver on {on}. I'm checking your connection from our side right now, "
              f"so you don't need to do anything yet.")
     m = before = _read(run)
     run.data["fault"] = _fault_for(t, m)
@@ -1061,7 +1070,11 @@ def _healthy(run, m, network_issue):
              f"something inside your home. Could you restart the box for me? Unplug it, wait 10 seconds and plug it "
              f"back in. [guide:restart_box] Tell me once it's back on.")
     reply = _wait_for(run, "guided", "Restarting the box", timeout=300)
-    if reply and _NO.search(reply):
+    if not reply:  # no answer is not "fixed": the case stays open for them
+        run.step("wait", f"No reply from {first} yet", "The case stays open until they answer.", "pending")
+        run.data["status"] = "waiting on customer"
+        return
+    if _NO.search(reply) or VISIT_ASK.search(reply) or _STILL.search(reply):  # "send someone", "still not working": a visit
         run.tell("Thanks for trying. I'll get a technician to check inside your home.")
         visit = _collect_details(run)
         if visit:
@@ -1414,20 +1427,23 @@ def on_chat(tenant, customer, text, opened=None):
         return start(tenant, c, ticket=waiting["ticket"], said=text, followup=True)
     with _lock:
         expected = (tenant, c) in _expected
-    if opened or not (expected or (has_line(tenant, c) and _network_complaint(text) and not claimed(tenant, c))):
+    if opened or not (expected or (has_line(tenant, c) and (_network_complaint(text) or _visit_ask(tenant, c, text))
+                                   and not claimed(tenant, c))):
         return None  # a new ticket starts the resolver through the normal handoff (start() clears the claim)
     from .agents import open_ticket_for
     return start(tenant, c, ticket=open_ticket_for(tenant, c), said=text)  # an open ticket, or none: still look
 
 
-def resolver_turn(tenant, customer, kind, handled, session_id):
+def resolver_turn(tenant, customer, kind, handled, session_id, text=None):
     """The resolver's own answer while it owns the case, so intake doesn't talk over it. Returns (text, episode id)."""
     c = norm(customer)
     first = _first(c)
     if kind == "busy":
         text = "I'm still on it, checking your line right now. I'll message you here in a moment."
     elif kind == "guided":
-        text = "Thanks! Checking your line again now."
+        said = text or ""
+        text = ("Understood, I'll arrange a technician for you." if (_NO.search(said) or VISIT_ASK.search(said) or _STILL.search(said))
+                else "Thanks! Checking your line again now.")
     elif kind == "details":
         with _lock:
             w = _awaiting.get((tenant, c))
@@ -1466,11 +1482,19 @@ def before_chat(tenant, customer, text):
         r = _run(tenant, w["run"])
         if r is not None:
             r["slot"] = slot
-    if not claimed_now and _network_complaint(text) and has_line(tenant, c):
+    if not claimed_now and (_network_complaint(text) or _visit_ask(tenant, c, text)) and has_line(tenant, c):
         with _lock:
             _expected.add((tenant, c))
         # ponytail: a fixed expiry; if the handoff never starts a run, intake stops deferring after 90 s
         threading.Timer(90, lambda: _expected.discard((tenant, c))).start()
+
+
+def _visit_ask(tenant, customer, text):
+    """Asking for someone to come, or for help, while a ticket is open."""
+    if not VISIT_ASK.search(text or ""):
+        return False
+    from .agents import open_ticket_for  # lazy: agents imports this module
+    return bool(open_ticket_for(tenant, customer))
 
 
 def claimed(tenant, customer):

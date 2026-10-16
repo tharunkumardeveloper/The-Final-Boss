@@ -159,6 +159,16 @@ def abstention_gates():
     assert retrieve.ungrounded(q, retrieve.recall(T, q)) is None, "the owner of a linked ticket is the subject"
 
 
+def pickup_reads_the_ticket_not_the_last_message():
+    """A wired device that won't connect is a connectivity complaint (home path, not 'handed to the team'); asking for
+    someone to come is a visit request; an address change is neither."""
+    assert lab._network_complaint("ethernet cable not detecting")
+    assert not lab._network_complaint("im living in the chennai")
+    for t in ("can u send ur men to fix my issue", "pls i need assistance", "still not working"):
+        assert lab.VISIT_ASK.search(t) or lab._STILL.search(t), t
+    assert not lab.VISIT_ASK.search("which plans do you have") and not lab.VISIT_ASK.search("im living in the chennai")
+
+
 if __name__ == "__main__":
     db.reset(T)
     try:
@@ -171,6 +181,7 @@ if __name__ == "__main__":
         fixed_by_names_the_fix_that_worked()
         resolver_waits_for_the_line()
         abstention_gates()
+        pickup_reads_the_ticket_not_the_last_message()
         print("test_write_resolution: all passed")
     finally:
         db.graph(T).delete()
