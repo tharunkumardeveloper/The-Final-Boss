@@ -10,6 +10,7 @@ import type { Chip } from '../lib/chips'
 
 // the graph canvas is heavy; it loads once someone is chatting
 const MyGraph = lazy(() => import('../components/portal/MyGraph'))
+const YourLine = lazy(() => import('../components/portal/YourLine'))
 import { api } from '../lib/api'
 import { flag, titleCase } from '../lib/format'
 import { activeOutages, applyEvent, emptyGraph, loadGraph } from '../lib/graph'
@@ -58,6 +59,31 @@ function AccountPanel({ tenant, who, customer, chips, subscribe, onAsk }: { tena
         {tab === 'tickets'
           ? <TicketsPanel tenant={tenant} who={who} customer={customer} subscribe={subscribe} onAsk={onAsk} />
           : <MemoryPanel who={who} customer={customer} chips={chips} tenant={tenant} />}
+      </div>
+    </div>
+  )
+}
+
+/** Memory while the customer is talking; their own line once a case is open (a ticket, or the resolver on it). */
+function GraphOrLine({ tenant, who, subscribe }: { tenant: string; who: string | null; subscribe: (fn: (e: RelayEvent) => void) => () => void }) {
+  const [mode, setMode] = useState<'memory' | 'line'>('memory')
+  useEffect(() => { setMode('memory') }, [who])
+  useEffect(() => subscribe((e) => {
+    const c = (e.data as { customer?: string })?.customer?.toLowerCase()
+    if (who && c === who && (e.type === 'ticket_opened' || e.type === 'pickup' || (e.type === 'lab_run' && (e.data as { status?: string }).status === 'running'))) setMode('line')
+  }), [subscribe, who])
+  return (
+    <div className="flex h-full min-h-[560px] flex-col gap-2 xl:min-h-0">
+      <div role="tablist" aria-label="Your view" className="inline-flex shrink-0 self-start rounded-full bg-surface p-1 hairline">
+        {([['memory', 'What we remember'], ['line', 'Your line']] as const).map(([k, label]) => (
+          <button key={k} role="tab" aria-selected={mode === k} onClick={() => setMode(k)}
+            className={`rounded-full px-3 py-1 text-xs ${mode === k ? 'bg-ink font-medium text-paper' : 'text-ink-2 hover:bg-sunk'}`}>{label}</button>
+        ))}
+      </div>
+      <div className="min-h-0 flex-1" role="tabpanel">
+        <Suspense fallback={null}>
+          {mode === 'memory' ? <MyGraph tenant={tenant} who={who} subscribe={subscribe} /> : <YourLine tenant={tenant} who={who} subscribe={subscribe} />}
+        </Suspense>
       </div>
     </div>
   )
@@ -174,7 +200,7 @@ export default function Portal() {
             <AccountPanel tenant={tenant} who={who} customer={customers.find((c) => c.key === who)} chips={chips} subscribe={subscribe}
               onAsk={(t) => typeRef.current?.(t)} />
             <div className="min-h-[560px] lg:col-span-2 xl:col-span-1 xl:min-h-0">
-              <Suspense fallback={null}><MyGraph tenant={tenant} who={who} subscribe={subscribe} /></Suspense>
+              <GraphOrLine tenant={tenant} who={who} subscribe={subscribe} />
             </div>
           </div>
           <dl className="mt-6 flex flex-wrap gap-x-10 gap-y-3 num">

@@ -118,6 +118,13 @@ describe('field dispatch', async () => {
     expect(t).toContain('On site · repairing')
     expect(t).toContain('fast-forwarded to 8 s')
   })
+  it("a customer's own screen never shows a neighbour's name", () => {
+    const two = { ...net, homes: [...net.homes, { ...net.homes[0], id: 'ont-2', port: 4, customer: 'priya', name: 'Priya Naik' }] }
+    expect(renderToString(<Canvas view={two} focus="kevin" />)).toContain('Priya')
+    const mine = renderToString(<Canvas view={two} focus="kevin" privateTo="kevin" />)
+    expect(mine).not.toContain('Priya')
+    expect(mine).toContain('Kevin')
+  })
   it('draws the van on the diagram only while a crew is out', () => {
     expect(renderToString(<Canvas view={net} focus="kevin" dispatch={d} />)).toContain('stroke-dasharray="3 5"')
     expect(renderToString(<Canvas view={net} focus="kevin" />)).not.toContain('stroke-dasharray="3 5"')

@@ -147,7 +147,10 @@ export function FieldDispatch({ d, view }: { d: Dispatch; view: NonNullable<LabV
 // ---------------------------------------------------------------- the network canvas
 
 /** The network as the container allows: left to right when there's room, top to bottom when narrow. Never cut. */
-export const Canvas = memo(function Canvas({ view, focus, dispatch }: { view: NonNullable<LabView['network']>; focus: string | null; dispatch?: Dispatch | null }) {
+export const Canvas = memo(function Canvas({ view, focus, dispatch, privateTo }: { view: NonNullable<LabView['network']>; focus: string | null
+  dispatch?: Dispatch | null; privateTo?: string | null }) {
+  // privateTo: drawn on a customer's own screen, so every other home is anonymous (no name, no readings)
+  const mine = (h: LabHome) => !privateTo || h.customer === privateTo
   const box = useRef<HTMLDivElement>(null)
   const [width, setWidth] = useState(720)
   useEffect(() => {
@@ -255,9 +258,9 @@ export const Canvas = memo(function Canvas({ view, focus, dispatch }: { view: No
                   {bad && <circle cx={p.x} cy={p.y} r="8" fill={color} opacity="0.5" className="lab-alarm" />}
                   <rect x={p.x - sz / 2} y={p.y - sz / 2} width={sz} height={sz} rx="4" fill={color} fillOpacity={bad ? 0.95 : 0.85}
                     stroke={me ? 'white' : 'none'} strokeWidth="2">
-                    <title>{`${h.name} · port ${h.port} · ${HOME_WORD[h.state]}${h.rx != null ? ` · ${h.rx} dBm` : ''}`}</title>
+                    <title>{mine(h) ? `${h.name} · port ${h.port} · ${HOME_WORD[h.state]}${h.rx != null ? ` · ${h.rx} dBm` : ''}` : `a neighbour's home · ${HOME_WORD[h.state]}`}</title>
                   </rect>
-                  {h.customer && <text x={p.x} y={p.y + (me ? 22 : 19)} textAnchor="middle" className={`text-[9.5px] font-semibold ${me ? 'fill-white' : 'fill-white/70'}`}>{h.name.split(' ')[0]}</text>}
+                  {h.customer && mine(h) && <text x={p.x} y={p.y + (me ? 22 : 19)} textAnchor="middle" className={`text-[9.5px] font-semibold ${me ? 'fill-white' : 'fill-white/70'}`}>{h.name.split(' ')[0]}</text>}
                 </g>
               )
             })}
