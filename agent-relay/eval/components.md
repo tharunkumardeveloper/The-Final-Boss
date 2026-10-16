@@ -109,6 +109,26 @@ Source: {'report': 'eval/load_report_fix6.json', 'graph': 'pml-bench', 'commit':
 | cross_agent | 100.0% (16/16) [81%–100%] | 16/16 |
 | **all** | 96.5% (82/85) [90%–99%] | 96.5% (82/85) [90%–99%] |
 
+## Components: final
+
+Source: {'report': 'eval/load_report_final.json', 'graph': 'pml-bench', 'commit': 'df56065476e784fe67ad8d0654bf1145556b4c92', 'relay_retrieve_dirty': False, 'relay_dirty': []}
+
+- Extraction recall: 99.7% (305/306) [98%–100%]; extra facts 133, load errors 0
+- Predicate normalisation (extracted fact with the planted value carries the planted predicate): 100.0% (273/273) [99%–100%]
+- Entity resolution, issue paraphrases (32 mentions, 6 gold clusters -> 10 entities): pairwise precision 1.0, recall 0.7763 (76 gold pairs)
+- Typos mapped to the existing entity: 87.5% (7/8) [53%–98%]
+- Name collisions kept apart (both customers hold exactly their own current city): 100.0% (4/4) [51%–100%]
+
+| Contradiction case | Correct [CI] | Excluding extraction misses |
+|---|---|---|
+| change | 92.3% (36/39) [80%–97%] | 36/39 |
+| multi | 100.0% (16/16) [81%–100%] | 16/16 |
+| unchanged | 100.0% (14/14) [78%–100%] | 14/14 |
+| cross_agent | 100.0% (16/16) [81%–100%] | 16/16 |
+| **all** | 96.5% (82/85) [90%–99%] | 96.5% (82/85) [90%–99%] |
+
+Extraction misses by predicate: {'lives_in': '1/66'}
+
 ## Benchmark: scaled-160
 
 Tenant `pml-bench`, 40 customers, 556 customer turns, 160 questions, run `run-20261015-140300`. Provenance: git archive of HEAD fe9abb5 (relay/ clean, incl. retrieve.py) + eval/bench_shim.py; graph mem:pml-bench reloaded 2026-10-15 13:44-13:58 IST; answers 2026-10-15
@@ -169,6 +189,54 @@ Why misses happen: gold in context but model refused: 23; retrieval: gold value 
 
 By answer model (all API keys pooled): gemini-3.5-flash-lite 50.0% (80/160) [42%–58%]
 
+## Benchmark: before
+
+Tenant `pml-bench`, 40 customers, 556 customer turns, 160 questions, run `run-20261015-161615`. Provenance: None
+
+Head-to-head on 160 questions: Relay 90.6% (145/160) [85%–94%] vs B1 50.0% (80/160) [42%–58%]; difference +40.6%, paired bootstrap 95% CI [+31.2%, +50.0%]; Relay-only correct 75, B1-only 10, exact McNemar p = 1.9e-13
+
+| Type | n | Relay | B1 | Δ [bootstrap CI] |
+|---|---|---|---|---|
+| belief_time | 18 | 94.4% (17/18) [74%–99%] | 38.9% (7/18) [20%–61%] | +56% [+33%, +78%] |
+| completeness | 18 | 100.0% (18/18) [82%–100%] | 33.3% (6/18) [16%–56%] | +67% [+44%, +89%] |
+| current | 18 | 100.0% (18/18) [82%–100%] | 44.4% (8/18) [25%–66%] | +56% [+33%, +78%] |
+| disagreement | 16 | 100.0% (16/16) [81%–100%] | 6.2% (1/16) [1%–28%] | +94% [+81%, +100%] |
+| handoff | 18 | 100.0% (18/18) [82%–100%] | 66.7% (12/18) [44%–84%] | +33% [+11%, +56%] |
+| multi_hop | 18 | 100.0% (18/18) [82%–100%] | 27.8% (5/18) [12%–51%] | +72% [+50%, +94%] |
+| procedural | 18 | 44.4% (8/18) [25%–66%] | 50.0% (9/18) [29%–71%] | -6% [-44%, +33%] |
+| unknown | 18 | 88.9% (16/18) [67%–97%] | 88.9% (16/18) [67%–97%] | +0% [-22%, +22%] |
+| world_time | 18 | 88.9% (16/18) [67%–97%] | 88.9% (16/18) [67%–97%] | +0% [-17%, +17%] |
+
+**FULL**: accuracy 90.6% (145/160) [85%–94%]. Abstention (18 should-refuse): precision 88.9% (16/18) [67%–97%], recall 88.9% (16/18) [67%–97%].
+
+Why misses happen: gold in context, wrong/incomplete value chosen: 8; retrieval: gold value not in context -> wrong answer: 3; retrieval: gold value not in context -> refused: 2; answered a should-refuse question (hallucination): 2
+
+By answer model (all API keys pooled): gemini-3.5-flash-lite 90.6% (145/160) [85%–94%]
+
+**B1**: accuracy 50.0% (80/160) [42%–58%]. Abstention (18 should-refuse): precision 28.6% (16/56) [18%–41%], recall 88.9% (16/18) [67%–97%].
+
+Why misses happen: gold in context but model refused: 23; retrieval: gold value not in context -> wrong answer: 21; retrieval: gold value not in context -> refused: 17; gold in context, conflict not flagged: 9; gold in context, wrong/incomplete value chosen: 8; answered a should-refuse question (hallucination): 2
+
+By answer model (all API keys pooled): gemini-3.5-flash-lite 50.0% (80/160) [42%–58%]
+
+**A1**: accuracy 71.4% (45/63) [59%–81%]. Abstention (7 should-refuse): precision 77.8% (7/9) [45%–94%], recall 100.0% (7/7) [65%–100%].
+
+Why misses happen: gold in context, wrong/incomplete value chosen: 14; retrieval: gold value not in context -> wrong answer: 2; retrieval: gold value not in context -> refused: 2
+
+By answer model (all API keys pooled): gemini-3.5-flash-lite 71.4% (45/63) [59%–81%]
+
+**A2**: accuracy 81.0% (51/63) [70%–89%]. Abstention (7 should-refuse): precision 58.3% (7/12) [32%–81%], recall 100.0% (7/7) [65%–100%].
+
+Why misses happen: retrieval: gold value not in context -> wrong answer: 5; retrieval: gold value not in context -> refused: 5; gold in context, wrong/incomplete value chosen: 2
+
+By answer model (all API keys pooled): gemini-3.5-flash-lite 81.0% (51/63) [70%–89%]
+
+**B0**: accuracy 30.0% (3/10) [11%–60%]. Abstention (0 should-refuse): precision 0.0% (0/3) [0%–56%], recall -.
+
+Why misses happen: retrieval: gold value not in context -> wrong answer: 4; gold in context but model refused: 3
+
+By answer model (all API keys pooled): gemini-3.5-flash-lite 30.0% (3/10) [11%–60%]
+
 ## Small set (74 questions, earlier run)
 
 Relay 93.2% (69/74) [85%–97%]; B1 43.5% (20/46) [30%–58%]; head-to-head Relay 91.3% (42/46) [80%–97%] vs B1 43.5% (20/46) [30%–58%]. Exact McNemar p ≤ 6e-05 for any pairing consistent with these counts. aggregates from README/PROGRESS; per-question rows not kept, so no bootstrap.
@@ -207,16 +275,8 @@ Relay 93.2% (69/74) [85%–97%]; B1 43.5% (20/46) [30%–58%]; head-to-head Rela
 
 ```
 {
- "commit": "46a46f166d35ffd5111118689901609c992081c3",
- "relay_retrieve_dirty": true,
- "relay_dirty": [
-  "M relay/agents.py",
-  " M relay/config.py",
-  " M relay/kb.py",
-  " M relay/memory.py",
-  " M relay/queries.py",
-  " M relay/registry.py",
-  " M relay/retrieve.py"
- ]
+ "commit": "df56065476e784fe67ad8d0654bf1145556b4c92",
+ "relay_retrieve_dirty": false,
+ "relay_dirty": []
 }
 ```

@@ -327,7 +327,7 @@ def write_md(results):
     out += ["## All systems", "", "| System | What it is | Questions | Accuracy [95% CI] | Evidence recall | Retrieval p50 / p95 ms |",
             "|---|---|---|---|---|---|"]
     for s, (_, _, _, desc) in SYSTEMS.items():
-        if s in S and S[s].get("summary"):
+        if s in S and S[s].get("summary") and S[s]["summary"].get("retrieval_ms"):  # a system with no answered rows yet has none
             sm = S[s]["summary"]
             out.append(f"| {s} | {desc} | {sm['overall']['n']}/{S[s].get('n_target', '?')} | {ci(sm['overall'])} | "
                        f"{pct(sm['overall']['evidence_recall'])} | {sm['retrieval_ms']['p50']} / {sm['retrieval_ms']['p95']} |")

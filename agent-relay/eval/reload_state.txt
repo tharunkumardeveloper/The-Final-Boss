@@ -83,3 +83,30 @@ fe9abb5d0ff3368974212c4d41364ad2c355a80b
 ?? eval/load_report_fix5.json
 ?? eval/load_report_fix6.json
 [fix6b] done 16:05:39 summary {"turns": 556, "planted": 306, "recovered": 306, "missed": 0, "extra_facts": 97, "dropped": 2}
+
+[fix8] start 2026-10-15 19:18:41 HEAD d99bf94502ae18d6e516570375c20775e8f0ea6b
+ M data/load.py
+ M relay/agents.py
+ M relay/cards.py
+ M relay/lab.py
+ M relay/registry.py
+
+[fix8b] start 2026-10-15 20:08:31 HEAD d99bf94502ae18d6e516570375c20775e8f0ea6b
+ M data/load.py
+ M eval/reload_state.txt
+ M relay/agents.py
+ M relay/cards.py
+ M relay/lab.py
+ M relay/registry.py
+
+[fix8c] start 2026-10-15 20:13:16 HEAD d11a807bb8215cff99199261bfd5b6c8b352d413
+ M eval/reload_state.txt
+ M relay/db.py
+
+[final] start 2026-10-16 01:18:51 HEAD df56065476e784fe67ad8d0654bf1145556b4c92
+ M data/load_report.json
+ M eval/fixlog/fix8_procedural.json
+ M eval/reload_state.txt
+
+[final] resumed at event 427 of 634 (events 0-426 already in the graph), HEAD df56065476e784fe67ad8d0654bf1145556b4c92
+[final] resume done, errors 0

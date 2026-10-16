@@ -1,16 +1,8 @@
 {
  "git": {
-  "commit": "46a46f166d35ffd5111118689901609c992081c3",
-  "relay_retrieve_dirty": true,
-  "relay_dirty": [
-   "M relay/agents.py",
-   " M relay/config.py",
-   " M relay/kb.py",
-   " M relay/memory.py",
-   " M relay/queries.py",
-   " M relay/registry.py",
-   " M relay/retrieve.py"
-  ]
+  "commit": "df56065476e784fe67ad8d0654bf1145556b4c92",
+  "relay_retrieve_dirty": false,
+  "relay_dirty": []
  },
  "small_set": {
   "relay": {
@@ -794,6 +786,123 @@
      " M relay/registry.py"
     ]
    }
+  },
+  "final": {
+   "extraction": {
+    "planted": 306,
+    "recovered": 305,
+    "recall": 0.9967,
+    "extra_facts": 133,
+    "load_errors": 0
+   },
+   "predicate_normalization": {
+    "n": 273,
+    "correct": 273,
+    "accuracy": 1.0,
+    "ci95": [
+     0.9861,
+     1.0
+    ]
+   },
+   "entity_resolution": {
+    "issue_aliases": {
+     "precision": 1.0,
+     "recall": 0.7763,
+     "pairs_merged": 59,
+     "gold_pairs": 76,
+     "mentions": 32,
+     "entities": 10,
+     "clusters": 6
+    },
+    "typos": {
+     "n": 8,
+     "ok": 7,
+     "failures": [
+      {
+       "text": "Again, we're still in Tahne.",
+       "stored": []
+      }
+     ]
+    },
+    "collisions": {
+     "n": 4,
+     "kept_apart": 4,
+     "ci95": [
+      0.5101,
+      1.0
+     ]
+    }
+   },
+   "contradiction": {
+    "change": {
+     "n": 39,
+     "correct": 36,
+     "extraction_miss": 0,
+     "accuracy": 0.9231,
+     "ci95": [
+      0.7968,
+      0.9735
+     ]
+    },
+    "multi": {
+     "n": 16,
+     "correct": 16,
+     "extraction_miss": 0,
+     "accuracy": 1.0,
+     "ci95": [
+      0.8064,
+      1.0
+     ]
+    },
+    "unchanged": {
+     "n": 14,
+     "correct": 14,
+     "extraction_miss": 0,
+     "accuracy": 1.0,
+     "ci95": [
+      0.7847,
+      1.0
+     ]
+    },
+    "cross_agent": {
+     "n": 16,
+     "correct": 16,
+     "extraction_miss": 0,
+     "accuracy": 1.0,
+     "ci95": [
+      0.8064,
+      1.0
+     ]
+    }
+   },
+   "contradiction_overall": {
+    "k": 82,
+    "n": 85,
+    "rate": 0.9647,
+    "ci95": [
+     0.9013,
+     0.9879
+    ],
+    "excluding_extraction_misses": {
+     "k": 82,
+     "n": 85,
+     "rate": 0.9647,
+     "ci95": [
+      0.9013,
+      0.9879
+     ]
+    }
+   },
+   "misses_by_predicate": {
+    "lives_in": "1/66"
+   },
+   "_source": {
+    "report": "eval/load_report_final.json",
+    "graph": "pml-bench",
+    "commit": "df56065476e784fe67ad8d0654bf1145556b4c92",
+    "relay_retrieve_dirty": false,
+    "relay_dirty": []
+   }
   }
  },
  "bench": {
@@ -1357,6 +1466,580 @@
       "handoff": 6,
       "world_time": 2,
       "unknown": 2
+     }
+    }
+   },
+   "paired": {
+    "n": 160,
+    "relay": {
+     "k": 145,
+     "n": 160,
+     "rate": 0.9062,
+     "ci95": [
+      0.8511,
+      0.9424
+     ]
+    },
+    "b1": {
+     "k": 80,
+     "n": 160,
+     "rate": 0.5,
+     "ci95": [
+      0.4234,
+      0.5766
+     ]
+    },
+    "diff": 0.4062,
+    "diff_ci95_bootstrap": [
+     0.3125,
+     0.5
+    ],
+    "relay_only_correct": 75,
+    "b1_only_correct": 10,
+    "mcnemar_exact_p": 1.8582753310340622e-13
+   },
+   "by_type": {
+    "belief_time": {
+     "n": 18,
+     "relay": {
+      "k": 17,
+      "n": 18,
+      "rate": 0.9444,
+      "ci95": [
+       0.7424,
+       0.9901
+      ]
+     },
+     "b1": {
+      "k": 7,
+      "n": 18,
+      "rate": 0.3889,
+      "ci95": [
+       0.203,
+       0.6138
+      ]
+     },
+     "diff": 0.5556,
+     "diff_ci95_bootstrap": [
+      0.3333,
+      0.7778
+     ],
+     "relay_only_correct": 10,
+     "b1_only_correct": 0,
+     "mcnemar_exact_p": 0.001953125
+    },
+    "completeness": {
+     "n": 18,
+     "relay": {
+      "k": 18,
+      "n": 18,
+      "rate": 1.0,
+      "ci95": [
+       0.8241,
+       1.0
+      ]
+     },
+     "b1": {
+      "k": 6,
+      "n": 18,
+      "rate": 0.3333,
+      "ci95": [
+       0.1628,
+       0.5625
+      ]
+     },
+     "diff": 0.6667,
+     "diff_ci95_bootstrap": [
+      0.4444,
+      0.8889
+     ],
+     "relay_only_correct": 12,
+     "b1_only_correct": 0,
+     "mcnemar_exact_p": 0.00048828125
+    },
+    "current": {
+     "n": 18,
+     "relay": {
+      "k": 18,
+      "n": 18,
+      "rate": 1.0,
+      "ci95": [
+       0.8241,
+       1.0
+      ]
+     },
+     "b1": {
+      "k": 8,
+      "n": 18,
+      "rate": 0.4444,
+      "ci95": [
+       0.2456,
+       0.6628
+      ]
+     },
+     "diff": 0.5556,
+     "diff_ci95_bootstrap": [
+      0.3333,
+      0.7778
+     ],
+     "relay_only_correct": 10,
+     "b1_only_correct": 0,
+     "mcnemar_exact_p": 0.001953125
+    },
+    "disagreement": {
+     "n": 16,
+     "relay": {
+      "k": 16,
+      "n": 16,
+      "rate": 1.0,
+      "ci95": [
+       0.8064,
+       1.0
+      ]
+     },
+     "b1": {
+      "k": 1,
+      "n": 16,
+      "rate": 0.0625,
+      "ci95": [
+       0.0111,
+       0.2833
+      ]
+     },
+     "diff": 0.9375,
+     "diff_ci95_bootstrap": [
+      0.8125,
+      1.0
+     ],
+     "relay_only_correct": 15,
+     "b1_only_correct": 0,
+     "mcnemar_exact_p": 6.103515625e-05
+    },
+    "handoff": {
+     "n": 18,
+     "relay": {
+      "k": 18,
+      "n": 18,
+      "rate": 1.0,
+      "ci95": [
+       0.8241,
+       1.0
+      ]
+     },
+     "b1": {
+      "k": 12,
+      "n": 18,
+      "rate": 0.6667,
+      "ci95": [
+       0.4375,
+       0.8372
+      ]
+     },
+     "diff": 0.3333,
+     "diff_ci95_bootstrap": [
+      0.1111,
+      0.5556
+     ],
+     "relay_only_correct": 6,
+     "b1_only_correct": 0,
+     "mcnemar_exact_p": 0.03125
+    },
+    "multi_hop": {
+     "n": 18,
+     "relay": {
+      "k": 18,
+      "n": 18,
+      "rate": 1.0,
+      "ci95": [
+       0.8241,
+       1.0
+      ]
+     },
+     "b1": {
+      "k": 5,
+      "n": 18,
+      "rate": 0.2778,
+      "ci95": [
+       0.125,
+       0.5087
+      ]
+     },
+     "diff": 0.7222,
+     "diff_ci95_bootstrap": [
+      0.5,
+      0.9444
+     ],
+     "relay_only_correct": 13,
+     "b1_only_correct": 0,
+     "mcnemar_exact_p": 0.000244140625
+    },
+    "procedural": {
+     "n": 18,
+     "relay": {
+      "k": 8,
+      "n": 18,
+      "rate": 0.4444,
+      "ci95": [
+       0.2456,
+       0.6628
+      ]
+     },
+     "b1": {
+      "k": 9,
+      "n": 18,
+      "rate": 0.5,
+      "ci95": [
+       0.2903,
+       0.7097
+      ]
+     },
+     "diff": -0.0556,
+     "diff_ci95_bootstrap": [
+      -0.4444,
+      0.3333
+     ],
+     "relay_only_correct": 6,
+     "b1_only_correct": 7,
+     "mcnemar_exact_p": 1.0
+    },
+    "unknown": {
+     "n": 18,
+     "relay": {
+      "k": 16,
+      "n": 18,
+      "rate": 0.8889,
+      "ci95": [
+       0.672,
+       0.969
+      ]
+     },
+     "b1": {
+      "k": 16,
+      "n": 18,
+      "rate": 0.8889,
+      "ci95": [
+       0.672,
+       0.969
+      ]
+     },
+     "diff": 0.0,
+     "diff_ci95_bootstrap": [
+      -0.2222,
+      0.2222
+     ],
+     "relay_only_correct": 2,
+     "b1_only_correct": 2,
+     "mcnemar_exact_p": 1.0
+    },
+    "world_time": {
+     "n": 18,
+     "relay": {
+      "k": 16,
+      "n": 18,
+      "rate": 0.8889,
+      "ci95": [
+       0.672,
+       0.969
+      ]
+     },
+     "b1": {
+      "k": 16,
+      "n": 18,
+      "rate": 0.8889,
+      "ci95": [
+       0.672,
+       0.969
+      ]
+     },
+     "diff": 0.0,
+     "diff_ci95_bootstrap": [
+      -0.1667,
+      0.1667
+     ],
+     "relay_only_correct": 1,
+     "b1_only_correct": 1,
+     "mcnemar_exact_p": 1.0
+    }
+   }
+  },
+  "before": {
+   "tenant": "pml-bench",
+   "dataset": "40 customers, 556 customer turns, 160 questions",
+   "run_id": "run-20261015-161615",
+   "provenance": null,
+   "systems": {
+    "FULL": {
+     "accuracy": {
+      "k": 145,
+      "n": 160,
+      "rate": 0.9062,
+      "ci95": [
+       0.8511,
+       0.9424
+      ]
+     },
+     "abstention": {
+      "precision": {
+       "k": 16,
+       "n": 18,
+       "rate": 0.8889,
+       "ci95": [
+        0.672,
+        0.969
+       ]
+      },
+      "recall": {
+       "k": 16,
+       "n": 18,
+       "rate": 0.8889,
+       "ci95": [
+        0.672,
+        0.969
+       ]
+      },
+      "should_refuse": 18
+     },
+     "misses": {
+      "gold in context, wrong/incomplete value chosen": 8,
+      "retrieval: gold value not in context -> wrong answer": 3,
+      "retrieval: gold value not in context -> refused": 2,
+      "answered a should-refuse question (hallucination)": 2
+     },
+     "by_model": {
+      "gemini-3.5-flash-lite": {
+       "k": 145,
+       "n": 160,
+       "rate": 0.9062,
+       "ci95": [
+        0.8511,
+        0.9424
+       ]
+      }
+     },
+     "misses_by_type": {
+      "procedural": 10,
+      "world_time": 2,
+      "unknown": 2,
+      "belief_time": 1
+     }
+    },
+    "B1": {
+     "accuracy": {
+      "k": 80,
+      "n": 160,
+      "rate": 0.5,
+      "ci95": [
+       0.4234,
+       0.5766
+      ]
+     },
+     "abstention": {
+      "precision": {
+       "k": 16,
+       "n": 56,
+       "rate": 0.2857,
+       "ci95": [
+        0.1842,
+        0.4148
+       ]
+      },
+      "recall": {
+       "k": 16,
+       "n": 18,
+       "rate": 0.8889,
+       "ci95": [
+        0.672,
+        0.969
+       ]
+      },
+      "should_refuse": 18
+     },
+     "misses": {
+      "gold in context but model refused": 23,
+      "retrieval: gold value not in context -> wrong answer": 21,
+      "retrieval: gold value not in context -> refused": 17,
+      "gold in context, conflict not flagged": 9,
+      "gold in context, wrong/incomplete value chosen": 8,
+      "answered a should-refuse question (hallucination)": 2
+     },
+     "by_model": {
+      "gemini-3.5-flash-lite": {
+       "k": 80,
+       "n": 160,
+       "rate": 0.5,
+       "ci95": [
+        0.4234,
+        0.5766
+       ]
+      }
+     },
+     "misses_by_type": {
+      "disagreement": 15,
+      "multi_hop": 13,
+      "completeness": 12,
+      "belief_time": 11,
+      "current": 10,
+      "procedural": 9,
+      "handoff": 6,
+      "world_time": 2,
+      "unknown": 2
+     }
+    },
+    "A1": {
+     "accuracy": {
+      "k": 45,
+      "n": 63,
+      "rate": 0.7143,
+      "ci95": [
+       0.593,
+       0.811
+      ]
+     },
+     "abstention": {
+      "precision": {
+       "k": 7,
+       "n": 9,
+       "rate": 0.7778,
+       "ci95": [
+        0.4526,
+        0.9368
+       ]
+      },
+      "recall": {
+       "k": 7,
+       "n": 7,
+       "rate": 1.0,
+       "ci95": [
+        0.6457,
+        1.0
+       ]
+      },
+      "should_refuse": 7
+     },
+     "misses": {
+      "gold in context, wrong/incomplete value chosen": 14,
+      "retrieval: gold value not in context -> wrong answer": 2,
+      "retrieval: gold value not in context -> refused": 2
+     },
+     "by_model": {
+      "gemini-3.5-flash-lite": {
+       "k": 45,
+       "n": 63,
+       "rate": 0.7143,
+       "ci95": [
+        0.593,
+        0.811
+       ]
+      }
+     },
+     "misses_by_type": {
+      "world_time": 5,
+      "belief_time": 5,
+      "procedural": 4,
+      "current": 3,
+      "disagreement": 1
+     }
+    },
+    "A2": {
+     "accuracy": {
+      "k": 51,
+      "n": 63,
+      "rate": 0.8095,
+      "ci95": [
+       0.6959,
+       0.8875
+      ]
+     },
+     "abstention": {
+      "precision": {
+       "k": 7,
+       "n": 12,
+       "rate": 0.5833,
+       "ci95": [
+        0.3195,
+        0.8067
+       ]
+      },
+      "recall": {
+       "k": 7,
+       "n": 7,
+       "rate": 1.0,
+       "ci95": [
+        0.6457,
+        1.0
+       ]
+      },
+      "should_refuse": 7
+     },
+     "misses": {
+      "retrieval: gold value not in context -> wrong answer": 5,
+      "retrieval: gold value not in context -> refused": 5,
+      "gold in context, wrong/incomplete value chosen": 2
+     },
+     "by_model": {
+      "gemini-3.5-flash-lite": {
+       "k": 51,
+       "n": 63,
+       "rate": 0.8095,
+       "ci95": [
+        0.6959,
+        0.8875
+       ]
+      }
+     },
+     "misses_by_type": {
+      "multi_hop": 6,
+      "procedural": 4,
+      "world_time": 1,
+      "belief_time": 1
+     }
+    },
+    "B0": {
+     "accuracy": {
+      "k": 3,
+      "n": 10,
+      "rate": 0.3,
+      "ci95": [
+       0.1078,
+       0.6032
+      ]
+     },
+     "abstention": {
+      "precision": {
+       "k": 0,
+       "n": 3,
+       "rate": 0.0,
+       "ci95": [
+        0.0,
+        0.5615
+       ]
+      },
+      "recall": {
+       "k": 0,
+       "n": 0,
+       "rate": null,
+       "ci95": null
+      },
+      "should_refuse": 0
+     },
+     "misses": {
+      "retrieval: gold value not in context -> wrong answer": 4,
+      "gold in context but model refused": 3
+     },
+     "by_model": {
+      "gemini-3.5-flash-lite": {
+       "k": 3,
+       "n": 10,
+       "rate": 0.3,
+       "ci95": [
+        0.1078,
+        0.6032
+       ]
+      }
+     },
+     "misses_by_type": {
+      "current": 5,
+      "world_time": 2
      }
     }
    },

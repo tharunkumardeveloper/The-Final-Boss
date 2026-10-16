@@ -1,6 +1,7 @@
 """Out-of-distribution extraction: a different model (Gemini) writes customer messages for planted facts in its own
 style; we measure whether Relay's extraction recovers them. No graph writes."""
 import json
+import os
 import random
 from pathlib import Path
 
@@ -8,7 +9,7 @@ from relay import llm
 from relay.memory import norm
 
 DATA = Path(__file__).resolve().parent.parent / "data"
-WRITER = "gemini:gemini-3.5-flash-lite"
+WRITER = os.environ.get("RELAY_OOD_WRITER", "gemini:gemini-3.5-flash-lite")  # any model other than the extractor
 PHRASE = {"lives_in": "the customer lives in {x}", "on_plan": "the customer is subscribed to the {x} plan",
           "has_router": "the customer's router model is {x}", "prefers_channel": "the customer wants to be contacted by {x}",
           "owns_device": "the customer has a {x} at home that uses the wifi",
