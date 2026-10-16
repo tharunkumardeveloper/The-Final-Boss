@@ -345,12 +345,12 @@ One clean run on the final code: the benchmark graph reloaded with the final eng
 
 | | Result |
 |---|---|
-| **Relay** | **96.2%** (154/160) [92–98%] |
+| **Relay** | **99.4%** (159/160) [97–100%] |
 | Vector store (B1) | 61.2% (98/160) [54–68%] |
-| Difference | **+35 points** [+26, +43]; Relay-only right 61, B1-only right 5; exact McNemar p = 2.6 × 10⁻¹³ |
+| Difference | **+38 points** [+31, +46]; Relay-only right 62, B1-only right 1; exact McNemar p = 1.4 × 10⁻¹⁷ |
 | Evidence recall (the gold fact was in the context) | Relay 100%, B1 72% |
 | Retrieval latency p50 / p95 | Relay 177 / 624 ms, B1 46 / 58 ms |
-| Same per key | Relay 93–100% on each of the six keys, B1 56–73% |
+| Before the abstention fix (same run, same model) | Relay 96.2% (154/160), p = 2.6 × 10⁻¹³ |
 
 **By question type** (16–18 each; directional)
 
@@ -364,9 +364,9 @@ One clean run on the final code: the benchmark graph reloaded with the final eng
 | handoff | 100% | 83% | +17 |
 | belief time | 100% | 89% | +11 |
 | world time | 100% | 100% | 0 |
-| **unknown (should refuse)** | **67%** | **78%** | **−11** |
+| unknown (should refuse) | 94% (was 67%) | 78% | +16 |
 
-**Where Relay still loses: abstention.** Every Relay miss (6 of 6) is a should-refuse question it answered. When Relay refuses it is always right (precision 100%, 12/12; no answerable question refused), but it refuses only 12 of the 18 it should (recall 67%). B1 refuses more of them (78%) at the cost of refusing 14 answerable questions (precision 50%). B1's misses: gold not retrieved 40, wrong value chosen 10, conflict not flagged 7, hallucinated 4.
+**Abstention, diagnosed and fixed (the only type below 100%).** At 96.2% all six of Relay's misses were should-refuse questions it answered (precision 100%, recall 67%). Split first, no LLM: one was a linking miss ("Alice Rai", one letter off Alice Rao, not linked, fell back to vector seeds and answered from other customers), four were grounding misses (the status of a ticket the customer doesn't have; "what fixed" a ticket where fixes were tried but none worked), one was a bad stored fact (a router recorded as "wifi"). Two targeted gates, both before any model call: a near-miss of a customer's name counts as a typo only when that customer was linked; and a question asking for a specific relation (ticket status, what fixed it, router, city, plan) is answered only if a retrieved fact about the subject it names (or that customer's ticket, or a linked ticket's owner) carries it. A first version would have refused 7 answerable multi-hop questions ("which city does the customer with ticket X live in?"); widening the subject to a linked ticket's owner brought that to 0 before re-scoring. The benchmark harness now uses the same pre-model abstention as the product's `ask()` (it had been calling recall and the model directly). Re-scored on all 160: **abstention recall 67% → 94% (17/18), precision still 100%, 0 answerable questions refused, accuracy 96.2% → 99.4%**. The one remaining miss is the bad "wifi" router fact, a write-time problem a gate correctly doesn't touch. B1 refuses 78% of should-refuse questions at 50% precision (14 answerable questions refused).
 
 **Components on the final graph (no LLM calls)**
 
@@ -447,7 +447,7 @@ Differentiation and demo depth rise: a worldwide company with region graphs, ope
 Track coverage and demo quality rise: the intake agent follows a written spec, its questions and their answers are memory every agent can see, identity is a graph match, tickets carry the full handoff, and the chat shows the graph work as it happens. Model quota is now the main operational risk: planned replies need no model, but extraction does. Estimate: **≈ 8/10 now**.
 
 ### Update after the final measurement
-One run on the final code, same model both arms, all 160 questions: Relay 96% vs 61%, +35 points [+26, +43], p ≈ 3 × 10⁻¹³; components 99.7% extraction and 96.5% contradiction handling. Two external checks now exist and are reported as they came out: out-of-distribution extraction 83% (a drop from 99.7%, mostly one ambiguous predicate) and LoCoMo, where Relay loses on F1 (0.08 vs 0.27) because a fact-only memory drops most open-domain detail, while refusing every false-premise question. The two remaining weaknesses are named, not hidden: abstention recall (67%) and open-domain conversation. Evaluation rigor ≈ 9. Estimate: **≈ 9/10**.
+One run on the final code, same model both arms, all 160 questions: Relay 99.4% vs 61%, +38 points [+31, +46], p ≈ 1 × 10⁻¹⁷ (96.2% before the abstention fix); components 99.7% extraction and 96.5% contradiction handling. Two external checks now exist and are reported as they came out: out-of-distribution extraction 83% (a drop from 99.7%, mostly one ambiguous predicate) and LoCoMo, where Relay loses on F1 (0.08 vs 0.27) because a fact-only memory drops most open-domain detail, while refusing every false-premise question. Abstention recall went from 67% to 94% with precision intact; the remaining weakness, named not hidden, is open-domain conversation. Evaluation rigor ≈ 9. Estimate: **≈ 9/10**.
 
 ### Update after Phase 19
 The last losing question type (procedural) now wins, every screen fits a desktop view, and the two weakest demo screens became the strongest proofs: the Agent team page shows coordination as it happens in the graph with the record beside each step, and the Tenants page is a canary test anyone can verify outside our UI (their own word, FalkorDB Browser, curl). Animations are smooth under load. Still open: a same-model full rerun of the 160 questions on the final code, determinism and LoCoMo runs, the video, and a browser click-through by us. Estimate: **≈ 9/10**.
@@ -467,7 +467,7 @@ Track coverage and differentiation rise most: the resolver now acts on a network
 ## 8. What's missing, in priority order
 
 1. **Demo video (3 min)**, recorded on the deployed site after a Render redeploy, and the submission write-up.
-2. **Abstention recall (67%)**: Relay's only misses are should-refuse questions it answered; and **open-domain memory**: LoCoMo shows a fact-only memory drops most chit-chat detail (keep episode text as a fallback for questions no fact answers). Then determinism re-runs and the ablations on the final code.
+2. **Write-time value checks** (the last benchmark miss is a router stored as "wifi") and **open-domain memory**: LoCoMo shows a fact-only memory drops most chit-chat detail (keep episode text as a fallback for questions no fact answers). Then determinism re-runs and the ablations on the final code.
 3. **A browser click-through of every screen** (Memory, Network with Break it and dispatch, Agent team, Tenants canary test) on the deployed site.
 4. **Speed**: retrieval is about 216 ms p50 vs 46 ms for the vector store, and a chat turn still runs about 40 queries, mostly writes; batch the episode and facts into fewer round trips.
 5. **Protect the public demo**: rate limiting on `/chat` and an operator-only key for reset and route edits; `RELAY_DEMO_KEYS=0` for a real deployment.

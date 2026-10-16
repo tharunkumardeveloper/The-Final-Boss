@@ -4,7 +4,7 @@ Tenant `pml-bench`: 40 customers, 556 customer turns, 160 questions. Answer mode
 
 ## Headline
 
-On the 160 questions both systems answered: **Relay 96%** [92%–98%] vs **vector baseline (B1) 61%** [54%–68%].
+On the 160 questions both systems answered: **Relay 99%** [97%–100%] vs **vector baseline (B1) 61%** [54%–68%].
 
 ## Gap decomposition by question type (directional: ~16–18 questions per type, wide intervals)
 
@@ -17,7 +17,7 @@ On the 160 questions both systems answered: **Relay 96%** [92%–98%] vs **vecto
 | handoff | 18 | 100% [82%–100%] | 83% [61%–94%] | +17 pts |
 | multi_hop | 18 | 100% [82%–100%] | 22% [9%–45%] | +78 pts |
 | procedural | 18 | 100% [82%–100%] | 50% [29%–71%] | +50 pts |
-| unknown | 18 | 67% [44%–84%] | 78% [55%–91%] | -11 pts |
+| unknown | 18 | 94% [74%–99%] | 78% [55%–91%] | +17 pts |
 | world_time | 18 | 100% [82%–100%] | 100% [82%–100%] | +0 pts |
 
 Simple recall (`current`, `handoff`) is where a good vector store should stay competitive; the gap should come from updates over time, disagreement, multi-hop and abstention.
@@ -26,22 +26,22 @@ Simple recall (`current`, `handoff`) is where a good vector store should stay co
 
 | System | What it is | Questions | Accuracy [95% CI] | Evidence recall | Retrieval p50 / p95 ms |
 |---|---|---|---|---|---|
-| FULL | Relay: graph expansion + two clocks + conflict ranking | 160/160 | 96% [92%–98%] | 100% | 177.4 / 624.0 |
+| FULL | Relay: graph expansion + two clocks + conflict ranking | 160/160 | 99% [97%–100%] | 100% | 165.8 / 209.8 |
 | B1 | Vector store: customer-filtered, top-10, dated, newest first | 160/160 | 61% [54%–68%] | 72% | 45.8 / 57.9 |
 
 ## Abstention (should-refuse questions)
 
 | System | Precision | Recall | Hallucinated answers | False refusals |
 |---|---|---|---|---|
-| FULL | 100% | 67% | 6 | 0 |
 | B1 | 50% | 78% | 4 | 14 |
+| FULL | 100% | 94% | 1 | 0 |
 
 ## Per answer model
 
 | System | groq6:qwen/qwen3.8-27b | groq7:qwen/qwen3.8-27b | groq8:qwen/qwen3.8-27b | groq9:qwen/qwen3.8-27b | groq10:qwen/qwen3.8-27b | groq11:qwen/qwen3.8-27b |
 |---|---|---|---|---|---|---|
-| FULL | 96% [82%–99%] | 100% [88%–100%] | 93% [77%–98%] | 93% [77%–98%] | 96% [81%–99%] | 100% [87%–100%] |
 | B1 | 59% [41%–75%] | 59% [41%–75%] | 56% [37%–72%] | 56% [37%–72%] | 73% [54%–86%] | 65% [46%–81%] |
+| FULL | 100% [88%–100%] | 100% [88%–100%] | 96% [82%–99%] | 100% [88%–100%] | 100% [87%–100%] | 100% [87%–100%] |
 
 ## Out-of-distribution extraction
 

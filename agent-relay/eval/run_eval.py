@@ -188,13 +188,17 @@ def round_robin(questions):
 def context(name, q, tenant, store):
     kind, setting, k, _ = SYSTEMS[name]
     t = time.perf_counter()
+    gate = False
     if kind == "relay":
         r = retrieve.recall(tenant, q["question"], mode=setting)
         lines, known = r["lines"], {f["fact_id"] for f in r["facts"]}
+        # the same pre-model abstention as retrieve.ask (the product's answer path): an unknown name, or a question
+        # whose relation isn't on file for the subject it names, is refused without asking the model
+        gate = bool(r["unknown"] and not r["facts"]) or bool(retrieve.ungrounded(q["question"], r))
     else:
         lines = store.lines(q["question"], setting, k)
         known = {ln[1:ln.index("]")] for ln in lines}
-    return lines, known, (time.perf_counter() - t) * 1000
+    return lines, known, (time.perf_counter() - t) * 1000, gate
 
 
 def run_system(name, questions, tenant, store, results, exhausted):
@@ -209,9 +213,9 @@ def run_system(name, questions, tenant, store, results, exhausted):
         if m in exhausted:
             pending.append(q["i"])
             continue
-        lines, known, ms = context(name, q, tenant, store)
+        lines, known, ms, gate = context(name, q, tenant, store)
         try:
-            a = answer(q["question"], lines, m)
+            a = {"answer": "unknown", "values": [], "cited_ids": [], "conflict": False, "unknown": True} if gate                 else answer(q["question"], lines, m)
         except QuotaExhausted as e:
             print(f"quota: {e}")
             exhausted.add(m)
@@ -244,7 +248,7 @@ def run_variance(questions, tenant, results, exhausted, runs=3):
             m = model_for(q)
             if q["i"] in done or m in exhausted:
                 continue
-            lines, _, _ = context("FULL", q, tenant, None)
+            lines, _, _, _ = context("FULL", q, tenant, None)
             try:
                 a = answer(q["question"], lines, m, cache=False)
             except QuotaExhausted as e:

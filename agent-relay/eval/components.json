@@ -1,8 +1,10 @@
 {
  "git": {
-  "commit": "e098954cb706044d5c59f326005f54bef96b5acc",
-  "relay_retrieve_dirty": false,
-  "relay_dirty": []
+  "commit": "1d4d90848fe40eaa0d3b947b600f29feb78ae95f",
+  "relay_retrieve_dirty": true,
+  "relay_dirty": [
+   "M relay/retrieve.py"
+  ]
  },
  "small_set": {
   "relay": {
@@ -899,9 +901,11 @@
    "_source": {
     "report": "eval/load_report_final.json",
     "graph": "pml-bench",
-    "commit": "e098954cb706044d5c59f326005f54bef96b5acc",
-    "relay_retrieve_dirty": false,
-    "relay_dirty": []
+    "commit": "1d4d90848fe40eaa0d3b947b600f29feb78ae95f",
+    "relay_retrieve_dirty": true,
+    "relay_dirty": [
+     "M relay/retrieve.py"
+    ]
    }
   }
  },
@@ -2342,55 +2346,6 @@
    "run_id": "run-20261016-073654",
    "provenance": null,
    "systems": {
-    "FULL": {
-     "accuracy": {
-      "k": 154,
-      "n": 160,
-      "rate": 0.9625,
-      "ci95": [
-       0.9206,
-       0.9827
-      ]
-     },
-     "abstention": {
-      "precision": {
-       "k": 12,
-       "n": 12,
-       "rate": 1.0,
-       "ci95": [
-        0.7575,
-        1.0
-       ]
-      },
-      "recall": {
-       "k": 12,
-       "n": 18,
-       "rate": 0.6667,
-       "ci95": [
-        0.4375,
-        0.8372
-       ]
-      },
-      "should_refuse": 18
-     },
-     "misses": {
-      "answered a should-refuse question (hallucination)": 6
-     },
-     "by_model": {
-      "qwen/qwen3.8-27b": {
-       "k": 154,
-       "n": 160,
-       "rate": 0.9625,
-       "ci95": [
-        0.9206,
-        0.9827
-       ]
-      }
-     },
-     "misses_by_type": {
-      "unknown": 6
-     }
-    },
     "B1": {
      "accuracy": {
       "k": 98,
@@ -2451,17 +2406,66 @@
       "handoff": 3,
       "belief_time": 2
      }
+    },
+    "FULL": {
+     "accuracy": {
+      "k": 159,
+      "n": 160,
+      "rate": 0.9938,
+      "ci95": [
+       0.9655,
+       0.9989
+      ]
+     },
+     "abstention": {
+      "precision": {
+       "k": 17,
+       "n": 17,
+       "rate": 1.0,
+       "ci95": [
+        0.8157,
+        1.0
+       ]
+      },
+      "recall": {
+       "k": 17,
+       "n": 18,
+       "rate": 0.9444,
+       "ci95": [
+        0.7424,
+        0.9901
+       ]
+      },
+      "should_refuse": 18
+     },
+     "misses": {
+      "answered a should-refuse question (hallucination)": 1
+     },
+     "by_model": {
+      "qwen/qwen3.8-27b": {
+       "k": 159,
+       "n": 160,
+       "rate": 0.9938,
+       "ci95": [
+        0.9655,
+        0.9989
+       ]
+      }
+     },
+     "misses_by_type": {
+      "unknown": 1
+     }
     }
    },
    "paired": {
     "n": 160,
     "relay": {
-     "k": 154,
+     "k": 159,
      "n": 160,
-     "rate": 0.9625,
+     "rate": 0.9938,
      "ci95": [
-      0.9206,
-      0.9827
+      0.9655,
+      0.9989
      ]
     },
     "b1": {
@@ -2473,14 +2477,14 @@
       0.6845
      ]
     },
-    "diff": 0.35,
+    "diff": 0.3812,
     "diff_ci95_bootstrap": [
-     0.2625,
-     0.4313
+     0.3063,
+     0.4562
     ],
-    "relay_only_correct": 61,
-    "b1_only_correct": 5,
-    "mcnemar_exact_p": 2.6307135723296904e-13
+    "relay_only_correct": 62,
+    "b1_only_correct": 1,
+    "mcnemar_exact_p": 1.3877787807814457e-17
    },
    "by_type": {
     "belief_time": {
@@ -2689,12 +2693,12 @@
     "unknown": {
      "n": 18,
      "relay": {
-      "k": 12,
+      "k": 17,
       "n": 18,
-      "rate": 0.6667,
+      "rate": 0.9444,
       "ci95": [
-       0.4375,
-       0.8372
+       0.7424,
+       0.9901
       ]
      },
      "b1": {
@@ -2706,14 +2710,14 @@
        0.91
       ]
      },
-     "diff": -0.1111,
+     "diff": 0.1667,
      "diff_ci95_bootstrap": [
-      -0.3889,
-      0.1667
+      -0.0556,
+      0.3889
      ],
-     "relay_only_correct": 3,
-     "b1_only_correct": 5,
-     "mcnemar_exact_p": 0.7265625
+     "relay_only_correct": 4,
+     "b1_only_correct": 1,
+     "mcnemar_exact_p": 0.375
     },
     "world_time": {
      "n": 18,

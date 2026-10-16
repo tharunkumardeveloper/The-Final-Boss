@@ -5,6 +5,8 @@
 5. an open invoice request doesn't swallow a new fault: the fault opens its own ticket
 6. a topic word in a name slot ("for slow speeds") is not an unknown person; "for Kevin" still is
 3. recall's fact cap drops the farthest facts first, never a 1-hop fact for a far one
+9. abstention gates: a name one letter off a customer it didn't link is unknown; a question whose relation isn't on file
+   for the subject it names (no ticket status, nothing that fixed it) is not answered, but one reached through a ticket is
 8. a live chat hands a ticket to the resolver only once the customer's line is known (no troubleshooting before identity)
 7. the fix that worked is its own edge (ticket fixed_by fix), apart from everything tried; lab fixes use the team's names"""
 from relay import queries as Q
@@ -143,6 +145,20 @@ def resolver_waits_for_the_line():
     assert not agents.Intake._ready_for_resolver(T, c, "t-8"), "already picked up: no second pickup"
 
 
+def abstention_gates():
+    say("meera iyer", ("meera iyer", "lives_in", "thane"), ("meera iyer", "on_plan", "fiber 300"))
+    r = retrieve.recall(T, "Which city does Meera Iyar live in?")  # one letter off, but she wasn't linked as Meera Iyar
+    assert r["linked"] == [] or "meera iyer" in r["linked"], r["linked"]
+    assert retrieve.recall(T, "Which city does Meera Iyer live in?")["linked"][:1] == ["meera iyer"]
+    r = retrieve.recall(T, "What is the status of Meera Iyer's ticket?")  # she has no ticket
+    assert retrieve.ungrounded("What is the status of Meera Iyer's ticket?", r) == "has_status"
+    say("meera iyer", ("meera iyer", "has_ticket", "t-9"), ("t-9", "has_status", "open"), ("t-9", "tried_fix", "restart router"))
+    r = retrieve.recall(T, "What fixed ticket t-9?")
+    assert retrieve.ungrounded("What fixed ticket t-9?", r) == "fixed_by", "tried is not fixed"
+    q = "Which city does the customer with ticket t-9 live in?"
+    assert retrieve.ungrounded(q, retrieve.recall(T, q)) is None, "the owner of a linked ticket is the subject"
+
+
 if __name__ == "__main__":
     db.reset(T)
     try:
@@ -154,6 +170,7 @@ if __name__ == "__main__":
         topic_words_are_not_names()
         fixed_by_names_the_fix_that_worked()
         resolver_waits_for_the_line()
+        abstention_gates()
         print("test_write_resolution: all passed")
     finally:
         db.graph(T).delete()

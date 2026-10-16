@@ -106,7 +106,10 @@ def _link(tenant, question, qvec, k=8, log=None):
         # nobody named: a question about an issue or a fix itself ("which fix worked for slow speeds?") seeds from it.
         # Not otherwise: an issue is a hub ("no internet" links many customers) and would flood one customer's answer
         found += [key for key, typ, _ in exact if typ in ("issue", "fix") and key not in found]
-    near = {t for src in ("name", "fuzzy") for key, _, _ in by.get(src, []) for t in key.split()}
+    # a word one edit from a customer's name is that customer's typo only if the question linked to them ("alise rao");
+    # near a customer it didn't link to ("alice rai" with no Alice linked) it is a name memory doesn't hold
+    linked_customers = customers & set(found)
+    near = {t for key in linked_customers for t in key.split()}
     return {"linked": sorted(found, key=len, reverse=True), "vector": by.get("vector", []),
             "unknown": _unknown_names(question, {key for key, _, _ in exact} | set(found), near, _tenant_vocab(tenant)),
             "person": bool(customers & set(found))}
@@ -360,6 +363,27 @@ def grounding(tenant, customer, reply, before, log=None):
     return [hop(f) for f in out[:3]]
 
 
+# what a question asks for, and the predicate that has to be on file to answer it
+ASKS = [(re.compile(r"\bstatus\b.*\bticket\b|\bticket\b.*\bstatus\b", re.I), "has_status"),
+        (re.compile(r"\bwhat fixed\b|\bwhich fix (?:fixed|resolved)\b", re.I), "fixed_by"),
+        (re.compile(r"\b(?:what|which) router\b", re.I), "has_router"),
+        (re.compile(r"\bwhich city\b|\bwhere does\b.*\blive\b", re.I), "lives_in"),
+        (re.compile(r"\b(?:what|which) plan\b", re.I), "on_plan")]
+
+
+def ungrounded(question, r):
+    """The predicate a question asks for, when no retrieved fact about the subject it names carries it (else None).
+    The subject is what the question linked, plus those customers' tickets and a linked ticket's owner; facts about
+    anything else don't count."""
+    want = next((p for rx, p in ASKS if rx.search(question)), None)
+    if not want or not r.get("linked"):
+        return None
+    tix = [f for f in r["facts"] if f["predicate"] == "has_ticket"]
+    subjects = set(r["linked"]) | {f["object"] for f in tix if f["subject"] in r["linked"]}         | {f["subject"] for f in tix if f["object"] in r["linked"]}  # a customer's tickets, and a linked ticket's owner
+    have = any(f["predicate"] == want and f["subject"] in subjects and f["active"] for f in r["facts"])
+    return None if have else want
+
+
 def ask(tenant, question, *, mode="full", agent=None, log=None):
     """agent: who is asking; when given, the facts the answer cites are recorded as CONSULTED by that agent.
     (The benchmark leaves it None so measuring never writes to the graph it measures.)"""
@@ -367,6 +391,10 @@ def ask(tenant, question, *, mode="full", agent=None, log=None):
     if r["unknown"] and not r["facts"]:  # names someone memory doesn't hold: abstain, no model call to talk round it
         who = ", ".join(n.upper() if any(c.isdigit() for c in n) else n.title() for n in r["unknown"])
         a = {"answer": f"I don't have anything on file about {who}.", "values": [], "cited_ids": [],
+             "conflict": False, "unknown": True}
+    elif want := ungrounded(question, r):  # nothing on file answers it: say so instead of letting the model guess
+        who = " / ".join(n.title() for n in r["linked"][:2])
+        a = {"answer": f"Nothing on file for {who} answers that ({want.replace('_', ' ')}).", "values": [], "cited_ids": [],
              "conflict": False, "unknown": True}
     else:
         a = llm.answer(question, r["lines"])
