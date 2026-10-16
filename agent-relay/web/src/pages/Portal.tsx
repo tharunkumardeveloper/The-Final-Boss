@@ -70,15 +70,19 @@ function GraphOrLine({ tenant, who, subscribe }: { tenant: string; who: string |
   const [mode, setMode] = useState<'memory' | 'line'>('memory')
   const [hasCase, setHasCase] = useState(false)
   const [fresh, setFresh] = useState(false)
+  const auto = useRef(false)  // already switched to their line for this case
   useEffect(() => {  // a returning customer with a case still open gets the switch straight away
-    setMode('memory'); setFresh(false); setHasCase(false)
+    setMode('memory'); setFresh(false); setHasCase(false); auto.current = false
     if (who) api.tickets(tenant).then((ts) => setHasCase(ts.some((t) => t.customer === who && t.status !== 'resolved'))).catch(() => {})
   }, [tenant, who])
   useEffect(() => subscribe((e) => {
     const c = (e.data as { customer?: string })?.customer?.toLowerCase()
     if (!who || c !== who) return
-    if (e.type === 'ticket_opened' || (e.type === 'lab_run' && (e.data as { status?: string }).status === 'running')) {
-      setHasCase(true); setFresh(true); setMode('line')  // a case opened: show their line, where the resolver is working
+    // the resolver speaking in their chat is the surest sign it is on the case (its run events can arrive first or not at all)
+    const resolverSpoke = e.type === 'message' && (e.data as { speaker?: string }).speaker === 'resolver'
+    if (e.type === 'ticket_opened' || resolverSpoke || (e.type === 'lab_run' && (e.data as { status?: string }).status === 'running')) {
+      setHasCase(true)
+      if (e.type === 'ticket_opened' || !auto.current) { auto.current = true; setFresh(true); setMode('line') }  // once per case: toggling back sticks
     }
   }), [subscribe, who])
   return (

@@ -1468,7 +1468,10 @@ def on_chat(tenant, customer, text, opened=None):
         # investigate() read the ticket's issue and intake's facts), so the customer never has to say it again
         ticket, status = stalled
         return start(tenant, c, ticket=ticket, picked=status == "in progress")  # an open one is taken first
-    return start(tenant, c, ticket=open_ticket_for(tenant, c), said=text)  # an open ticket, or none: still look
+    ticket = open_ticket_for(tenant, c)
+    if not expected and not _visit_ask(tenant, c, text) and not details_ready(tenant, c, ticket):
+        return None  # intake is still asking about the problem; the handoff starts the resolver once it's done
+    return start(tenant, c, ticket=ticket, said=text)  # an open ticket, or none: still look
 
 
 _IDLE_MS = 10 * 60_000
@@ -1485,6 +1488,8 @@ def _stalled_ticket(tenant, customer):
     if not mine:
         return None
     ticket, status = mine[0]["ticket"], mine[0]["status"]
+    if not details_ready(tenant, customer, ticket):
+        return None
     runs = [r for r in _runs.get(tenant, []) if (r.get("ticket") or "").lower() == ticket.lower()]
     if not runs:  # includes a restart: runs live in memory, the ticket in the graph
         return ticket, status
@@ -1545,11 +1550,16 @@ def before_chat(tenant, customer, text):
         r = _run(tenant, w["run"])
         if r is not None:
             r["slot"] = slot
-    if not claimed_now and (_network_complaint(text) or _visit_ask(tenant, c, text)) and has_line(tenant, c):
+    if not claimed_now and (_network_complaint(text) or _visit_ask(tenant, c, text)) and has_line(tenant, c)             and (_visit_ask(tenant, c, text) or _ready_now(tenant, c)):
         with _lock:
             _expected.add((tenant, c))
         # ponytail: a fixed expiry; if the handoff never starts a run, intake stops deferring after 90 s
         threading.Timer(90, lambda: _expected.discard((tenant, c))).start()
+
+
+def _ready_now(tenant, customer):
+    from .agents import open_ticket_for  # lazy: agents imports this module
+    return details_ready(tenant, customer, open_ticket_for(tenant, customer))
 
 
 def _visit_ask(tenant, customer, text):
@@ -1558,6 +1568,22 @@ def _visit_ask(tenant, customer, text):
         return False
     from .agents import open_ticket_for  # lazy: agents imports this module
     return bool(open_ticket_for(tenant, customer))
+
+
+def details_ready(tenant, customer, ticket):
+    """Intake has finished asking about the problem on this ticket (spec order: when it started, how often, whole home
+    or one device, WiFi or cable, what they tried; an "I don't know" counts as answered). Until then the resolver waits,
+    so it never diagnoses off a bare "my wifi has issues". A Break it customer is simulated: nobody answers intake."""
+    c = norm(customer)
+    with _lock:
+        if (tenant, c) in _SIMULATED:
+            return True
+    if not ticket:
+        return False
+    from . import intake  # lazy: intake imports retrieve, which this module also uses
+    have = intake.ticket_facts(tenant, norm(ticket))
+    gave_up = {f["object"] for f in retrieve.customer_facts(tenant, c) if f["active"] and f["predicate"] == "doesnt_know"}
+    return all(s.key in gave_up or any(p in have for p in s.preds) for s in intake.ISSUE)
 
 
 def claimed(tenant, customer):

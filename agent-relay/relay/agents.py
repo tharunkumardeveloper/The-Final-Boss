@@ -76,7 +76,7 @@ class Intake:
         info = next((t for t in tickets(tenant, log) if t["ticket"] == ticket), None)
         if not info or info["status"] != "open":
             return False  # already picked up, or closed
-        return not lab.lab_on(tenant) or lab.has_line(tenant, customer)
+        return not lab.lab_on(tenant) or (lab.has_line(tenant, customer) and lab.details_ready(tenant, customer, ticket))
 
     def handle(self, tenant, *, customer, session_id, text, at, ticket_id=None, reply_llm=False, greeted=False,
                country=None, speak=True, log=None):
