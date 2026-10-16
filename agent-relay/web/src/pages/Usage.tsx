@@ -71,8 +71,8 @@ const ago = (iso: string | null | undefined, now: number) => {
   return s < 60 ? `${s} s ago` : s < 3600 ? `${Math.round(s / 60)} min ago` : `${Math.round(s / 3600)} h ago`
 }
 const clock = (s: number) => `${Math.floor(s / 3600) ? `${Math.floor(s / 3600)}:` : ''}${String(Math.floor((s % 3600) / 60)).padStart(Math.floor(s / 3600) ? 2 : 1, '0')}:${String(s % 60).padStart(2, '0')}`
-const PROVIDER: Record<string, string> = { groq: 'Groq · key 1', groq2: 'Groq · key 2', groq3: 'Groq · key 3', groq4: 'Groq · key 4',
-  groq5: 'Groq · key 5', gemini: 'Gemini', sarvam: 'Sarvam' }
+const PROVIDER: Record<string, string> = { groq: 'Groq · key 1', gemini: 'Gemini', sarvam: 'Sarvam',
+  ...Object.fromEntries(Array.from({ length: 11 }, (_, i) => [`groq${i + 2}`, `Groq · key ${i + 2}`])) }
 const STATE: Record<string, string> = {
   available: 'bg-current-tint text-current', 'rate limited': 'bg-conflict-tint text-conflict', exhausted: 'bg-danger-tint text-danger',
   recovering: 'bg-conflict-tint text-conflict', 'not checked yet': 'bg-sunk text-ink-2', 'no key': 'bg-sunk text-ink-3',

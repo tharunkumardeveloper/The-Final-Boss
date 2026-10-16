@@ -19,9 +19,9 @@ FALKOR_PORT = int(os.environ.get("FALKOR_PORT", 6379))
 FALKOR_USER = os.environ.get("FALKOR_USER") or None
 FALKOR_PASS = os.environ.get("FALKOR_PASS") or None
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
-# Groq key pool: GROQ_API_KEY is slot 1 (provider "groq"), GROQ_API_KEY_2..GROQ_API_KEY_5 are slots 2-5 ("groq2:"...).
+# Groq key pool: GROQ_API_KEY is slot 1 (provider "groq"), GROQ_API_KEY_2..GROQ_API_KEY_12 are slots 2-12 ("groq2:"...).
 # Each slot is its own quota and its own row on the Usage page. Only slots with a key are used.
-GROQ_SLOTS = {i: k for i, k in ((1, GROQ_API_KEY), *((i, os.environ.get(f"GROQ_API_KEY_{i}")) for i in range(2, 6))) if k}
+GROQ_SLOTS = {i: k for i, k in ((1, GROQ_API_KEY), *((i, os.environ.get(f"GROQ_API_KEY_{i}")) for i in range(2, 13))) if k}
 
 
 def groq_slot(model):
