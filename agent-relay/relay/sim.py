@@ -30,6 +30,25 @@ WORLD = {  # the company's back office (synthetic)
 }
 PLAYBOOK = ["restart router"]  # tried after known fixes from procedural memory, before the customer-specific fix
 
+# The demo story in every region: the same storyline (a customer gives her details; a neighbour's evening Wi-Fi drops
+# are fixed after one failed try, so the fix becomes procedural memory; she moves to his city; billing disagrees about
+# her plan) with local names, two covered cities and the local time zone. India is the original cast.
+CASTS = {
+    "pml": {"a": "Alice Rao", "b": "Bob Menon", "from": "Mumbai", "to": "Pune", "tz": "+05:30"},
+    "pml-eu": {"a": "Emma Clarke", "b": "Oliver Hughes", "from": "London", "to": "Manchester", "tz": "+01:00"},
+    "pml-na": {"a": "Olivia Bennett", "b": "Ethan Walker", "from": "New York City", "to": "Chicago", "tz": "-04:00"},
+    "pml-apac": {"a": "Chloe Nguyen", "b": "Liam Carter", "from": "Sydney", "to": "Melbourne", "tz": "+10:00"},
+    "pml-mea": {"a": "Layla Haddad", "b": "Omar Farouk", "from": "Dubai", "to": "Abu Dhabi", "tz": "+04:00"},
+    "pml-latam": {"a": "Sofia Almeida", "b": "Mateo Souza", "from": "Sao Paulo", "to": "Rio de Janeiro", "tz": "-03:00"},
+}
+for _c in CASTS.values():  # each cast's back office: billing disagrees with what she says; the same Wi-Fi fix works
+    _a, _b = _c["a"].lower(), _c["b"].lower()
+    WORLD["billing"].setdefault(_a, "fiber 100")
+    WORLD["billing"].setdefault(_b, "fiber 300")
+    for _n in (_a, _b):
+        WORLD["diagnostics"].setdefault(_n, "channel congestion on 2.4 ghz")
+        WORLD["working_fixes"].setdefault(_n, ["change wifi channel"])
+
 # (day offset, "HH:MM", session number, what the message must get across)
 PERSONAS = [
     {"name": "Alice Rao", "profile": "34, product designer, lives in Mumbai, on the Fiber 300 plan, has a PS5 and a work "
@@ -251,23 +270,27 @@ def load_story(tenant, log=None):
 
 def _story(tenant, log=None):
     tools.WORLDS[tenant] = WORLD
+    cast = CASTS.get(tenant, CASTS["pml"])  # any other tenant (tests, a new workspace) gets the original cast
+    a, b, here, there, tz = cast["a"], cast["b"], cast["from"], cast["to"], cast["tz"]
+    sa, sb = f"{a.split()[0].lower()}-s1", f"{b.split()[0].lower()}-s1"
     intake, resolver = agents.Intake(), agents.Resolver()
-    say = lambda c, s, at, text: intake.handle(tenant, customer=c, session_id=s, text=text, at=at, reply_llm=True, log=log)
-    say("Alice Rao", "alice-s1", "2026-09-01T09:30:00+05:30",
-        "Hi, I'm Alice. I live in Mumbai, I'm on the Fiber 300 plan, and WhatsApp is the best way to reach me.")
-    say("Alice Rao", "alice-s1", "2026-09-01T09:35:00+05:30", "My PS5 and my laptop both keep dropping wifi every evening.")
-    say("Bob Menon", "bob-s1", "2026-09-05T19:00:00+05:30", "Hello, Bob here, I live in Pune. My wifi drops every evening.")
-    bob_t = agents.open_ticket_for(tenant, "Bob Menon", log)
-    if bob_t:
-        resolver.pick_up(tenant, ticket=bob_t, at="2026-09-06T10:00:00+05:30", log=log)
-        resolver.try_fix(tenant, ticket=bob_t, fix="restart router", worked=False, at="2026-09-06T11:00:00+05:30", log=log)
-        resolver.try_fix(tenant, ticket=bob_t, fix="change wifi channel", worked=True, at="2026-09-06T14:00:00+05:30", log=log)
-    say("Alice Rao", "alice-s2", "2026-09-12T10:00:00+05:30", "Quick update: I moved to Pune on the 10th.")
-    alice_t = agents.open_ticket_for(tenant, "Alice Rao", log)
-    pick = resolver.pick_up(tenant, ticket=alice_t, at="2026-09-13T10:00:00+05:30", log=log) if alice_t else None
-    converse.summarize_session(tenant, "alice-s1", log)
-    converse.summarize_session(tenant, "bob-s1", log)
+    say = lambda c, s, at, text: intake.handle(tenant, customer=c, session_id=s, text=text, at=f"{at}{tz}", reply_llm=True,
+                                              log=log)
+    say(a, sa, "2026-09-01T09:30:00",
+        f"Hi, I'm {a.split()[0]}. I live in {here}, I'm on the Fiber 300 plan, and WhatsApp is the best way to reach me.")
+    say(a, sa, "2026-09-01T09:35:00", "My PS5 and my laptop both keep dropping wifi every evening.")
+    say(b, sb, "2026-09-05T19:00:00", f"Hello, {b.split()[0]} here, I live in {there}. My wifi drops every evening.")
+    b_t = agents.open_ticket_for(tenant, b, log)
+    if b_t:
+        resolver.pick_up(tenant, ticket=b_t, at=f"2026-09-06T10:00:00{tz}", log=log)
+        resolver.try_fix(tenant, ticket=b_t, fix="restart router", worked=False, at=f"2026-09-06T11:00:00{tz}", log=log)
+        resolver.try_fix(tenant, ticket=b_t, fix="change wifi channel", worked=True, at=f"2026-09-06T14:00:00{tz}", log=log)
+    say(a, f"{a.split()[0].lower()}-s2", "2026-09-12T10:00:00", f"Quick update: I moved to {there} on the 10th.")
+    a_t = agents.open_ticket_for(tenant, a, log)
+    pick = resolver.pick_up(tenant, ticket=a_t, at=f"2026-09-13T10:00:00{tz}", log=log) if a_t else None
+    converse.summarize_session(tenant, sa, log)
+    converse.summarize_session(tenant, sb, log)
     agents.consolidate(tenant, log, summaries=True)
     from . import lab  # after the scripted story: live chats from here on get the street-level network
     lab.ensure(tenant, log)
-    return {"alice_ticket": alice_t, "bob_ticket": bob_t, "pickup": pick}
+    return {"alice_ticket": a_t, "bob_ticket": b_t, "pickup": pick}  # keys kept: callers and tests read them
