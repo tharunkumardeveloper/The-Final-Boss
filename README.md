@@ -53,6 +53,7 @@ piece you set up yourself is the optional MCP connection for Claude ([below](#-b
 - [Watch it, or take part](#-watch-it-or-take-part)
 - [The five memory capabilities](#-the-five-memory-capabilities)
 - [Results](#-results)
+- [What's new, and what isn't](#-whats-new-and-what-isnt)
 - [Remove FalkorDB and…](#-remove-falkordb-and)
 - [Bring your own agent (MCP)](#-bring-your-own-agent-mcp)
 - [Tech stack](#-tech-stack)
@@ -343,6 +344,28 @@ remaining question types, every interval and why each miss happened; [`eval/resu
 is the same run. Relay's one miss is a should-refuse question it answered because of a bad stored fact (a router
 recorded as "wifi"). The write-time value checks added since then target exactly that, but the benchmark has not
 been re-run, so 159/160 stands.
+
+**Reproduce the numbers:**
+
+```bash
+cd agent-relay && pip install -r requirements.txt
+python -m eval.run_eval --report      # rebuilds eval/results.md from the raw per-question results: no keys, no database
+# full re-run, with FalkorDB and Groq keys in .env (it reloads 556 turns through extraction, so it takes a while):
+python -m data.load --tenant pml-bench && python -m eval.run_eval --tenant pml-bench --phases main
+```
+
+The first command reproduces the published `results.md` byte for byte from
+[`eval/results.json`](agent-relay/eval/results.json), which holds every question, both systems' answers, the evidence
+each one saw, and the grade.
+
+## ✨ What's new, and what isn't
+
+None of Relay's building blocks is new on its own, and we'd rather say so: bi-temporal facts come from
+**Zep / Graphiti**, add / update / no-op memory operations from **Mem0**, and one graph per user or tenant is a standard
+FalkorDB pattern (the **mem0-falkordb** plugin does it). What we add is putting them together for **a team of agents
+that never message each other**: handoffs as graph state, disagreements kept, ranked and settled by a person with trust
+that learns, fixes remembered as paths, and a network model the agents act on and re-measure. And then **measuring
+it**: 160 questions with intervals and paired tests, ablations, component metrics, and the one external check we lose.
 
 ## 🔬 Remove FalkorDB and…
 

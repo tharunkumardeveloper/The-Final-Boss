@@ -309,9 +309,13 @@ def ci(a):
 
 def write_md(results):
     S = results["systems"]
+    # the models the run actually used, from results.json, so the report is the same on any machine (MODELS comes
+    # from this machine's keys and routes); natural order, groq6 before groq10
+    natural = lambda m: [int(x) if x.isdigit() else x for x in re.split(r"(\d+)", m)]
+    models = sorted({m for s in S.values() for m in (s.get("summary") or {}).get("by_model", {})}, key=natural) or MODELS
     out = ["# Relay benchmark", "",
            f"Tenant `{results.get('tenant')}`: {results.get('dataset', '')}. Answer models alternate per question "
-           f"({', '.join(f'`{m}`' for m in MODELS)}); for each question every system uses the same model and prompt. "
+           f"({', '.join(f'`{m}`' for m in models)}); for each question every system uses the same model and prompt. "
            "Intervals are 95% Wilson.", ""]
     if "FULL" in S and "B1" in S:
         ids, rf, rb = common_acc(results, "FULL", "B1")
@@ -356,11 +360,11 @@ def write_md(results):
         ab = S[s].get("summary", {}).get("abstention")
         if ab and ab["should_refuse"]:
             out.append(f"| {s} | {pct(ab['precision'])} | {pct(ab['recall'])} | {ab['hallucinations']} | {ab['false_refusals']} |")
-    out += ["", "## Per answer model", "", "| System | " + " | ".join(MODELS) + " |", "|---|" + "---|" * len(MODELS)]
+    out += ["", "## Per answer model", "", "| System | " + " | ".join(models) + " |", "|---|" + "---|" * len(models)]
     for s in S:
         bm = S[s].get("summary", {}).get("by_model", {})
         if bm:
-            out.append(f"| {s} | " + " | ".join(ci(bm.get(m)) if bm.get(m) else "-" for m in MODELS) + " |")
+            out.append(f"| {s} | " + " | ".join(ci(bm.get(m)) if bm.get(m) else "-" for m in models) + " |")
     comp = results.get("components")
     if comp:
         ex, pn, er, ch = comp["extraction"], comp["predicate_normalization"], comp["entity_resolution"], comp["contradiction"]
