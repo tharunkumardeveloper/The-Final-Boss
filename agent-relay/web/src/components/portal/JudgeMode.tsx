@@ -26,6 +26,10 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 export type JudgeStatus = 'idle' | 'running' | 'done' | 'stopped' | 'error'
 export interface Judge { status: JudgeStatus; step: number; note?: string; name?: string; start: () => void; stop: () => void; close: () => void }
 
+/** The last question in a reply, if any: "…the resolver is testing your line. When did this start?" -> that question.
+ *  A reply can mention the resolver and still ask something; the resolver waits until intake has every answer. */
+const lastQuestion = (reply?: string) => reply?.split(/(?<=[.!?])\s+/).filter((s) => s.trim().endsWith('?')).pop() ?? null
+
 /** Answers to what intake asks, matched on its question (the wording comes from a model, the order from the spec). */
 function answerFor(q: string, phone: string): string | null {
   if (/number|mobile|phone|e-?mail|account/i.test(q)) return `It's ${phone}.`
@@ -91,8 +95,9 @@ export function useJudge({ drive, run, tenant, setTenant, customers, onStep }: {
       go(2)
       let reply = await say(`My internet keeps dropping since this morning, on every device, WiFi and cable both. `
         + `My number is ${phone} and I'm in T. Nagar, Chennai.`)
-      for (let i = 0; i < 6 && reply && !/hand(ed)?|resolver/i.test(reply); i++) {
-        const a = answerFor(reply, phone)
+      for (let i = 0; i < 6; i++) {  // answer intake until it asks nothing more we can answer
+        const q = lastQuestion(reply)
+        const a = q && answerFor(q, phone)
         if (!a) break
         reply = await say(a)
       }
@@ -100,11 +105,19 @@ export function useJudge({ drive, run, tenant, setTenant, customers, onStep }: {
       // 3. the resolver works the ticket; the customer answers only when it asks something
       go(3)
       const answered = new Set<string>()
-      let confirmedAt = 0
+      let confirmedAt = 0, saidAt = Date.now(), nudged = false
       const end = Date.now() + 5 * 60_000
       while (Date.now() < end) {
         check()
         const r = runRef.current
+        if (!r && !nudged && Date.now() - saidAt > 25_000 && drive.current?.ready()) {
+          // no resolver yet: intake is probably still missing an answer (or the handoff was missed); say something once
+          nudged = true
+          const q = lastQuestion(reply)
+          reply = await say((q && answerFor(q, phone)) || 'Any update on my ticket?')
+          saidAt = Date.now()
+          continue
+        }
         if (r?.confirmed || (confirmedAt && Date.now() - confirmedAt > 5000)) break
         if (r && !r.awaiting && ['handed over', 'unresolved', 'error'].includes(r.status)) break
         const key = r ? `${r.id}:${String(r.awaiting)}:${r.steps.filter((s) => s.kind === 'wait').length}` : ''
