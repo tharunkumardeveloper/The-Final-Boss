@@ -401,7 +401,7 @@ The service lines the bot knows (Fiber, Gaming Zone, Binge Club, The Hub) are in
 seeded as `:Offering` nodes it finds by meaning. The company serves everywhere (it's a mockup): a country or city
 without a catalogue entry is a yes, followed by "what's the exact address?".
 
-Tests: `python -m tests.test_core`, `test_api`, `test_round2`, `test_kb`, `test_sharing`, `test_network`, `test_experts`, `test_browser_names`, `test_open_facts`, `test_profile`, `test_transcript`, `test_anomaly`, `test_pallavi`, `test_raj`, `test_intake_spec`, `test_labels`, `test_schema`, `test_time_edges`, `test_udf`, `test_outage_feed`, `test_mcp`, `check_sim_noc`, `check_outage`; web: `cd web && npm test`. Region graphs are seeded on first use; the benchmark tenants (`pml-bench`, `nimbus`, `life-locomo`) refuse resets and the simulator.
+Tests: `python -m tests.test_core`, `test_api`, `test_round2`, `test_kb`, `test_sharing`, `test_network`, `test_experts`, `test_browser_names`, `test_open_facts`, `test_profile`, `test_transcript`, `test_anomaly`, `test_pallavi`, `test_raj`, `test_intake_spec`, `test_labels`, `test_schema`, `test_time_edges`, `test_udf`, `test_outage_feed`, `test_mcp`, `check_sim_noc`, `check_outage`, plus three that need no database or model: `test_value_checks`, `test_learned_trust`, `test_demo_guard`; web: `cd web && npm test`. Region graphs are seeded on first use; the benchmark tenants (`pml-bench`, `nimbus`, `life-locomo`) refuse resets and the simulator.
 
 ### Deploy (free)
 
@@ -423,7 +423,7 @@ Tests: `python -m tests.test_core`, `test_api`, `test_round2`, `test_kb`, `test_
 4. Back on Render, set `CORS_ORIGINS=https://<project>.vercel.app` and redeploy.
 5. Open the Vercel URL. The first visit after a quiet spell wakes the API.
 
-Memory lives in FalkorDB, so nothing is lost when the free API sleeps; only a resolver run that is in progress at that
+During judging, `.github/workflows/keep-awake.yml` pings `/health` every 10 minutes so the API never sleeps (disable it afterwards: on a private repository each run costs an Actions minute). Memory lives in FalkorDB, so nothing is lost when the free API sleeps; only a resolver run that is in progress at that
 moment stops. `RELAY_DEMO_KEYS=1` hands the demo web app every tenant's key so you can switch regions; set it to `0` and
 give each tenant its own key (`python -c "from relay.tenancy import key_for; print(key_for('pml'))"`) for a real deployment.
 
@@ -435,7 +435,7 @@ give each tenant its own key (`python -c "from relay.tenancy import key_for; pri
 {"mcpServers": {"relay-memory": {"command": "python", "args": ["/path/to/agent-relay/mcp_server.py"]}}}
 ```
 
-or, for Claude Code: `claude mcp add relay-memory -- python /path/to/agent-relay/mcp_server.py`. It reads the same `.env` as the API.
+or, for Claude Code: `claude mcp add relay-memory -- python /path/to/agent-relay/mcp_server.py`. It reads the same `.env` as the API. Outside clients write as agent `mcp`. On Windows, the local embedding model (`onnxruntime`) needs the current Microsoft Visual C++ runtime (`winget install Microsoft.VCRedist.2015+.x64`).
 
 ## Data
 

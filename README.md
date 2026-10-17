@@ -10,8 +10,8 @@ One click plays the whole story through the real agents in about two minutes. No
 Or open [the site](https://wifight.vercel.app) and chat yourself, the [staff console](https://wifight.vercel.app/console),
 or the [benchmark page](https://wifight.vercel.app/console/benchmark).
 
-> The API runs on a free plan that sleeps when idle. The first visit after a quiet spell takes about a minute to wake
-> it, and the site shows a wake-up screen meanwhile.
+> The API runs on a free plan that sleeps when idle. During judging a scheduled ping keeps it awake; if it ever does
+> sleep, the first visit takes about a minute to wake it, and the site shows a wake-up screen meanwhile.
 
 <!-- DEMO VIDEO: put the link here (record it from Judge mode, so the video and the live demo tell the same story) -->
 
@@ -187,9 +187,10 @@ It needs Python with `requirements.txt` installed and the same `.env` as the API
 for `remember` (which extracts facts from text; `remember_fact` stores a structured fact with no model). Outside
 clients write as the **`mcp`** agent (trust 0.7), a teammate with its own name: use tenant `pml` and what it writes
 lands in the same graph the live demo uses, where Mr.Fix-It and the resolver find it like any other fact, and the
-Agent team page draws it once it acts. For example, ask Claude: *"Use relay-memory to remember, as agent mcp in tenant
-pml, that customer Asha Menon has a PML Hub 6 Pro router"*, then chat as Asha on the site and ask Mr.Fix-It which
-router you have.
+Agent team page draws it once it acts. For example, ask Claude: *"Use relay-memory's remember_fact, as agent mcp in
+tenant pml: subject alice rao, predicate has_router, object pml hub 6 pro"* (Alice Rao is in the demo story and has no
+router on file), then chat as Alice on the site and ask Mr.Fix-It which router you have. On Windows, the local
+embedding model needs the current Microsoft Visual C++ runtime (`winget install Microsoft.VCRedist.2015+.x64`).
 
 ## What's next
 

@@ -294,7 +294,10 @@ Known gaps: none of the screens in this phase were clicked through by us in a br
 | MCP clients as teammates | An `mcp` agent (trust 0.7) for Claude Code, Claude Desktop or any MCP client, drawn on the Agent team page once it acts |
 | Confirm value: trust that learns | "This one is right" on a disagreement (console → Show me): a review episode by the new `operator` agent confirms the chosen claim (`:Confirmed`, `CONFIRMED` edge), retires the others with the usual RETIRE (both clocks close; `:Rejected`, kept in history), and closes the `Conflict`. Each writer's track record on that predicate (confirmed minus rejected, counted from the graph) moves its trust by 0.05 per decision when the next disagreement of that kind is ranked. With no confirmations the ranking is exactly as before, so the benchmark is unaffected. `tests/test_learned_trust.py` (the ranking; the Cypher was not run before deploy) |
 | Write-time value checks | `registry.valid_value`: a router can't be "wifi", a city can't be "home", a phone needs digits, an email a domain; such values are dropped before the write (the benchmark's one remaining miss was a router stored as "wifi"). Not re-benchmarked, so the headline stays 159/160. `tests/test_value_checks.py`, and `tests/test_demo_guard.py` for the reset lock and rate limits (both need no database) |
-| README | A repository README written for judges: the problem first, live links, results near the top, the five Track 2 focus points mapped to features and proof, "Remove FalkorDB and…" with inline Cypher, names explained once |
+| README | A repository README written for judges: the problem first, live links, results near the top, the five Track 2 focus points mapped to features and proof, "Remove FalkorDB and…" with inline Cypher, names explained once, and a "What's next" section |
+| Keep-awake | `.github/workflows/keep-awake.yml` pings `/health` every 10 minutes during judging, so the free API never sleeps when a judge clicks; a manual run succeeded. To disable after judging |
+| A new FalkorDB instance | The database moved to a fresh FalkorDB Cloud instance: the catalogue re-seeds itself on start, the demo story was reloaded (reset → story) through the reset key. Found on the way: compare crashed on a graph with no episodes (the vector baseline unpacked zero rows), and the 500 reached the browser as "blocked by CORS policy". Now compare answers `409` with what to do, and every server error is returned inside the CORS middleware as a readable `500` |
+| MCP, run for real | The MCP server runs locally against the live graph and shows as connected in Claude Code (`claude mcp add -s user relay-memory -- <venv python> mcp_server.py`, 14 tools). On Windows, `onnxruntime` (the local embedding model) needed the current Microsoft Visual C++ runtime |
 
 ## 3. Architecture
 
@@ -356,6 +359,9 @@ python -m tests.test_write_resolution      # write-path fixes the evaluation fou
 python -m tests.test_contract              # the four answer outcomes, hops, tool argument checks
 python -m tests.test_canary                # the Tenants page's canary test
 python -m tests.test_network               # network model, readings, failures
+python -m tests.test_value_checks          # write-time value checks (no database, no LLM)
+python -m tests.test_learned_trust         # confirmations re-rank claims; none = unchanged (no database, no LLM)
+python -m tests.test_demo_guard            # reset key, rate limits, readable 500s, compare on an empty graph (no database)
 uvicorn api.main:app --port 8000           # API
 cd web && npm install && npm run dev       # web (VITE_API_URL=http://localhost:8000), or npm run dev:mock
 ```
@@ -497,11 +503,11 @@ The last losing question type (procedural) now wins, every screen fits a desktop
 One run on the final code, same model both arms, all 160 questions: Relay 99.4% vs 61%, +38 points [+31, +46], p ≈ 1 × 10⁻¹⁷ (96.2% before the abstention fix); components 99.7% extraction and 96.5% contradiction handling. Two external checks now exist and are reported as they came out: out-of-distribution extraction 83% (a drop from 99.7%, mostly one ambiguous predicate) and LoCoMo, where Relay loses on F1 (0.08 vs 0.27) because a fact-only memory drops most open-domain detail, while refusing every false-premise question. Abstention recall went from 67% to 94% with precision intact; the remaining weakness, named not hidden, is open-domain conversation. Evaluation rigor ≈ 9. Estimate: **≈ 9/10**.
 
 ### Update after Phase 21
-Demo and security close their gaps: Judge mode plays the whole story live through the real agents, resets need a reset key and writes are rate-limited (deployability and security, once 4/10, is no longer the weak spot), and the repository README now leads with the problem, the proof and the Track 2 mapping. Still open: the demo video, the ablations on the final code, and open-domain recall. Estimate: **≈ 9/10**.
+Demo and security close their gaps: Judge mode plays the whole story live through the real agents, resets need a reset key and writes are rate-limited (deployability and security, once 4/10, is no longer the weak spot), and the repository README now leads with the problem, the proof and the Track 2 mapping. Coordination gains a human in the loop ("This one is right"; trust learns per predicate) and an outside agent (`mcp`) that really connects. Still open: the demo video, making the repository public, the ablations on the final code, and open-domain recall. Estimate: **≈ 9/10**.
 
 ## 8. What's missing, in priority order
 
-1. **Demo video (3 min)**, recorded on the deployed site after a Render redeploy, and the submission write-up.
+1. **Demo video (3 min)**, recorded from Judge mode on the deployed site, and the submission write-up. **Make the repository public** first (it is private; the history holds no secrets).
 2. ~~**Write-time value checks**~~ (done in Phase 21; rerun the benchmark to confirm the router miss is gone) and **open-domain memory**: LoCoMo shows a fact-only memory drops most chit-chat detail (keep episode text as a fallback for questions no fact answers). Then determinism re-runs and the ablations on the final code.
 3. **A browser click-through of every screen** (Memory, Network with Break it and dispatch, Agent team, Tenants canary test) on the deployed site.
 4. **Speed**: retrieval for a benchmark question (linking, expansion and ranking on an idle graph) is about 170–180 ms p50 vs 46 ms for the vector store (section 6), and a chat turn still runs about 40 queries, mostly writes; batch the episode and facts into fewer round trips.

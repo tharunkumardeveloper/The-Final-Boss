@@ -228,19 +228,19 @@ That spreads over several days of free quota. Order of priority: FULL vs B1 → 
 |---|---|
 | Daily LLM quotas | Per-job models, Gemini fallback, cache, priority order in §6 |
 | `allam-2-7b` English quality | Test first; Gemini Flash-Lite fallback |
-| Render free-plan RAM and sleep | Measure; Gemini embeddings; warm-up screen; demo cache |
+| Render free-plan RAM and sleep | Measure; Gemini embeddings; warm-up screen; demo cache; a keep-awake ping every 10 minutes during judging (`.github/workflows/keep-awake.yml`) |
 | FalkorDB free-tier memory | One graph per tenant; dataset sized well below the ceiling |
 | Self-graded benchmark | Out-of-distribution extraction + LoCoMo + component metrics |
-| Live demo flakiness | Deterministic replay for the video; live typing as a bonus |
+| Live demo flakiness | Deterministic replay for the video; live typing as a bonus; Judge mode answers only what the agents ask; resets need a reset key and writes are rate-limited, so nobody wipes the demo |
 | Judges probe the code | All Cypher in one commented file; walk through it before submitting |
 
 ## 11. Submission checklist
 
-- [ ] Public repo
-- [ ] README: setup, graph data model, memory types, predicate normalization, key Cypher, concurrency model, benchmark with intervals and decomposition, component metrics, external check, data statement, prior work, AI disclosure
-- [ ] Demo video (3 min): live conversations → fact change → two clocks → handoff → disagreement → you type live → Cypher proof → numbers
-- [ ] Live deployment: Vercel + Render + FalkorDB Cloud
-- [ ] Track named: "Track 02 — Agent Memory and Coordination"
-- [ ] AI-assistant use disclosed
+- [ ] **Public repo.** Still private: judges get a 404 on the code and every README link. The history was scanned (66 commits): no key, password or host was ever committed, only `.env.example` files. GitHub → Settings → General → Danger Zone → Change visibility → Public
+- [x] README: the repository [`README.md`](README.md) (problem, live Judge mode, results, Track 2 mapping, "Remove FalkorDB and…" with Cypher, MCP, what's next, AI disclosure) and the technical [`agent-relay/README.md`](agent-relay/README.md) (setup, graph data model, memory types, predicate normalization, key Cypher, concurrency, benchmark, data statement, prior work)
+- [ ] Demo video (3 min), recorded from Judge mode, so the video and the live demo tell the same story; plus a 20–30 s clip of Claude Code writing a fact over MCP that Mr.Fix-It then uses
+- [x] Live deployment: Vercel (`wifight.vercel.app`) + Render (`relay-api-6twk.onrender.com`) + FalkorDB Cloud (a new instance; demo story loaded)
+- [x] Track named: "Track 02, Agent Memory and Coordination"
+- [x] AI-assistant use disclosed (both READMEs)
 - [ ] Blog post (side prize)
-- [ ] Rotate the FalkorDB password, Groq key and Gemini key (pasted in chat earlier)
+- [ ] After judging: rotate the FalkorDB password, Groq keys, `RELAY_RESET_KEY` and `RELAY_TENANT_SECRET` (all pasted in chat), and disable the keep-awake workflow
