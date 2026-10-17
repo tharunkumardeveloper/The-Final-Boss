@@ -2,7 +2,7 @@ import { COMPANY, TAGLINE } from '../lib/brand'
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Wordmark } from '../components/Brand'
-import { ArrowUpRight, Check, Warning, Wifi } from '../components/Icons'
+import { ArrowUpRight, Check, Wifi } from '../components/Icons'
 import { MemoryPanel } from '../components/portal/MemoryPanel'
 import { JudgeBar, useJudge } from '../components/portal/JudgeMode'
 import { SupportDesk, type ChatDriver } from '../components/portal/SupportChat'
@@ -194,20 +194,11 @@ export default function Portal() {
     listeners.current.forEach((fn) => fn(e))
   }, refresh)
 
-  const outages = activeOutages(graph.current)
-  const down = new Set(outages.map((o) => o.city))
+  // outages only mark cities as Degraded in Coverage (and Mr.Fix-It knows them); no site-wide banner
+  const down = new Set(activeOutages(graph.current).map((o) => o.city))
 
   return (
     <div className="min-h-[100dvh]">
-      {outages.length > 0 && (
-        <div className="bg-conflict-tint text-[13px] text-ink" role="status">
-          <div className="mx-auto flex max-w-6xl items-center gap-2 px-4 py-2 sm:px-6">
-            <Warning className="shrink-0 text-conflict" />
-            <span><strong className="font-semibold">Known issue:</strong> {outages.map((o) => `${titleCase(o.outage)} affecting ${titleCase(o.city)}`).join(' · ')}. Engineers are on it; no need to report it again.</span>
-          </div>
-        </div>
-      )}
-
       <header className="mx-auto flex max-w-[1360px] items-center justify-between px-4 py-4 sm:px-6">
         <Wordmark />
         <nav className="flex flex-wrap items-center gap-1 text-sm" aria-label="Main">
