@@ -152,7 +152,7 @@ Contradiction handling needs two statements about the same thing to use the same
 - **Two clocks**: world time (`valid_from/valid_to`) and system time (`recorded_at/expired_at`) on every fact; `facts_at` answers both "what was true then" and "what we had on file then", which diverge when someone tells us late.
 - **Trust-ranked disagreement**: conflicting claims from different agents are both kept, ranked by agent trust then recency, and recorded as a `Conflict` node instead of last-write-wins.
 - **Procedures as paths**: what fixed a line is stored as `(:Procedure)-[:FIRST]->(:ProcStep)-[:NEXT]->…`, scored by successes and failures; `past_fixes` returns them as paths.
-- **Measured, not assumed**: Relay 99.4% vs a vector store 61.2% on 160 questions (same answer model and prompt), with ablations (the two clocks are worth about 19 points, multi-hop about 9) and a fix log; see [Benchmark](#benchmark) and `eval/`.
+- **Measured, not assumed**: Relay 99.4% vs a vector store 61.3% on 160 questions (same answer model and prompt), with ablations (the two clocks are worth about 19 points, multi-hop about 9) and a fix log; see [Benchmark](#benchmark) and `eval/`.
 - Tests: `python -m tests.test_contract` covers each outcome shape, path hops, arg validation (an unknown name runs no tool query, checked from the query log) and the depth cap, without LLM calls.
 
 ## Key Cypher
@@ -358,8 +358,8 @@ Final run on the final code: tenant `pml-bench`, 40 synthetic customers, 556 cus
 
 | | Relay | Vector store (B1) |
 |---|---|---|
-| **Accuracy** | **99.4%** (159/160) [97–100%] | 61.2% (98/160) [54–68%] |
-| Difference | **+38 points** [+31, +46], exact McNemar p = 1.4 × 10⁻¹⁷ | |
+| **Accuracy** | **99.4%** (159/160) [97–100%] | 61.3% (98/160) [54–68%] |
+| Difference | **+38.1 points**, paired bootstrap 95% CI [+30.6, +45.6], exact McNemar p = 1.4 × 10⁻¹⁷ | |
 | Gold fact in the context | 100% | 72% |
 | Should-refuse: precision / recall | 100% / 94% | 50% / 78% |
 

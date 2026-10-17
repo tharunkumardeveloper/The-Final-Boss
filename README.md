@@ -8,7 +8,7 @@
 
 [![Graph Hacks](https://img.shields.io/badge/Graph_Hacks-WeMakeDevs_×_FalkorDB-0B5FFF?style=for-the-badge)](https://wifight.vercel.app)
 [![Track 02](https://img.shields.io/badge/Track_02-Agent_Memory_&_Coordination-7C5CC4?style=for-the-badge)](#-the-five-memory-capabilities)
-[![Benchmark](https://img.shields.io/badge/Benchmark-99.4%25_vs_61.2%25-2E9E5B?style=for-the-badge)](#-results)
+[![Benchmark](https://img.shields.io/badge/Benchmark-99.4%25_vs_61.3%25-2E9E5B?style=for-the-badge)](#-results)
 
 [![Live demo](https://img.shields.io/badge/▶_Judge_mode-Watch_it_work-14A39A?style=for-the-badge)](https://wifight.vercel.app/?judge=1)
 [![Site](https://img.shields.io/badge/WiFight-wifight.vercel.app-0F1B2D?style=for-the-badge)](https://wifight.vercel.app)
@@ -36,7 +36,7 @@ piece you set up yourself is the optional MCP connection for Claude ([below](#-b
 
 | 🎯 **99.4%** | 🤖 **3 agents** | 🗺️ **6 regional graphs** | ✍️ **0 duplicates** | 🔌 **14 MCP tools** | 🌍 **39 countries** |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| accuracy vs 61.2% for a vector store | that never message each other | one FalkorDB graph per tenant | with 8 writers at once | Claude joins as a 4th agent | local plans and prices |
+| accuracy vs 61.3% for a vector store | that never message each other | one FalkorDB graph per tenant | with 8 writers at once | Claude joins as a 4th agent | local plans and prices |
 
 </div>
 
@@ -58,6 +58,7 @@ piece you set up yourself is the optional MCP connection for Claude ([below](#-b
 - [Tech stack](#-tech-stack)
 - [Team](#-team-the-final-boss)
 - [Run it yourself](#-run-it-yourself)
+- [AI-use disclosure](#-ai-use-disclosure)
 
 </details>
 
@@ -273,7 +274,7 @@ fail to find it: through its live stream, its agent tools and raw Cypher. You ca
 <tr>
 <td><b>⚡ High-concurrency reads and writes</b></td>
 <td>One Cypher statement per fact write: it creates the fact, corroborates a repeat (never a duplicate), or supersedes what it contradicts, atomically. FalkorDB serializes writes per graph, so no reader sees two current values</td>
-<td>Benchmark → Concurrency.<br><b>8 writers · 18.3 writes/s · 0 duplicates</b><br><a href="agent-relay/eval/bench.py"><code>bench.py</code></a></td>
+<td>Benchmark → Concurrency.<br><b>0 duplicates, and never two current values, under 8 concurrent writers</b><br><sub>18.3 writes/s on the free tier, each write including a local embedding over a ~24 ms round trip</sub><br><a href="agent-relay/eval/bench.py"><code>bench.py</code></a></td>
 </tr>
 <tr>
 <td><b>🔒 Separate memory per user or tenant</b></td>
@@ -314,21 +315,21 @@ the customer, top 10 chunks, each dated, newest first.
 
 | | 🧠 Relay | 📦 Vector store |
 |---|:---:|:---:|
-| **Accuracy** | **99.4%** (159/160) | 61.2% (98/160) |
-| Difference | **+38 points** [+31, +46] · McNemar p = 1.4 × 10⁻¹⁷ | |
+| **Accuracy** | **99.4%** (159/160) | 61.3% (98/160) |
+| Difference | **+38.1 points**, paired bootstrap 95% CI [+30.6, +45.6] · exact McNemar p = 1.4 × 10⁻¹⁷ | |
 | Gold fact in the context | 100% | 72% |
-| Should-refuse questions: precision / recall | 100% / 94% | 50% / 78% |
+| Should-refuse questions: precision / recall | 100% (17/17) / 94.4% (17/18) | 50.0% (14/28) / 77.8% (14/18) |
 
 </div>
 
 | Question type | 🧠 Relay | 📦 Vector store |
 |---|---|---|
-| ⚖️ Two agents disagree | `████████████████████` 100% | `█` 6% |
-| 🕸️ Multi-hop (customer → city ← outage) | `████████████████████` 100% | `████` 22% |
-| 📋 Completeness (every device, every ticket) | `████████████████████` 100% | `█████████` 44% |
-| 🛠️ Procedural (what fixed this before?) | `████████████████████` 100% | `██████████` 50% |
-| 🔄 Current truth after changes | `████████████████████` 100% | `██████████████` 72% |
-| 🤝 Handoff (what did the other agent learn?) | `████████████████████` 100% | `█████████████████` 83% |
+| ⚖️ Two agents disagree | `████████████████████` 100% (16/16) | `█` 6.2% (1/16) |
+| 🕸️ Multi-hop (customer → city ← outage) | `████████████████████` 100% (18/18) | `████` 22.2% (4/18) |
+| 📋 Completeness (every device, every ticket) | `████████████████████` 100% (18/18) | `█████████` 44.4% (8/18) |
+| 🛠️ Procedural (what fixed this before?) | `████████████████████` 100% (18/18) | `██████████` 50.0% (9/18) |
+| 🔄 Current truth after changes | `████████████████████` 100% (18/18) | `██████████████` 72.2% (13/18) |
+| 🤝 Handoff (what did the other agent learn?) | `████████████████████` 100% (18/18) | `█████████████████` 83.3% (15/18) |
 
 - **Ablations** (an earlier run on a 63-question subset, one model for every arm): without the two clocks about
   **−19 points**, without multi-hop expansion about **−9**.
@@ -336,8 +337,12 @@ the customer, top 10 chunks, each dated, newest first.
   ([LoCoMo](https://github.com/snap-research/locomo), open-ended personal chat), **Relay loses on token F1 (0.08 vs
   0.27)** because it keeps facts, not transcripts. It did refuse 15/15 false-premise questions, against 4/15.
 
-Full tables, intervals and how every number was produced: [`eval/results.md`](agent-relay/eval/results.md) ·
-[`eval/components.md`](agent-relay/eval/components.md).
+**One source for every number above:** the *Benchmark: final* section of
+[`eval/components.md`](agent-relay/eval/components.md#benchmark-final) (run `run-20261016-073654`), with the
+remaining question types, every interval and why each miss happened; [`eval/results.md`](agent-relay/eval/results.md)
+is the same run. Relay's one miss is a should-refuse question it answered because of a bad stored fact (a router
+recorded as "wifi"). The write-time value checks added since then target exactly that, but the benchmark has not
+been re-run, so 159/160 stands.
 
 ## 🔬 Remove FalkorDB and…
 
@@ -494,8 +499,7 @@ judging; a scheduled ping keeps the free API awake.
 
 </details>
 
-<details>
-<summary><b>🤖 AI-use disclosure</b></summary>
+## 🤖 AI-use disclosure
 
 Built with AI coding assistance (Claude Code) for code generation, review and documentation drafts. The design, graph
 model, queries and evaluation were directed, verified and tested by us, and we can explain every component. Runtime
@@ -503,8 +507,6 @@ models: Groq `gpt-oss-120b` for extraction, answers and replies, with `gpt-oss-2
 is also the benchmark's answer model), Gemini Flash-Lite last; `allam-2-7b` for simulated customers and summaries;
 embeddings by fastembed `bge-small-en-v1.5`, run locally. All customer data is synthetic; place names come from
 GeoNames (CC BY 4.0); the India outline is Natural Earth's 1:10m boundary from the India point of view (public domain).
-
-</details>
 
 <div align="center">
 <br>
