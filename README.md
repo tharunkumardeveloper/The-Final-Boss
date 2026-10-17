@@ -7,7 +7,7 @@ works, we built a whole company on top of it: **WiFight**, a fiber internet prov
 shared FalkorDB graph.
 
 <!-- GIF 01 · hero · docs/gifs/01-judge-mode.gif (see docs/gifs/SHOTLIST.md) -->
-<p align="center"><img src="docs/gifs/01-judge-mode.gif" alt="Judge mode: a customer reports a fault, the resolver fixes it, the customer moves city and a new session remembers" width="900"></p>
+<p align="center"><img src="docs/gifs/judge.gif" alt="Judge mode: a customer reports a fault, the resolver fixes it, the customer moves city and a new session remembers" width="852"></p>
 
 ### ▶ [Try it live: Judge mode](https://wifight.vercel.app/?judge=1) · [The site](https://wifight.vercel.app) · [Staff console](https://wifight.vercel.app/console) · [Benchmark](https://wifight.vercel.app/console/benchmark)
 
@@ -46,7 +46,7 @@ agents). The only piece you set up yourself is the optional MCP connection for C
 | **Network ops** | Watches the network graph; when a node fails it finds every affected customer by traversal and warns them before they complain |
 
 <!-- GIF 02 · docs/gifs/02-wifight-home.gif -->
-<p align="center"><img src="docs/gifs/02-wifight-home.gif" alt="The WiFight home page: region switch, local plans and prices, coverage" width="900"></p>
+<!-- pending: <p align="center"><img src="docs/gifs/02-wifight-home.gif" alt="The WiFight home page: region switch, local plans and prices, coverage" width="900"></p> -->
 
 ## Why we chose an ISP
 
@@ -91,7 +91,7 @@ steps underneath and the technician's van on the map. If every reading is health
 the resolver doesn't argue: the home is marked **reported faulty** and a technician goes to look.
 
 <!-- GIF 03 · docs/gifs/03-ticket-lifecycle.gif -->
-<p align="center"><img src="docs/gifs/03-ticket-lifecycle.gif" alt="A ticket from complaint to fix: chat, Your tickets stages, resolver steps, technician dispatched" width="900"></p>
+<p align="center"><img src="docs/gifs/ticket.gif" alt="A ticket from complaint to fix: chat, Your tickets stages, resolver steps, technician dispatched" width="852"></p>
 
 ## A tour of every screen
 
@@ -107,7 +107,7 @@ the resolver doesn't argue: the home is marked **reported faulty** and a technic
 | **Region · country · Plans · Coverage** | Six regional desks, local prices, which cities are degraded right now | Switch region at the top; prices and coverage come from that region's graph |
 
 <!-- GIF 04 · docs/gifs/04-network-lab.gif -->
-<p align="center"><img src="docs/gifs/04-network-lab.gif" alt="The customer's Network lab: a fault glows, the technician's van drives out, the line turns green" width="900"></p>
+<!-- pending: <p align="center"><img src="docs/gifs/04-network-lab.gif" alt="The customer's Network lab: a fault glows, the technician's van drives out, the line turns green" width="900"></p> -->
 
 ### The staff console · [wifight.vercel.app/console](https://wifight.vercel.app/console)
 
@@ -127,16 +127,16 @@ can wipe it).
 | **Benchmark** | Relay vs a vector store on 160 questions, by question type, plus concurrency | **Ask both memories** the same question live and compare the answers and evidence |
 
 <!-- GIF 05 · docs/gifs/05-console-memory.gif -->
-<p align="center"><img src="docs/gifs/05-console-memory.gif" alt="Console Memory screen: live graph, replay through time, Show me two clocks, This one is right" width="900"></p>
+<!-- pending: <p align="center"><img src="docs/gifs/05-console-memory.gif" alt="Console Memory screen: live graph, replay through time, Show me two clocks, This one is right" width="900"></p> -->
 
 <!-- GIF 06 · docs/gifs/06-network-break-it.gif -->
-<p align="center"><img src="docs/gifs/06-network-break-it.gif" alt="Console Network: break a fault, the customer complains, the resolver measures, acts and is graded" width="900"></p>
+<!-- pending: <p align="center"><img src="docs/gifs/06-network-break-it.gif" alt="Console Network: break a fault, the customer complains, the resolver measures, acts and is graded" width="900"></p> -->
 
 <!-- GIF 07 · docs/gifs/07-agent-team.gif -->
-<p align="center"><img src="docs/gifs/07-agent-team.gif" alt="Agent team: facts flowing from writer to reader through shared memory, and a handoff replay" width="900"></p>
+<!-- pending: <p align="center"><img src="docs/gifs/07-agent-team.gif" alt="Agent team: facts flowing from writer to reader through shared memory, and a handoff replay" width="900"></p> -->
 
 <!-- GIF 08 · docs/gifs/08-tenants-canary.gif -->
-<p align="center"><img src="docs/gifs/08-tenants-canary.gif" alt="Tenants: a canary word written in one region is invisible to every other region" width="900"></p>
+<!-- pending: <p align="center"><img src="docs/gifs/08-tenants-canary.gif" alt="Tenants: a canary word written in one region is invisible to every other region" width="900"></p> -->
 
 ## Watch it, or take part
 
@@ -281,7 +281,7 @@ page draws the new agent. Tools: `remember`, `remember_fact`, `recall`, `ask`, `
 embedding model needs the current Microsoft Visual C++ runtime.
 
 <!-- GIF 09 · docs/gifs/09-mcp-claude.gif -->
-<p align="center"><img src="docs/gifs/09-mcp-claude.gif" alt="Claude Code writes a fact over MCP; Mr.Fix-It uses it on the live site; the Agent team page shows the new agent" width="900"></p>
+<!-- pending: <p align="center"><img src="docs/gifs/09-mcp-claude.gif" alt="Claude Code writes a fact over MCP; Mr.Fix-It uses it on the live site; the Agent team page shows the new agent" width="900"></p> -->
 
 ## Names, once
 
