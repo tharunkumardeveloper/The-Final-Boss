@@ -456,7 +456,7 @@ Built with AI coding assistance (Claude Code) for code generation, review and do
 - "On file on date X" questions are the weakest type; trust scores are static per agent.
 - Entity linking in questions is exact-name and scans known names per question.
 - The reply guard checks plan names, prices, speeds, device counts, budget fit and coverage; anything else a weak model says (a delivery time, a discount) is not checked.
-- The simulator's personas live in India (`pml`); the other regions are filled by portal chats.
+- The simulator's personas live in India (`pml`). Every region has its own demo story (reset → story): the same storyline with local names, two covered cities and the local time zone, e.g. Emma Clarke moving from London to Manchester on the Europe desk.
 - Intake updates a changed fact and says it back rather than confirming first (history is kept); calling for someone else pulls up their record but doesn't switch the chat to their account.
 - PageRank salience counts every Entity-to-Entity edge, so `WAS` history edges add a little weight to past places.
 - On free tiers, extraction needs Groq or Gemini quota; when both are out, planned replies still work but nothing new is learned from free text.
