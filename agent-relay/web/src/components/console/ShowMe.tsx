@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { api } from '../../lib/api'
 import { titleCase } from '../../lib/format'
-import type { DemoPicks, Hop, ToolResult } from '../../lib/types'
+import type { ConfirmResult, DemoPicks, Hop, ToolResult } from '../../lib/types'
 import { Hops, OutcomeChip, shortDate } from '../Hops'
 
 type Demo = 'clock' | 'conflict' | 'blast'
@@ -55,14 +55,29 @@ export function ShowMe({ tenant, kind = 'memory' }: { tenant: string; kind?: 'me
   const [ran, setRan] = useState<Ran>()
   const [busy, setBusy] = useState<Demo>()
   const [error, setError] = useState<string>()
+  const [settled, setSettled] = useState<ConfirmResult>()  // a person said which claim is right
+  const [confirming, setConfirming] = useState<string>()
   useEffect(() => {
-    setPicks(undefined); setRan(undefined)
+    setPicks(undefined); setRan(undefined); setSettled(undefined)
     api.demos(tenant).then(setPicks).catch(() => setPicks({ clock: null, conflict: null, exchange: null }))
   }, [tenant])
 
+  /** "This one is right": the other claims retire (kept in history), the Conflict closes, trust learns from it. */
+  const confirm = async (factId: string) => {
+    const c = picks?.conflict
+    if (!c) return
+    setConfirming(factId); setError(undefined)
+    try {
+      const res = await api.confirmClaim(tenant, { subject: c.name, predicate: c.predicate, fact_id: factId })
+      setSettled(res)
+      setRan({ demo: 'conflict', a: await api.tool(tenant, 'claims', { name: c.name, predicate: c.predicate }), label: [c.question] })
+    } catch (e) { setError(e instanceof Error && /isn't active/.test(e.message) ? 'That claim was already settled. Run it again to see the current state.' : 'Could not record that right now.') }
+    finally { setConfirming(undefined) }
+  }
+
   const run = async (demo: Demo) => {
     if (!picks) return
-    setBusy(demo); setError(undefined)
+    setBusy(demo); setError(undefined); setSettled(undefined)
     try {
       if (demo === 'clock' && picks.clock) {
         const c = picks.clock
@@ -117,12 +132,26 @@ export function ShowMe({ tenant, kind = 'memory' }: { tenant: string; kind?: 'me
                 {ran.a.result.map((c: any, i: number) => (
                   <li key={c.fact_id} className="text-sm">
                     <p><span className="num text-ink-3">#{c.rank}</span> <span className="font-semibold">{titleCase(c.value)}</span>
-                      <span className="text-xs text-ink-3"> · written by {c.agents.join(', ')} · trust {c.trust}</span>
-                      {c.preferred && <span className="chip-new ml-1.5 !py-0 text-[10px]">preferred</span>}</p>
+                      <span className="text-xs text-ink-3"> · written by {c.agents.join(', ')} · trust {c.trust}
+                        {c.record ? ` (fixed ${c.base_trust}, ${c.record > 0 ? '+' : ''}${c.record} from people's confirmations)` : ''}</span>
+                      {c.preferred && <span className="chip-new ml-1.5 !py-0 text-[10px]">preferred</span>}
+                      {settled?.confirmed.fact_id === c.fact_id && <span className="chip ml-1.5 bg-current-tint !py-0 text-[10px] text-current">confirmed by a person</span>}</p>
                     {ran.a.paths[i] && <Hops hops={ran.a.paths[i]} />}
+                    {ran.a.extra.disputed && (
+                      <button onClick={() => confirm(c.fact_id)} disabled={!!confirming}
+                        className="mt-1 rounded-full bg-surface px-2.5 py-0.5 text-[11px] font-medium text-signal-deep hairline transition hover:bg-signal-tint disabled:opacity-50">
+                        {confirming === c.fact_id ? 'Recording…' : 'This one is right'}</button>
+                    )}
                   </li>
                 ))}
               </ol>
+              {settled && (
+                <div className="mt-2 rounded-lg bg-current-tint px-3 py-2 text-xs text-ink" role="status">
+                  <p><span className="font-semibold">Settled: {titleCase(settled.confirmed.value)}.</span>
+                    {settled.rejected.length ? ` ${settled.rejected.map((r) => titleCase(r.value)).join(', ')} retired: both clocks closed, kept in history as rejected.` : ''} The Conflict is closed.</p>
+                  <p className="mt-0.5 text-ink-2">Trust learned for this kind of fact: {settled.trust.map((t) => `${t.agent} ${t.from} → ${t.to}`).join(' · ')}. The next disagreement like this is ranked with it.</p>
+                </div>
+              )}
               {ran.a.extra.conflict && (
                 <p className="mt-2 font-mono text-[10.5px] text-ink-3">(:Conflict {'{'}id: '{ran.a.extra.conflict.id}', status: '{ran.a.extra.conflict.status}', policy: '{ran.a.extra.conflict.policy}'{'}'})-[:BETWEEN]-&gt;(:Fact) ×{ran.a.result.length}</p>
               )}

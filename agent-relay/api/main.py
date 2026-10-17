@@ -182,6 +182,13 @@ class FixIn(BaseModel):
     worked: bool
 
 
+class ConfirmIn(BaseModel):
+    subject: str
+    predicate: str
+    fact_id: str
+    by: str = "operator"
+
+
 class AskIn(BaseModel):
     question: str
     agent: str = "resolver"
@@ -403,6 +410,21 @@ def _how(tenant, customer, reply, at):
     except Exception as e:  # a missing footnote must never cost the customer their reply
         print(f"grounding: {e}")
         return []
+
+
+@app.post("/api/tenants/{tenant}/claims/confirm")
+def confirm_claim(tenant: str, body: ConfirmIn):
+    """"This one is right": a person settles a disagreement between agents. The other claims are retired (kept in
+    history as rejected), the Conflict closes, and each writer's trust on this predicate learns from it."""
+    T(tenant)
+    _guard(tenant)  # the benchmark tenants' disagreements are the test set: never settled by hand
+    if body.predicate not in R._ALL or not (R.is_single(body.predicate) and R.policy(body.predicate) == "trust"):
+        raise HTTPException(400, f"'{body.predicate}' isn't a fact agents can disagree on")
+    try:
+        return relay_memory.confirm_claim(tenant, subject=body.subject, predicate=body.predicate,
+                                          fact_id=body.fact_id, by=(body.by or "operator").strip()[:40])
+    except ValueError as e:
+        raise HTTPException(409, str(e))
 
 
 @app.get("/api/tenants/{tenant}/orders")

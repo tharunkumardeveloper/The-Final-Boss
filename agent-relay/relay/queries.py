@@ -681,6 +681,26 @@ SET c.status = 'resolved', c.resolved_at = $at, c.resolved_dt = localdatetime($a
 REMOVE c:Open SET c:Resolved
 """
 
+# A person settles a disagreement: the chosen claim is confirmed by the review episode (the others are retired with
+# RETIRE from the same episode, then marked rejected), so the decision is provenance like any other write.
+CONFIRM_CLAIM = """
+MATCH (ep:Episode {episode_id:$eid}), (f:Fact {fact_id:$fid, active:true})
+SET f.confirmed_by = $by, f.confirmed_at = $at, f.confirmed_dt = localdatetime($at_dt)
+SET f:Confirmed
+CREATE (ep)-[:CONFIRMED]->(f)
+RETURN f.object_value
+"""
+MARK_REJECTED = """
+MATCH (f:Fact) WHERE f.fact_id IN $fids
+SET f.rejected = true, f.rejected_by = $eid
+SET f:Rejected
+"""
+# Each writer's track record on one predicate, from those decisions: +1 per confirmed claim, -1 per rejected one.
+TRACK_RECORD = """
+MATCH (f:Fact {predicate:$p}) WHERE f.confirmed_at IS NOT NULL OR f.rejected = true
+RETURN f.asserted_by, sum(CASE WHEN f.rejected = true THEN -1 ELSE 1 END)
+"""
+
 HAS_SESSION = "MATCH (c:Entity {name_key:$c}), (s:Session {session_id:$sid}) MERGE (c)-[:HAS_SESSION]->(s)"
 
 # 4. a ticket raised to priority, with why and by whom

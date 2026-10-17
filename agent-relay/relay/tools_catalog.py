@@ -12,7 +12,7 @@ import collections
 import threading
 import time
 
-from . import agents, db, events, network, queries as Q, registry as R, retrieve
+from . import agents, db, events, memory, network, queries as Q, registry as R, retrieve
 from .memory import norm, to_date, to_ms
 
 MAX_DEPTH = 4
@@ -121,10 +121,14 @@ def claims(tenant, log, name, predicate):
     """Every active claim for one customer + predicate, best supported first (trust, then recency), with each
     claim's writers and the Conflict node that records the disagreement."""
     rows = db.run(tenant, "tool: claims with trust", Q.CLAIMS, {"s": name, "p": predicate}, log, ro=True)
+    record = memory.learned_trust(tenant, predicate, log) if len(rows) > 1 else {}
+    base = {fid: trust for fid, _, _, trust, *_ in rows}
+    rows = memory.rerank(rows, record)  # trust learned from people's confirmations, when there are any
     out, conflict = [], None
     for i, (fid, val, by, trust, seen, ags, vf, rec, cid, status, policy, pref) in enumerate(rows):
         out.append({"fact_id": fid, "value": val, "asserted_by": by, "trust": trust, "agents": ags, "rank": i + 1,
-                    "preferred": i == 0, "since": to_date(vf), "learned": to_date(rec)})
+                    "preferred": i == 0, "since": to_date(vf), "learned": to_date(rec),
+                    "base_trust": base.get(fid), "record": record.get(by, 0)})
         if cid and not conflict:
             conflict = {"id": cid, "status": status, "policy": policy, "preferred": pref}
     rel = R.rel_type(predicate)

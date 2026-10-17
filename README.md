@@ -109,7 +109,10 @@ Swap the graph for a vector store, or for tables plus a vector index, and these 
   questions; they diverge when someone tells us late. A vector store has no notion of either.
 - **Retire.** "I no longer live in Chennai" must stop matching. In a vector store, the old chunk keeps ranking.
 - **Conflict ranking.** When billing and support disagree, both claims stay and are ranked at read time by agent
-  trust, then recency, with a `Conflict` node. Otherwise, the last write silently wins.
+  trust, then recency, with a `Conflict` node. Otherwise, the last write silently wins. When a person clicks "This
+  one is right" (console → Show me), the other claims retire into history as `:Rejected`, the `Conflict` closes, and
+  each writer's trust on that kind of fact moves with its track record, counted from the graph, so the next
+  disagreement is ranked by learned trust instead of a fixed number.
 - **Answer paths.** Every answer comes with the hops that found it (customer → `LIVES_IN` → city ← `AFFECTS` ←
   outage). A list of similar chunks is not a reason.
 - **Blast radius.** "Who is affected if this cabinet fails?" is a bounded traversal, plus `algo.maxFlow` for
@@ -187,6 +190,19 @@ lands in the same graph the live demo uses, where Mr.Fix-It and the resolver fin
 Agent team page draws it once it acts. For example, ask Claude: *"Use relay-memory to remember, as agent mcp in tenant
 pml, that customer Asha Menon has a PML Hub 6 Pro router"*, then chat as Asha on the site and ask Mr.Fix-It which
 router you have.
+
+## What's next
+
+Where Relay stops today, named rather than hidden:
+
+- **Open-domain recall.** Relay keeps facts, not transcripts, which is why it loses LoCoMo on F1. Next: when no fact
+  answers, search that customer's `Episode` text and label the answer "from the conversation, not a confirmed fact".
+- **Ablations on the final code.** The −19 / −9 point numbers come from an earlier 63-question run; rerun them on the
+  final graph, along with determinism re-runs.
+- **Learned trust everywhere.** Confirmations already re-rank the claims tool and the `Conflict` node; answers should
+  use them too, and the customer should be able to confirm from the chat.
+- **Fewer round trips per chat turn** (about 40 queries today, mostly writes), a retention policy for old episodes,
+  and the reply guard's remaining gaps (delivery times, discounts).
 
 ## Run it
 

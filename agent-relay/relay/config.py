@@ -100,4 +100,6 @@ AGENTS = {
     "simulator": {"role": "plays synthetic customers on a simulated clock (never writes facts itself)", "trust": 0.5},
     # any outside AI client on the MCP server (Claude Code, Claude Desktop, ...): a teammate with its own name and trust
     "mcp": {"role": "an outside AI client connected over MCP (Claude Code, Claude Desktop, ...)", "trust": 0.7},
+    # a person on the staff console who settles disagreements ("this one is right"); never writes facts itself
+    "operator": {"role": "a person who confirms which claim is right when agents disagree", "trust": 1.0},
 }

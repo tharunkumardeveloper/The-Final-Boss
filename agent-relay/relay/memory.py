@@ -118,12 +118,82 @@ def assert_triple(tenant, *, agent, episode_id, subject, predicate, obj, at, val
     return out
 
 
+LEARN_STEP = 0.05  # how far one person's confirmation (or rejection) moves a writer's trust on that predicate
+
+
+def effective_trust(base, record):
+    """A writer's trust on one predicate: its fixed trust, moved by its track record there, kept within (0, 1)."""
+    return round(min(0.99, max(0.05, (base or 0) + LEARN_STEP * (record or 0))), 2)
+
+
+def rerank(rows, record, writer=2, trust=3, seen=4):
+    """Claims re-ranked by learned trust, then recency. rows are query rows; record maps writer -> confirmed minus
+    rejected. With no record (no one has confirmed anything yet) the order is exactly the query's."""
+    if not record:
+        return rows
+    out = [(*r[:trust], effective_trust(r[trust], record.get(r[writer])), *r[trust + 1:]) for r in rows]
+    return sorted(out, key=lambda r: (-(r[trust] or 0), -(r[seen] or 0)))
+
+
+def learned_trust(tenant, p, log=None):
+    """writer -> its track record on predicate p (confirmed minus rejected claims). Empty if anything goes wrong:
+    ranking then falls back to the fixed per-agent trust."""
+    try:
+        return {a: n for a, n in db.run(tenant, "learned trust", Q.TRACK_RECORD, {"p": p}, log, ro=True) if a}
+    except Exception as e:
+        print(f"learned trust: {e}")
+        return {}
+
+
+def ranked_claims(tenant, s, p, log=None):
+    """Active claims for one subject+predicate, best first: learned trust, then recency."""
+    rows = db.run(tenant, "active claims", Q.ACTIVE_CLAIMS, {"s": s, "p": p}, log, ro=True)
+    return rerank(rows, learned_trust(tenant, p, log)) if len(rows) > 1 else rows
+
+
+def confirm_claim(tenant, *, subject, predicate, fact_id, by="operator", log=None):
+    """A person settles a disagreement. The chosen claim is confirmed, the other agents' claims are retired (both clocks
+    close; they stay in history, marked rejected), the Conflict closes, and the outcome becomes each writer's track
+    record on this predicate, so the next disagreement of this kind is ranked by learned trust, not only fixed trust."""
+    s, at_ms = norm(subject), to_ms(datetime.now(timezone.utc))
+    claims = db.run(tenant, "active claims", Q.ACTIVE_CLAIMS, {"s": s, "p": predicate}, log, ro=True)
+    win = next((c for c in claims if c[0] == fact_id), None)
+    if not win:
+        raise ValueError("that claim isn't active any more")
+    before = learned_trust(tenant, predicate, log)
+    eid = record_episode(tenant, agent="operator", session_id=f"review-{s.replace(' ', '-')}", customer=s,
+                         text=f"{by} confirmed: {s} {R.attribute(predicate)} {win[1]}", at=at_ms, speaker="action", log=log)
+    db.run(tenant, "confirm claim", Q.CONFIRM_CLAIM, {"eid": eid, "fid": fact_id, "by": by, "at": at_ms,
+                                                      "at_dt": dt(at_ms)}, log)
+    rejected = []
+    for fid, value, writer, *_ in claims:
+        if fid != fact_id and value != win[1]:
+            rejected += _retire(tenant, agent=writer, episode_id=eid, subject=s, predicate=predicate, obj=value,
+                                at=at_ms, log=log)
+    if rejected:
+        db.run(tenant, "mark rejected", Q.MARK_REJECTED, {"fids": [r["fact_id"] for r in rejected], "eid": eid}, log)
+    if predicate == "lives_in" and R.for_tenant(tenant) == "isp":
+        from . import network  # lazy: network imports memory
+        network.attach(tenant, s, win[1], log)  # retiring the other city must not take the confirmed one's line away
+    db.run(tenant, "conflict close", Q.CONFLICT_CLOSE, {"id": f"conflict:{s}|{predicate}", "at": at_ms,
+                                                        "at_dt": dt(at_ms), "how": f"confirmed by {by}: {win[1]}"}, log)
+    after = learned_trust(tenant, predicate, log)
+    base = {a: v["trust"] for a, v in config.AGENTS.items()}
+    moved = [{"agent": a, "from": effective_trust(base.get(a), before.get(a)), "to": effective_trust(base.get(a), after.get(a))}
+             for a in sorted({win[2], *(c[2] for c in claims if c[0] != fact_id)}) if a]
+    events.emit(tenant, "conflict_resolved", {"subject": s, "predicate": predicate, "value": win[1], "by": by,
+                                              "rejected": [r["triple"][2] for r in rejected], "trust": moved}, at_ms)
+    return {"confirmed": {"fact_id": fact_id, "value": win[1], "asserted_by": win[2]},
+            "rejected": [{"fact_id": r["fact_id"], "value": r["triple"][2]} for r in rejected], "trust": moved,
+            "episode_id": eid}
+
+
 def track_conflict(tenant, s, p, at_ms, log=None):
     """A (:Conflict) node while two agents' claims about one single-valued fact are both active; resolved when only
     one is left. Ranked by trust, then recency (the read-time policy), and the preferred claim is named."""
     if not (R.is_single(p) and R.policy(p) == "trust"):
         return
-    claims = db.run(tenant, "active claims", Q.ACTIVE_CLAIMS, {"s": s, "p": p}, log, ro=True)
+    claims = ranked_claims(tenant, s, p, log)
     cid = f"conflict:{s}|{p}"
     if len({c[1] for c in claims}) > 1:
         db.run(tenant, "conflict open", Q.CONFLICT_OPEN, {
@@ -149,7 +219,7 @@ def _emit_fact(tenant, f, agent, episode_id, at_ms, valid_from, log):
     if p == "has_status":
         events.emit(tenant, "ticket_status", {"ticket": s.upper(), "status": o}, at_ms)
     if R.is_single(p) and R.policy(p) == "trust":
-        claims = db.run(tenant, "active claims", Q.ACTIVE_CLAIMS, {"s": s, "p": p}, log, ro=True)
+        claims = ranked_claims(tenant, s, p, log)
         if len({c[1] for c in claims}) > 1:
             events.emit(tenant, "conflict", {"subject": s, "predicate": p, "claims": [
                 {"fact_id": fid, "value": v, "agent": a, "trust": t, "preferred": i == 0}

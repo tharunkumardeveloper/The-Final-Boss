@@ -168,6 +168,10 @@ export type RelayEvent =
   | Ev<'lab_state', { why: string; fault?: string; blind?: boolean }>
   | Ev<'lab_run', { run: string; status: string; customer?: string }>
 
+/** POST /claims/confirm: a person settled a disagreement; each writer's trust on that predicate before and after. */
+export interface ConfirmResult { confirmed: { fact_id: string; value: string; asserted_by: string }
+  rejected: { fact_id: string; value: string }[]; trust: { agent: string; from: number; to: number }[]; episode_id: string }
+
 // ---- Network lab
 export interface LabCypher { name: string; query: string; ms: number; rows: number }
 export interface LabStep { i: number; kind: 'memory' | 'check' | 'think' | 'act' | 'wait' | 'verify'; title: string; detail: string
