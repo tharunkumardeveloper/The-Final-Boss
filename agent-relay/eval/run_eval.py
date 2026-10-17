@@ -89,9 +89,9 @@ class VectorStore:
     def __init__(self, tenant, customers):
         rows = db.run(tenant, "episodes", "MATCH (ep:Episode) RETURN ep.episode_id, ep.text, ep.recorded_at, ep.customer",
                       ro=True)
-        self.ids, self.texts, self.at, self.cust = map(list, zip(*rows))
-        m = np.array(embed.embed(self.texts))
-        self.m = m / np.linalg.norm(m, axis=1, keepdims=True)
+        self.ids, self.texts, self.at, self.cust = (list(x) for x in zip(*rows)) if rows else ([], [], [], [])
+        m = np.array(embed.embed(self.texts)) if self.texts else np.zeros((0, 1))
+        self.m = m / np.linalg.norm(m, axis=1, keepdims=True) if len(m) else m
         firsts = {}
         for c in customers:
             firsts.setdefault(c.split()[0], []).append(c)
@@ -105,6 +105,8 @@ class VectorStore:
     def lines(self, question, dated, k=10):
         c = self.customer_in(question)
         idx = [i for i, cu in enumerate(self.cust) if c is None or cu == c]
+        if not idx:  # an empty graph, or nothing about that customer: nothing to retrieve
+            return []
         qv = np.array(embed.embed_one(question))
         sims = self.m[idx] @ (qv / np.linalg.norm(qv))
         top = [idx[j] for j in np.argsort(-sims)[:k]]

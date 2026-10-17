@@ -78,7 +78,12 @@ async def tenant_key(request, call_next):
                                      f"That key doesn't open tenant '{tenant}'."}, status_code=401 if why == "missing" else 403)
         elif path == "/api/isolation" and tenancy.check(tenancy.ADMIN, request.headers.get("x-admin-key")):
             return JSONResponse({"detail": "Looking a customer up across tenants needs an operator key."}, status_code=403)
-    return await call_next(request)
+    try:
+        return await call_next(request)
+    except Exception as e:  # answered here, inside CORS: the browser sees the error, not a misleading "CORS blocked"
+        import traceback
+        traceback.print_exc()
+        return JSONResponse({"detail": f"Server error: {type(e).__name__}: {str(e)[:200]}"}, status_code=500)
 
 
 app.add_middleware(CORSMiddleware, allow_origins=[o.strip() for o in os.environ.get("CORS_ORIGINS", "*").split(",")],
@@ -1046,6 +1051,9 @@ def compare(tenant: str, body: AskIn):
         custs = [c for (c,) in db.run(tenant, "customers", "MATCH (c:Entity {type:'customer'}) RETURN c.name_key", ro=True)]
         vs = VectorStore(tenant, custs)
         _vectors[tenant] = (time.time(), vs)
+    if not vs.texts:  # a fresh graph: no conversation for either memory to answer from yet
+        raise HTTPException(409, "This graph has no conversations yet. Chat on the home page, play Judge mode, or load "
+                                 "the demo story (console → reset → story), then compare.")
     t0 = time.perf_counter()
     g = retrieve.ask(tenant, body.question, mode="full")
     t1 = time.perf_counter()

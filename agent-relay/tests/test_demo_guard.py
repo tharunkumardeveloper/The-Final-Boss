@@ -32,6 +32,32 @@ def test_demo_guard():
                   headers={"X-Forwarded-For": "203.0.113.9"}).status_code == 401
 
 
+def test_errors_reach_the_browser():
+    """A crash inside a request comes back as a readable 500 with the CORS header (no database here, so a tenant
+    request fails for real): the browser shows the error instead of a misleading "blocked by CORS policy"."""
+    from relay import tenancy
+    main.db.setup = lambda tenant: (_ for _ in ()).throw(ConnectionError("no database in this test"))
+    main._ready.discard("pml")
+    c = TestClient(main.app, raise_server_exceptions=False)
+    r = c.get("/api/tenants/pml/stats", headers={"X-Tenant-Key": tenancy.key_for("pml"), "Origin": "https://wifight.vercel.app"})
+    assert r.status_code == 500 and "ConnectionError" in r.json()["detail"], r.text
+    assert r.headers.get("access-control-allow-origin") in ("*", "https://wifight.vercel.app"), dict(r.headers)
+
+
+def test_baseline_on_an_empty_graph():
+    """The compare baseline on a fresh graph (no episodes) is empty instead of crashing."""
+    from eval import run_eval
+    real = run_eval.db.run
+    run_eval.db.run = lambda *a, **k: []
+    try:
+        vs = run_eval.VectorStore("pml", [])
+        assert vs.texts == [] and vs.lines("what plan is asha on?", dated=True) == []
+    finally:
+        run_eval.db.run = real
+
+
 if __name__ == "__main__":
     test_demo_guard()
+    test_errors_reach_the_browser()
+    test_baseline_on_an_empty_graph()
     print("demo guard ok")

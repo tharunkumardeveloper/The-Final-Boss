@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { Wordmark } from '../components/Brand'
 import { ConsoleNav } from '../components/console/ConsoleNav'
-import { api } from '../lib/api'
+import { api, ApiError } from '../lib/api'
 import { pct, wilson } from '../lib/format'
 import { useTenant } from '../lib/tenant'
 import type { Benchmark as B, BenchRow, Compare } from '../lib/types'
@@ -50,7 +50,11 @@ function AskBoth() {
   const [err, setErr] = useState<string>()
   const ask = async (question = q, e?: FormEvent) => {
     e?.preventDefault(); setQ(question); setBusy(true); setErr(undefined)
-    try { setRes(await api.compare(tenant, question)) } catch { setErr("Couldn't ask. Is the API running, and is the model quota OK?") } finally { setBusy(false) }
+    try { setRes(await api.compare(tenant, question)) } catch (e) {
+      // the API says why when it can (a graph with no conversations yet); otherwise the likely causes
+      const detail = e instanceof ApiError ? (() => { try { return JSON.parse(e.message).detail } catch { return null } })() : null
+      setErr(typeof detail === 'string' ? detail : "Couldn't ask. Is the API running, and is the model quota OK?")
+    } finally { setBusy(false) }
   }
   const Side = ({ title, sub, s, tone }: { title: string; sub: string; s?: Compare['graph']; tone: string }) => (
     <div className={`rounded-2xl p-4 ${tone}`}>
