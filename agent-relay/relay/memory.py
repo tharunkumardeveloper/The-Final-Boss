@@ -280,6 +280,8 @@ def ingest_turn(tenant, *, agent, session_id, customer, text, at, speaker="custo
                 subject = None
         if R.object_type(p) == "agent" and obj not in config.AGENTS:
             subject = None
+        if obj and not f.get("ended") and not R.valid_value(p, obj):  # a router stored as "wifi": never written
+            subject = None
         if f.get("ended") and subject:
             endings.append((subject, p, obj, _valid_from(f["valid_from"], at)))
             continue

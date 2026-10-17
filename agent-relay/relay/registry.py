@@ -170,6 +170,33 @@ def attribute(p):
     return p[5:].replace("_", " ") if is_open(p) else p.replace("_", " ")
 
 
+# Write-time value checks: values no fact of that type can hold. A router is a device, not "wifi"; a city is a place,
+# not "home"; a phone has digits. The extractor sometimes files a word under the right predicate with the wrong value
+# (the benchmark's one remaining miss was a router stored as "wifi"), and a wrong value written once is then served
+# as memory. These are dropped before the write instead, like an unknown status or agent.
+_VAGUE = {
+    "router": {"wifi", "wi-fi", "wi fi", "router", "modem", "internet", "net", "box", "the box", "broadband", "fiber",
+               "fibre", "connection", "my router", "the router", "wifi router", "home router", "unknown", "none", "n/a"},
+    "city": {"home", "my home", "my place", "here", "there", "city", "the city", "unknown", "none", "n/a"},
+}
+_EMAIL = re.compile(r"[^@\s]+@[^@\s]+\.[a-z]{2,}")
+
+
+def valid_value(p, value):
+    """False when `value` can't be a real value of predicate p's object type (checked before any fact is written)."""
+    v = " ".join(str(value or "").lower().split())
+    if not v:
+        return False
+    t = object_type(p)
+    if v in _VAGUE.get(t, ()):
+        return False
+    if t == "phone":
+        return len(re.sub(r"\D", "", v)) >= 7
+    if t == "email":
+        return bool(_EMAIL.fullmatch(v))
+    return True
+
+
 # Graph naming, so FalkorDB Browser reads like the domain: (:Entity:Customer)-[:LIVES_IN]->(:Entity:City).
 # Every entity keeps the shared :Entity label (indexes, vector search); the type label is added on top.
 _LABEL_OVERRIDES = {"agent": "Assignee"}  # :Agent is taken by the agent nodes themselves

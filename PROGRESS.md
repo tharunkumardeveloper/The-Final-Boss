@@ -292,6 +292,7 @@ Known gaps: none of the screens in this phase were clicked through by us in a br
 | Network lab on the home page | Fits its card (no scrolling), the resolver's steps moved under the ticket, the screen's own refreshes no longer light up the live-query glow, one shared feed for the lab and the tickets |
 | Public demo protection | Resets, snapshot restores and model settings need `RELAY_RESET_KEY`; writes are rate-limited per visitor address (`RELAY_CHAT_PER_MIN=30`, `RELAY_WRITES_PER_MIN=90`); verified live (a locked call is refused with 403) |
 | MCP clients as teammates | An `mcp` agent (trust 0.7) for Claude Code, Claude Desktop or any MCP client, drawn on the Agent team page once it acts |
+| Write-time value checks | `registry.valid_value`: a router can't be "wifi", a city can't be "home", a phone needs digits, an email a domain; such values are dropped before the write (the benchmark's one remaining miss was a router stored as "wifi"). Not re-benchmarked, so the headline stays 159/160. `tests/test_value_checks.py`, and `tests/test_demo_guard.py` for the reset lock and rate limits (both need no database) |
 | README | A repository README written for judges: the problem first, live links, results near the top, the five Track 2 focus points mapped to features and proof, "Remove FalkorDB and…" with inline Cypher, names explained once |
 
 ## 3. Architecture
@@ -500,7 +501,7 @@ Demo and security close their gaps: Judge mode plays the whole story live throug
 ## 8. What's missing, in priority order
 
 1. **Demo video (3 min)**, recorded on the deployed site after a Render redeploy, and the submission write-up.
-2. **Write-time value checks** (the last benchmark miss is a router stored as "wifi") and **open-domain memory**: LoCoMo shows a fact-only memory drops most chit-chat detail (keep episode text as a fallback for questions no fact answers). Then determinism re-runs and the ablations on the final code.
+2. ~~**Write-time value checks**~~ (done in Phase 21; rerun the benchmark to confirm the router miss is gone) and **open-domain memory**: LoCoMo shows a fact-only memory drops most chit-chat detail (keep episode text as a fallback for questions no fact answers). Then determinism re-runs and the ablations on the final code.
 3. **A browser click-through of every screen** (Memory, Network with Break it and dispatch, Agent team, Tenants canary test) on the deployed site.
 4. **Speed**: retrieval for a benchmark question (linking, expansion and ranking on an idle graph) is about 170–180 ms p50 vs 46 ms for the vector store (section 6), and a chat turn still runs about 40 queries, mostly writes; batch the episode and facts into fewer round trips.
 5. ~~**Protect the public demo**~~ Done in Phase 21: resets need `RELAY_RESET_KEY`, writes are rate-limited per address. A real deployment would also set `RELAY_DEMO_KEYS=0`.
