@@ -205,6 +205,8 @@ export default function Portal() {
           {regions.length > 0 && (
             <label className="flex items-center gap-1.5 rounded-full bg-surface px-3 py-1.5 text-xs text-ink-2 hairline">
               <span className="sr-only">Region</span>
+              {/* a one-country region (India) has no Country menu to carry the flag, so it sits by the region name */}
+              {kb && kb.countries.length <= 1 && kb.country && <span aria-hidden className="text-sm leading-none">{flag(kb.country)}</span>}
               <select aria-label="Region" className="bg-transparent outline-none" value={regions.find((r) => r.tenant === tenant)?.tenant ?? tenant}
                 onChange={(e) => setTenant(e.target.value)}>
                 {regions.map((r) => <option key={r.code} value={r.tenant}>{r.name}</option>)}
