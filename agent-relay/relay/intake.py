@@ -1,4 +1,4 @@
-"""The intake agent spec (intake_agent_spec.md) as code: what intake does on each turn, in order.
+"""The intake agent's spec as code: what intake does on each turn, in order.
 
 1. check the graph (who is this, what do we know), with each lookup shown live in the chat
 2. greet new vs returning; confirm changes; escalate repeat contacts

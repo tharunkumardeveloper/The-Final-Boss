@@ -1,4 +1,4 @@
-"""intake_agent_spec.md, scenario by scenario, through the real /chat endpoint.
+"""The intake spec (relay/intake.py), scenario by scenario, through the real /chat endpoint.
 Run: python -m tests.test_intake_spec"""
 import re
 

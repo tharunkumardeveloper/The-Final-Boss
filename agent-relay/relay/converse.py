@@ -328,7 +328,7 @@ _DATE_CHANGE = re.compile(
 
 def intake_reply(tenant, *, customer, session_id, text, learned, ticket, opened, at=None, greeted=False, country=None,
                  log=None):
-    """One reply, following intake_agent_spec.md: graph check, then the planned move, then the model (only when it
+    """One reply, following the intake spec (relay/intake.py): graph check, then the planned move, then the model (only when it
     has to word something), then the spec's guards."""
     if is_data_request(text):
         return DATA_POLICY

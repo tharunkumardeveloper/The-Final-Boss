@@ -336,8 +336,8 @@ the customer, top 10 chunks, each dated, newest first.
   ([LoCoMo](https://github.com/snap-research/locomo), open-ended personal chat), **Relay loses on token F1 (0.08 vs
   0.27)** because it keeps facts, not transcripts. It did refuse 15/15 false-premise questions, against 4/15.
 
-Full tables and how every number was produced: [`PROGRESS.md` §6](PROGRESS.md#6-results) ·
-[`eval/results.md`](agent-relay/eval/results.md).
+Full tables, intervals and how every number was produced: [`eval/results.md`](agent-relay/eval/results.md) ·
+[`eval/components.md`](agent-relay/eval/components.md).
 
 ## 🔬 Remove FalkorDB and…
 
@@ -466,8 +466,7 @@ page draws the new agent.
 
 Setup, tests and the free deploy (Render + Vercel + FalkorDB Cloud) are in
 [`agent-relay/README.md`](agent-relay/README.md#setup), with the full graph model, every key query and a FalkorDB
-Browser tour. The API reference is [`agent-relay/api/CONTRACT.md`](agent-relay/api/CONTRACT.md); what we built, in
-order, with every measurement and fix, is [`PROGRESS.md`](PROGRESS.md).
+Browser tour. The API reference is [`agent-relay/api/CONTRACT.md`](agent-relay/api/CONTRACT.md).
 
 On the public demo, resets need a reset key and writes are rate-limited per visitor, so nobody can wipe it during
 judging; a scheduled ping keeps the free API awake.
