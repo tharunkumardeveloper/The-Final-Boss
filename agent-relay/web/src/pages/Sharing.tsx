@@ -11,16 +11,17 @@ import type { Crossing, Expert, RelayEvent, Sharing } from '../lib/types'
 import { HandoffReplay } from '../components/console/HandoffReplay'
 import { AnimatePresence, motion } from 'framer-motion'
 
-const AGENTS = ['intake', 'resolver', 'noc']
-const NAME: Record<string, string> = { intake: BOT, resolver: 'Resolver', noc: 'Network ops' }
-const TONE: Record<string, string> = { intake: '#14A39A', resolver: '#3D6FB6', noc: '#C47F0E' }
-const INITIAL: Record<string, string> = { intake: 'F', resolver: 'R', noc: 'N' }
+const AGENTS = ['intake', 'resolver', 'noc', 'mcp']
+const NAME: Record<string, string> = { intake: BOT, resolver: 'Resolver', noc: 'Network ops', mcp: 'MCP client' }
+const TONE: Record<string, string> = { intake: '#14A39A', resolver: '#3D6FB6', noc: '#C47F0E', mcp: '#7C5CC4' }
+const INITIAL: Record<string, string> = { intake: 'F', resolver: 'R', noc: 'N', mcp: 'M' }
 const name = (a: string) => NAME[a] ?? titleCase(a)
 const tone = (a: string) => TONE[a] ?? '#7A8799'
 
 // constellation geometry: shared memory in the middle, the agents around it
 const W = 760, H = 440, MID = { x: 380, y: 222 }
-const AT: Record<string, { x: number; y: number }> = { intake: { x: 128, y: 104 }, resolver: { x: 632, y: 104 }, noc: { x: 380, y: 392 } }
+const AT: Record<string, { x: number; y: number }> = { intake: { x: 128, y: 104 }, resolver: { x: 632, y: 104 }, noc: { x: 380, y: 392 },
+  mcp: { x: 632, y: 352 } }
 
 function Avatar({ agent, size = 28 }: { agent: string; size?: number }) {
   return (
@@ -33,7 +34,9 @@ function Avatar({ agent, size = 28 }: { agent: string; size?: number }) {
  *  a live CONSULTED edge sends a dot from the writer, through memory, to the reader. */
 export function Constellation({ data, pulse, picked, pick }: { data: Sharing; pulse: { from: string; to: string; at: number } | null
   picked?: string; pick: (a: string) => void }) {
-  const agents = AGENTS.filter((a) => a !== 'noc' || data.agents.some((x) => x.agent === 'noc'))
+  // an outside MCP client is drawn once it has written or used something
+  const agents = AGENTS.filter((a) => a === 'noc' ? data.agents.some((x) => x.agent === 'noc')
+    : a === 'mcp' ? data.agents.some((x) => x.agent === 'mcp' && (x.wrote > 0 || x.consulted > 0)) : true)
   const stats = Object.fromEntries(data.agents.map((a) => [a.agent, a]))
   const out = (a: string) => data.flows.filter((f) => f.from === a).reduce((t, f) => t + f.facts, 0)
   const inn = (a: string) => data.flows.filter((f) => f.to === a).reduce((t, f) => t + f.facts, 0)
@@ -96,8 +99,8 @@ export function Constellation({ data, pulse, picked, pick }: { data: Sharing; pu
             </circle>
             <circle cx={p.x} cy={p.y} r="26" fill={tone(a)} />
             <text x={p.x} y={p.y + 6} textAnchor="middle" className="fill-white text-[17px] font-semibold">{INITIAL[a]}</text>
-            <text x={p.x} y={p.y + (a === 'noc' ? -62 : 70)} textAnchor="middle" className="fill-ink text-[13px] font-semibold">{name(a)}</text>
-            <text x={p.x} y={p.y + (a === 'noc' ? -47 : 85)} textAnchor="middle" className="fill-ink-3 text-[10.5px] num">
+            <text x={p.x} y={p.y + (p.y > MID.y ? -62 : 70)} textAnchor="middle" className="fill-ink text-[13px] font-semibold">{name(a)}</text>
+            <text x={p.x} y={p.y + (p.y > MID.y ? -47 : 85)} textAnchor="middle" className="fill-ink-3 text-[10.5px] num">
               wrote {s?.wrote ?? 0} · used {s?.consulted ?? 0} · {s?.reuse_pct ?? 0}% from others · trust {s?.trust ?? '–'}</text>
           </g>
         )

@@ -284,6 +284,16 @@ Known gaps: none of the screens in this phase were clicked through by us in a br
 | Groq key pool | Up to 12 Groq keys (`GROQ_API_KEY_2..12`), on Render too; the Gemini project is refused by Google (403) and is disabled |
 | Tests | `test_network` (blast radius decides priority, none for a fault inside one home), `test_write_resolution` (both abstention gates, including the multi-hop case that must not be refused) |
 
+### Phase 21: Judge mode, a judge-first README, and a demo nobody can wipe
+| Item | What changed |
+|---|---|
+| Judge mode | "▶ Watch it work" on the home page (or `/?judge=1`) plays the whole story through the real agents with nobody typing: a new customer reports a fault, Mr.Fix-It opens a ticket, the resolver fixes it (technician, re-measure, the customer confirms), the customer moves to Pune (supersede on both clocks), and a new session answers from memory. It answers only what the agents ask. Checked end to end against the live API (about 70 s); a first live run stalled when intake asked one more question in the same reply that mentioned the resolver, now fixed |
+| The customer's word stands | A vague complaint ("my wifi is troubling, the connection is poor") was treated as a request, and a healthy reading made the resolver say "your connection is healthy". Now any ticket about the connection is a complaint; when every reading is healthy the home is drawn as *reported faulty* and a technician is booked |
+| Network lab on the home page | Fits its card (no scrolling), the resolver's steps moved under the ticket, the screen's own refreshes no longer light up the live-query glow, one shared feed for the lab and the tickets |
+| Public demo protection | Resets, snapshot restores and model settings need `RELAY_RESET_KEY`; writes are rate-limited per visitor address (`RELAY_CHAT_PER_MIN=30`, `RELAY_WRITES_PER_MIN=90`); verified live (a locked call is refused with 403) |
+| MCP clients as teammates | An `mcp` agent (trust 0.7) for Claude Code, Claude Desktop or any MCP client, drawn on the Agent team page once it acts |
+| README | A repository README written for judges: the problem first, live links, results near the top, the five Track 2 focus points mapped to features and proof, "Remove FalkorDB and…" with inline Cypher, names explained once |
+
 ## 3. Architecture
 
 ```
@@ -348,7 +358,7 @@ uvicorn api.main:app --port 8000           # API
 cd web && npm install && npm run dev       # web (VITE_API_URL=http://localhost:8000), or npm run dev:mock
 ```
 
-Most recent runs: `test_recall`, `test_procedural`, `test_write_resolution`, `test_contract`, `test_canary`, `test_network`, `test_schema`, `test_status`, `test_mcp` pass; `test_core` and `test_api` pass when model quota is available (they failed only while every model was out). The older LLM-heavy scenario tests (`test_profile`, `test_transcript`, `test_intake_spec` and the replays) have not been rerun on the latest code. The web app builds and its 33 tests pass.
+Most recent runs: `test_recall`, `test_procedural`, `test_write_resolution`, `test_contract`, `test_canary`, `test_network`, `test_schema`, `test_status`, `test_mcp` pass; `test_core` and `test_api` pass when model quota is available (they failed only while every model was out). The older LLM-heavy scenario tests (`test_profile`, `test_transcript`, `test_intake_spec` and the replays) have not been rerun on the latest code. The web app builds and its 34 tests pass.
 
 ## 6. Results
 
@@ -437,7 +447,14 @@ Belief time was not a two-clock bug: its misses were fix 5. "Unchanged" contradi
 
 I scored it the way a technical judge from FalkorDB would read it: does the graph do the work, does it cover the track, is it proven, does it show well.
 
-| Criterion | Score | Why |
+**Where it stands now (after Phase 21): ≈ 9/10.** Deployed on Render + Vercel + FalkorDB Cloud; tenant keys on every
+request; resets need a reset key and writes are rate-limited; the 160-question run on the final code (99.4% vs 61.2%);
+Judge mode plays the story live. Open: the demo video, ablations rerun on the final code, open-domain recall (LoCoMo).
+
+The table below is the **starting assessment**, written before deployment and before the scaled evaluation. It is kept
+as it was; the updates after it, in order, track how each score moved.
+
+| Criterion | Score at the start | Why (at the time) |
 |---|---|---|
 | Graph does real work | **9/10** | Atomic writes, two clocks, supersede/retire, trust-ranked conflicts, multi-hop recall, algorithms on real edges, provenance paths. Fails the swap test properly |
 | Track 02 coverage | **9/10** | Episodic, semantic and procedural memory; persistence; handoffs and shared state; measured concurrency; per-tenant graphs; MCP |
@@ -459,31 +476,34 @@ Differentiation and demo depth rise: a worldwide company with region graphs, ope
 ### Update after Phase 10
 Track coverage and demo quality rise: the intake agent follows a written spec, its questions and their answers are memory every agent can see, identity is a graph match, tickets carry the full handoff, and the chat shows the graph work as it happens. Model quota is now the main operational risk: planned replies need no model, but extraction does. Estimate: **≈ 8/10 now**.
 
-### Update after the final measurement
-One run on the final code, same model both arms, all 160 questions: Relay 99.4% vs 61%, +38 points [+31, +46], p ≈ 1 × 10⁻¹⁷ (96.2% before the abstention fix); components 99.7% extraction and 96.5% contradiction handling. Two external checks now exist and are reported as they came out: out-of-distribution extraction 83% (a drop from 99.7%, mostly one ambiguous predicate) and LoCoMo, where Relay loses on F1 (0.08 vs 0.27) because a fact-only memory drops most open-domain detail, while refusing every false-premise question. Abstention recall went from 67% to 94% with precision intact; the remaining weakness, named not hidden, is open-domain conversation. Evaluation rigor ≈ 9. Estimate: **≈ 9/10**.
+### Update after Phase 15
+Track coverage and differentiation rise most: the resolver now acts on a network model and proves its fixes by measuring again, can be wrong (and is graded), and a human customer closes the loop. Agent coordination is visible (one voice, claimed cases, consulted facts). Still open: deployment, API auth, scaled evaluation, video. Estimate: **≈ 8.5/10**.
 
-### Update after Phase 19
-The last losing question type (procedural) now wins, every screen fits a desktop view, and the two weakest demo screens became the strongest proofs: the Agent team page shows coordination as it happens in the graph with the record beside each step, and the Tenants page is a canary test anyone can verify outside our UI (their own word, FalkorDB Browser, curl). Animations are smooth under load. Still open: a same-model full rerun of the 160 questions on the final code, determinism and LoCoMo runs, the video, and a browser click-through by us. Estimate: **≈ 9/10**.
-
-### Update after Phase 18
-The evaluation drove the work: seven root causes fixed, each measured, and the ablations show the graph features earn their keep (two clocks ≈ +19 points, multi-hop ≈ +9). The judges' published principles (answer shapes, path with the answer, a fixed tool catalogue with checked arguments, names resolved before reasoning) are now visible on screen. Still open: a same-model before/after headline, determinism and LoCoMo runs, a browser click-through. Estimate: **≈ 9/10**.
+### Update after Phase 16
+Deployment and security move most: the app is live on Render and Vercel, every tenant request and stream needs that tenant's key, and the isolation audit is drawn. Demo quality rises with the handoff replay, the network map and live graph access. Still open: the scaled evaluation, the video, the unknown-person fallback. Estimate: **≈ 8.5/10**.
 
 ### Update after Phase 17
 Evaluation rigor rises from 5 to about 8 (after the fix log and ablations): the scaled run is scored with intervals, paired tests, component metrics and a miss breakdown, and it lowered our own headline. It also exposed real weaknesses to fix next: typo entities (25%), abstention precision (52%), multi-hop (28%), and the billing pickup that kept disagreements out of the graph. Graph use rises: recall is two queries and the resolver's choice comes from a path query. Estimate: **≈ 8.5/10**, with the next gains in those four weaknesses rather than new features.
 
-### Update after Phase 16
-Deployment and security move most: the app is live on Render and Vercel, every tenant request and stream needs that tenant's key, and the isolation audit is drawn. Demo quality rises with the handoff replay, the network map and live graph access. Still open: the scaled evaluation, the video, the unknown-person fallback. Estimate: **≈ 8.5/10 now**.
+### Update after Phase 18
+The evaluation drove the work: seven root causes fixed, each measured, and the ablations show the graph features earn their keep (two clocks ≈ +19 points, multi-hop ≈ +9). The judges' published principles (answer shapes, path with the answer, a fixed tool catalogue with checked arguments, names resolved before reasoning) are now visible on screen. Still open: a same-model before/after headline, determinism and LoCoMo runs, a browser click-through. Estimate: **≈ 9/10**.
 
-### Update after Phase 15
-Track coverage and differentiation rise most: the resolver now acts on a network model and proves its fixes by measuring again, can be wrong (and is graded), and a human customer closes the loop. Agent coordination is visible (one voice, claimed cases, consulted facts). Still open: deployment, API auth, scaled evaluation, video. Estimate: **≈ 8.5/10 now**.
+### Update after Phase 19
+The last losing question type (procedural) now wins, every screen fits a desktop view, and the two weakest demo screens became the strongest proofs: the Agent team page shows coordination as it happens in the graph with the record beside each step, and the Tenants page is a canary test anyone can verify outside our UI (their own word, FalkorDB Browser, curl). Animations are smooth under load. Still open: a same-model full rerun of the 160 questions on the final code, determinism and LoCoMo runs, the video, and a browser click-through by us. Estimate: **≈ 9/10**.
+
+### Update after the final measurement (Phase 20)
+One run on the final code, same model both arms, all 160 questions: Relay 99.4% vs 61%, +38 points [+31, +46], p ≈ 1 × 10⁻¹⁷ (96.2% before the abstention fix); components 99.7% extraction and 96.5% contradiction handling. Two external checks now exist and are reported as they came out: out-of-distribution extraction 83% (a drop from 99.7%, mostly one ambiguous predicate) and LoCoMo, where Relay loses on F1 (0.08 vs 0.27) because a fact-only memory drops most open-domain detail, while refusing every false-premise question. Abstention recall went from 67% to 94% with precision intact; the remaining weakness, named not hidden, is open-domain conversation. Evaluation rigor ≈ 9. Estimate: **≈ 9/10**.
+
+### Update after Phase 21
+Demo and security close their gaps: Judge mode plays the whole story live through the real agents, resets need a reset key and writes are rate-limited (deployability and security, once 4/10, is no longer the weak spot), and the repository README now leads with the problem, the proof and the Track 2 mapping. Still open: the demo video, the ablations on the final code, and open-domain recall. Estimate: **≈ 9/10**.
 
 ## 8. What's missing, in priority order
 
 1. **Demo video (3 min)**, recorded on the deployed site after a Render redeploy, and the submission write-up.
 2. **Write-time value checks** (the last benchmark miss is a router stored as "wifi") and **open-domain memory**: LoCoMo shows a fact-only memory drops most chit-chat detail (keep episode text as a fallback for questions no fact answers). Then determinism re-runs and the ablations on the final code.
 3. **A browser click-through of every screen** (Memory, Network with Break it and dispatch, Agent team, Tenants canary test) on the deployed site.
-4. **Speed**: retrieval is about 216 ms p50 vs 46 ms for the vector store, and a chat turn still runs about 40 queries, mostly writes; batch the episode and facts into fewer round trips.
-5. **Protect the public demo**: rate limiting on `/chat` and an operator-only key for reset and route edits; `RELAY_DEMO_KEYS=0` for a real deployment.
+4. **Speed**: retrieval for a benchmark question (linking, expansion and ranking on an idle graph) is about 170–180 ms p50 vs 46 ms for the vector store (section 6), and a chat turn still runs about 40 queries, mostly writes; batch the episode and facts into fewer round trips.
+5. ~~**Protect the public demo**~~ Done in Phase 21: resets need `RELAY_RESET_KEY`, writes are rate-limited per address. A real deployment would also set `RELAY_DEMO_KEYS=0`.
 6. **Human-in-the-loop for conflicts:** a "confirm value" action, so trust becomes a learned signal instead of fixed per agent.
 7. **Retirement scope:** decide whether a customer's "no longer" should also retire a tool's claim.
 8. **Memory growth:** a retention or compaction policy for old episodes; the free tier caps out around 15–75K nodes.

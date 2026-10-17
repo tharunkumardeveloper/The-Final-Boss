@@ -50,7 +50,8 @@ function Entry({ c }: { c: Chip }) {
 // Staff bookkeeping stays out of the customer's view (it is still in memory and in the console).
 const HIDDEN = new Set(['awaiting', 'doesnt_know', 'has_priority', 'visit_reason'])  // what they asked for shows
 const value = (r: HistoryRow) => (r.predicate === 'has_ticket' ? ticketLabel(r.value) : titleCase(r.value))
-const AGENT: Record<string, string> = { intake: `${BOT} (intake)`, resolver: 'the resolver', noc: 'network operations', simulator: 'the simulator' }
+const AGENT: Record<string, string> = { intake: `${BOT} (intake)`, resolver: 'the resolver', noc: 'network operations', simulator: 'the simulator',
+  mcp: 'an outside AI agent (MCP)' }
 // One current value per thing for these; a second active claim is a disagreement between sources, shown as such.
 const SINGLE = new Set(['lives_in', 'on_plan', 'has_router', 'prefers_channel', 'budget', 'moving_to', 'occupation',
   'connection_type', 'preferred_language', 'household_size', 'current_provider', 'address'])

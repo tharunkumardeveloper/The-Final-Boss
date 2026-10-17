@@ -1,0 +1,24 @@
+# Keeps the free Render API awake during judging: it sleeps after 15 idle minutes and takes about a minute to wake,
+# which a judge clicking Judge mode would sit through. A ping every 10 minutes keeps it warm.
+# On a private repository each run counts as one Actions minute (about 144 a day), so turn this off after judging:
+# Actions -> keep-awake -> "..." -> Disable workflow. GitHub can delay scheduled runs; a second pinger
+# (cron-job.org or UptimeRobot on the same URL) covers the gaps.
+name: keep-awake
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Ping the API
+        run: |
+          for i in 1 2 3; do
+            if curl -fsS --max-time 90 https://relay-api-6twk.onrender.com/health -o /dev/null; then echo "awake"; exit 0; fi
+            sleep 10
+          done
+          echo "the API did not answer"; exit 1

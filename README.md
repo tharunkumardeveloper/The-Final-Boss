@@ -80,8 +80,9 @@ conversations: filtered to the customer, top 10 chunks, each one dated, newest f
 
 - **Ablations** (an earlier run on a 63-question subset, same model in every arm): removing the two clocks costs
   about **19 points** (90% → 71%), and removing multi-hop expansion about **9** (90% → 81%).
-- **Concurrency**: 8 writer threads against one FalkorDB Cloud graph, 18.3 writes/s (23.7 across 4 graphs), reads
-  during writes at p50 310 ms, **0 duplicate facts**.
+- **Concurrency**: 8 writer threads against one FalkorDB Cloud graph, 18.3 writes/s (23.7 across 4 graphs), **0
+  duplicate facts**. A full recall *while those 8 threads write* takes 310 ms at p50; on an idle graph, retrieval for
+  a benchmark question takes about 170–180 ms (the vector baseline: 46 ms).
 - **What it doesn't prove**: the benchmark data is synthetic, built from our own templates. On the one external check
   ([LoCoMo](https://github.com/snap-research/locomo), open-ended personal chat) **Relay loses on token F1 (0.08 vs
   0.27)**: it keeps facts, not transcripts, so details that never became facts can't be recalled. It did refuse 15/15
@@ -166,8 +167,8 @@ RETURN f.predicate, f.object_value, f.valid_from, f.valid_to, collect(DISTINCT a
 ## Bring your own agent (MCP)
 
 [`agent-relay/mcp_server.py`](agent-relay/mcp_server.py) exposes the same memory to any MCP client: `remember`,
-`recall`, `ask`, `explain`, `tickets` and `handoff`, plus the typed tool catalogue above. Claude Code joins as a third
-agent with one command:
+`remember_fact`, `recall`, `ask`, `explain`, `tickets` and `handoff`, plus the typed tool catalogue above. It runs on
+your machine and talks to the client over stdio, so there is no extra server or port. Claude Code joins with one command:
 
 ```bash
 claude mcp add relay-memory -- python /path/to/agent-relay/mcp_server.py
@@ -179,8 +180,13 @@ Or in Claude Desktop's config:
 {"mcpServers": {"relay-memory": {"command": "python", "args": ["/path/to/agent-relay/mcp_server.py"]}}}
 ```
 
-It needs the same `.env` as the API (FalkorDB credentials). What Claude writes lands in the same graph, under its own
-agent name, so the support desk's agents find it like any other fact.
+It needs Python with `requirements.txt` installed and the same `.env` as the API: FalkorDB credentials, plus a Groq key
+for `remember` (which extracts facts from text; `remember_fact` stores a structured fact with no model). Outside
+clients write as the **`mcp`** agent (trust 0.7), a teammate with its own name: use tenant `pml` and what it writes
+lands in the same graph the live demo uses, where Mr.Fix-It and the resolver find it like any other fact, and the
+Agent team page draws it once it acts. For example, ask Claude: *"Use relay-memory to remember, as agent mcp in tenant
+pml, that customer Asha Menon has a PML Hub 6 Pro router"*, then chat as Asha on the site and ask Mr.Fix-It which
+router you have.
 
 ## Run it
 

@@ -98,4 +98,6 @@ AGENTS = {
     "resolver": {"role": "works tickets with diagnostic, billing and outage tools", "trust": 0.6},
     "noc": {"role": "watches the network, finds affected customers and warns them first", "trust": 0.8},
     "simulator": {"role": "plays synthetic customers on a simulated clock (never writes facts itself)", "trust": 0.5},
+    # any outside AI client on the MCP server (Claude Code, Claude Desktop, ...): a teammate with its own name and trust
+    "mcp": {"role": "an outside AI client connected over MCP (Claude Code, Claude Desktop, ...)", "trust": 0.7},
 }
