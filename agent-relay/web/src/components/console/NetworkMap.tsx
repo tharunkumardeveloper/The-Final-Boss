@@ -3,21 +3,27 @@ import { api } from '../../lib/api'
 import { titleCase } from '../../lib/format'
 import { TouchLayer } from './TouchLayer'
 import type { FailResult, NetNode, Network, RelayEvent } from '../../lib/types'
+import INDIA from '../../data/india.json'
 
 const W = 900, H = 820, PAD = 70
+// Country outlines drawn under the hubs (lon/lat rings). India uses Natural Earth's India point-of-view boundary.
+const OUTLINES: Record<string, { bounds: number[]; rings: number[][][] }> = { IN: INDIA }
 
 /** The map: each node at its city's latitude/longitude (equirectangular, longitude squeezed by the mean latitude);
- *  area exchanges sit on a small ring around their city hub, backbones just off their city so both stay visible. */
-function layout(nodes: NetNode[]) {
+ *  area exchanges sit on a small ring around their city hub, backbones just off their city so both stay visible.
+ *  With a country outline, the frame is the whole country, so the hubs land on the map where the cities are. */
+function layout(nodes: NetNode[], frame?: number[]) {
   const placed = nodes.filter((n) => n.lat != null && n.lon != null)
   const pos: Record<string, { x: number; y: number }> = {}
-  if (!placed.length) return { pos, W, H }
-  const lats = placed.map((n) => n.lat!), lons = placed.map((n) => n.lon!)
-  const k = Math.cos(((Math.min(...lats) + Math.max(...lats)) / 2) * Math.PI / 180)
-  const spanX = (Math.max(...lons) - Math.min(...lons)) * k || 1, spanY = Math.max(...lats) - Math.min(...lats) || 1
+  if (!placed.length && !frame) return { pos, W, H, project: undefined }
+  const [minLon, minLat, maxLon, maxLat] = frame ?? [Math.min(...placed.map((n) => n.lon!)), Math.min(...placed.map((n) => n.lat!)),
+    Math.max(...placed.map((n) => n.lon!)), Math.max(...placed.map((n) => n.lat!))]
+  const k = Math.cos(((minLat + maxLat) / 2) * Math.PI / 180)
+  const spanX = (maxLon - minLon) * k || 1, spanY = maxLat - minLat || 1
   const scale = Math.min((W - 2 * PAD) / spanX, (H - 2 * PAD) / spanY)
   const ox = (W - spanX * scale) / 2, oy = (H - spanY * scale) / 2
-  const at = (n: NetNode) => ({ x: ox + (n.lon! - Math.min(...lons)) * k * scale, y: oy + (Math.max(...lats) - n.lat!) * scale })
+  const project = (lon: number, lat: number) => ({ x: ox + (lon - minLon) * k * scale, y: oy + (maxLat - lat) * scale })
+  const at = (n: NetNode) => project(n.lon!, n.lat!)
   for (const n of placed) {
     if (n.kind === 'pop') pos[n.id] = at(n)
     if (n.kind === 'backbone') { const p = at(n); pos[n.id] = { x: p.x - 34, y: p.y - 34 } }
@@ -29,8 +35,12 @@ function layout(nodes: NetNode[]) {
       pos[o.id] = { x: pos[pop.id].x + Math.cos(t) * r, y: pos[pop.id].y + Math.sin(t) * r }
     })
   }
-  return { pos, W, H }
+  return { pos, W, H, project }
 }
+
+/** A country's rings as one SVG path, in the map's projection. */
+const outlinePath = (rings: number[][][], project: (lon: number, lat: number) => { x: number; y: number }) =>
+  rings.map((ring) => ring.map(([lon, lat], i) => { const p = project(lon, lat); return `${i ? 'L' : 'M'}${p.x.toFixed(1)} ${p.y.toFixed(1)}` }).join('') + 'Z').join('')
 
 /** The whole region on a real map, with failure simulation. Shares the page's event stream through `subscribe`.
  *  `onHub` opens a city's customers in the lab; `hubCustomers` says how many lab customers a city has. */
@@ -55,7 +65,9 @@ export function NetworkMap({ tenant, subscribe, onHub, hubCustomers }: {
   useEffect(() => { load() }, [load])
   useEffect(() => subscribe((e) => { if (e.type === 'outage_detected' || e.type === 'outage_resolved') load() }), [subscribe, load])
 
-  const { pos } = useMemo(() => layout(net?.nodes ?? []), [net])
+  const outline = country ? OUTLINES[country] : undefined
+  const { pos, project } = useMemo(() => layout(net?.nodes ?? [], outline?.bounds), [net, outline])
+  const land = useMemo(() => outline && project ? outlinePath(outline.rings, project) : null, [outline, project])
   const maxB = Math.max(1e-9, ...(net?.nodes ?? []).map((n) => n.betweenness))
   const node = net?.nodes.find((n) => n.id === sel)
   const [cap, setCap] = useState<{ node: string; gbps: number }>()
@@ -102,6 +114,7 @@ export function NetworkMap({ tenant, subscribe, onHub, hubCustomers }: {
               <svg viewBox={`0 0 ${W} ${H}`} className="mx-auto block h-auto w-full max-w-[860px]" role="img" aria-label="Network map">
                 <defs>
                 </defs>
+                {land && <path d={land} fill="rgb(255 255 255 / 0.05)" stroke="rgb(var(--signal) / 0.45)" strokeWidth={1.2} strokeLinejoin="round" pointerEvents="none" />}
                 {net.edges.map((e) => {
                   const a = pos[e.source], b = pos[e.target]
                   if (!a || !b) return null
