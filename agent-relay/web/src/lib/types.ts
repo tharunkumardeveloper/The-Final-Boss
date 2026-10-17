@@ -178,7 +178,7 @@ export interface LabProcedure { id: string; successes: number; failures: number;
   confident?: boolean; score?: number }
 export interface LabMessage { text: string; at: number; me?: boolean; image?: { src: string; title: string; link?: string } | null }
 export interface LabRun { id: string; customer: string; name: string; ticket: string | null; said: string; symptoms: string[]
-  started_at: number; ended_at?: number; status: 'running' | 'resolved' | 'unresolved' | 'handed over' | 'error'
+  started_at: number; ended_at?: number; status: 'running' | 'resolved' | 'unresolved' | 'handed over' | 'waiting on customer' | 'error'
   steps: LabStep[]; messages: LabMessage[]; actions: string[]; fault: string | null; technician?: string | null
   diagnosis: { cause: string; action: string; why: string; by: string; agrees: boolean } | null
   verdict: { truth: string; truth_label: string; said: string; correct: boolean; fixed: boolean } | null
@@ -188,7 +188,7 @@ export interface LabCustomer { key: string; name: string; city: string; area: st
 export interface LabFault { id: string; active: boolean; mitigated: boolean; blind: boolean; customer: string; injected_at: number
   preset?: string; title?: string; label?: string }
 export interface LabHome { id: string; splitter: string; port: number; customer: string | null; name: string; rx: number | null
-  box: string; account: string; wifi: number; state: 'ok' | 'dark' | 'flapping' | 'frozen' | 'paused' | 'offline' | 'slow' | 'wifi' }
+  box: string; account: string; wifi: number; state: 'ok' | 'dark' | 'flapping' | 'frozen' | 'paused' | 'offline' | 'slow' | 'wifi' | 'reported' }
 export interface LabOlt { id: string; label: string; status: string; peak_gbps: number; uplink_gbps: number; flow_gbps: number; free_peak_mbps: number; curve: number[] }
 export interface LabLink { id: string; label: string; status: string; role: 'primary' | 'standby'; active: boolean; link: 'up' | 'cut'; gbps: number; flow: number }
 export type Led = 'on' | 'off' | 'blink' | 'red'

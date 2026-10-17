@@ -11,7 +11,7 @@ const listeners = new Set<() => void>()
 let seq = 0
 
 // The screens' own page loads read everything at once; only the agents' work should light up.
-const VIEW = /^(graph:|network:|schema:|sharing:|card:|stats|customers|tickets|community nodes|top communities|relationship types|conflict count)/
+const VIEW = /^(graph:|network:|lab view:|schema:|sharing:|card:|stats|customers|tickets|community nodes|top communities|relationship types|conflict count)/
 
 export function recordTouch(e: RelayEvent) {
   if (e.type !== 'cypher' || VIEW.test(e.data.name) || (!e.data.seek?.length && !e.data.found?.length)) return

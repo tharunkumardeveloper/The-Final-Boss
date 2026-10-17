@@ -14,6 +14,7 @@ const YourLine = lazy(() => import('../components/portal/YourLine'))
 import { api } from '../lib/api'
 import { flag, titleCase } from '../lib/format'
 import { activeOutages, applyEvent, emptyGraph, loadGraph } from '../lib/graph'
+import { useLine } from '../lib/line'
 import { useRelayStream } from '../lib/stream'
 import { useTenant } from '../lib/tenant'
 import type { Customer, Kb, Region, RelayEvent } from '../lib/types'
@@ -31,9 +32,12 @@ const plansFrom = (kb?: Kb) => kb?.plans.length
     note: p.notes, perks: [`About ${p.devices} devices`, ...p.includes.map(cap)], featured: p.key === 'fiber 300' }))
   : PLANS
 
-/** Tickets and memory share one full-height panel, so each has room; it jumps to Tickets when one opens. */
-function AccountPanel({ tenant, who, customer, chips, subscribe, onAsk }: { tenant: string; who: string | null; customer?: Customer
-  chips: Chip[]; subscribe: (fn: (e: RelayEvent) => void) => () => void; onAsk: (t: string) => void }) {
+type Line = ReturnType<typeof useLine>
+
+/** Tickets and memory share one full-height panel, so each has room; it jumps to Tickets when one opens.
+ *  The resolver's work shows under the ticket it's on. */
+function AccountPanel({ tenant, who, customer, chips, subscribe, onAsk, line }: { tenant: string; who: string | null; customer?: Customer
+  chips: Chip[]; subscribe: (fn: (e: RelayEvent) => void) => () => void; onAsk: (t: string) => void; line: Line }) {
   const [tab, setTab] = useState<'tickets' | 'memory'>('memory')
   const [fresh, setFresh] = useState<{ tickets: boolean; memory: boolean }>({ tickets: false, memory: false })
   const settled = chips.filter((c) => c.phase === 'settled').length
@@ -57,7 +61,7 @@ function AccountPanel({ tenant, who, customer, chips, subscribe, onAsk }: { tena
       </div>
       <div className="min-h-0 flex-1">
         {tab === 'tickets'
-          ? <TicketsPanel tenant={tenant} who={who} customer={customer} subscribe={subscribe} onAsk={onAsk} />
+          ? <TicketsPanel tenant={tenant} who={who} customer={customer} subscribe={subscribe} onAsk={onAsk} run={line.run} view={line.view} />
           : <MemoryPanel who={who} customer={customer} chips={chips} tenant={tenant} />}
       </div>
     </div>
@@ -65,34 +69,29 @@ function AccountPanel({ tenant, who, customer, chips, subscribe, onAsk }: { tena
 }
 
 /** The third card. Memory while the customer is talking; once they have a line (a place) and a case (a ticket, or the
- *  resolver on it), it becomes two tabs and opens on the network lab: their line live, the resolver at work. This is
- *  what the console's old "Talk as a customer" screen showed, on the home page. */
-function GraphOrLine({ tenant, who, subscribe }: { tenant: string; who: string | null; subscribe: (fn: (e: RelayEvent) => void) => () => void }) {
+ *  resolver on it), it becomes two tabs and opens on the network lab: their line live. The resolver's step-by-step work
+ *  is under the ticket in Your tickets, so the diagram keeps the whole card. */
+function GraphOrLine({ tenant, who, subscribe, line }: { tenant: string; who: string | null; subscribe: (fn: (e: RelayEvent) => void) => () => void
+  line: Line }) {
   const [mode, setMode] = useState<'memory' | 'line'>('memory')
   const [hasCase, setHasCase] = useState(false)
-  const [hasLine, setHasLine] = useState(false)
   const auto = useRef(false)  // already opened the lab for this case: a manual switch back sticks
-  const checkLine = useCallback(() => {
-    if (who) api.lab(tenant, who).then((v) => setHasLine(v.focus === who && !!v.network)).catch(() => {})
-  }, [tenant, who])
+  const { hasLine, reload } = line
   useEffect(() => {  // a returning customer with a case still open gets the tabs straight away
-    setMode('memory'); setHasCase(false); setHasLine(false); auto.current = false
+    setMode('memory'); setHasCase(false); auto.current = false
     if (!who) return
     api.tickets(tenant).then((ts) => setHasCase(ts.some((t) => t.customer === who && t.status !== 'resolved'))).catch(() => {})
-    checkLine()
-  }, [tenant, who, checkLine])
+  }, [tenant, who])
   useEffect(() => subscribe((e) => {
-    const d = e.data as { customer?: string; subject?: string; predicate?: string; speaker?: string; status?: string }
-    const c = (d?.customer ?? d?.subject)?.toLowerCase()
-    if (!who || c !== who) return
-    if ((e.type === 'fact_created' || e.type === 'fact_superseded') && (d.predicate === 'lives_in' || d.predicate === 'address')) { setTimeout(checkLine, 600); return }
+    const d = e.data as { customer?: string; subject?: string; speaker?: string; status?: string }
+    if (!who || (d?.customer ?? d?.subject)?.toLowerCase() !== who) return
     // the resolver speaking in their chat is the surest sign it is on the case (its run events can arrive first or not at all)
     if (e.type === 'ticket_opened' || (e.type === 'message' && d.speaker === 'resolver') || (e.type === 'lab_run' && d.status === 'running')) {
       setHasCase(true)
-      if (e.type !== 'ticket_opened') setHasLine(true)  // the resolver only works on a line it found
+      if (e.type !== 'ticket_opened' && !hasLine) reload()  // the resolver only works on a line it found
     }
-  }), [subscribe, who, checkLine])
-  const tabs = !!who && hasCase && hasLine
+  }), [subscribe, who, hasLine, reload])
+  const tabs = !!who && (hasCase || !!line.run) && hasLine
   useEffect(() => { if (tabs && !auto.current) { auto.current = true; setMode('line') } }, [tabs])
   const show = tabs ? mode : 'memory'
   return (
@@ -110,7 +109,7 @@ function GraphOrLine({ tenant, who, subscribe }: { tenant: string; who: string |
         <Suspense fallback={null}>
           {show === 'memory'
             ? <MyGraph tenant={tenant} who={who} subscribe={subscribe} />
-            : <YourLine tenant={tenant} who={who} subscribe={subscribe} />}
+            : <YourLine who={who} view={line.view} run={line.run} />}
         </Suspense>
       </div>
     </div>
@@ -154,6 +153,7 @@ export default function Portal() {
   const listeners = useRef(new Set<(e: RelayEvent) => void>())
   const refetch = useRef<ReturnType<typeof setTimeout>>()
   const subscribe = useCallback((fn: (e: RelayEvent) => void) => { listeners.current.add(fn); return () => { listeners.current.delete(fn) } }, [])
+  const line = useLine(tenant, who, subscribe)  // their line + the resolver's run: one feed for the lab and the tickets
 
   const refresh = useCallback(() => {
     api.graph(tenant).then((g) => {
@@ -226,9 +226,9 @@ export default function Portal() {
               <SupportDesk tenant={tenant} customers={customers} subscribe={subscribe} side="none" onWho={setWho} onChips={setChips} typeRef={typeRef} country={kb?.country} />
             </div>
             <AccountPanel tenant={tenant} who={who} customer={customers.find((c) => c.key === who)} chips={chips} subscribe={subscribe}
-              onAsk={(t) => typeRef.current?.(t)} />
-            <div className="min-h-[560px] lg:col-span-2 xl:col-span-1 xl:min-h-0">
-              <GraphOrLine tenant={tenant} who={who} subscribe={subscribe} />
+              onAsk={(t) => typeRef.current?.(t)} line={line} />
+            <div className="h-[600px] lg:col-span-2 xl:col-span-1 xl:h-auto xl:min-h-0">
+              <GraphOrLine tenant={tenant} who={who} subscribe={subscribe} line={line} />
             </div>
           </div>
           <dl className="mt-6 flex flex-wrap gap-x-10 gap-y-3 num">

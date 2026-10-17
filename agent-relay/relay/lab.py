@@ -32,6 +32,7 @@ _lock = threading.Lock()
 _runs: dict[str, list] = {}           # tenant -> recent runs (newest first)
 _busy: set = set()                    # (tenant, customer) with a run in progress
 _expected: set = set()                # a complaint just arrived; the run starts right after intake has noted it
+_reported: dict[str, set] = {}        # tenant -> customers who say it's broken while every reading is fine
 _gen: dict[str, int] = {}             # tenant -> reset generation (delayed jobs from before a reset are dropped)
 
 # ---------------------------------------------------------------- the catalogue
@@ -211,8 +212,12 @@ def _chaos(tenant):
     return db.client().select_graph(f"chaos:{tenant}")
 
 
+_screen = threading.local()  # set while drawing the lab view: the screen's own reads are not the resolver's work
+
+
 def _q(tenant, name, query, params=None, log=None, ro=False):
-    return db.run(tenant, f"lab: {name}", query, params, log, ro=ro)
+    # "lab view:" queries are skipped by the live-query glow, so a page refresh doesn't light up the whole network
+    return db.run(tenant, f"{'lab view' if getattr(_screen, 'on', False) else 'lab'}: {name}", query, params, log, ro=ro)
 
 
 def _ms():
@@ -494,6 +499,7 @@ def reset(tenant):
     with _lock:
         _gen[tenant] = _gen.get(tenant, 0) + 1
         _runs[tenant] = []
+        _reported.pop(tenant, None)
         for k in [k for k in _awaiting if k[0] == tenant]:
             _awaiting.pop(k)
     ensure(tenant)
@@ -516,8 +522,11 @@ _SYMPTOMS = [
     ("drops", r"\b(drop\w*|disconnect\w*|keeps going off|cuts? out)\b"),
     ("one device", r"\b(ps5|xbox|console|tv|phone|laptop|tablet)\b"),
     ("red light", r"\bred light|blinking\b"),
-    ("something wrong", r"\b(internet|wi-?fi|connection|net)\b.{0,30}\b(weird|off|wrong|not right|acting up|issues?|problems?)\b"
-                        r"|\b(weird|wrong|off|issues?|problems?)\b.{0,30}\b(internet|wi-?fi|connection)\b"),
+    ("something wrong", r"\b(internet|wi-?fi|connection|net|signal|network)\b.{0,30}\b(weird|off|wrong|not right|acting up|"
+                        r"issues?|problems?|troubl\w*|poor|bad|weak|unstable|patchy|spotty|flaky|fluctuat\w*|"
+                        r"intermittent|not good)\b"
+                        r"|\b(weird|wrong|off|issues?|problems?|troubl\w*|poor|bad|weak|unstable|patchy|spotty|flaky|"
+                        r"fluctuat\w*|intermittent)\b.{0,30}\b(internet|wi-?fi|connection|signal|network)\b"),
     ("lights look normal", r"\blights? (look|are|seem) (normal|fine|ok)\b"),
     ("can't connect", r"\b(ethernet|lan|cable|port|wired)\b.{0,25}\b(not|no|isn'?t|won'?t|doesn'?t|can'?t)\b.{0,15}"
                       r"\b(detect\w*|connect\w*|work\w*|recogni[sz]\w*)\b|\b(not|can'?t|won'?t) (detect\w*|connect\w*)\b"),
@@ -777,6 +786,8 @@ def _candidates(text):
     if "red light" in sy or re.search(r"\blos\b", t):
         return ["damaged_drop", "area_cable_cut"]
     if re.search(r"\bwi-?fi\b", t) or "one device" in sy:
+        if re.search(r"\b(both|cable|wired|ethernet|lan|whole home|all devices)\b", t):
+            return ["frozen_box", "damaged_drop"]  # on the cable too, or every device: the line, not the Wi-Fi
         return ["wifi_interference", "wifi_interference", "frozen_box"]
     if "evenings" in sy or re.search(r"\b(9|nine) ?(pm)?\b.*\b(slow|buffer)", t):
         return ["evening_congestion"]
@@ -938,9 +949,11 @@ def investigate(run):
              {"facts": [{"id": f["fact_id"], "text": cards.sentence(f["subject"], f["predicate"], f["object"]),
                          "by": (f.get("agents") or ["?"])[0]} for f in facts],
               "symptoms": run.data["symptoms"]})
-    network_issue = _network_complaint(heard)
+    # a ticket about the connection is a complaint even when the words are vague ("wifi", "it's troubling")
+    network_issue = _network_complaint(heard) or bool(run.ticket and _NETTALK.search(heard))
+    scope = " ".join(f["object"] for f in facts if f["predicate"] in ("connection_medium", "affected_device"))
     if network_issue and not run.followup and not _fault_for(t, measure(t, c)):
-        _match_complaint(t, c, heard)  # the world's side; the resolver never sees this
+        _match_complaint(t, c, f"{heard} {scope}")  # the world's side; the resolver never sees this
     recent = any(r["customer"] == c and r["id"] != run.id and r["started_at"] > _ms() - 30 * 60_000 for r in _runs.get(t, []))
     on = (f"your ticket {run.ticket.upper()} ({about[0]})" if run.ticket and about else "your case")
     run.tell("Thanks for telling me. I'm taking another look at your line right now." if run.followup or recent else
@@ -1051,7 +1064,8 @@ def investigate(run):
 
 
 def _healthy(run, m, network_issue):
-    """Every reading is fine. Never 'you're good to go' to someone who says it's broken: it's probably inside the home."""
+    """Every reading is fine. Never 'you're good to go' to someone who says it's broken: their line is marked faulty and
+    a technician goes to look."""
     first = _first(run.customer)
     if not network_issue:
         issue = (run.said or "your request").strip().rstrip(".")
@@ -1060,31 +1074,36 @@ def _healthy(run, m, network_issue):
                  f"from here and update you right here.")
         run.data["status"] = "handed over"
         return
-    run.step("think", "Every reading up to the box is healthy",
-             "So the trouble is most likely inside the home: the box itself, its placement, or a device.", "info")
-    run.tell(f"I've tested everything from our side again and it's healthy all the way to your box, {first}, so it's "
-             f"probably something inside your home. Could you restart the box for me? Unplug it, wait 10 seconds and "
-             f"plug it back in. [guide:restart_box] Tell me once it's back on, and whether it's still acting up."
-             if run.followup else
-             f"I've tested your line from our side and it's healthy all the way to your box, {first}, so it's probably "
-             f"something inside your home. Could you restart the box for me? Unplug it, wait 10 seconds and plug it "
-             f"back in. [guide:restart_box] Tell me once it's back on.")
-    reply = _wait_for(run, "guided", "Restarting the box", timeout=300)
-    if not reply:  # no answer is not "fixed": the case stays open for them
-        run.step("wait", f"No reply from {first} yet", "The case stays open until they answer.", "pending")
+    # The customer is the one using the line: a fault the remote tests miss is still a fault. Their home is drawn as
+    # reported (not green) and a technician goes to look, instead of telling them everything is fine.
+    _flag(run.tenant, run.customer, True)
+    run.step("think", f"{first} reports a fault the remote tests don't show",
+             "Readings up to the box look normal, but the customer's word stands: the line is marked faulty "
+             "(reported) and a technician checks it in person.", "bad")
+    run.tell(f"Thanks for flagging it, {first}. Our remote tests don't catch everything, and you're the one using the "
+             f"connection, so I've marked your line as faulty and I'm arranging a technician to check it in person. "
+             f"Meanwhile, a restart of the box sometimes helps: unplug it, wait 10 seconds and plug it back in. "
+             f"[guide:restart_box]")
+    visit = _collect_details(run)
+    if visit is None:
+        run.step("wait", "Paused: waiting for the customer's visit details", "The line stays marked faulty and the case "
+                 "stays open.", "pending")
+        run.tell("No rush. I'll book the visit as soon as you send those details.")
         run.data["status"] = "waiting on customer"
         return
-    if _NO.search(reply) or VISIT_ASK.search(reply) or _STILL.search(reply):  # "send someone", "still not working": a visit
-        run.tell("Thanks for trying. I'll get a technician to check inside your home.")
-        visit = _collect_details(run)
-        if visit:
-            tech = experts.assign(run.tenant, run.ticket, m["olt"]["city"], _ms()) if run.ticket else None
-            run.tell(f"Booked. {(tech or 'Our technician').title()} will come {SLOT_LABEL[visit['slot']]} to "
-                     f"{visit['address'].title()}. They'll call you before they arrive.")
-            _home_visit(run, tech, visit)
-            return
-    run.tell(f"Thanks, {first}. If it acts up again, tell me what you were doing when it happened and I'll dig in.")
-    run.data["status"] = "resolved"
+    tech = experts.assign(run.tenant, run.ticket, m["olt"]["city"], _ms()) if run.ticket else None
+    run.data["technician"] = tech
+    run.tell(f"Booked. {(tech or 'Our technician').title()} will come {SLOT_LABEL[visit['slot']]} to "
+             f"{visit['address'].title()}. They'll call you before they arrive.")
+    _home_visit(run, tech, visit)
+
+
+def _flag(tenant, customer, on):
+    """Mark (or clear) a customer's home as reported faulty on the network view."""
+    with _lock:
+        s = _reported.setdefault(tenant, set())
+        (s.add if on else s.discard)(customer)
+    events.emit(tenant, "lab_state", {"why": "reported" if on else "cleared", "customer": customer})
 
 
 def _home_visit(run, tech, visit):
@@ -1112,6 +1131,7 @@ def _home_visit(run, tech, visit):
              f"{issue}; " + ("the re-measure proves the fault is gone, so the case is closed" if graded else
                              "nothing on the line to re-measure against, so the case is closed on the technician's "
                              "confirmation") + " and the fix is saved to procedural memory.", "ok")
+    _flag(run.tenant, run.customer, False)
     run.tell(f"{who} has been and fixed it ({issue}), and your line is healthy. Can you check on your side and tell me "
              f"if it's working now?")
     run.data["status"] = "resolved"
@@ -1632,6 +1652,14 @@ def customers(tenant, log=None):
 
 
 def view(tenant, customer=None):
+    _screen.on = True
+    try:
+        return _view(tenant, customer)
+    finally:
+        _screen.on = False
+
+
+def _view(tenant, customer=None):
     ensure(tenant)
     custs = customers(tenant)
     focus = next((c for c in custs if c["key"] == norm(customer or "")), custs[0] if custs else None)
@@ -1654,6 +1682,8 @@ def view(tenant, customer=None):
     pop = focus["pop"]
     rows = _q(tenant, "lab view", VIEW, {"pop": pop, "peak": NORMAL_PEAK_GBPS}, ro=True)
     olts, homes, spl = {}, [], {}
+    with _lock:
+        reported = set(_reported.get(tenant, ()))
     for olt, olabel, ostatus, peak, cap, sid, slabel, feeder, ont in rows:
         if olt not in olts:
             g = flow(tenant, olt)
@@ -1670,7 +1700,8 @@ def view(tenant, customer=None):
                       "state": ("dark" if box == "no-signal" else "flapping" if box == "flapping" else
                                 "frozen" if box != "online" else "paused" if ont["account"] != "active" else
                                 "offline" if g <= 0 else "slow" if olts[olt]["free_peak_mbps"] < 100 else
-                                "wifi" if ont["wifi_interference"] >= 0.5 else "ok")})
+                                "wifi" if ont["wifi_interference"] >= 0.5 else
+                                "reported" if ont.get("customer") in reported else "ok")})
     hub = [{"id": b, "label": lab, "status": st, "role": role, "active": act_, "link": link, "gbps": cap, "flow": fl}
            for b, lab, st, role, act_, link, cap, fl in _q(tenant, "hub uplinks", HUB, {"p": pop}, ro=True)]
     out["network"] = {"pop": {"id": pop, "label": focus["pop_label"], "city": focus["city"]}, "links": hub,

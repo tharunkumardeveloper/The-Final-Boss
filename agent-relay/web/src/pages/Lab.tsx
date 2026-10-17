@@ -18,10 +18,11 @@ import type { LabHome, LabManual, LabMessage, LabOlt, LabPreset, LabProcedure, L
 const SPRING = { type: 'spring', stiffness: 380, damping: 32 } as const
 const C = { ok: 'rgb(var(--signal))', bad: 'rgb(var(--danger))', warn: 'rgb(var(--conflict))', idle: 'rgb(255 255 255 / 0.22)', frozen: '#8fa2ff' }
 export const HOME_COLOR: Record<LabHome['state'], string> = {
-  ok: C.ok, dark: C.bad, flapping: C.warn, frozen: C.frozen, paused: '#c49bff', offline: C.bad, slow: C.warn, wifi: C.warn,
+  ok: C.ok, dark: C.bad, flapping: C.warn, frozen: C.frozen, paused: '#c49bff', offline: C.bad, slow: C.warn, wifi: C.warn, reported: '#ff7a59',
 }
 export const HOME_WORD: Record<LabHome['state'], string> = {
   ok: 'online', dark: 'no light', flapping: 'weak light', frozen: 'box frozen', paused: 'account paused', offline: 'no route', slow: 'slow at night', wifi: 'Wi-Fi interference',
+  reported: 'reported faulty',
 }
 const ACTIONS: [string, string][] = [
   ['remote_reboot', 'Restart the box remotely'], ['change_wifi_channel', 'Move Wi-Fi to a quieter channel'],
@@ -143,30 +144,36 @@ export function FieldDispatch({ d, view }: { d: Dispatch; view: NonNullable<LabV
 
 // ---------------------------------------------------------------- the network canvas
 
-/** The network as the container allows: left to right when there's room, top to bottom when narrow. Never cut. */
-export const Canvas = memo(function Canvas({ view, focus, dispatch, privateTo }: { view: NonNullable<LabView['network']>; focus: string | null
-  dispatch?: Dispatch | null; privateTo?: string | null }) {
+type P = { x: number; y: number }
+type Pos = { core: P[]; pop: P; olt: Record<string, P>; spl: Record<string, P>; home: Record<string, P>; label: Record<string, P> }
+
+/** The network as the container allows: left to right when there's room, top to bottom when narrow. Never cut.
+ *  fit: scaled to fill the container's height as well, so it never scrolls (the customer's own line). */
+export const Canvas = memo(function Canvas({ view, focus, dispatch, privateTo, fit = false }: { view: NonNullable<LabView['network']>; focus: string | null
+  dispatch?: Dispatch | null; privateTo?: string | null; fit?: boolean }) {
   // privateTo: drawn on a customer's own screen, so every other home is anonymous (no name, no readings)
   const mine = (h: LabHome) => !privateTo || h.customer === privateTo
   const box = useRef<HTMLDivElement>(null)
-  const [width, setWidth] = useState(720)
+  const [size, setSize] = useState({ w: 720, h: 0 })
   useEffect(() => {
     const el = box.current
     if (!el) return
-    const ro = new ResizeObserver(([e]) => setWidth(Math.max(300, Math.floor(e.contentRect.width))))
+    // rounded to 8 px, so a scrollbar or a one-pixel reflow doesn't re-lay out (and visibly jump) the whole drawing
+    const ro = new ResizeObserver(([e]) => {
+      const w = Math.max(300, Math.floor(e.contentRect.width / 8) * 8), h = Math.floor(e.contentRect.height / 8) * 8
+      setSize((s) => s.w === w && s.h === h ? s : { w, h })
+    })
     ro.observe(el)
     return () => ro.disconnect()
   }, [])
-  const W = Math.min(width, 860)  // wider than this, the network turns into one long thin strip
-  const wide = W >= 620
+  const W = Math.min(size.w, 860)  // wider than this, the network turns into one long thin strip
   const STEP = 30, HOME = 14
   const blocks = view.splitters.map((s) => ({ s, homes: view.homes.filter((h) => h.splitter === s.id) }))
   const cores = view.links
 
   // ---- positions
-  type P = { x: number; y: number }
-  const pos: { core: P[]; pop: P; olt: Record<string, P>; spl: Record<string, P>; home: Record<string, P>; label: Record<string, P> } =
-    { core: [], pop: { x: 0, y: 0 }, olt: {}, spl: {}, home: {}, label: {} }
+  const place = (wide: boolean): { pos: Pos; H: number } => {
+  const pos: Pos = { core: [], pop: { x: 0, y: 0 }, olt: {}, spl: {}, home: {}, label: {} }
   let H: number
   if (wide) {
     const X = { core: W * 0.08, pop: W * 0.27, olt: W * 0.46, spl: W * 0.62, home: W * 0.68 }
@@ -203,6 +210,15 @@ export const Canvas = memo(function Canvas({ view, focus, dispatch, privateTo }:
     }
     H = y
   }
+  return { pos, H }
+  }
+  // fitted: whichever orientation ends up larger in the box; otherwise left to right once there's room
+  let wide = W >= 620, laid = place(wide)
+  if (fit && size.h > 0 && W >= 520) {
+    const other = place(!wide), scale = (H: number) => Math.min(size.w / W, size.h / H)
+    if (scale(other.H) > scale(laid.H) * 1.05) { wide = !wide; laid = other }
+  }
+  const { pos, H } = laid
   const curve = (a: P, b: P) => wide
     ? `M${a.x} ${a.y} C${(a.x + b.x) / 2} ${a.y}, ${(a.x + b.x) / 2} ${b.y}, ${b.x} ${b.y}`
     : `M${a.x} ${a.y} C${a.x} ${(a.y + b.y) / 2}, ${b.x} ${(a.y + b.y) / 2}, ${b.x} ${b.y}`
@@ -227,8 +243,9 @@ export const Canvas = memo(function Canvas({ view, focus, dispatch, privateTo }:
   }
 
   return (
-    <div ref={box} className="w-full">
-      <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} className="mx-auto block max-w-full" role="img" aria-label={`Network for ${view.pop.label}`}>
+    <div ref={box} className={fit ? 'h-full w-full' : 'w-full'}>
+      <svg viewBox={`0 0 ${W} ${H}`} width={fit ? '100%' : W} height={fit ? '100%' : H} preserveAspectRatio="xMidYMid meet"
+        className={fit ? 'block' : 'mx-auto block max-w-full'} role="img" aria-label={`Network for ${view.pop.label}`}>
         <defs>
         </defs>
         {cores.map((l, i) => (
@@ -251,7 +268,7 @@ export const Canvas = memo(function Canvas({ view, focus, dispatch, privateTo }:
               const sz = me ? 18 : HOME
               return (
                 <g key={h.id}>
-                  <path d={curve(pos.spl[s.id], p)} fill="none" stroke={h.state === 'dark' || h.state === 'flapping' ? C.bad : 'rgb(255 255 255 / 0.08)'} strokeWidth="1" />
+                  <path d={curve(pos.spl[s.id], p)} fill="none" stroke={h.state === 'dark' || h.state === 'flapping' || h.state === 'reported' ? C.bad : 'rgb(255 255 255 / 0.08)'} strokeWidth="1" />
                   {bad && <circle cx={p.x} cy={p.y} r="8" fill={color} opacity="0.5" className="lab-alarm" />}
                   <rect x={p.x - sz / 2} y={p.y - sz / 2} width={sz} height={sz} rx="4" fill={color} fillOpacity={bad ? 0.95 : 0.85}
                     stroke={me ? 'white' : 'none'} strokeWidth="2">
@@ -441,7 +458,8 @@ function Step({ s, live }: { s: LabStep; live: boolean }) {
   )
 }
 
-export function Trace({ run, fill = false }: { run?: LabRun; fill?: boolean }) {
+export function Trace({ run, fill = false, compact = false }: { run?: LabRun; fill?: boolean; compact?: boolean }) {
+  // compact: inside the customer's ticket card, which already names them and the ticket
   const box = useRef<HTMLDivElement>(null)
   useEffect(() => { const el = box.current; if (el) el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' }) }, [run?.steps.length])
   if (!run) return <p className="rounded-2xl bg-sunk/60 p-4 text-sm text-ink-2">Break something on the left. The customer will complain the way a real person would, intake hands the ticket over, and the resolver's work shows up here, step by step.</p>
@@ -449,19 +467,19 @@ export function Trace({ run, fill = false }: { run?: LabRun; fill?: boolean }) {
   return (
     <div className={fill ? 'flex h-full min-h-0 flex-col' : ''}>
       <div className="flex flex-wrap items-center gap-2">
-        <h3 className="font-display text-lg font-semibold">{run.name}</h3>
-        {run.ticket && <span className="chip bg-sunk font-mono text-ink-2">{run.ticket}</span>}
+        {!compact && <h3 className="font-display text-lg font-semibold">{run.name}</h3>}
+        {run.ticket && !compact && <span className="chip bg-sunk font-mono text-ink-2">{run.ticket}</span>}
         <span className={`chip ${live ? 'bg-conflict-tint text-conflict' : run.status === 'resolved' ? 'bg-current-tint text-current' : 'bg-danger-tint text-danger'}`}>
           {live && <i className="h-1.5 w-1.5 rounded-full bg-conflict animate-breathe" />}{live ? 'working' : run.status}</span>
         {run.diagnosis?.by === 'procedural memory' && <ProcBadge />}
       </div>
       {run.said && <p className="mt-1 text-xs text-ink-3">Said: <span className="italic text-ink-2">“{run.said}”</span>{run.symptoms.length > 0 && <> · heard: {run.symptoms.join(', ')}</>}</p>}
-      <div ref={box} className={`scroll-thin mt-4 overflow-y-auto pr-1 ${fill ? 'min-h-0 flex-1' : 'max-h-[540px]'}`}>
+      <div ref={box} className={`scroll-thin overflow-y-auto pr-1 ${compact ? 'mt-3' : 'mt-4'} ${fill ? 'min-h-0 flex-1' : compact ? 'max-h-[320px]' : 'max-h-[540px]'}`}>
         <ol className="relative space-y-4 before:absolute before:left-3 before:top-2 before:h-[calc(100%-1rem)] before:w-px before:bg-line/10">
           {run.steps.map((s) => <Step key={s.i} s={s} live={live && s.i === run.steps.length - 1} />)}
           {live && <li className="pl-9 text-xs text-ink-3 animate-breathe">Working…</li>}
         </ol>
-        {run.verdict && (
+        {run.verdict && !compact && (
           <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} transition={SPRING}
             className={`mt-5 rounded-2xl p-4 ${run.verdict.correct && run.verdict.fixed ? 'bg-current-tint' : 'bg-danger-tint'}`}>
             <p className="eyebrow">Graded against the hidden truth</p>
@@ -776,7 +794,7 @@ export default function LabPage() {
             </div>
             <AnimatePresence>{crew && view?.network && <FieldDispatch key={crew.at} d={crew} view={view.network} />}</AnimatePresence>
             <div className="mt-2 flex shrink-0 flex-wrap gap-x-4 gap-y-1 px-1 text-[10.5px] text-white/55">
-              {(['ok', 'dark', 'flapping', 'frozen', 'paused', 'slow'] as LabHome['state'][]).map((k) => (
+              {(['ok', 'dark', 'flapping', 'frozen', 'paused', 'slow', ...(view?.network?.homes.some((h) => h.state === 'reported') ? ['reported'] : [])] as LabHome['state'][]).map((k) => (
                 <span key={k} className="inline-flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-[3px]" style={{ background: HOME_COLOR[k] }} />{HOME_WORD[k]}</span>
               ))}
               <span className="inline-flex items-center gap-1.5"><i className="h-0.5 w-4 border-t-2 border-dotted border-white/40" />standby link</span>
