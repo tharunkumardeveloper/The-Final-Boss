@@ -13,7 +13,7 @@ import type { Chip } from '../lib/chips'
 const MyGraph = lazy(() => import('../components/portal/MyGraph'))
 const YourLine = lazy(() => import('../components/portal/YourLine'))
 import { api } from '../lib/api'
-import { flag, titleCase } from '../lib/format'
+import { flag, tenantLabel, titleCase } from '../lib/format'
 import { activeOutages, applyEvent, emptyGraph, loadGraph } from '../lib/graph'
 import { useLine } from '../lib/line'
 import { useRelayStream } from '../lib/stream'
@@ -339,7 +339,7 @@ export default function Portal() {
           <label htmlFor="portal-tenant" className="ml-2">Demo workspace</label>
           <select id="portal-tenant" className="rounded-full bg-surface px-2 py-0.5 font-mono text-[11px] text-ink hairline outline-none focus:ring-2 focus:ring-signal/40"
             value={tenant} onChange={(e) => setTenant(e.target.value)}>
-            {tenants.map((t) => <option key={t} value={t}>mem:{t}</option>)}
+            {tenants.map((t) => <option key={t} value={t}>{tenantLabel(t)}</option>)}
           </select>
           <span className={`h-1.5 w-1.5 rounded-full ${status === 'live' ? 'bg-current' : 'bg-conflict'}`} title={status === 'live' ? 'Live updates on' : 'Reconnecting'} />
         </span>

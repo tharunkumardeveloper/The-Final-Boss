@@ -70,3 +70,13 @@ export const pct = (x: number) => `${Math.round(x * 100)}%`
 
 /** 'IN' -> the Indian flag emoji (Windows gets it from the flag polyfill font loaded in main.tsx). */
 export const flag = (iso: string) => String.fromCodePoint(...iso.toUpperCase().split('').map((c) => 127397 + c.charCodeAt(0)))
+
+// A tenant graph as people read it: the region's flag (one country) or its part of the world (several), its name, and
+// the graph key. The benchmark graphs aren't regions, so they say what they hold.
+const TENANT_MARK: Record<string, [string, string]> = {
+  pml: [flag('IN'), 'India'], 'pml-eu': [flag('EU'), 'Europe'], 'pml-na': ['🌎', 'North America'],
+  'pml-apac': ['🌏', 'Asia-Pacific'], 'pml-mea': ['🌍', 'Middle East & Africa'], 'pml-latam': ['🌎', 'Latin America'],
+  'pml-bench': ['📊', 'Benchmark'], nimbus: ['📊', 'Benchmark (Nimbus)'], 'life-locomo': ['📊', 'LoCoMo check'],
+}
+/** 'pml-eu' -> '🇪🇺 Europe · mem:pml-eu'; an unknown tenant -> 'mem:<tenant>'. */
+export const tenantLabel = (t: string) => TENANT_MARK[t] ? `${TENANT_MARK[t][0]} ${TENANT_MARK[t][1]} · mem:${t}` : `mem:${t}`

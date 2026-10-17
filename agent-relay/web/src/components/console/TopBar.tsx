@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { api, MOCK } from '../../lib/api'
-import { when } from '../../lib/format'
+import { tenantLabel, when } from '../../lib/format'
 import type { StreamStatus } from '../../lib/stream'
 import type { SimStatus, Stats, UsagePayload } from '../../lib/types'
 import { Wordmark } from '../Brand'
@@ -67,7 +67,7 @@ export function TopBar({ tenant, setTenant, stats, sim, setSim, simTime, status,
         <label htmlFor="tenant" className="text-ink-3">Tenant</label>
         <select id="tenant" className="rounded-full bg-surface px-2.5 py-1 font-mono text-[11.5px] text-ink hairline outline-none focus:ring-2 focus:ring-signal/40"
           value={tenant} onChange={(e) => setTenant(e.target.value)}>
-          {tenants.map((t) => <option key={t} value={t}>mem:{t}</option>)}
+          {tenants.map((t) => <option key={t} value={t}>{tenantLabel(t)}</option>)}
         </select>
         <span className={`chip ${status === 'live' ? 'bg-current-tint text-current' : 'bg-conflict-tint text-conflict'}`}>
           <i className={`h-1.5 w-1.5 rounded-full ${status === 'live' ? 'bg-current animate-breathe' : 'bg-conflict'}`} />
