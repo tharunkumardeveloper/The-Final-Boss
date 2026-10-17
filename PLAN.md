@@ -90,7 +90,7 @@ Groq free limits on this account: `gpt-oss-120b`, `gpt-oss-20b` and `qwen3.8-27b
 
 **P3: if time allows**
 
-11. MCP demo beat: Claude Desktop joins as a third agent (20 s)
+11. MCP demo beat: Claude joins as a fourth agent (`mcp`), after intake, the resolver and Network Ops (20 s)
 12. A second tenant (for example a clinic front desk)
 
 ### Add-on: shared knowledge (how the agents share what they know)

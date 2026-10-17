@@ -204,8 +204,9 @@ button: the conflict closes, and each agent's trust on that kind of fact learns 
 <p align="center"><img src="docs/gifs/network.gif" alt="Console Network lab: pick a customer and see their line from the core to the street cabinet" width="860"></p>
 
 **One line · lab** shows any customer's connection from the core to their street cabinet, with the eight faults you can
-inject on the left. **Whole region · map** shows every hub at its real location; for India, on a map of India drawn
-with the Government of India's boundary.
+inject on the left. **Whole region · map** shows every hub at its real location; for India, on a map of India
+(Natural Earth's India point-of-view boundary, which follows India's official map, including all of Jammu & Kashmir
+and Ladakh).
 
 #### 💥 Break it: the resolver, graded against the truth
 
@@ -502,7 +503,7 @@ model, queries and evaluation were directed, verified and tested by us, and we c
 models: Groq `gpt-oss-120b` for extraction, answers and replies, with `gpt-oss-20b` and `qwen3.8-27b` as fallbacks (qwen
 is also the benchmark's answer model), Gemini Flash-Lite last; `allam-2-7b` for simulated customers and summaries;
 embeddings by fastembed `bge-small-en-v1.5`, run locally. All customer data is synthetic; place names come from
-GeoNames (CC BY 4.0); the India outline is Natural Earth's (public domain).
+GeoNames (CC BY 4.0); the India outline is Natural Earth's 1:10m boundary from the India point of view (public domain).
 
 </details>
 
