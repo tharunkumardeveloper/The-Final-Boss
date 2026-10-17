@@ -11,6 +11,10 @@ import { AppRoutes } from './routes'
 
 polyfillCountryFlagEmojis()  // Windows has no flag emoji; this adds a flag-only font there
 
+// A reload starts at the top of the page, not wherever the browser last was (a link to #plans still goes there)
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
+if (!location.hash) window.scrollTo(0, 0)
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <MotionConfig reducedMotion="user">

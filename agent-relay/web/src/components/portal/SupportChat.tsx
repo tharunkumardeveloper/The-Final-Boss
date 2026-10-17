@@ -223,9 +223,11 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
   const rename = () => {
     setWho(null); clear()
     setIntro((l) => [...l, { id: `ask-${Date.now()}`, speaker: 'intake', at: new Date().toISOString(), text: 'No problem. What should I call you?' }])
-    input.current?.focus()
+    input.current?.focus({ preventScroll: true })
   }
   useEffect(clear, [tenant]) // a region is its own desk and graph: keep the person, load that desk's history for them
+  // the cursor waits in the chat on arrival, without scrolling the page down to it (autoFocus would)
+  useEffect(() => { if (!who) input.current?.focus({ preventScroll: true }) }, []) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { scroller.current?.scrollTo({ top: scroller.current.scrollHeight, behavior: reduce ? 'auto' : 'smooth' }) }, [lines, history, busy, chips.length, reduce])
   useEffect(() => { if (!toast) return; const id = setTimeout(() => setToast(undefined), 6500); return () => clearTimeout(id) }, [toast])
   useEffect(() => () => clearInterval(typer.current), [])
@@ -248,7 +250,7 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
       setHistory(c.sessions.filter((s) => s !== current))
       setSession(current?.session_id)
       setLines((current?.messages ?? []).map((m) => ({ id: m.episode_id, ep: m.episode_id, speaker: m.speaker, text: m.text, at: m.at })))
-    }).catch(() => live && setHistory([])).finally(() => { if (live) { setLoading(false); setLoadedFor(who); input.current?.focus() } })
+    }).catch(() => live && setHistory([])).finally(() => { if (live) { setLoading(false); setLoadedFor(who); input.current?.focus({ preventScroll: true }) } })
     return () => { live = false }
   }, [tenant, who, visit]) // customers is read once at chat start on purpose
 
@@ -309,7 +311,7 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
   }
   function typeInto(full: string) {
     clearInterval(typer.current)
-    input.current?.focus()
+    input.current?.focus({ preventScroll: true })
     if (reduce) { setText(full); return }
     let i = 0
     setText('')
@@ -466,7 +468,7 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
                     placeholder={who ? `Tell ${BOT} what's going on, ${first(who)}…` : `Say hi and tell ${BOT} your name`} value={text}
                     onChange={(e) => { clearInterval(typer.current); setText(e.target.value); e.target.style.height = 'auto'; e.target.style.height = `${e.target.scrollHeight}px` }}
                     onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (text.trim() && !busy) send() } }}
-                    disabled={busy} autoFocus={!who} />
+                    disabled={busy} />
                   <button className="btn-signal h-11 shrink-0 !px-4" aria-label="Send" disabled={busy || !text.trim()}>
                     <span className="hidden text-sm sm:inline">Send</span><Send />
                   </button>
