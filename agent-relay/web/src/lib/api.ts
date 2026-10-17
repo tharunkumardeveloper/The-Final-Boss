@@ -1,4 +1,4 @@
-import { keyHeaders, setKeys } from './keys'
+import { keyHeaders, setKeys, setResetKey } from './keys'
 import { mockRequest } from './mock'
 import type { CaseStory, Compare, Crossing, LabManual, LabView, QueryResult, Schema, AskResponse, Benchmark, Card, ChatResponse, Clock, Community, Conversation, Customer, DbHealth, DemoPicks, ToolResult, Expert, FailResult, FixResponse, Graph, HistoryRow, Isolation, Kb, Network, PickupResponse, Region, Sharing, SimStatus, SlowQuery, Snapshot, Stats, Ticket, UsagePayload } from './types'
 
@@ -31,6 +31,10 @@ async function req<T>(path: string, init?: RequestInit & { timeoutMs?: number },
     }
     if (!r.ok) {
       const body = await r.text().catch(() => '')
+      if (r.status === 403 && !retried && /reset key/i.test(body)) {  // a locked reset on the public demo: ask once
+        const k = window.prompt('Resets are locked on this public demo so nobody wipes it mid-judging. Reset key:')?.trim()
+        if (k) { setResetKey(k); return req<T>(path, init, true) }
+      }
       throw new ApiError(r.status, body.slice(0, 300) || r.statusText)
     }
     return (await r.json()) as T

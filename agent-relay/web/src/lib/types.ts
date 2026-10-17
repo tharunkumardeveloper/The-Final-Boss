@@ -182,7 +182,8 @@ export interface LabRun { id: string; customer: string; name: string; ticket: st
   steps: LabStep[]; messages: LabMessage[]; actions: string[]; fault: string | null; technician?: string | null
   diagnosis: { cause: string; action: string; why: string; by: string; agrees: boolean } | null
   verdict: { truth: string; truth_label: string; said: string; correct: boolean; fixed: boolean } | null
-  awaiting?: boolean; confirmed?: boolean }
+  awaiting?: boolean | 'guided' | 'details' | null  // what the resolver waits for from the customer; true = "is it working now?"
+  confirmed?: boolean }
 export interface LabPreset { key: string; title: string; layer: string; icon: string; blurb: string; says: string; action: string; customers: string[] }
 export interface LabCustomer { key: string; name: string; city: string; area: string; pop: string; pop_label: string; uplinks: number }
 export interface LabFault { id: string; active: boolean; mitigated: boolean; blind: boolean; customer: string; injected_at: number

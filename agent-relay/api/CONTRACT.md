@@ -92,7 +92,7 @@ Client → server: nothing required (REST for actions). Reconnect on close; on r
 
 **Company knowledge** (in every tenant graph, seeded on setup/reset; Entity nodes with `kb: true` and descriptive props, connected by structural edges):
 - `GET /api/tenants/{t}/kb` → `{plans:[{key, name, price_inr, speed_mbps, data, router, includes[], notes}], addons:[{key, name, price_inr, notes}], services:[{key, name, price_inr?, turnaround, notes}], policies:[{key, title, text}], coverage:[{city, areas[]}], support:{channels[], hours}}`
-- Kavya answers company questions ("How much is Fiber 300?", "Do you do static IPs?", "Can you shift my connection to Baner?") from these nodes; `/chat` `cypher` shows the KB lookup.
+- Mr.Fix-It (intake) answers company questions ("How much is Fiber 300?", "Do you do static IPs?", "Can you shift my connection to Baner?") from these nodes; `/chat` `cypher` shows the KB lookup.
 
 **Network + NOC agent** (topology: backbone → POP per city → OLT per area; customers `CONNECTED_VIA` an OLT once their area/city is known; third agent `noc`, trust 0.8):
 - `GET /api/tenants/{t}/network` → `{nodes:[{id, kind: "backbone"|"pop"|"olt", label, city, area?, status: "up"|"down", betweenness, customers}], edges:[{id, source, target, kind: "UPLINK"}]}` (`betweenness` from `algo.betweenness`: how critical a node is).
@@ -119,7 +119,7 @@ New graph kinds: `backbone`, `pop`, `olt`, `area`, `technician`, `service`, `add
 
 ## Additions (round 5): intake to spec
 - `POST /chat`: `customer` is cleaned of lead-ins ("Myself Adit Raj" → "Adit Raj"); an empty name is a 422.
-- **WS `kavya_step {customer, step}`**: what Kavya is doing right now ("Looking you up in our records", "Checking the network at Baner OLT", "Looking through your past tickets", "Finding fixes that worked for others with this problem", "Checking plans and prices in India", "Writing your reply"). The portal shows the latest one in the typing bubble while a reply is pending.
+- **WS `kavya_step {customer, step}`**: what Mr.Fix-It is doing right now ("Looking you up in our records", "Checking the network at Baner OLT", "Looking through your past tickets", "Finding fixes that worked for others with this problem", "Checking plans and prices in India", "Writing your reply"). The portal shows the latest one in the typing bubble while a reply is pending.
 - **WS `handoff`** adds `customer`, `issue_type`, `priority`, `context_nodes[]`.
 - Internal notes (`speaker: "action"`) now include "intake asked … for: area", "intake got the area it asked … for", "intake declined a request for customer data …"; hidden from `/conversation` unless `include_actions=true`.
 - **New predicates:** `occupation`, `visit_reason`, `asked_about`, `requested`, `address`, `awaiting`, `doesnt_know`, `phone`, `email`, `account_id`, `alt_phone`, `installed_at`, `connection_type`, `preferred_name`, `billing_contact`, `has_addon`, `referred`, `previous_contact`, `service_request`, `calling_for`, `on_waitlist`; on tickets `issue_type`, `issue_started`, `frequency`, `severity`, `affected_device`, `error_message`, `router_lights`, `speed_reported`, `connection_medium`, `affected_users`, `distance_from_router`, `has_priority`.

@@ -2,6 +2,10 @@
 
 Companion to `PLAN.md` (the plan). This file is the record: what was done, what was verified, what is open, and an honest evaluation.
 
+> **Names in this record.** The demo company changed name twice: *Ping Me Later* (intake agent *Kavya*), then
+> *locked.in* (*Mr.Lowkey*), now **WiFight** (**Mr.Fix-It**), see phases 14 and 16. Earlier phases keep the name used
+> at the time. The product has always been **Relay**; the `pml` tenant and ticket prefix is from the first name.
+
 ---
 
 ## 1. The product in one paragraph

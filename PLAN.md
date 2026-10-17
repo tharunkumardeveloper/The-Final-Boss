@@ -3,7 +3,10 @@
 **Track 02: Agent Memory and Coordination** · Graph Hacks (WeMakeDevs × FalkorDB) · solo
 **One line:** shared memory for teams of agents. They hand off work, disagree safely, and every answer shows its source path.
 
-This is the only plan document. Older notes are in `_archive/`. The submission README is `agent-relay/README.md`.
+This is the only plan document. Older notes are in `_archive/`. The submission README is [`README.md`](README.md) (with the technical detail in `agent-relay/README.md`).
+
+> **Names.** This plan was written when the demo company was *Ping Me Later* and its intake agent *Kavya*. The demo is
+> now **WiFight** with **Mr.Fix-It** (see `PROGRESS.md` phases 14 and 16); the product is **Relay** throughout.
 
 ---
 

@@ -6,17 +6,23 @@
 
 Relay is a memory layer on **FalkorDB** that several agents read and write at once. It remembers across sessions, tracks how facts change on two clocks, keeps disagreements between agents instead of overwriting them, records which agent used which agent's knowledge, and returns the graph path behind every answer.
 
-The demo is **locked.in** (*"Fiber fast. Game hard. Binge harder."*), a fictional, youth-focused fiber broadband provider in 39 countries across six regions (India, Europe, North America, Asia-Pacific, Middle East & Africa, Latin America), with local plans, prices, taxes and coverage. Its AI support desk has three agents that never message each other. Everything one knows, the others find in the graph:
+The demo is **WiFight** (*"Fiber fast. Game hard. Binge harder."*), a fictional fiber broadband provider in 39 countries across six regions (India, Europe, North America, Asia-Pacific, Middle East & Africa, Latin America), with local plans, prices, taxes and coverage. WiFight is one tenant of Relay, not the product. Its AI support desk has three agents that never message each other. Everything one knows, the others find in the graph:
 
 | Agent | Does | Trust |
 |---|---|---|
-| **Mr.Lowkey (intake)** | Talks to customers, writes what they say into memory, opens tickets and hands them off | 0.9 |
+| **Mr.Fix-It (intake)** | Talks to customers, writes what they say into memory, opens tickets and hands them off | 0.9 |
 | **Resolver** | Picks up tickets, runs billing / outage / diagnostic tools, tries fixes, assigns field technicians | 0.6 |
 | **Network ops (NOC)** | Watches the network graph; when a node fails it finds every affected customer by traversal and warns them first | 0.8 |
 
 A **persona simulator** plays customers on a simulated clock (weeks in minutes). Each persona has a hidden schedule of life events (a backdated move, a plan dispute, evening wifi drops, an outage), so every key moment happens while the LLM chooses the words. You can also chat as a customer yourself in the portal.
 
-<!-- DEMO VIDEO + LIVE LINK -->
+**Live:** [wifight.vercel.app](https://wifight.vercel.app) · **[▶ Judge mode](https://wifight.vercel.app/?judge=1)** plays the whole story through the real agents in about two minutes, nobody typing.
+
+*Names:* **Relay** is the memory layer (this folder). **WiFight** is the demo company and **Mr.Fix-It** its intake agent (both set in [`brand.json`](brand.json)). The `pml` prefix on tenant graphs (`mem:pml`, `mem:pml-eu`, …) and ticket ids (`PML-2057-EB25`) is left from the first prototype's name. Code names from earlier brands remain in a few internal identifiers and history docs (`Kavya.tsx` draws Mr.Fix-It's avatar; `PROGRESS.md` phases 14 and 16 tell the rebrands).
+
+<!-- DEMO VIDEO -->
+
+Pitch, results and the Track 2 mapping: the [repository README](../README.md).
 
 ---
 
@@ -115,13 +121,15 @@ Contradiction handling needs two statements about the same thing to use the same
 
 ## How it works
 
+**Extraction is the LLM's job; everything after it (supersede, retire, conflicts, recall paths) is pure Cypher.**
+
 **Write path** (one turn): strict-schema extraction → subject checks (facts about a customer's sister are dropped) → alias resolution → **one Cypher statement** that writes the fact, corroborates a repeat instead of duplicating it, supersedes what it contradicts and moves the typed edge → the customer's network line follows their address.
 
-**Read path**: exact entity linking + vector entry points (`db.idx.vector.queryNodes`) → 2-hop expansion over typed fact edges → conflict ranking → strict-JSON answer with cited fact ids → `EXPLAIN` path. Mr.Lowkey's replies use a **customer-scoped** view (only that customer's facts, tickets and outages in their area, plus relevant company knowledge), never other customers' memory.
+**Read path**: exact entity linking + vector entry points (`db.idx.vector.queryNodes`) → 2-hop expansion over typed fact edges → conflict ranking → strict-JSON answer with cited fact ids → `EXPLAIN` path. Mr.Fix-It's replies use a **customer-scoped** view (only that customer's facts, tickets and outages in their area, plus relevant company knowledge), never other customers' memory.
 
-**Grounded replies**: Mr.Lowkey can only quote the catalogue. Every reply is checked before it is sent: plan names must exist, every price must appear in the catalogue text she was given (not in what the customer typed), and a price, speed or device count next to a plan must be that plan's, in that country. She can't call a plan over the customer's budget a fit, and she can't tell a covered customer that they aren't served. One corrected retry, then a factual fallback. She never promises to "check and get back" (she can't act after replying); such sentences are replaced with what memory knows. A customer in another region's country is quoted from that region's graph (a Chicago customer on the India desk gets US plans in USD from `mem:pml-na`), and booking happens in the chat: naming a plan places the order. "Which plan am I on?" and "How much is Fiber 300?" are answered from the graph, not by the model. `tests/test_transcript.py` replays a conversation that went wrong, on the weakest model, as a regression test.
+**Grounded replies**: Mr.Fix-It can only quote the catalogue. Every reply is checked before it is sent: plan names must exist, every price must appear in the catalogue text it was given (not in what the customer typed), and a price, speed or device count next to a plan must be that plan's, in that country. It can't call a plan over the customer's budget a fit, and it can't tell a covered customer that they aren't served. One corrected retry, then a factual fallback. It never promises to "check and get back" (it can't act after replying); such sentences are replaced with what memory knows. A customer in another region's country is quoted from that region's graph (a Chicago customer on the India desk gets US plans in USD from `mem:pml-na`), and booking happens in the chat: naming a plan places the order. "Which plan am I on?" and "How much is Fiber 300?" are answered from the graph, not by the model. `tests/test_transcript.py` replays a conversation that went wrong, on the weakest model, as a regression test.
 
-**Intake follows a written spec** (`intake_agent_spec.md`, implemented in [`relay/intake.py`](relay/intake.py)): every turn, the graph is checked first (record, the network at the customer's OLT, past tickets, fixes that worked for others, local plans), and the chat shows each lookup live. Then one move is planned: a greeting (new or returning), a direct answer from the graph (coverage, outage, "which plan am I on"), or the first missing piece of information, asked in the spec's order and wording: registered number → city/area → plan → router → when it started → how often → whole home or one device → WiFi or cable → what they tried. "I don't know" gets the spec's hint once. What Mr.Lowkey asks is memory too: an `awaiting` fact every agent can see, retired when the answer lands, and the next message is read as that answer. Phone numbers, emails and account numbers are their own nodes, so identity is a graph match; problem details land on the `Ticket` node for the resolver. The model only words open replies, guided by the nearest of 15 issue trees stored as `Guide` nodes. On every reply: one question, nothing asked twice, no fix-time promises, no troubleshooting before identity, no billing details before verification (`tests/test_intake_spec.py`, `test_raj.py`, `test_pallavi.py`).
+**Intake follows a written spec** (`intake_agent_spec.md`, implemented in [`relay/intake.py`](relay/intake.py)): every turn, the graph is checked first (record, the network at the customer's OLT, past tickets, fixes that worked for others, local plans), and the chat shows each lookup live. Then one move is planned: a greeting (new or returning), a direct answer from the graph (coverage, outage, "which plan am I on"), or the first missing piece of information, asked in the spec's order and wording: registered number → city/area → plan → router → when it started → how often → whole home or one device → WiFi or cable → what they tried. "I don't know" gets the spec's hint once. What Mr.Fix-It asks is memory too: an `awaiting` fact every agent can see, retired when the answer lands, and the next message is read as that answer. Phone numbers, emails and account numbers are their own nodes, so identity is a graph match; problem details land on the `Ticket` node for the resolver. The model only words open replies, guided by the nearest of 15 issue trees stored as `Guide` nodes. On every reply: one question, nothing asked twice, no fix-time promises, no troubleshooting before identity, no billing details before verification (`tests/test_intake_spec.py`, `test_raj.py`, `test_pallavi.py`).
 
 **No data disclosure**: a message asking for other customers' data, or invoking police, warrants or an investigation, never reaches the model. It gets one fixed reply pointing to the legal team, and an internal note flags the attempt for the console (`tests/test_anomaly.py`).
 
@@ -144,7 +152,7 @@ Contradiction handling needs two statements about the same thing to use the same
 - **Two clocks**: world time (`valid_from/valid_to`) and system time (`recorded_at/expired_at`) on every fact; `facts_at` answers both "what was true then" and "what we had on file then", which diverge when someone tells us late.
 - **Trust-ranked disagreement**: conflicting claims from different agents are both kept, ranked by agent trust then recency, and recorded as a `Conflict` node instead of last-write-wins.
 - **Procedures as paths**: what fixed a line is stored as `(:Procedure)-[:FIRST]->(:ProcStep)-[:NEXT]->…`, scored by successes and failures; `past_fixes` returns them as paths.
-- **Measured, not assumed**: Relay 91% vs a vector store 50% on 160 questions, with ablations (the two clocks are worth about 19 points, multi-hop about 9) and a fix log; see `PROGRESS.md` section 6 and `eval/`.
+- **Measured, not assumed**: Relay 99.4% vs a vector store 61.2% on 160 questions (same answer model and prompt), with ablations (the two clocks are worth about 19 points, multi-hop about 9) and a fix log; see [Benchmark](#benchmark), `PROGRESS.md` section 6 and `eval/`.
 - Tests: `python -m tests.test_contract` covers each outcome shape, path hops, arg validation (an unknown name runs no tool query, checked from the query log) and the depth cap, without LLM calls.
 
 ## Key Cypher
@@ -240,7 +248,7 @@ CALL algo.pageRank('Entity', null) YIELD node, score     // Entity-to-Entity edg
 
 ## What you can see
 
-- **Portal** (`/`): locked.in's site with Mr.Lowkey's chat. History and session continuity, live "what we remembered" chips, plans/services/coverage from the graph, proactive NOC warnings in your chat.
+- **Portal** (`/`): WiFight's site with Mr.Fix-It's chat, and **Judge mode** (▶ Watch it work, or `/?judge=1`), which plays the whole story through the real agents with nobody typing. History and session continuity, live "what we remembered" chips, plans/services/coverage from the graph, proactive NOC warnings in your chat.
 - **Console** (`/console`): live memory graph (per customer, "follow live"), conversations, tickets, two-clock scrubber, node cards, answer paths, Cypher drawer, simulator controls.
 - **Network** (`/console/network`): topology, criticality, simulate a failure, see who is affected and why.
 - **Regions** (`/console/regions`): the six region graphs, their size, and the isolation check.
@@ -317,7 +325,7 @@ MATCH (k:Conflict) RETURN k.subject, k.predicate, k.claims, k.preferred, k.statu
 MATCH (c:City) WHERE c.location IS NOT NULL
 RETURN c.name, round(distance(c.location, point({latitude:15.49, longitude:73.83})) / 1000) AS km ORDER BY km LIMIT 3
 // Tab "FLEX": FalkorDB's own function library
-RETURN flex.text.levenshtein('alise', 'alice'), flex.sim.jaccard(['fiber','5g'], ['fiber']), flex.text.camelCase('ping me later')
+RETURN flex.text.levenshtein('alise', 'alice'), flex.sim.jaccard(['fiber','5g'], ['fiber']), flex.text.camelCase('fiber fast game hard')
 ```
 
 The console's **Database** page shows `GRAPH.INFO`, memory against the free tier, server limits, `GRAPH.SLOWLOG`
@@ -346,18 +354,28 @@ Recall latency: 178 ms at 1.1K facts, 210 ms at 10.9K (bounded neighbourhood exp
 
 ## Benchmark
 
-First run, small set: 74 questions over 8 synthetic customers, 9 question types modelled on LongMemEval. Same answer model and prompt for every system; only the memory differs.
+Final run on the final code: tenant `pml-bench`, 40 synthetic customers, 556 customer turns, 160 questions in 9 types modelled on LongMemEval, planted name collisions. Same answer model (qwen3.8-27b) and prompt for both systems on every question; only the memory differs. The baseline (B1) is a vector store over the same conversations, filtered to the customer, top 10 chunks, dated, newest first. 95% Wilson intervals; `python -m eval.run_eval`.
 
-| Question type | n | Relay | Vector store + dates |
-|---|---|---|---|
-| Current truth after changes | 16 | **100%** | 62% |
-| True on a date (world clock) | 7 | **100%** | 57% |
-| On file on a date (system clock) | 6 | **67%** | 33% |
-| Completeness | 8 | **88%** | 0% |
-| Agent disagreement surfaced | 4 | **75%** | 0% |
-| **Overall** | 74 | **93%** | **43%** (46 run) |
+| | Relay | Vector store (B1) |
+|---|---|---|
+| **Accuracy** | **99.4%** (159/160) [97–100%] | 61.2% (98/160) [54–68%] |
+| Difference | **+38 points** [+31, +46], exact McNemar p = 1.4 × 10⁻¹⁷ | |
+| Gold fact in the context | 100% | 72% |
+| Should-refuse: precision / recall | 100% / 94% | 50% / 78% |
 
-On the 46 questions both systems answered: Relay 91% vs vector 43%. A scaled set (40 customers, 556 turns, 160 questions, planted name collisions) is loaded into `pml-bench`: extraction recovered 282 of 306 planted facts (92%). Scoring it (confidence intervals, gap decomposition by type, k-sensitivity, component metrics, abstention, a LoCoMo external check) is the next run: `python -m eval.run_eval`.
+| Question type (16–18 each) | Relay | B1 |
+|---|---|---|
+| Agent disagreement | 100% | 6% |
+| Multi-hop | 100% | 22% |
+| Completeness | 100% | 44% |
+| Procedural | 100% | 50% |
+| Current truth after changes | 100% | 72% |
+| Handoff | 100% | 83% |
+| On file on a date (system clock) | 100% | 89% |
+| True on a date (world clock) | 100% | 100% |
+| Unknown (should refuse) | 94% | 78% |
+
+Components on the same graph, no LLM: extraction recall 305/306 planted facts, predicate normalisation 273/273, contradiction handling 82/85. Ablations (earlier run, 63-question subset, one model for every arm): without the two clocks 71%, without multi-hop 81%, full Relay 90%. External checks: out-of-distribution extraction 60/72 (83%); LoCoMo token F1 0.08 vs B1 0.27 (Relay stores facts, not transcripts), with 15/15 false-premise questions refused vs 4/15. Full tables: [`eval/results.md`](eval/results.md), [`PROGRESS.md` §6](../PROGRESS.md#6-results).
 
 ## Setup
 
@@ -396,7 +414,9 @@ Tests: `python -m tests.test_core`, `test_api`, `test_round2`, `test_kb`, `test_
 
 1. Push this repository to GitHub (public).
 2. **Render**: New → Blueprint → pick the repository. Fill in `FALKOR_HOST`, `FALKOR_PORT`, `FALKOR_USER`, `FALKOR_PASS`,
-   `GROQ_API_KEY` (and `_2`, `_3` if you have more) and `GEMINI_API_KEY`. `RELAY_TENANT_SECRET` is generated for you.
+   `GROQ_API_KEY` (and `_2`, `_3` if you have more) and `GEMINI_API_KEY`. `RELAY_TENANT_SECRET` and `RELAY_RESET_KEY`
+   are generated for you (copy the reset key from the dashboard when you want to reset the demo; the site asks for it),
+   and per-visitor write limits are set (`RELAY_CHAT_PER_MIN=30`, `RELAY_WRITES_PER_MIN=90`).
    Leave `CORS_ORIGINS` as `*` for now. Wait until `https://<service>.onrender.com/health` answers.
 3. **Vercel**: Add New → Project → the same repository. Root Directory `agent-relay/web`, environment variable
    `VITE_API_URL=https://<service>.onrender.com` (the WebSocket URL is derived from it). Deploy.
@@ -415,9 +435,11 @@ give each tenant its own key (`python -c "from relay.tenancy import key_for; pri
 {"mcpServers": {"relay-memory": {"command": "python", "args": ["/path/to/agent-relay/mcp_server.py"]}}}
 ```
 
+or, for Claude Code: `claude mcp add relay-memory -- python /path/to/agent-relay/mcp_server.py`. It reads the same `.env` as the API.
+
 ## Data
 
-The company (locked.in) and its customers are fictional, generated by `data/generate.py`, `data/kb_world.py` and the persona simulator. Place names, coordinates and populations come from [GeoNames](https://www.geonames.org/) (`cities15000`, CC BY 4.0); the raw dump is not committed. No personal or private data.
+The company (WiFight) and its customers are fictional, generated by `data/generate.py`, `data/kb_world.py` and the persona simulator. Place names, coordinates and populations come from [GeoNames](https://www.geonames.org/) (`cities15000`, CC BY 4.0); the raw dump is not committed. No personal or private data.
 
 ## Prior work and how Relay differs
 
@@ -426,7 +448,7 @@ The company (locked.in) and its customers are fictional, generated by `data/gene
 
 ## AI-assistant disclosure
 
-Built with AI coding assistance (Claude Code) for code generation, review and documentation drafts. The design, graph model, queries and evaluation were directed, verified and tested by the author, who can explain every component. Runtime models: Groq `gpt-oss-20b` (extraction), `gpt-oss-120b` (answers), `qwen3.8-27b` and Gemini Flash-Lite (fallbacks and replies), `allam-2-7b` (personas, summaries); embeddings by fastembed `bge-small-en-v1.5`, run locally.
+Built with AI coding assistance (Claude Code) for code generation, review and documentation drafts. The design, graph model, queries and evaluation were directed, verified and tested by the author, who can explain every component. Runtime models (the routes the live API reports at `/health`): Groq `gpt-oss-120b` for extraction, answers and replies, with `gpt-oss-20b` and `qwen3.8-27b` as fallbacks (qwen is also the benchmark's answer model), Gemini Flash-Lite last; `allam-2-7b` for personas and summaries; embeddings by fastembed `bge-small-en-v1.5`, run locally.
 
 ## Limitations
 
@@ -439,4 +461,4 @@ Built with AI coding assistance (Claude Code) for code generation, review and do
 - PageRank salience counts every Entity-to-Entity edge, so `WAS` history edges add a little weight to past places.
 - On free tiers, extraction needs Groq or Gemini quota; when both are out, planned replies still work but nothing new is learned from free text.
 - The free FalkorDB Cloud tier caps memory around 15–75K nodes; per-tenant graphs keep each tenant below it.
-- The API has no authentication yet; benchmark tenants are protected from resets.
+- Every tenant request needs that tenant's key, but the demo hands its own web app every key (`RELAY_DEMO_KEYS=1`) so visitors can switch regions; a real deployment sets it to `0`. On the public demo, resets need `RELAY_RESET_KEY` and writes are rate-limited per address; benchmark tenants refuse resets altogether.

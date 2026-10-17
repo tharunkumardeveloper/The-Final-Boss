@@ -1,5 +1,5 @@
 # Intake Agent — Complete Specification
-## Ping Me Later ISP Support Agent
+## WiFight ISP Support Agent
 
 **Role:** First point of contact for every customer. Talks naturally, extracts structured facts, writes them to FalkorDB via the Relay engine, and hands off to the Resolver when a ticket needs action.
 
@@ -34,7 +34,7 @@ Customer sends message
 | Full name | "Can I get your name?" | — | `Customer.name` |
 | Phone number | "What's the registered mobile number on your account?" | "If you're not sure, check the welcome SMS we sent when you registered — it'll have your account number and registered number." | `Customer.phone` |
 | Email | "What email did you sign up with?" | "Check your inbox for a welcome email from support@pingmelater.in — that'll confirm the address." | `Customer.email` |
-| Account number | "Do you have your Ping Me Later account number? It starts with PML-AC." | "It's on your monthly bill PDF, or on the sticker on the back of your router box." | `Customer.account_id` |
+| Account number | "Do you have your WiFight account number? It starts with PML-AC." | "It's on your monthly bill PDF, or on the sticker on the back of your router box." | `Customer.account_id` |
 | City / area | "Which city are you in?" | — | `(Customer)-[:LIVES_IN]->(City)` |
 | Area / locality | "And which area or locality?" | — | `Customer.locality` |
 | Plan type | "Which plan are you on — Fiber 100, 300, or 1000?" | "If you're not sure, check the sticker on the side of your router box — it'll say your plan speed. Or give me your phone number and I can pull it up." | `Customer.plan` |
@@ -53,7 +53,7 @@ Customer sends message
 Agent: No problem. Could you check the sticker on the back or 
        bottom of your router? It usually has your registered 
        number printed on it along with your account number.
-       If not, check your welcome SMS from Ping Me Later — 
+       If not, check your welcome SMS from WiFight — 
        it was sent when your connection was first activated.
 ```
 
@@ -78,7 +78,7 @@ Agent: Easy to check — flip your router upside down. There's
 ```
 Agent: No worries. You can find it in three places:
        1. Sticker on the back of your router
-       2. Your monthly bill email (subject: "Ping Me Later Invoice")
+       2. Your monthly bill email (subject: "WiFight Invoice")
        3. The SMS we send on your billing date each month
        Alternatively, your registered phone number works just as 
        well to pull up your account.
@@ -142,7 +142,7 @@ These aren't questions the agent asks — they're facts it **listens for** and e
 ### State 1: New customer (no node in graph)
 
 ```
-Agent:    Hi! Welcome to Ping Me Later support. I'm here to help.
+Agent:    Hi! Welcome to WiFight support. I'm here to help.
           To get started, could I get your name?
 
 Customer: Tharun Kumar
@@ -153,7 +153,7 @@ Agent:    Thanks Tharun! What's the best number to reach you on —
 Customer: I don't remember which number I used
 
 Agent:    No problem. Check the welcome SMS we sent when your 
-          connection was first activated — it'll say "Ping Me Later" 
+          connection was first activated — it'll say "WiFight" 
           and have your account details. Alternatively, check the 
           sticker on the back of your router — your registered 
           number is printed there.
@@ -467,7 +467,7 @@ Agent: What's the billing issue you're facing?
 ### Issue 6: New installation request
 
 ```
-Agent: Great, you'd like a new Ping Me Later connection. 
+Agent: Great, you'd like a new WiFight connection. 
        Let me check availability in your area first. 
        Which city and locality are you in?
 
@@ -638,7 +638,7 @@ Agent: I'm sorry to hear you'd like to cancel.
 
   → All cancellations:
     Agent: To confirm — there's no cancellation fee since 
-           Ping Me Later doesn't lock you in. 
+           WiFight doesn't lock you in. 
            Any outstanding balance will be settled in your 
            final bill. Shall I go ahead?
     Open ticket: cancellation_confirmed
@@ -809,7 +809,7 @@ Agent: Easy. Here are three ways:
 
 ```
 Agent: I can see this is a business account. 
-       Do you have an assigned account manager from Ping Me Later?
+       Do you have an assigned account manager from WiFight?
 
   → Yes: Route to account manager's queue
   → No: Handle as standard but flag as commercial
@@ -821,7 +821,7 @@ Agent: I can see this is a business account.
            Do you have that ready?
 
   → Multiple office locations:
-    Agent: Do all your locations have separate Ping Me Later accounts, 
+    Agent: Do all your locations have separate WiFight accounts, 
            or are they under one billing account?
     Handle accordingly
 
@@ -951,7 +951,7 @@ WebSocket event fired immediately after:
 ## 9. System prompt skeleton
 
 ```
-You are the intake agent for Ping Me Later, a fiber broadband ISP 
+You are the intake agent for WiFight, a fiber broadband ISP 
 serving Pune, Mumbai, Bengaluru, and Hyderabad.
 
 Your personality: calm, plain-spoken, helpful. 
@@ -1025,7 +1025,7 @@ Customer: idk which number i used honestly
 
 Agent:    No worries — check the back of your router, there's a 
           sticker with your registered number printed on it. 
-          Alternatively, look for a welcome SMS from Ping Me Later 
+          Alternatively, look for a welcome SMS from WiFight 
           when your connection was first set up.
 
 Customer: oh found it, 9876543210

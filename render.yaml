@@ -58,3 +58,12 @@ services:
       # 1 = the demo web app is handed every tenant's key so you can switch regions; 0 for a real deployment
       - key: RELAY_DEMO_KEYS
         value: "1"
+      # resets, snapshot restores and model settings need this key (X-Reset-Key), so nobody can wipe the public demo;
+      # Render generates it once: copy it from the dashboard when you want to reset
+      - key: RELAY_RESET_KEY
+        generateValue: true
+      # writes per visitor address per minute (chat turns cost model quota, so they get a lower limit)
+      - key: RELAY_CHAT_PER_MIN
+        value: "30"
+      - key: RELAY_WRITES_PER_MIN
+        value: "90"

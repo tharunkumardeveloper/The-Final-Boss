@@ -2,7 +2,7 @@
 setlocal
 cd /d "%~dp0"
 echo.
-echo  Ping Me Later / Relay - install
+echo  Relay (WiFight demo) - install
 echo  ==============================
 
 where python >nul 2>nul || (echo  [x] Python 3.12+ not found. Install it from python.org, tick "Add to PATH", then re-run. & goto :fail)

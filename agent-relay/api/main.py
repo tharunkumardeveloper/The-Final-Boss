@@ -11,7 +11,7 @@ import uuid
 from relay import memory as relay_memory
 from datetime import datetime
 
-from fastapi import Body, FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi import Body, FastAPI, Header, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, field_validator
 
@@ -21,22 +21,62 @@ from relay.memory import norm, to_ms
 app = FastAPI(title="Relay API", description=f"Shared graph memory for {config.BRAND['company']}'s AI support desk")
 _TENANT_PATH = re.compile(r"^/api/tenants/([^/]+)(?:/|$)")
 
+# A public demo: wipes and model settings could break it for everyone watching, so with RELAY_RESET_KEY set they need
+# that key (X-Reset-Key). Unset (local runs), nothing is locked.
+RESET_KEY = os.environ.get("RELAY_RESET_KEY", "")
+_LOCKED = re.compile(r"^/api/(?:tenants/[^/]+/(?:reset|lab/reset|snapshots/[^/]+/restore)|usage/(?:limits|routes))$")
+# Per-address limits on writes, per minute: a chat turn costs model quota, so it has its own, lower one. Off (0) unless
+# set, so local runs and the test suites aren't throttled; render.yaml turns them on for the public demo.
+RATE = {"chat": int(os.environ.get("RELAY_CHAT_PER_MIN", "0")), "write": int(os.environ.get("RELAY_WRITES_PER_MIN", "0"))}
+_hits: dict = {}  # (address, bucket) -> request times in the last minute
+_hits_lock = threading.Lock()
+
+
+def _reset_key_ok(key):
+    import hmac
+    return not RESET_KEY or bool(key) and hmac.compare_digest(key.encode(), RESET_KEY.encode())
+
+
+def _over_limit(addr, bucket):
+    limit, now = RATE[bucket], time.time()
+    if limit <= 0:
+        return False
+    with _hits_lock:
+        recent = [t for t in _hits.get((addr, bucket), ()) if now - t < 60]
+        over = len(recent) >= limit
+        _hits[(addr, bucket)] = recent if over else recent + [now]
+        if len(_hits) > 5000:  # forget addresses that went quiet
+            for k in [k for k, v in _hits.items() if not v or now - v[-1] > 60]:
+                _hits.pop(k, None)
+    return over
+
 
 @app.middleware("http")
 async def tenant_key(request, call_next):
     """Every request for a tenant's memory carries that tenant's key; a cross-tenant lookup needs an operator key.
-    Registered before CORS, so CORS wraps it and a refusal reaches the browser as a readable 401/403."""
+    Writes are rate-limited per address, and wipes need the reset key when one is set.
+    Registered before CORS, so CORS wraps it and a refusal reaches the browser as a readable 401/403/429."""
     from fastapi.responses import JSONResponse
     from urllib.parse import unquote
+    path = request.url.path
+    if request.method in ("POST", "PUT", "DELETE") and path.startswith("/api/"):
+        if _LOCKED.match(path) and not _reset_key_ok(request.headers.get("x-reset-key")):
+            return JSONResponse({"detail": "Resets are locked on this public demo. They need the reset key.",
+                                 "need": "reset_key"}, status_code=403)
+        fwd = request.headers.get("x-forwarded-for")  # Render's proxy puts the visitor's address first
+        addr = fwd.split(",")[0].strip() if fwd else (request.client.host if request.client else "?")
+        if _over_limit(addr, "chat" if path.endswith("/chat") else "write"):
+            return JSONResponse({"detail": "Too many requests from your address. Please wait a minute and try again."},
+                                status_code=429, headers={"Retry-After": "60"})
     if request.method != "OPTIONS":
-        m = _TENANT_PATH.match(request.url.path)
+        m = _TENANT_PATH.match(path)
         if m:
             tenant = unquote(m.group(1))
             why = tenancy.check(tenant, request.headers.get("x-tenant-key"))
             if why:
                 return JSONResponse({"detail": "This request needs the tenant's key." if why == "missing" else
                                      f"That key doesn't open tenant '{tenant}'."}, status_code=401 if why == "missing" else 403)
-        elif request.url.path == "/api/isolation" and tenancy.check(tenancy.ADMIN, request.headers.get("x-admin-key")):
+        elif path == "/api/isolation" and tenancy.check(tenancy.ADMIN, request.headers.get("x-admin-key")):
             return JSONResponse({"detail": "Looking a customer up across tenants needs an operator key."}, status_code=403)
     return await call_next(request)
 
@@ -944,9 +984,11 @@ def consolidate(tenant: str):
 
 
 @app.post("/api/tenants/{tenant}/sim/start")
-def sim_start(tenant: str, body: SimIn):
+def sim_start(tenant: str, body: SimIn, x_reset_key: str | None = Header(None)):
     T(tenant)
     _guard(tenant)
+    if body.reset and not _reset_key_ok(x_reset_key):  # starting over wipes the graph, like a reset
+        raise HTTPException(403, "Resets are locked on this public demo. They need the reset key.")
     sim.start(tenant, customers=body.customers, speed=body.speed, reset=body.reset)
     return {"running": True}
 

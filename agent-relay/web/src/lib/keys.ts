@@ -12,10 +12,16 @@ export const keyFor = (tenant: string) => tenants[tenant] ?? ''
 export const operatorKey = () => operator
 export const knownTenants = () => Object.keys(tenants)
 
-/** The key header a request needs, from its path. */
+// On the public demo, resets need a reset key (RELAY_RESET_KEY). Asked for once, kept for this browser tab only.
+const RESET = 'relay.resetKey'
+const resetKey = () => { try { return sessionStorage.getItem(RESET) ?? '' } catch { return '' } }
+export const setResetKey = (k: string) => { try { sessionStorage.setItem(RESET, k) } catch { /* private mode */ } }
+
+/** The key headers a request needs, from its path. */
 export function keyHeaders(path: string): Record<string, string> {
+  const out: Record<string, string> = resetKey() ? { 'X-Reset-Key': resetKey() } : {}
   const m = path.match(/^\/api\/tenants\/([^/?]+)/)
-  if (m) return keyFor(decodeURIComponent(m[1])) ? { 'X-Tenant-Key': keyFor(decodeURIComponent(m[1])) } : {}
-  if (path.startsWith('/api/isolation') && operator) return { 'X-Admin-Key': operator }
-  return {}
+  if (m && keyFor(decodeURIComponent(m[1]))) out['X-Tenant-Key'] = keyFor(decodeURIComponent(m[1]))
+  if (!m && path.startsWith('/api/isolation') && operator) out['X-Admin-Key'] = operator
+  return out
 }

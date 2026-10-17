@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom'
 import { Wordmark } from '../components/Brand'
 import { ArrowUpRight, Check, Warning, Wifi } from '../components/Icons'
 import { MemoryPanel } from '../components/portal/MemoryPanel'
-import { SupportDesk } from '../components/portal/SupportChat'
+import { JudgeBar, useJudge } from '../components/portal/JudgeMode'
+import { SupportDesk, type ChatDriver } from '../components/portal/SupportChat'
 import { TicketsPanel } from '../components/portal/TicketsPanel'
 import type { Chip } from '../lib/chips'
 
@@ -36,10 +37,12 @@ type Line = ReturnType<typeof useLine>
 
 /** Tickets and memory share one full-height panel, so each has room; it jumps to Tickets when one opens.
  *  The resolver's work shows under the ticket it's on. */
-function AccountPanel({ tenant, who, customer, chips, subscribe, onAsk, line }: { tenant: string; who: string | null; customer?: Customer
-  chips: Chip[]; subscribe: (fn: (e: RelayEvent) => void) => () => void; onAsk: (t: string) => void; line: Line }) {
+function AccountPanel({ tenant, who, customer, chips, subscribe, onAsk, line, force }: { tenant: string; who: string | null; customer?: Customer
+  chips: Chip[]; subscribe: (fn: (e: RelayEvent) => void) => () => void; onAsk: (t: string) => void; line: Line
+  force?: { tab: 'tickets' | 'memory'; n: number } }) {
   const [tab, setTab] = useState<'tickets' | 'memory'>('memory')
   const [fresh, setFresh] = useState<{ tickets: boolean; memory: boolean }>({ tickets: false, memory: false })
+  useEffect(() => { if (force) setTab(force.tab) }, [force])  // Judge mode points at what to watch
   const settled = chips.filter((c) => c.phase === 'settled').length
   useEffect(() => subscribe((e) => {
     if (e.type === 'ticket_opened' && e.data.customer === who) setTab('tickets')
@@ -71,11 +74,12 @@ function AccountPanel({ tenant, who, customer, chips, subscribe, onAsk, line }: 
 /** The third card. Memory while the customer is talking; once they have a line (a place) and a case (a ticket, or the
  *  resolver on it), it becomes two tabs and opens on the network lab: their line live. The resolver's step-by-step work
  *  is under the ticket in Your tickets, so the diagram keeps the whole card. */
-function GraphOrLine({ tenant, who, subscribe, line }: { tenant: string; who: string | null; subscribe: (fn: (e: RelayEvent) => void) => () => void
-  line: Line }) {
+function GraphOrLine({ tenant, who, subscribe, line, force }: { tenant: string; who: string | null; subscribe: (fn: (e: RelayEvent) => void) => () => void
+  line: Line; force?: { mode: 'memory' | 'line'; n: number } }) {
   const [mode, setMode] = useState<'memory' | 'line'>('memory')
   const [hasCase, setHasCase] = useState(false)
   const auto = useRef(false)  // already opened the lab for this case: a manual switch back sticks
+  useEffect(() => { if (force) { setMode(force.mode); auto.current = true } }, [force])  // Judge mode points at what to watch
   const { hasLine, reload } = line
   useEffect(() => {  // a returning customer with a case still open gets the tabs straight away
     setMode('memory'); setHasCase(false); auto.current = false
@@ -154,6 +158,22 @@ export default function Portal() {
   const refetch = useRef<ReturnType<typeof setTimeout>>()
   const subscribe = useCallback((fn: (e: RelayEvent) => void) => { listeners.current.add(fn); return () => { listeners.current.delete(fn) } }, [])
   const line = useLine(tenant, who, subscribe)  // their line + the resolver's run: one feed for the lab and the tickets
+  // Judge mode: the story played through the real agents, nobody typing; it points the side cards at what to watch
+  const driveRef = useRef<ChatDriver | null>(null)
+  const [forceTab, setForceTab] = useState<{ tab: 'tickets' | 'memory'; n: number }>()
+  const [forceMode, setForceMode] = useState<{ mode: 'memory' | 'line'; n: number }>()
+  const onStep = useCallback((n: number) => {
+    if (n === 3) { setForceTab({ tab: 'tickets', n }); setForceMode({ mode: 'line', n }) }
+    if (n === 4 || n === 5) { setForceTab({ tab: 'memory', n }); setForceMode({ mode: 'memory', n }) }
+  }, [])
+  const judge = useJudge({ drive: driveRef, run: line.run, tenant, setTenant, customers, onStep })
+  const judgeStart = useRef(judge.start)
+  judgeStart.current = judge.start
+  useEffect(() => {  // ?judge=1 (the README's link) starts it on arrival
+    try { if (new URLSearchParams(window.location.search).get('judge') !== '1') return } catch { return }
+    const id = setTimeout(() => judgeStart.current(), 1500)
+    return () => clearTimeout(id)
+  }, [])
 
   const refresh = useCallback(() => {
     api.graph(tenant).then((g) => {
@@ -215,20 +235,29 @@ export default function Portal() {
         <section className="mx-auto max-w-[1360px] px-4 pb-16 sm:px-6">
           <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-2 pb-5 pt-2 animate-rise">
             <h1 className="font-display text-[32px] font-semibold leading-[1.05] tracking-[-0.02em] sm:text-[40px]">{TAGLINE}</h1>
-            <p className="max-w-md pb-1 text-[15px] leading-relaxed text-ink-2">
-              Fiber broadband in {kb?.stats.countries ?? 39} countries, from {kb ? (kb.coverage[0]?.city ?? 'Pune') : 'Pune'} to wherever you move next.
-              Tell us once and we'll remember it, whoever you talk to next.
-            </p>
+            <div className="flex max-w-xl flex-wrap items-end gap-4 pb-1">
+              <p className="max-w-md text-[15px] leading-relaxed text-ink-2">
+                Fiber broadband in {kb?.stats.countries ?? 39} countries, from {kb ? (kb.coverage[0]?.city ?? 'Pune') : 'Pune'} to wherever you move next.
+                Tell us once and we'll remember it, whoever you talk to next.
+              </p>
+              {judge.status !== 'running' && (
+                <button onClick={judge.start} className="btn-signal shrink-0 !py-2 text-sm" title="Plays the whole story through the real agents, nobody typing">
+                  <span aria-hidden>▶</span> Watch it work <span className="font-normal opacity-80">· ~2 min, no typing</span>
+                </button>
+              )}
+            </div>
           </div>
+          <JudgeBar judge={judge} />
           {/* chat | your tickets + what we remember | your graph */}
           <div className="grid animate-rise gap-4 [animation-delay:100ms] lg:grid-cols-[380px_minmax(0,1fr)] xl:h-[calc(100dvh-210px)] xl:min-h-[660px] xl:max-h-[940px] xl:grid-cols-[380px_minmax(340px,1fr)_minmax(0,1fr)]">
             <div className="h-[700px] min-h-0 xl:h-auto">
-              <SupportDesk tenant={tenant} customers={customers} subscribe={subscribe} side="none" onWho={setWho} onChips={setChips} typeRef={typeRef} country={kb?.country} />
+              <SupportDesk tenant={tenant} customers={customers} subscribe={subscribe} side="none" onWho={setWho} onChips={setChips} typeRef={typeRef}
+                driveRef={driveRef} country={kb?.country} />
             </div>
             <AccountPanel tenant={tenant} who={who} customer={customers.find((c) => c.key === who)} chips={chips} subscribe={subscribe}
-              onAsk={(t) => typeRef.current?.(t)} line={line} />
+              onAsk={(t) => typeRef.current?.(t)} line={line} force={forceTab} />
             <div className="h-[600px] lg:col-span-2 xl:col-span-1 xl:h-auto xl:min-h-0">
-              <GraphOrLine tenant={tenant} who={who} subscribe={subscribe} line={line} />
+              <GraphOrLine tenant={tenant} who={who} subscribe={subscribe} line={line} force={forceMode} />
             </div>
           </div>
           <dl className="mt-6 flex flex-wrap gap-x-10 gap-y-3 num">

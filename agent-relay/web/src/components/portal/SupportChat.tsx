@@ -17,6 +17,20 @@ interface Line { id: string; ep?: string; speaker: string; text: string; at?: st
   mark?: string; rename?: boolean; images?: ChatImages; how?: Hop[] }
 export type Subscribe = (fn: (e: RelayEvent) => void) => () => void
 
+/** Lets a script drive the chat exactly as a person would (Judge mode): typed on screen, sent through the same path. */
+export interface ChatDriver {
+  /** Type a message into the box and send it; resolves with the reply once it's in (undefined before a name is known). */
+  say: (text: string) => Promise<string | undefined>
+  /** Nothing in flight. */
+  idle: () => boolean
+  /** A customer is set, their history has loaded, and nothing is in flight. */
+  ready: () => boolean
+  /** Back to "what should I call you?", forgetting who was chatting on this device. */
+  restart: () => void
+  /** End this conversation: the next message starts a new session as the same customer (their next visit). */
+  newSession: () => void
+}
+
 const FLY_MS = 1200
 
 const sessionKey = (tenant: string, who: string) => `pml.session.${tenant}.${who}`
@@ -162,9 +176,9 @@ function HistoryRow({ s, customer }: { s: ConversationSession; customer: string 
   )
 }
 
-export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, typeRef, country, memoryWidth = 380, side = 'memory' }: { tenant: string; customers: Customer[]; subscribe: Subscribe
+export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, typeRef, driveRef, country, memoryWidth = 380, side = 'memory' }: { tenant: string; customers: Customer[]; subscribe: Subscribe
   onWho?: (who: string | null) => void; onChips?: (chips: Chip[]) => void; memoryWidth?: number; side?: 'memory' | 'tickets' | 'none'
-  typeRef?: { current: ((text: string) => void) | null }; country?: string }) {
+  typeRef?: { current: ((text: string) => void) | null }; driveRef?: { current: ChatDriver | null }; country?: string }) {
   const reduce = useReducedMotion()
   const [openedAt] = useState(() => new Date().toISOString())  // the on-screen greetings carry the time the chat opened
   // an old "talk as a customer" link lands here with ?customer=: continue them (their stored session id is read below)
@@ -184,6 +198,8 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
   const [pendingAsk, setPendingAsk] = useState<string>() // a question you asked before giving your name
   const [autoSend, setAutoSend] = useState<string>()
   const [loadedFor, setLoadedFor] = useState<string | null>(null) // whose history has finished loading
+  const [visit, setVisit] = useState(0)                 // bumped by newSession(): reload their history as a new visit
+  const freshSession = useRef<string>()                 // the session id a new visit starts with
   const [lastChat, setLastChat] = useState<LastChat | undefined>(() => readLast(tenant))
   useEffect(() => setLastChat(readLast(tenant)), [tenant])
   const scroller = useRef<HTMLDivElement>(null)
@@ -234,7 +250,7 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
       setLines((current?.messages ?? []).map((m) => ({ id: m.episode_id, ep: m.episode_id, speaker: m.speaker, text: m.text, at: m.at })))
     }).catch(() => live && setHistory([])).finally(() => { if (live) { setLoading(false); setLoadedFor(who); input.current?.focus() } })
     return () => { live = false }
-  }, [tenant, who]) // customers is read once at chat start on purpose
+  }, [tenant, who, visit]) // customers is read once at chat start on purpose
 
   useEffect(() => {
     if (!who || loadedFor !== who || !autoSend) return  // after their history has loaded, so it can't overwrite it
@@ -272,6 +288,25 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
 
   useEffect(() => { if (!text && input.current) input.current.style.height = '' }, [text])
   if (typeRef) typeRef.current = typeInto  // lets a panel outside the chat type a message into it
+  const sendRef = useRef(send)
+  sendRef.current = send
+  const readyRef = useRef(false)
+  readyRef.current = !!who && loadedFor === who && !busy
+  if (driveRef) driveRef.current = {
+    say: (msg) => new Promise((resolve) => {
+      typeInto(msg)  // typed on screen first, so a viewer reads it before it's sent
+      setTimeout(() => { sendRef.current(undefined, msg).then(resolve, () => resolve(undefined)) }, reduce ? 60 : msg.length * 16 + 450)
+    }),
+    idle: () => !busyRef.current,
+    ready: () => readyRef.current && !busyRef.current,
+    restart: () => { try { localStorage.removeItem(lastKey(tenant)) } catch { /* private mode */ } setLastChat(undefined); reset() },
+    newSession: () => {
+      if (!who) return
+      try { localStorage.removeItem(sessionKey(tenant, who)) } catch { /* private mode */ }
+      freshSession.current = `${who.replace(/\s+/g, '-')}-web-${Date.now()}`
+      clear(); setLoadedFor(null); setVisit((v) => v + 1)
+    },
+  }
   function typeInto(full: string) {
     clearInterval(typer.current)
     input.current?.focus()
@@ -304,7 +339,7 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
     if (follow) setAutoSend(follow)
   }
 
-  async function send(e?: FormEvent, override?: string) {
+  async function send(e?: FormEvent, override?: string): Promise<string | undefined> {
     e?.preventDefault()
     const msg = (override ?? text).trim()
     if (!msg || busy) return
@@ -314,7 +349,8 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
     const localId = `local-${Date.now()}`
     setLines((l) => [...l, { id: localId, speaker: 'customer', text: msg, pending: true, local: true }])
     try {
-      const r = await api.chat(tenant, { customer: who, text: msg, session_id: session, greeted: true, country })  // we greet on screen
+      const r = await api.chat(tenant, { customer: who, text: msg, session_id: session ?? freshSession.current, greeted: true, country })  // we greet on screen
+      freshSession.current = undefined
       setSession(r.session_id)
       writeSession(sessionKey(tenant, who), r.session_id)
       // The socket may already have delivered Kavya's reply. The reply's episode id is the shared key, so the
@@ -336,6 +372,7 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
       // Chips ride on Kavya's reply, then fly into the memory panel.
       setChips((cs) => launch(fromLearned(cs, r.learned, 'pending'), replyId, r.learned.map((f) => f.fact_id)))
       setTimeout(() => { setChips((cs) => settle(cs, replyId)); setRipple((x) => x + 1) }, reduce ? 0 : FLY_MS)
+      return r.reply
     } catch {
       setLines((ls) => ls.filter((l) => l.id !== localId))
       setChips((cs) => cs.map((c) => (c.phase === 'pending' ? { ...c, phase: 'settled', at: Date.now() } : c)))
