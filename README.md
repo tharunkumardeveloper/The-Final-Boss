@@ -10,6 +10,7 @@
 [![Track 02](https://img.shields.io/badge/Track_02-Agent_Memory_&_Coordination-7C5CC4?style=for-the-badge)](#-the-five-memory-capabilities)
 [![Benchmark](https://img.shields.io/badge/Benchmark-99.4%25_vs_61.3%25-2E9E5B?style=for-the-badge)](#-results)
 
+[![Demo video](https://img.shields.io/badge/Demo_video-YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=CvykcxFdh4c)
 [![Live demo](https://img.shields.io/badge/▶_Judge_mode-Watch_it_work-14A39A?style=for-the-badge)](https://wifight.vercel.app/?judge=1)
 [![Site](https://img.shields.io/badge/WiFight-wifight.vercel.app-0F1B2D?style=for-the-badge)](https://wifight.vercel.app)
 [![Console](https://img.shields.io/badge/Staff_console-Open-0F1B2D?style=for-the-badge)](https://wifight.vercel.app/console)
@@ -35,6 +36,24 @@
 about two minutes) or **take part** (chat as yourself, break the network, settle an argument between agents). The only
 piece you set up yourself is the optional MCP connection for Claude ([below](#-bring-your-own-agent-mcp)).
 
+<p align="center"><a href="https://www.youtube.com/watch?v=CvykcxFdh4c"><img src="https://img.youtube.com/vi/CvykcxFdh4c/maxresdefault.jpg" alt="Demo video on YouTube: Relay, shared memory for teams of AI agents" width="560"></a><br>
+<sub><b>🎬 <a href="https://www.youtube.com/watch?v=CvykcxFdh4c">Watch the demo video</a></b> (YouTube)</sub></p>
+
+<details open>
+<summary><b>✅ Submission checklist</b></summary>
+
+| Graph Hacks asks for | Where it is |
+|---|---|
+| A public source-code repository | This repository |
+| A README with setup instructions and the graph data model | [Setup: run it yourself](#-setup-run-it-yourself) · [Graph data model](#-graph-data-model) |
+| The Cypher queries or graph algorithms the product depends on | [Cypher queries and graph algorithms the product depends on](#-cypher-queries-and-graph-algorithms-the-product-depends-on) |
+| A demo video showing the working project | [YouTube](https://www.youtube.com/watch?v=CvykcxFdh4c) |
+| A live deployment | [wifight.vercel.app](https://wifight.vercel.app) (web) · API on Render · FalkorDB Cloud |
+| The track entered | Track 02: Agent Memory and Coordination |
+| Disclosure of AI coding assistants | [AI-use disclosure](#-ai-use-disclosure-ai-coding-assistants) |
+
+</details>
+
 <div align="center">
 
 | 🎯 **99.4%** | 🤖 **3 agents** | 🗺️ **6 regional graphs** | ✍️ **0 duplicates** | 🔌 **14 MCP tools** | 🌍 **39 countries** |
@@ -57,7 +76,7 @@ piece you set up yourself is the optional MCP connection for Claude ([below](#-b
 - [Watch it, or take part](#-watch-it-or-take-part)
 - [The five memory capabilities](#-the-five-memory-capabilities)
 - [Graph data model](#-graph-data-model)
-- [Cypher queries and graph algorithms](#-cypher-queries-and-graph-algorithms)
+- [Cypher queries and graph algorithms the product depends on](#-cypher-queries-and-graph-algorithms-the-product-depends-on)
 - [Results](#-results)
 - [What's new, and what isn't](#-whats-new-and-what-isnt)
 - [Remove FalkorDB and…](#-remove-falkordb-and)
@@ -66,7 +85,7 @@ piece you set up yourself is the optional MCP connection for Claude ([below](#-b
 - [Team](#-team-the-final-boss)
 - [Setup: run it yourself](#-setup-run-it-yourself)
 - [Repository layout](#-repository-layout)
-- [AI-use disclosure](#-ai-use-disclosure)
+- [AI-use disclosure (AI coding assistants)](#-ai-use-disclosure-ai-coding-assistants)
 
 </details>
 
@@ -384,7 +403,7 @@ when we had it on file. Nothing is overwritten: "where did she live on the 5th?"
 are two filters on the same facts. The full model, every predicate and its conflict policy are in
 [`agent-relay/README.md`](agent-relay/README.md#graph-data-model) and [`relay/registry.py`](agent-relay/relay/registry.py).
 
-## 🧮 Cypher queries and graph algorithms
+## 🧮 Cypher queries and graph algorithms the product depends on
 
 What the product depends on, and where each one lives. The model never writes Cypher: every query below is fixed code.
 
@@ -709,11 +728,19 @@ addresses our city list doesn't know; without it, our list and the offline town 
     └── demo_cache/            cached model replies, so the demo story replays without spending quota
 ```
 
-## 🤖 AI-use disclosure
+## 🤖 AI-use disclosure (AI coding assistants)
 
-Built with AI coding assistance (Claude Code) for code generation, review and documentation drafts. The design, graph
-model, queries and evaluation were directed, verified and tested by us, and we can explain every component. Runtime
-models: Groq `gpt-oss-120b` for extraction, answers and replies, with `gpt-oss-20b` and `qwen3.8-27b` as fallbacks (qwen
+**We used an AI coding assistant, and disclose it here as the rules require.**
+
+| AI coding assistant | What we used it for |
+|---|---|
+| **Claude Code** (Anthropic) | Writing and refactoring code, reviewing it, drafting documentation and diagrams, and running the tests and checks |
+
+The idea, the design, the graph model, the queries and the evaluation were ours: we directed the assistant, read and
+tested what it produced, and we can explain every component. The benchmark numbers come from our own runs, kept in
+[`eval/results.json`](agent-relay/eval/results.json).
+
+**Models inside the product** (runtime, not coding assistants): Groq `gpt-oss-120b` for extraction, answers and replies, with `gpt-oss-20b` and `qwen3.8-27b` as fallbacks (qwen
 is also the benchmark's answer model), Gemini Flash-Lite last; `allam-2-7b` for simulated customers and summaries;
 embeddings by fastembed `bge-small-en-v1.5`, run locally. All customer data is synthetic; place names come from
 GeoNames (CC BY 4.0); the India outline is Natural Earth's 1:10m boundary from the India point of view (public domain); addresses our
