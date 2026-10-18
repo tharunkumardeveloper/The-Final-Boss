@@ -172,7 +172,7 @@ We wanted a domain where shared memory isn't a nice-to-have but **the whole job*
 A complaint goes from a sentence in the chat to a verified fix, and **the two agents never message each other**: the
 ticket and the facts in the graph are the only thing they share.
 
-<p align="center"><a href="docs/gifs/ticket.gif"><img loading="lazy" src="docs/gifs/readme/ticket.gif" alt="A ticket from complaint to fix: chat, Your tickets stages, resolver steps, technician dispatched" width="560"></a></p>
+<p align="center"><a href="docs/gifs/ticket.gif"><img loading="lazy" src="docs/gifs/readme/ticket.gif" alt="A ticket from complaint to fix: chat, Your tickets stages, resolver steps, technician dispatched" width="640"></a></p>
 
 <p align="center"><a href="docs/diagrams/ticket-flow-light.svg"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/ticket-flow-dark.svg"><img src="docs/diagrams/ticket-flow-light.svg" alt="How a ticket works: the customer reports a fault, Mr.Fix-It writes the facts and a ticket marked HANDED_OFF, the Resolver picks it up, reads intake's facts, measures the line with Cypher and algo.maxFlow, sends a technician, re-measures, and the customer confirms the fix." width="860" loading="lazy"></picture></a></p>
 
@@ -250,7 +250,7 @@ per second), the **Cypher drawer** (every query the agents just ran, with Falkor
 
 #### 🧠 Memory: the graph, live and through time
 
-<p align="center"><a href="docs/gifs/memory.gif"><img loading="lazy" src="docs/gifs/readme/memory.gif" alt="Console Memory screen: the live memory graph, replay through time, and Show me" width="560"></a></p>
+<p align="center"><a href="docs/gifs/memory.gif"><img loading="lazy" src="docs/gifs/readme/memory.gif" alt="Console Memory screen: the live memory graph, replay through time, and Show me" width="640"></a></p>
 
 The live memory graph and the agents' feed, plus a **Replay** with a time bar to scrub through history. Side tabs:
 **Ask** (a question, answered with the path behind it), **Inspect** (click any node), **Tickets** and **Two clocks**.
@@ -259,7 +259,8 @@ button: the conflict closes, and each agent's trust on that kind of fact learns 
 
 #### 🛰️ Network: one customer's line, live
 
-<p align="center"><a href="docs/gifs/network.gif"><img loading="lazy" src="docs/gifs/readme/network.gif" alt="Console Network lab: pick a customer and see their line from the core to the street cabinet" width="560"></a></p>
+<p align="center"><a href="docs/gifs/network.gif"><img loading="lazy" src="docs/gifs/readme/network.png" alt="Still frame, click to play: Console Network lab: pick a customer and see their line from the core to the street cabinet" width="640"></a></p>
+<p align="center"><sub><a href="docs/gifs/network.gif">▶ Click to play the GIF</a></sub></p>
 
 **One line · lab** shows any customer's connection from the core to their street cabinet, with the eight faults you can
 inject on the left. **Whole region · map** shows every hub at its real location; for India, on a map of India
@@ -268,7 +269,7 @@ and Ladakh).
 
 #### 💥 Break it: the resolver, graded against the truth
 
-<p align="center"><a href="docs/gifs/break-it.gif"><img loading="lazy" src="docs/gifs/readme/break-it.gif" alt="Break it: inject a fault, the customer complains, the resolver measures, acts and is graded against the hidden truth" width="560"></a></p>
+<p align="center"><a href="docs/gifs/break-it.gif"><img loading="lazy" src="docs/gifs/readme/break-it.gif" alt="Break it: inject a fault, the customer complains, the resolver measures, acts and is graded against the hidden truth" width="640"></a></p>
 
 Pick one of **eight real faults** (a frozen box, Wi-Fi interference, damaged home fibre, a cut street cable, a hub link
 down with or without backup, evening congestion, a failed payment), or a **blind random** one. The truth goes into a
@@ -277,7 +278,8 @@ the scoreboard counts right diagnoses and proven fixes.
 
 #### 🤝 Agent team: knowledge sharing, measured
 
-<p align="center"><a href="docs/gifs/agent-team.gif"><img loading="lazy" src="docs/gifs/readme/agent-team.gif" alt="Agent team: facts flowing from writer to reader through shared memory" width="560"></a></p>
+<p align="center"><a href="docs/gifs/agent-team.gif"><img loading="lazy" src="docs/gifs/readme/agent-team.png" alt="Still frame, click to play: Agent team: facts flowing from writer to reader through shared memory" width="640"></a></p>
+<p align="center"><sub><a href="docs/gifs/agent-team.gif">▶ Click to play the GIF</a></sub></p>
 
 The agents around one shared memory: dots fly from the agent that **wrote** a fact to the agent that **used** it.
 **Watch a handoff** replays a real case lane by lane, **Knowledge crossings** lists every fact that moved between
@@ -285,7 +287,8 @@ agents, and **Who has worked on this?** finds experts by graph.
 
 #### 🔒 Tenants: isolation you can verify yourself
 
-<p align="center"><a href="docs/gifs/tenants.gif"><img loading="lazy" src="docs/gifs/readme/tenants.gif" alt="Tenants: a secret word written into one region is invisible to every other region" width="560"></a></p>
+<p align="center"><a href="docs/gifs/tenants.gif"><img loading="lazy" src="docs/gifs/readme/tenants.png" alt="Still frame, click to play: Tenants: a secret word written into one region is invisible to every other region" width="640"></a></p>
+<p align="center"><sub><a href="docs/gifs/tenants.gif">▶ Click to play the GIF</a></sub></p>
 
 Six regions, six separate FalkorDB graphs. Type a secret word, write it into one region, and watch every other region
 fail to find it: through its live stream, its agent tools and raw Cypher. You can check it yourself outside our UI too.
@@ -684,7 +687,7 @@ addresses our city list doesn't know; without it, our list and the offline town 
 ├── .github/workflows/         keep-awake ping for the free API
 ├── docs/
 │   ├── diagrams/              the README's diagrams (draw.py draws them; *.mmd are Mermaid sources)
-│   ├── gifs/                  full-size GIFs; readme/ (light, autoplaying) and blog/ (dev.to) copies
+│   ├── gifs/                  full-size GIFs; readme/ (smooth GIFs and stills for this page) and blog/ (dev.to)
 │   └── brand/                 wordmarks
 └── agent-relay/               Relay, and WiFight built on it
     ├── api/                   FastAPI app (main.py) and the API contract (CONTRACT.md)
