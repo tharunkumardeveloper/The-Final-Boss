@@ -1527,7 +1527,7 @@ def resolver_turn(tenant, customer, kind, handled, session_id, text=None):
     c = norm(customer)
     first = _first(c)
     if kind == "busy":
-        text = "I'm still on it, checking your line right now. I'll message you here in a moment."
+        text = _busy_reply(tenant, c, text or "")
     elif kind == "guided":
         said = text or ""
         text = ("Understood, I'll arrange a technician for you." if (_NO.search(said) or VISIT_ASK.search(said) or _STILL.search(said))
@@ -1548,6 +1548,37 @@ def resolver_turn(tenant, customer, kind, handled, session_id, text=None):
     eid = memory.record_episode(tenant, agent="resolver", session_id=session_id, customer=c, text=text, at=_ms(),
                                 speaker="resolver")
     return text, eid
+
+
+_BETTER = re.compile(r"\b(better|improv\w*|faster|stable now|working (now|again|fine)|fixed|sorted|back (on|up))\b", re.I)
+_ASKS = re.compile(r"\b(what|how|anything|should|can)\b.{0,30}\b(try|do|fix|check)\b|\btips?\b|\bmeanwhile\b|\bin the mean ?time\b",
+                   re.I)
+_IN_HOME = re.compile(r"\bwi-?fi\b|upstairs|downstairs|bedroom|one room|some rooms|far from|away from the router|weak signal",
+                      re.I)
+
+
+def _busy_reply(tenant, customer, said):
+    """What the resolver says while it's still testing the line, from what the customer just said and what intake
+    learned about the problem: an improvement is acknowledged; a "what should I try?" gets one safe tip that fits
+    (Wi-Fi only, or only in part of the home: where the box sits; otherwise a restart); anything else, a status line."""
+    first = _first(customer)
+    if _BETTER.search(said) and not _NO.search(said):
+        return (f"Good to hear it's better, {first}. I've noted what helped, and I'm finishing the line test; "
+                f"I'll confirm here in a moment.")
+    if _ASKS.search(said):
+        try:  # the problem as intake wrote it down: issue, which devices, where in the home, WiFi or cable
+            known = " ".join(f["object"] for f in retrieve.customer_facts(tenant, customer) if f["active"] and f["predicate"]
+                             in ("reported_issue", "ticket_about", "issue_type", "affected_device", "severity",
+                                 "connection_medium", "distance_from_router"))
+        except Exception:
+            known = ""
+        if _IN_HOME.search(f"{known} {said}") and not re.search(r"\b(both|cable|wired|ethernet)\b", known, re.I):
+            return ("While I test your line, one thing that often helps: Wi-Fi gets weaker through floors and walls, so "
+                    "put the box up high and central, away from the TV and the microwave. [guide:router_placement] "
+                    "I'll message you here as soon as the test is done.")
+        return ("While I test your line, one safe thing to try: restart the box. Unplug it, wait 10 seconds, plug it "
+                "back in. [guide:restart_box] I'll message you here as soon as the test is done.")
+    return "I'm still on it, checking your line right now. I'll message you here in a moment."
 
 
 def waiting_kind(tenant, customer):

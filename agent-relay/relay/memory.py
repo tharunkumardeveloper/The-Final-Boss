@@ -33,14 +33,29 @@ def _id(prefix):
     return f"{prefix}-{uuid.uuid4().hex[:8]}"
 
 
+# Where, when and on what a problem happens. Embeddings barely see these ("slow wifi in bedroom" vs "... in kitchen"
+# 0.09; "slow internet" vs "wifi slow upstairs" 0.17), so an alias could hand one customer another's detail.
+_QUALIFIER = re.compile(r"\b(up|down)stairs\b|\b(bed|living|dining|bath|class)?rooms?\b|\b(kitchen|hall|garden|garage|"
+                        r"balcony|terrace|office|floor|basement|attic|night|evenings?|mornings?|weekends?|peak|tv|phone|"
+                        r"mobile|laptop|pc|desktop|tablet|console|xbox|ps\d|printer|camera|vpn|zoom|teams|calls?|"
+                        r"gaming|games?|streaming|netflix|youtube|upload|download|cable|wired|ethernet|extender|mesh)\b")
+
+
+def _qualifiers(s):
+    return {m.group(0) for m in _QUALIFIER.finditer(s)}
+
+
 def resolve_entity(tenant, name, typ, log=None):
-    """Canonical key for an entity. Free-text types reuse an existing entity within ALIAS_MAX_DIST."""
+    """Canonical key for an entity. Free-text types reuse an existing entity within ALIAS_MAX_DIST, but only one that
+    names the same where/when/what (see _QUALIFIER)."""
     key = norm(name)
     if typ not in R.ALIAS_TYPES or db.run(tenant, "entity exists", Q.ENTITY_EXISTS, {"k": key}, log, ro=True):
         return key
     rows = db.run(tenant, "alias candidates", Q.ALIAS_CANDIDATES,
                   {"vec": embed.embed_one(key), "type": typ}, log, ro=True)
-    return rows[0][0] if rows and rows[0][1] < config.ALIAS_MAX_DIST else key
+    if rows and rows[0][1] < config.ALIAS_MAX_DIST and _qualifiers(rows[0][0]) == _qualifiers(key):
+        return rows[0][0]
+    return key
 
 
 def _digits(s):
