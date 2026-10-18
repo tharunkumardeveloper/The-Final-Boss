@@ -77,6 +77,7 @@ piece you set up yourself is the optional MCP connection for Claude ([below](#-b
 - [The five memory capabilities](#-the-five-memory-capabilities)
 - [Graph data model](#%EF%B8%8F-graph-data-model)
 - [Cypher queries and graph algorithms the product depends on](#-cypher-queries-and-graph-algorithms-the-product-depends-on)
+- [Built the way the Graph Hacks guide asks](#-built-the-way-the-graph-hacks-guide-asks)
 - [Results](#-results)
 - [What's new, and what isn't](#-whats-new-and-what-isnt)
 - [Remove FalkorDB and…](#-remove-falkordb-and)
@@ -460,6 +461,29 @@ RETURN [x IN nodes(p) | coalesce(x.node_id, x.name_key)]
 ```
 
 More, with a FalkorDB Browser tour and saved queries: [`agent-relay/README.md`](agent-relay/README.md#key-cypher).
+
+## 📐 Built the way the Graph Hacks guide asks
+
+The organisers' guide, *How to Build an Agent That Reasons Over a Graph*, lists five techniques and four answer shapes.
+Relay uses all of them:
+
+| The guide's technique | In Relay | Code |
+|---|---|---|
+| **Model the question, not the data** | The predicate registry and the 160 benchmark questions, by type (current truth, two clocks, disagreement, multi-hop, procedural, handoff), came first; the labels and edges follow from them | [`relay/registry.py`](agent-relay/relay/registry.py), [`data/questions.json`](agent-relay/data/questions.json) |
+| **A fixed tool catalogue beats generated queries** | The model never writes Cypher: it picks one of the typed tools (`recall_customer`, `facts_at`, `claims`, `who_handled`, `affected_by`, `capacity`, `past_fixes`, …), served to any agent over MCP | [`relay/tools_catalog.py`](agent-relay/relay/tools_catalog.py), [`mcp_server.py`](agent-relay/mcp_server.py) |
+| **Resolve names against the database** | Every argument is type-checked and resolved against the graph before a query runs; a name the graph doesn't hold stops there | `_validate` in [`relay/tools_catalog.py`](agent-relay/relay/tools_catalog.py) |
+| **Memory is more nodes** | What an agent learns is written back as a `Fact` from the `Episode` it came from, read before reasoning, and returned with when it was learned and by whom | [`relay/memory.py`](agent-relay/relay/memory.py) |
+| **Return the path with the answer** | The hops come back with the answer from the same traversal, never as an explanation written afterwards | [`relay/retrieve.py`](agent-relay/relay/retrieve.py) |
+
+**The four answer shapes**, labelled on every answer: *Answered with a path* · *Answered from memory* · *Not in the
+graph* (the names are known but nothing connects them, which is not the same as "nothing") · *Unknown name, no query
+ran* ([`components/Hops.tsx`](agent-relay/web/src/components/Hops.tsx)). Reads use the read-only path, every tenant is
+its own graph, and the console's Cypher drawer shows each query an agent ran with its time and rows.
+
+**The guide's demo move, depth 1 then deeper:** `affected_by` takes a depth. One hop finds the homes on a failed
+street cabinet; more hops reach every customer behind a failed exchange or hub, and each one comes with the path
+that connects it (Network page, or `affected_by` over MCP). The same contrast is in the benchmark: multi-hop
+questions, **100% for the graph against 22% for the vector store**.
 
 ## 📊 Results
 
