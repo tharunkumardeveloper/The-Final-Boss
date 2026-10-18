@@ -177,11 +177,13 @@ RETURN c.name_key, f.object_value
 
 
 def attach(tenant, customer, place, log=None):
-    """Connect a customer to the OLT for their area (or their city's first area). Outside this region's coverage:
-    no connection here (another region's graph serves them)."""
-    p = kb.resolve_place(place) if place else None
+    """Connect a customer to the OLT for their area (or their city's first area). A suburb, PIN code or landmark we
+    don't list is placed by geo (the nearest city we serve, its nearest area). Outside this region, or too far from
+    every city we serve: no connection here (another region's graph serves them)."""
+    from . import geo  # lazy: geo imports kb, which other modules import early
+    p = geo.place(place, kb.region_of(tenant)) if place else None
     olt = "none"
-    if p and p["region"] == kb.region_of(tenant):
+    if p and p.get("served") and p["region"] == kb.region_of(tenant):
         area = p["area"] or kb.coverage(p["region"])[p["city"]][0]
         olt = olt_id(p["city"], area)
     db.run(tenant, "network: attach", ATTACH, {"c": norm(customer), "olt": olt}, log)

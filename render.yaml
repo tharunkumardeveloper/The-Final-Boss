@@ -49,6 +49,9 @@ services:
         sync: false
       - key: GEMINI_API_KEY
         sync: false
+      # OpenCage geocoding: places a suburb, PIN code or landmark we don't list at the nearest city we serve
+      - key: OPENCAGE_API_KEY
+        sync: false
       # the web app's URL, e.g. https://relay-web.vercel.app (comma-separate several)
       - key: CORS_ORIGINS
         sync: false

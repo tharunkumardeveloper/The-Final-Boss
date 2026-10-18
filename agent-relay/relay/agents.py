@@ -94,9 +94,10 @@ class Intake:
         new = lambda p: [f["triple"][2] for f in res["facts"] if f["triple"][1] == p and f["status"] == "new"]
         if request and new("reported_issue"):
             ticket = None  # ...and the fault opens a ticket of its own
-        from . import kb, network
-        for place in new("lives_in"):  # a locality we don't list ("Pattabiram"): the city they named gets them a line
-            if not kb.resolve_place(place) and (city := kb.resolve_place(text)):
+        from . import geo, kb, network
+        for place in new("lives_in"):  # a locality we don't list ("Pattabiram"): placed by geo when writing the fact;
+            p = geo.place(place, kb.region_of(tenant))  # when even geo can't, the city they named gets them a line
+            if not (p and p.get("served")) and (city := kb.resolve_place(text)):
                 network.attach(tenant, norm(customer), city["key"], log)
         # a problem, or a request our team has to action (pause, cancel, billing dispute...), opens a ticket
         held = res.get("held", [])

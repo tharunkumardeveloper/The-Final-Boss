@@ -18,7 +18,7 @@ def test_desk():
     # already matching, or not a place we serve: nothing to do
     assert _other_desk("pml", lives("chennai"), "", "IN") is None
     assert _other_desk("pml-eu", lives("manchester"), "", "GB") is None
-    assert _other_desk("pml-na", lives("goa"), "", "US") is None
+    assert _other_desk("pml", lives("goa"), "", "IN") is None  # Goa, India on the India desk: no move
     assert _other_desk("pml", [{"triple": ("rupin", "phone", "9876543210")}], "", "IN") is None
 
 
@@ -29,7 +29,23 @@ def test_place_at_sentence_end():
     assert kb.resolve_place("pattabiram") is None                               # a suburb we don't list
 
 
+def test_geo_without_network():
+    """The resolver's offline layers (no OpenCage key in tests, so it never calls out): our catalogue, the GeoNames town
+    list, and nearest-served-city maths."""
+    from relay import geo
+    assert geo.place("near Avadi railway station", "in")["key"] == "avadi"      # catalogue, anywhere in the text
+    p = geo.place("Tambaram", "in")
+    assert p["city"] == "chennai" and p["served"]
+    n = geo.nearest(13.1166, 80.1037, "IN")                                    # Pattabiram's position
+    assert n["city"] == "chennai" and n["area"] == "avadi" and n["served"] and n["km"] < 40, n
+    far = geo.nearest(35.0, 75.0, "IN")                                        # high in the Himalaya
+    assert not far["served"]
+    if not geo.KEY:
+        assert geo.place("navajeevan nagar xyz", "in") is None                 # unknown and no geocoder: nothing
+
+
 if __name__ == "__main__":
     test_desk()
     test_place_at_sentence_end()
+    test_geo_without_network()
     print("desk routing ok")

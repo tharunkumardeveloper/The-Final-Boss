@@ -416,14 +416,18 @@ def _other_desk(tenant, facts, text="", country=None):
     Europe desk shows Germany): same graph, so the portal only switches the country, and prices follow (move: false).
     None when it already matches, or isn't a place we serve. A suburb we don't list ("Pattabiram") falls back to the
     place the message names ("Pattabiram, Chennai"), as the line itself does."""
+    from relay import geo
     for f in facts:
         s, p, o = f["triple"]
         if p in ("lives_in", "address"):
-            place = kb.resolve_place(o) or kb.resolve_place(text)
+            # our catalogue, the offline town list, then OpenCage: "Navajeevan Nagar, Pattabiram" or a PIN code too
+            place = geo.desk_for(o, kb.region_of(tenant)) or kb.resolve_place(text)
             if not place:
                 continue
             r = kb.world()["regions"][place["region"]]
-            desk = {"tenant": r["tenant"], "region": r["name"], "city": place["city"].title(), "country": place["country"]}
+            # the city we serve there; for a place too far from all of ours, the place they said ("Goa", not "Pune")
+            said = place["city"] if place.get("served", True) else str(o)
+            desk = {"tenant": r["tenant"], "region": r["name"], "city": said.title(), "country": place["country"]}
             if place["region"] != kb.region_of(tenant):
                 return {**desk, "move": True}
             if country and place["country"] != country.upper():
