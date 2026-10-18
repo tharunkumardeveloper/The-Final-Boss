@@ -125,6 +125,13 @@ def _warm_regions():
     threading.Thread(target=warm, daemon=True).start()
 
 
+@app.on_event("startup")
+def _warm_compare():
+    """The default desk's 'Ask both memories' baseline, loaded in the background so the first question is quick."""
+    threading.Thread(target=lambda: _safe(_vector_store, config.DEFAULT_TENANT if hasattr(config, "DEFAULT_TENANT") else "pml"),
+                     daemon=True).start()
+
+
 def _guard(tenant):
     if tenant in config.PROTECTED_TENANTS:
         raise HTTPException(403, f"'{tenant}' holds benchmark data and can't be reset from the app. "
@@ -1092,29 +1099,63 @@ def sim_status(tenant: str):
     return sim.status(T(tenant))
 
 
-_vectors: dict = {}  # tenant -> (built at, VectorStore): embedding every episode takes a few seconds
+_vectors: dict = {}  # tenant -> VectorStore, loaded once from the episodes' stored embeddings, then topped up
+_vectors_lock = threading.Lock()
+
+
+def _vector_store(tenant):
+    """The baseline for 'Ask both memories': built once per tenant from the embeddings the episodes already carry,
+    then topped up with new messages only."""
+    from eval.run_eval import VectorStore  # lazy: numpy and the baseline are only needed here
+    custs = [c for (c,) in db.run(tenant, "customers", "MATCH (c:Entity {type:'customer'}) RETURN c.name_key", ro=True)]
+    with _vectors_lock:
+        vs = _vectors.get(tenant)
+        if vs is None:
+            vs = _vectors[tenant] = VectorStore(tenant, custs, stored=True)
+            return vs
+    return vs.refresh(custs)
+
+
+@app.post("/api/tenants/{tenant}/compare/warm")
+def compare_warm(tenant: str):
+    """The Benchmark page opened: load the baseline in the background so the first question doesn't wait for it."""
+    T(tenant)
+    threading.Thread(target=lambda: _safe(_vector_store, tenant), daemon=True).start()
+    return {"ok": True}
+
+
+def _safe(fn, *a):
+    try:
+        return fn(*a)
+    except Exception as e:  # a warm-up that fails just means the first question builds it
+        print(f"warm: {e}")
 
 
 @app.post("/api/tenants/{tenant}/compare")
 def compare(tenant: str, body: AskIn):
     """One question, two memories, same answer model: Relay's graph vs the benchmark's vector-store baseline (B1)."""
     T(tenant)
-    from eval.run_eval import VectorStore  # lazy: numpy and the baseline are only needed here
+    from concurrent.futures import ThreadPoolExecutor
     from relay import llm
-    built, vs = _vectors.get(tenant, (0, None))
-    if vs is None or time.time() - built > 120:
-        custs = [c for (c,) in db.run(tenant, "customers", "MATCH (c:Entity {type:'customer'}) RETURN c.name_key", ro=True)]
-        vs = VectorStore(tenant, custs)
-        _vectors[tenant] = (time.time(), vs)
+    vs = _vector_store(tenant)
     if not vs.texts:  # a fresh graph: no conversation for either memory to answer from yet
         raise HTTPException(409, "This graph has no conversations yet. Chat on the home page, play Judge mode, or load "
                                  "the demo story (console → reset → story), then compare.")
-    t0 = time.perf_counter()
-    g = retrieve.ask(tenant, body.question, mode="full")
-    t1 = time.perf_counter()
-    lines = vs.lines(body.question, dated=True, k=10)
-    v = llm.answer(body.question, lines)
-    t2 = time.perf_counter()
+
+    def timed(fn):
+        t = time.perf_counter()
+        out = fn()
+        return out, time.perf_counter() - t
+
+    def vector_side():
+        lines = vs.lines(body.question, dated=True, k=10)
+        return llm.answer(body.question, lines), lines
+
+    with ThreadPoolExecutor(max_workers=2) as pool:  # both memories at once: the wait is the slower one, not the sum
+        g_job = pool.submit(timed, lambda: retrieve.ask(tenant, body.question, mode="full"))
+        v_job = pool.submit(timed, vector_side)
+        (g, g_s), ((v, lines), v_s) = g_job.result(), v_job.result()
+    t0, t1, t2 = 0.0, g_s, g_s + v_s  # each side's own time, as before
     strip = lambda ln: re.sub(r"^\[[^\]]+\]\s*", "", ln)
     pack = lambda a, ev, ms: {"answer": a.get("answer"), "unknown": a.get("unknown"), "conflict": a.get("conflict"),
                               "evidence": [strip(x) for x in ev][:8], "ms": round(ms * 1000)}

@@ -48,6 +48,7 @@ function AskBoth() {
   const [res, setRes] = useState<Compare>()
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState<string>()
+  useEffect(() => { api.compareWarm(tenant).catch(() => {}) }, [tenant])  // load the baseline before the first question
   const ask = async (question = q, e?: FormEvent) => {
     e?.preventDefault(); setQ(question); setBusy(true); setErr(undefined)
     try { setRes(await api.compare(tenant, question)) } catch (e) {

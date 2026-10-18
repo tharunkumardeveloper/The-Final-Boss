@@ -85,6 +85,7 @@ export const api = {
   resetStatus: (tenant: string) => req<{ phase: string | null }>(`${t(tenant)}/reset`),
   simStop: (tenant: string) => post<SimStatus>(`${t(tenant)}/sim/stop`),
   sim: (tenant: string) => req<SimStatus>(`${t(tenant)}/sim`),
+  compareWarm: (tenant: string) => req<{ ok: boolean }>(`${t(tenant)}/compare/warm`, { method: 'POST' }),
   compare: (tenant: string, question: string) => req<Compare>(`${t(tenant)}/compare`, { method: 'POST', body: JSON.stringify({ question }), timeoutMs: 120_000 }),
   benchmark: () => req<Benchmark>('/api/benchmark'),
   conversation: (tenant: string, customer: string, limit = 400) => req<Conversation>(`${t(tenant)}/conversation${q({ customer, limit })}`),

@@ -86,12 +86,43 @@ def pairwise_resolution(mentions):
 class VectorStore:
     """The standard baseline: every episode the agents wrote, embedded, with a customer metadata filter."""
 
-    def __init__(self, tenant, customers):
-        rows = db.run(tenant, "episodes", "MATCH (ep:Episode) RETURN ep.episode_id, ep.text, ep.recorded_at, ep.customer",
-                      ro=True)
-        self.ids, self.texts, self.at, self.cust = (list(x) for x in zip(*rows)) if rows else ([], [], [], [])
-        m = np.array(embed.embed(self.texts)) if self.texts else np.zeros((0, 1))
-        self.m = m / np.linalg.norm(m, axis=1, keepdims=True) if len(m) else m
+    def __init__(self, tenant, customers, stored=False):
+        """stored=True (the live comparison): use the embedding each episode got when it was written, the same model on
+        the same text, so the same vectors without re-embedding every message. The benchmark embeds the texts."""
+        self.tenant, self.stored = tenant, stored
+        self.ids, self.texts, self.at, self.cust, self.m = [], [], [], [], np.zeros((0, 1))
+        self._add(self._rows(None))
+        self._names(customers)
+
+    def _rows(self, after):
+        q = ("MATCH (ep:Episode)" + (" WHERE ep.recorded_at >= $after" if after is not None else "")
+             + " RETURN ep.episode_id, ep.text, ep.recorded_at, ep.customer"
+             + (", ep.embedding" if self.stored else "") + " ORDER BY ep.recorded_at")
+        return db.run(self.tenant, "episodes", q, {"after": after}, ro=True)
+
+    def _add(self, rows):
+        seen = set(self.ids)
+        rows = [r for r in rows if r[0] not in seen]  # a top-up re-reads the last timestamp: keep each message once
+        if not rows:
+            return
+        vecs = [r[4] if self.stored and len(r) > 4 else None for r in rows]
+        missing = [i for i, v in enumerate(vecs) if v is None]
+        for i, v in zip(missing, embed.embed([rows[i][1] for i in missing]) if missing else []):
+            vecs[i] = v
+        m = np.array(vecs, dtype=float)
+        m = m / np.linalg.norm(m, axis=1, keepdims=True)
+        self.ids += [r[0] for r in rows]; self.texts += [r[1] for r in rows]
+        self.at += [r[2] for r in rows]; self.cust += [r[3] for r in rows]
+        self.m = m if not len(self.m) or self.m.shape[1] != m.shape[1] else np.vstack([self.m, m])
+
+    def refresh(self, customers=None):
+        """Top up with messages written since the last load (no full rebuild)."""
+        self._add(self._rows(max(self.at) if self.at else None))
+        if customers is not None:
+            self._names(customers)
+        return self
+
+    def _names(self, customers):
         firsts = {}
         for c in customers:
             firsts.setdefault(c.split()[0], []).append(c)
