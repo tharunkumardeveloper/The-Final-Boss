@@ -123,7 +123,7 @@ Contradiction handling needs two statements about the same thing to use the same
 
 **Extraction is the LLM's job; everything after it (supersede, retire, conflicts, recall paths) is pure Cypher.**
 
-**Write path** (one turn): strict-schema extraction → subject checks (facts about a customer's sister are dropped) → alias resolution → **one Cypher statement** that writes the fact, corroborates a repeat instead of duplicating it, supersedes what it contradicts and moves the typed edge → the customer's network line follows their address.
+**Write path** (one turn): strict-schema extraction → subject checks (facts about a customer's sister are dropped) → alias resolution (a paraphrase reuses an existing issue, but only one naming the same place, time and device, so "slow internet" never becomes another customer's "wifi slow upstairs") → **one Cypher statement** that writes the fact, corroborates a repeat instead of duplicating it, supersedes what it contradicts and moves the typed edge → the customer's network line follows their address.
 
 **Read path**: exact entity linking + vector entry points (`db.idx.vector.queryNodes`) → 2-hop expansion over typed fact edges → conflict ranking → strict-JSON answer with cited fact ids → `EXPLAIN` path. Mr.Fix-It's replies use a **customer-scoped** view (only that customer's facts, tickets and outages in their area, plus relevant company knowledge), never other customers' memory.
 
@@ -403,7 +403,7 @@ The service lines the bot knows (Fiber, Gaming Zone, Binge Club, The Hub) are in
 seeded as `:Offering` nodes it finds by meaning. The company serves everywhere (it's a mockup): a country or city
 without a catalogue entry is a yes, followed by "what's the exact address?".
 
-Tests: `python -m tests.test_core`, `test_api`, `test_round2`, `test_kb`, `test_sharing`, `test_network`, `test_experts`, `test_browser_names`, `test_open_facts`, `test_profile`, `test_transcript`, `test_anomaly`, `test_pallavi`, `test_raj`, `test_intake_spec`, `test_labels`, `test_schema`, `test_time_edges`, `test_udf`, `test_outage_feed`, `test_mcp`, `check_sim_noc`, `check_outage`, plus three that need no database or model: `test_value_checks`, `test_learned_trust`, `test_demo_guard`; web: `cd web && npm test`. Region graphs are seeded on first use; the benchmark tenants (`pml-bench`, `nimbus`, `life-locomo`) refuse resets and the simulator.
+Tests: `python -m tests.test_core`, `test_api`, `test_round2`, `test_kb`, `test_sharing`, `test_network`, `test_experts`, `test_browser_names`, `test_open_facts`, `test_profile`, `test_transcript`, `test_anomaly`, `test_pallavi`, `test_raj`, `test_intake_spec`, `test_labels`, `test_schema`, `test_time_edges`, `test_udf`, `test_outage_feed`, `test_mcp`, `check_sim_noc`, `check_outage`, plus five that need no database or model: `test_value_checks`, `test_learned_trust`, `test_demo_guard`, `test_desk`, `test_alias_qualifiers`; web: `cd web && npm test`. Region graphs are seeded on first use; the benchmark tenants (`pml-bench`, `nimbus`, `life-locomo`) refuse resets and the simulator.
 
 ### Deploy (free)
 

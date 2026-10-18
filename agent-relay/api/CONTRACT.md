@@ -22,7 +22,7 @@ The live graph = entity nodes + fact edges (`active` false → dashed/faded). Ep
 | `GET /health` | | `{ok, falkordb: bool, models: {...routes}}` |
 | `GET /api/tenants` | | `[name]` |
 | `POST /api/tenants` | `{name}` | `{name}` (creates empty) |
-| `POST /api/tenants/{t}/reset` | `{scenario: "empty"\|"story"\|"benchmark"}` | `{ok}` (story = scripted Alice storyline) |
+| `POST /api/tenants/{t}/reset` | `{scenario: "empty"\|"story"\|"benchmark"}` | `{ok}` (story = the region's scripted neighbourhood: its moving customer, her neighbour and four residents, about two minutes) |
 | `GET /api/tenants/{t}/stats` | | `{current_facts, superseded_facts, episodes, entities, customers, open_tickets, conflicts}` |
 | `GET /api/tenants/{t}/customers` | | `[{key, name, city, plan, router, channel, devices[], open_ticket, last_seen}]` |
 | `GET /api/tenants/{t}/graph?focus=<e:key>&depth=2` | | `{nodes:[{id, kind, label, salience?, community?}], edges:[{id, source, target, label, active, conflict?}]}` (whole tenant if no focus, capped ~400 edges) |
@@ -135,7 +135,7 @@ New graph kinds: `backbone`, `pop`, `olt`, `area`, `technician`, `service`, `add
 - `POST /api/tenants/{t}/chat` body adds `greeted: bool` (default false): the client already greeted by name, so the reply doesn't greet again.
 - `GET /api/db/health` → server info (`GRAPH.INFO`, config, memory) or `{ok:false, error}`.
 - `GET /api/tenants/{t}/slowlog` → `{tenant, queries}` (`GRAPH.SLOWLOG`).
-- `GET /api/tenants/{t}/snapshots` → `{tenant, snapshots, kept}`; `POST` `{label}` → `{name, snapshots}` (`GRAPH.COPY` to `snap:` keys, 3 kept); `POST /api/tenants/{t}/snapshots/{name}/restore` → `{ok, restored}`. A snapshot is taken before every story reset.
+- `GET /api/tenants/{t}/snapshots` → `{tenant, snapshots, kept}`; `POST` `{label}` → `{name, snapshots}` (`GRAPH.COPY` to `snap:` keys, 1 per tenant; skipped above 60% of the instance's memory, a manual one then answers 507); `POST /api/tenants/{t}/snapshots/{name}/restore` → `{ok, restored}`. A snapshot is taken before every story reset.
 - `GET /api/tenants/{t}/network/{node_id}/capacity` → `algo.maxFlow` from that node over links that are `:Up`.
 - `GET /api/tenants/{t}/network-cable-plan` → `algo.MSF` over link km (the cheapest way to connect every site).
 - `/api/tenants/{t}/network` nodes add `harmonic` (reach).
