@@ -17,6 +17,11 @@ def test_value_checks():
     assert not R.valid_value("phone", "my number") and not R.valid_value("phone", "12345")
     assert R.valid_value("email", "asha.menon@example.com")
     assert not R.valid_value("email", "asha at gmail") and not R.valid_value("email", "asha@gmail")
+    # names: a person's, never the company's or the bot's ("hey, I'm a WiFight user" must not make you "WiFight")
+    for bad in ("wifight", "WiFight", "wifight user", "Mr.Fix-It", "fix-it", "customer", "existing user", "back", "team"):
+        assert not R.valid_value("preferred_name", bad), bad
+    for good in ("rupesh", "tharun kumar", "asha rao", "mr sharma", "dev"):
+        assert R.valid_value("preferred_name", good), good
     # types without a rule are untouched
     assert R.valid_value("reported_issue", "wifi") and R.valid_value("connection_medium", "wifi")
     assert R.valid_value("open:works_from_home", "yes") and R.valid_value("household_size", "four")

@@ -179,6 +179,25 @@ _VAGUE = {
                "fibre", "connection", "my router", "the router", "wifi router", "home router", "unknown", "none", "n/a"},
     "city": {"home", "my home", "my place", "here", "there", "city", "the city", "unknown", "none", "n/a"},
 }
+# A name is a person's, never the company's, the bot's or a word about being a customer ("hey, I'm a WiFight user").
+_NOT_A_NAME = {"user", "customer", "member", "subscriber", "client", "existing", "new", "old", "back", "again", "here",
+               "support", "team", "agent", "bot", "admin", "sir", "madam", "unknown", "none", "n/a", "fix-it", "fixit"}
+
+
+def _brand_words():
+    from .config import BRAND
+    words = set()
+    for v in (BRAND.get("company", ""), BRAND.get("bot", "")):
+        v = v.lower()
+        words |= {v, v.replace("-", " "), v.replace("-", ""), v.replace(".", " ").replace("-", " ")}
+        words |= set(re.split(r"[\s.]+", v)) - {"mr", "mrs", "ms", "dr", ""}
+    return words
+
+
+def _name_ok(v):
+    words = set(re.split(r"[\s.]+", v)) - {""}
+    brand = _brand_words()
+    return v not in brand and not (words & brand) and not words <= _NOT_A_NAME
 _EMAIL = re.compile(r"[^@\s]+@[^@\s]+\.[a-z]{2,}")
 
 
@@ -190,6 +209,8 @@ def valid_value(p, value):
     t = object_type(p)
     if v in _VAGUE.get(t, ()):
         return False
+    if t == "name":
+        return _name_ok(v)
     if t == "phone":
         return len(re.sub(r"\D", "", v)) >= 7
     if t == "email":

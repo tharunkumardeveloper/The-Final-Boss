@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { asksSomething, nameFrom, saysMore } from '../components/portal/SupportChat'
+import { asksSomething, introKind, nameFrom, saysMore } from '../components/portal/SupportChat'
 
 describe('nameFrom', () => {
   it('ignores greetings', () => {
@@ -44,5 +44,23 @@ describe('a message sent before the name', () => {
       expect(asksSomething(hi), hi).toBe(false)
     for (const q of ['my wifi is slow', 'internet not working', 'Hi there, my internet keeps dropping', 'do you have fiber in Pune?'])
       expect(asksSomething(q), q).toBe(true)
+  })
+})
+
+describe('the company and the bot are never your name', () => {
+  it('reads "I am a WiFight user" as one of ours, not as a name', () => {
+    for (const m of ['hey im a wifight user', "Hey I'm a WiFight user", 'hey im wifight user', 'hi wifight', 'hey wifight team',
+      'hey mr.fix-it', 'thanks mr fix it', 'my name is wifight', 'hey im back'])
+      expect(nameFrom(m), m).toBeNull()
+    expect(nameFrom('I am Rupesh, a WiFight user')).toBe('rupesh')
+    expect(nameFrom("I'm Tharun from WiFight")).toBe('tharun')
+  })
+  it('answers the first message in a way that fits it', () => {
+    expect(introKind('hey im a wifight user')).toBe('member')
+    expect(introKind('I already have an account')).toBe('member')
+    expect(introKind('hey im back')).toBe('member')
+    expect(introKind('hi wifight')).toBe('greeting')
+    expect(introKind('Hi there')).toBe('greeting')
+    expect(introKind("I'm a wifight user and my internet is down")).toBe('question')  // held, answered after the name
   })
 })

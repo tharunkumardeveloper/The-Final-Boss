@@ -53,15 +53,27 @@ const first = (who: string) => titleCase(who.split(' ')[0])
 
 // Greetings and lead-in words are never part of a name ("Myself Adit Raj" is Adit Raj).
 const GREETING = /^(hi+|hello+|hey+|hiya|yo|namaste|vanakkam|good|morning|afternoon|evening|there|team|kavya|myself|me|i|am|im|i'm|is|it's|its|this|here|my|name|called|sir|madam|mr|mrs|ms|dr)$/i
-// Words that end a name ("I'm Adit and my wifi drops" -> Adit) or show it isn't one ("I'm in Goa", "I'm a gamer").
+// The company and the bot are never the customer's name ("hi WiFight", "hey I'm a WiFight user", "thanks Mr.Fix-It").
+const BRAND_WORDS = [COMPANY, BOT].flatMap((b) => {
+  const v = b.toLowerCase()
+  return [v, v.replace(/-/g, ''), ...v.split(/[\s.]+/)].filter((w) => w && !['mr', 'mrs', 'ms', 'dr'].includes(w))
+}).concat(['wifight', 'wi-fight', 'fixit', 'fix-it', 'mrfixit'])
+// Words that end a name ("I'm Adit and my wifi drops" -> Adit) or show it isn't one ("I'm in Goa", "I'm a gamer",
+// "I'm back", "I'm a WiFight user").
 const NOT_NAME = new Set(['and', 'but', 'from', 'in', 'at', 'on', 'my', 'i', 'a', 'an', 'the', 'with', 'living', 'live', 'calling',
   'here', 'so', 'just', 'not', 'yes', 'no', 'ok', 'okay', 'thanks', 'thank', 'please', 'help', 'wifi', 'internet', 'plan', 'plans',
   'router', 'broadband', 'fiber', 'fibre', 'what', 'which', 'how', 'why', 'when', 'where', 'who', 'do', 'does', 'can', 'is', 'are',
-  'you', 'your', 'cover', 'service', 'services', 'having', 'facing', 'new', 'moving', 'looking', 'customer', 'user', 'gamer', 'student'])
+  'you', 'your', 'cover', 'service', 'services', 'having', 'facing', 'new', 'moving', 'looking', 'customer', 'user', 'gamer', 'student',
+  'member', 'subscriber', 'client', 'existing', 'old', 'regular', 'back', 'again', 'still', 'also', 'already', 'currently', 'really',
+  'very', 'fine', 'good', 'great', 'well', 'sorry', 'confused', 'frustrated', 'angry', 'upset', 'happy', 'unhappy', 'tired', 'ready',
+  'done', 'sure', 'stuck', 'waiting', 'trying', 'using', 'unable', 'going', 'getting', 'writing', 'texting', 'messaging', 'reaching',
+  'contacting', 'interested', 'curious', 'wondering', 'glad', 'worried', 'annoyed', 'paying', 'connected', 'to', 'for', 'of', 'about',
+  'support', 'team', 'agent', 'bot', 'admin', 'there', 'everyone', 'all', 'guys', 'folks', ...BRAND_WORDS])
 const LEAD = /(?:my name is|my name's|myself|i am|i'm|im|this is|here is|call me|it's|its)\s+([a-z][a-z'.-]*(?:\s+[a-z][a-z'.-]*){0,3})/i
 
 /** Find a name in a chat message, without a name box:
- *  "Hi, I'm Adit and my wifi drops" -> "adit"; "Adit Raj" -> "adit raj"; "do you cover goa?" -> null. */
+ *  "Hi, I'm Adit and my wifi drops" -> "adit"; "Adit Raj" -> "adit raj"; "do you cover goa?" -> null;
+ *  "hey I'm a WiFight user", "hi WiFight", "I'm back" -> null. */
 export function nameFrom(input: string): string | null {
   const t = input.trim()
   const lead = t.match(LEAD)
@@ -84,13 +96,36 @@ export function nameFrom(input: string): string | null {
 }
 
 // Small talk around a greeting: "hi there", "hello team", "hey, how are you?" carry nothing to answer later.
-const SMALL_TALK = new Set(['all', 'everyone', 'folks', 'guys', 'wifight', 'fix', 'it', 'how', 'are', 'you', 'doing', 'whats', 'up',
-  'sup', 'hope', 'well', 'day', 'nice', 'to', 'meet', 'please', 'thanks', 'thank', 'ok', 'okay', 'can', 'help'])
+const SMALL_TALK = new Set(['all', 'everyone', 'folks', 'guys', 'fix', 'it', 'how', 'are', 'you', 'doing', 'whats', 'up',
+  'sup', 'hope', 'well', 'day', 'nice', 'to', 'meet', 'please', 'thanks', 'thank', 'ok', 'okay', 'can', 'help', 'a', 'an', 'the',
+  'new', 'back', 'again', 'just', 'so', ...BRAND_WORDS])
+
+const contentWords = (input: string) => input.toLowerCase().replace(/[’']/g, '').split(/[^a-z0-9-]+/)
+  .filter((w) => w && !GREETING.test(w) && !SMALL_TALK.has(w))
 
 /** Is a message sent before the name worth answering once we know it? (Not a greeting or small talk.) */
 export function asksSomething(input: string): boolean {
-  const words = input.toLowerCase().replace(/[’']/g, '').split(/[^a-z0-9]+/).filter(Boolean)
-  return words.filter((w) => !GREETING.test(w) && !SMALL_TALK.has(w)).length >= 2
+  return contentWords(input).length >= 2
+}
+
+// "I'm a WiFight user", "existing customer", "I already have an account": they're telling us they're one of ours.
+const MEMBER = /\b(user|customer|member|subscriber|client)\b|\b(have|got) an? (account|connection|plan)\b|\balready (with|on|have)\b|\b(i'?m|i am) back\b|\bme again\b/i
+const TROUBLE = /\?|\b(slow|down|drop\w*|not working|issue|problem|broken|bill|charge\w*|outage|lag\w*|disconnect\w*)\b/i
+
+/** What a message sent before we know the name is, so the first reply fits it. */
+export type IntroKind = 'member' | 'greeting' | 'question' | 'unclear'
+export function introKind(input: string): IntroKind {
+  if (MEMBER.test(input) && !TROUBLE.test(input)) return 'member'
+  if (asksSomething(input)) return 'question'
+  return contentWords(input).length ? 'unclear' : 'greeting'
+}
+
+/** The first reply to a message that didn't give us a name. */
+export const INTRO_REPLY: Record<IntroKind, string> = {
+  member: "Good to have you with us. What name is on your account? I'll pull up everything we already know.",
+  question: 'Happy to help with that. First, what should I call you?',
+  greeting: 'Hi! What should I call you?',
+  unclear: "I didn't quite catch your name. What should I call you?",
 }
 
 /** Was there more in the message than the name? ("I'm Adit and my wifi drops" -> true: send it on.) */
@@ -340,11 +375,10 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
     const n = nameFrom(msg)
     const id = `intro-${Date.now()}`
     if (!n) {
-      const question = asksSomething(msg)
-      if (question) setPendingAsk(msg)
+      const kind = introKind(msg)
+      if (kind === 'question') setPendingAsk(msg)  // answered once we know who's asking
       setIntro((l) => [...l, { id, speaker: 'customer', text: msg, at: new Date().toISOString() },
-        { id: `${id}-k`, speaker: 'intake', at: new Date().toISOString(),
-          text: question ? "Happy to help with that. First, what should I call you?" : "I didn't quite catch your name. What should I call you?" }])
+        { id: `${id}-k`, speaker: 'intake', at: new Date().toISOString(), text: INTRO_REPLY[kind] }])
       return
     }
     setIntro((l) => [...l, { id, speaker: 'customer', text: msg, mark: n, at: new Date().toISOString() }])
