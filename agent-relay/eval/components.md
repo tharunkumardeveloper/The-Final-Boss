@@ -35,7 +35,7 @@ Extraction misses by predicate: {'on_plan': '11/52', 'lives_in': '6/66'}
 
 ## Components: fix1
 
-Source: {'report': 'eval/load_report_fix1.json', 'graph': 'pml-bench', 'commit': '46a46f166d35ffd5111118689901609c992081c3', 'relay_retrieve_dirty': False, 'relay_dirty': ['M relay/agents.py', ' M relay/config.py', ' M relay/kb.py', ' M relay/memory.py', ' M relay/queries.py']}
+Source: {'report': 'eval/archive/load_report_fix1.json', 'graph': 'pml-bench', 'commit': '46a46f166d35ffd5111118689901609c992081c3', 'relay_retrieve_dirty': False, 'relay_dirty': ['M relay/agents.py', ' M relay/config.py', ' M relay/kb.py', ' M relay/memory.py', ' M relay/queries.py']}
 
 - Extraction recall: 94.4% (289/306) [91%–96%]; extra facts 104, load errors 7
 - Predicate normalisation (extracted fact with the planted value carries the planted predicate): 100.0% (257/257) [99%–100%]
@@ -55,7 +55,7 @@ Extraction misses by predicate: {'on_plan': '11/52', 'lives_in': '6/66'}
 
 ## Components: fix2
 
-Source: {'report': 'eval/load_report_fix2.json', 'graph': 'pml-bench', 'commit': '46a46f166d35ffd5111118689901609c992081c3', 'relay_retrieve_dirty': False, 'relay_dirty': ['M relay/agents.py', ' M relay/config.py', ' M relay/kb.py', ' M relay/memory.py', ' M relay/queries.py']}
+Source: {'report': 'eval/archive/load_report_fix2.json', 'graph': 'pml-bench', 'commit': '46a46f166d35ffd5111118689901609c992081c3', 'relay_retrieve_dirty': False, 'relay_dirty': ['M relay/agents.py', ' M relay/config.py', ' M relay/kb.py', ' M relay/memory.py', ' M relay/queries.py']}
 
 - Extraction recall: 96.4% (295/306) [94%–98%]; extra facts 106, load errors 7
 - Predicate normalisation (extracted fact with the planted value carries the planted predicate): 100.0% (263/263) [99%–100%]
@@ -75,7 +75,7 @@ Extraction misses by predicate: {'on_plan': '11/52'}
 
 ## Components: fix5
 
-Source: {'report': 'eval/load_report_fix5.json', 'graph': 'pml-bench', 'commit': '46a46f166d35ffd5111118689901609c992081c3', 'relay_retrieve_dirty': False, 'relay_dirty': ['M relay/agents.py', ' M relay/config.py', ' M relay/kb.py', ' M relay/memory.py', ' M relay/queries.py']}
+Source: {'report': 'eval/archive/load_report_fix5.json', 'graph': 'pml-bench', 'commit': '46a46f166d35ffd5111118689901609c992081c3', 'relay_retrieve_dirty': False, 'relay_dirty': ['M relay/agents.py', ' M relay/config.py', ' M relay/kb.py', ' M relay/memory.py', ' M relay/queries.py']}
 
 - Extraction recall: 100.0% (306/306) [99%–100%]; extra facts 100, load errors 7
 - Predicate normalisation (extracted fact with the planted value carries the planted predicate): 100.0% (274/274) [99%–100%]
@@ -93,7 +93,7 @@ Source: {'report': 'eval/load_report_fix5.json', 'graph': 'pml-bench', 'commit':
 
 ## Components: fix6
 
-Source: {'report': 'eval/load_report_fix6.json', 'graph': 'pml-bench', 'commit': '46a46f166d35ffd5111118689901609c992081c3', 'relay_retrieve_dirty': False, 'relay_dirty': ['M relay/agents.py', ' M relay/config.py', ' M relay/kb.py', ' M relay/memory.py', ' M relay/queries.py', ' M relay/registry.py']}
+Source: {'report': 'eval/archive/load_report_fix6.json', 'graph': 'pml-bench', 'commit': '46a46f166d35ffd5111118689901609c992081c3', 'relay_retrieve_dirty': False, 'relay_dirty': ['M relay/agents.py', ' M relay/config.py', ' M relay/kb.py', ' M relay/memory.py', ' M relay/queries.py', ' M relay/registry.py']}
 
 - Extraction recall: 100.0% (306/306) [99%–100%]; extra facts 97, load errors 0
 - Predicate normalisation (extracted fact with the planted value carries the planted predicate): 100.0% (274/274) [99%–100%]
@@ -275,17 +275,17 @@ Relay 93.2% (69/74) [85%–97%]; B1 43.5% (20/46) [30%–58%]; head-to-head Rela
 
 | # | Fix | Metric | Before | After | n | Graph / answers |
 |---|---|---|---|---|---|---|
-| 1 | Resolver.pick_up reads billing before the lab branch (lab path returned before any tool ran) | disagreement, answers (FULL / B1) | 0/16 / 0/16 | 11/16 / 1/16 | 16 | reload fix1; qwen3.8-27b, Groq keys 1-5; eval/fixlog/fix1.json |
+| 1 | Resolver.pick_up reads billing before the lab branch (lab path returned before any tool ran) | disagreement, answers (FULL / B1) | 0/16 / 0/16 | 11/16 / 1/16 | 16 | reload fix1; qwen3.8-27b, Groq keys 1-5; eval/archive/fixlog/fix1.json |
 | 1 | (same) | contradiction cross_agent (zero-LLM) | 0/16 | 11/16 | 16 | reload fix1; 5 misses = customer plan claim never stored (fix 5) |
 | 2 | Write-time typo resolution vs places on file (difflib >= 0.75, digits equal, alias recorded); a city matched inside a longer name keeps the longer name | typos mapped to existing entity | 2/8 | 8/8 | 8 | reload fix2 |
 | 2 | (same) | name collisions kept apart (navi mumbai) | 2/4 | 4/4 | 4 | reload fix2 |
 | 2 | (same) | contradiction unchanged / change | 8/14 / 28/39 | 14/14 / 32/39 | 14 / 39 | reload fix2 (Tier 3 item 6 needed no separate fix: the guard was right, the typo was the cause) |
 | 3 | Resolver.pick_up reads the outage feed before the lab branch (0 `affects` facts in the graph) | multi_hop gold in context (zero-LLM) | 7/18 | 15/18 | 18 | reload fix3 |
-| 3 | (same) | multi_hop answers (FULL) | 5/18 | 15/18 | 18 | reload fix3, old expansion patched in; qwen3.8-27b, Groq keys 1-5 then 3-5; eval/fixlog/fix3.json |
-| 4 | 2-hop recall caps (max_entities/max_facts) cut by hop distance, not arbitrarily | multi_hop gold in context / answers | 15/18 / 15/18 | 18/18 / 18/18 | 18 | same graph as 3; other types' evidence unchanged; p50 156 -> 158 ms; eval/fixlog/fix4.json |
+| 3 | (same) | multi_hop answers (FULL) | 5/18 | 15/18 | 18 | reload fix3, old expansion patched in; qwen3.8-27b, Groq keys 1-5 then 3-5; eval/archive/fixlog/fix3.json |
+| 4 | 2-hop recall caps (max_entities/max_facts) cut by hop distance, not arbitrarily | multi_hop gold in context / answers | 15/18 / 15/18 | 18/18 / 18/18 | 18 | same graph as 3; other types' evidence unchanged; p50 156 -> 158 ms; eval/archive/fixlog/fix4.json |
 | 5 | on_plan keeps an off-catalogue plan the customer is on ('basic 50'); purchase predicates still need the catalogue | extraction recall (planted facts stored) | 295/306 | 306/306 | 306 | reload fix5; every 'basic 50' claim (11 turns) had been dropped at write time |
 | 5 | (same) | belief_time / disagreement gold in context | 15/18 / 13/16 | 18/18 / 16/16 | 18 / 16 | reload fix5 (belief_time misses were this, not a two-clock bug) |
-| 5 | (same) | belief_time / world_time / disagreement answers | 14/18 / 16/18 / 11/16 | 9/9 / 17/18 / 4/5 (partial) | 9 / 18 / 5 | qwen3.8-27b, Groq keys 3-5 then 4 only; qwen daily cap hit; eval/fixlog/fix5.json |
+| 5 | (same) | belief_time / world_time / disagreement answers | 14/18 / 16/18 / 11/16 | 9/9 / 17/18 / 4/5 (partial) | 9 / 18 / 5 | qwen3.8-27b, Groq keys 3-5 then 4 only; qwen daily cap hit; eval/archive/fixlog/fix5.json |
 | 5 | (same) | contradiction cross_agent / change | 11/16 / 32/39 | 14/16 / 36/39 | 16 / 39 | reload fix5 |
 | 6 | An open account request (invoice, pause...) is not the context for a new fault: the fault opens its own ticket | load errors (ticket never opened) | 7 | 0 | 634 | reload fix6b |
 | 6 | (same) | cross_agent / current gold in context | 14/16 / 17/18 | 16/16 / 18/18 | 16 / 18 | reload fix6b |
@@ -295,7 +295,7 @@ Relay 93.2% (69/74) [85%–97%]; B1 43.5% (20/46) [30%–58%]; head-to-head Rela
 ## Methodology and caveats (read before quoting)
 
 - **Answer models.** Fixes 1, 3, 4, 5 were scored on qwen3.8-27b (Groq keys 1-5); qwen and gpt-oss-120b then hit their daily caps on every key, so the final 160-question run uses gemini-3.5-flash-lite for both systems. The final headline is not same-model comparable with the 68.8% baseline; the paired comparison inside each run is. B1 moved 55.0% -> 50.0% across the model change.
-- **Graph.** Each write-path fix was measured on a fresh reload of `mem:pml-bench` from `data/scenario.json` (extraction answers cached, so the extracted text is identical across reloads; lab runs during the load call an LLM and are not cached). Reload times and git state per reload: `eval/reload_state.txt`. Load reports: `eval/load_report_fix*.json`.
+- **Graph.** Each write-path fix was measured on a fresh reload of `mem:pml-bench` from `data/scenario.json` (extraction answers cached, so the extracted text is identical across reloads; lab runs during the load call an LLM and are not cached). Reload times and git state per reload: `eval/archive/reload_state.txt`. Load reports: `eval/archive/load_report_fix*.json`.
 - **bench_shim removed.** `relay/retrieve.py` `_pvec` now embeds open predicates; all runs here use `python -m eval.run_eval` directly.
 - **Fix 3/4 attribution:** the fix-3 row ran with the pre-fix-4 expansion patched in (scratch `oldexp.py`), on the same graph as fix 4.
 - **Not fixed:** procedural 8/18 (gold fix not in context for 'which fix has worked before for X'); 8 remaining Relay misses are generation (gold in context, wrong value chosen), so retrieval is no longer the top miss bucket.

@@ -49,19 +49,23 @@ piece you set up yourself is the optional MCP connection for Claude ([below](#-b
 <summary><b>📑 Contents</b></summary>
 
 - [The idea](#-the-idea)
+- [Architecture](#-architecture)
 - [Meet WiFight](#-meet-wifight)
 - [Why we chose an ISP](#-why-we-chose-an-isp)
 - [How a ticket works](#-how-a-ticket-works)
 - [A tour of every screen](#-a-tour-of-every-screen)
 - [Watch it, or take part](#-watch-it-or-take-part)
 - [The five memory capabilities](#-the-five-memory-capabilities)
+- [Graph data model](#-graph-data-model)
+- [Cypher queries and graph algorithms](#-cypher-queries-and-graph-algorithms)
 - [Results](#-results)
 - [What's new, and what isn't](#-whats-new-and-what-isnt)
 - [Remove FalkorDB and…](#-remove-falkordb-and)
 - [Bring your own agent (MCP)](#-bring-your-own-agent-mcp)
 - [Tech stack](#-tech-stack)
 - [Team](#-team-the-final-boss)
-- [Run it yourself](#-run-it-yourself)
+- [Setup: run it yourself](#-setup-run-it-yourself)
+- [Repository layout](#-repository-layout)
 - [AI-use disclosure](#-ai-use-disclosure)
 
 </details>
@@ -75,7 +79,23 @@ still has the old address, support asks the customer again, and a handoff loses 
 others find in the graph, with **who** wrote it, **when** it was true, **what** it replaced, and the **path** behind
 every answer.
 
-<p align="center"><a href="docs/diagrams/idea-light.svg"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/idea-dark.svg"><img src="docs/diagrams/idea-light.svg" alt="Relay's architecture: the customer chats with Mr.Fix-It (intake), which writes facts and tickets to one FalkorDB graph per tenant; the Resolver, Network Ops and any MCP client such as Claude read and write the same graph; the staff console shows it." width="760" loading="lazy"></picture></a></p>
+<p align="center"><a href="docs/diagrams/idea-light.svg"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/idea-dark.svg"><img src="docs/diagrams/idea-light.svg" alt="The idea: the customer chats with Mr.Fix-It, which writes facts and tickets into one FalkorDB graph per tenant; the Resolver, Network Ops and any MCP client read and write the same graph, never each other; the staff console shows it live." width="860"></picture></a></p>
+
+## 🏗️ Architecture
+
+<p align="center"><a href="docs/diagrams/architecture-light.svg"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/architecture-dark.svg"><img src="docs/diagrams/architecture-light.svg" alt="Architecture, left to right: customers and staff use the web app on Vercel (customer site and staff console), which talks to the FastAPI service on Render over HTTPS and one live WebSocket. In the API: Mr.Fix-It (intake), the Resolver with the network lab, Network Ops, the persona simulator, the MCP server for Claude or any MCP client, and local fastembed embeddings. The agents call Groq (Gemini as fallback) and OpenCage, and every agent reads and writes FalkorDB Cloud with Cypher: one graph per region holding episodes, facts with two clocks, entities, tickets, procedures and the network, plus the lab's hidden fault graph." width="100%"></picture></a></p>
+
+| Layer | What runs there | Code |
+|---|---|---|
+| **Web** (Vercel) | The customer site and the staff console: React, TypeScript, Vite. Live updates over one WebSocket per tenant | [`agent-relay/web`](agent-relay/web) |
+| **API** (Render) | FastAPI: REST + WebSocket, the agents (intake, resolver and network lab, network ops), the persona simulator | [`agent-relay/api`](agent-relay/api), [`agent-relay/relay`](agent-relay/relay) |
+| **MCP** | Claude or any MCP client becomes another agent on the same memory, with typed tools | [`agent-relay/mcp_server.py`](agent-relay/mcp_server.py) |
+| **Memory** (FalkorDB Cloud) | One graph per region (`mem:pml`, `mem:pml-eu`, …): episodes, facts, entities, tickets, procedures, the network; `chaos:pml` holds the lab's hidden faults | [`relay/queries.py`](agent-relay/relay/queries.py), [`relay/network.py`](agent-relay/relay/network.py) |
+| **Models** | Groq (gpt-oss, qwen) with Gemini as fallback for extraction, answers and replies; fastembed runs locally for embeddings; OpenCage places unknown addresses | [`relay/llm.py`](agent-relay/relay/llm.py), [`relay/embed.py`](agent-relay/relay/embed.py), [`relay/geo.py`](agent-relay/relay/geo.py) |
+
+The agents never call each other. A handoff is graph state (`HANDED_OFF` / `PICKED_UP` edges on a ticket), and what one
+agent learned, the next one reads from the graph and records that it did (`CONSULTED`).
+
 
 ## 🏢 Meet WiFight
 
@@ -195,7 +215,7 @@ browser's time zone, on whichever page they open first. Then, the moment they gi
 **one resolver** ([`relay/geo.py`](agent-relay/relay/geo.py)), used by the chat, the customer's line, desk routing and
 MCP alike:
 
-<p align="center"><a href="docs/diagrams/location-light.svg"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/location-dark.svg"><img src="docs/diagrams/location-light.svg" alt="How an address is placed: WiFight's own list of 199 cities and 1,118 areas first, then the offline GeoNames town list, then OpenCage geocoding for unknown or ambiguous names; the result is the nearest city and area served, which picks the desk, the line, the resolver and the Network lab." width="376" loading="lazy"></picture></a></p>
+<p align="center"><a href="docs/diagrams/location-light.svg"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/location-dark.svg"><img src="docs/diagrams/location-light.svg" alt="How an address is placed, left to right: WiFight's own list of 199 cities and 1,118 areas first; if not listed, the offline GeoNames town list; if unknown or ambiguous, OpenCage geocoding. Whatever finds it gives the nearest city and area served, which picks the desk, the line, the resolver and the network lab." width="860"></picture></a></p>
 
 | The customer says | What happens |
 |---|---|
@@ -312,12 +332,82 @@ open in the resolver's queue. Europe, for example, is Camden, Islington, Coventr
 </tr>
 </table>
 
-<details>
-<summary><b>🗺️ The graph data model</b></summary>
+## 🗺️ Graph data model
 
-<p align="center"><a href="docs/diagrams/data-model-light.svg"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/data-model-dark.svg"><img src="docs/diagrams/data-model-light.svg" alt="The graph data model: Agent WROTE Episode, Episode DERIVED or RETIRED Fact, Fact ABOUT Customer, Fact SUPERSEDES Fact, Customer LIVES_IN City and other typed fact edges, Agent CONSULTED Fact, Agent HANDED_OFF or PICKED_UP Ticket, Conflict BETWEEN Facts, Procedure FIRST ProcStep NEXT ProcStep, and Customer CONNECTED_VIA Olt UPLINK Pop UPLINK Backbone." width="860" loading="lazy"></picture></a></p>
+<p align="center"><a href="docs/diagrams/data-model-light.svg"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/data-model-dark.svg"><img src="docs/diagrams/data-model-light.svg" alt="The graph data model: Agent WROTE Episode; Episode DERIVED or RETIRED Fact; Fact ABOUT Customer and the object; Fact SUPERSEDES Fact; Customer LIVES_IN City and other typed fact edges; Agent CONSULTED Fact; Agent HANDED_OFF or PICKED_UP Ticket; Conflict BETWEEN Facts; Procedure FIRST ProcStep NEXT ProcStep; Customer CONNECTED_VIA Olt UPLINK Pop UPLINK Backbone." width="860"></picture></a></p>
 
-</details>
+Every tenant is its own graph. Inside it, three layers share the same nodes:
+
+| Node | What it is | Key properties |
+|---|---|---|
+| `Episode` | One message, reply, tool reading or internal note, as it happened (**episodic** memory). Extra label by kind: `CustomerMessage`, `AgentReply`, `ToolResult`, `InternalNote` | `episode_id`, `text`, `speaker`, `customer`, `recorded_at`, `embedding` (vector index) |
+| `Fact` | One statement, subject · predicate · object (**semantic** memory). State label: `Current`, `Superseded` or `Retired` | `fact_id`, `predicate`, `subject`, `object_value`, `valid_from`/`valid_to`, `recorded_at`/`expired_at`, `asserted_by`, `active` |
+| `Entity` | Anything a fact is about, with a type label: `Customer`, `City`, `Area`, `Plan`, `Device`, `Issue`, `Fix`, `Ticket`, `Outage`, … | `name_key`, `type`, `embedding` (vector index), full-text index on names |
+| `Session`, `Agent` | A conversation, and the agent that wrote or read something | `session_id`, `summary`; `agent_id`, `trust` |
+| `Procedure`, `ProcStep` | A fix that worked, as a path of steps (**procedural** memory) | successes, failures, the readings it applies to |
+| `Conflict` | Two agents disagree about a single-valued fact; both claims stay | the two facts (`BETWEEN`) |
+| `NetNode` (`Backbone`, `Pop`, `Olt`), `LastMile` (`Splitter`, `Ont`) | The access network a customer's line runs through | `node_id`, `status`, `capacity_gbps`, `km` |
+| `Offering`, `Plan`, `Service`, `Addon`, `Faq`, `Guide`, `Technician`, … | The company's catalogue and staff, per region | prices, notes, coverage |
+
+| Relationship | Meaning |
+|---|---|
+| `(:Agent)-[:WROTE]->(:Episode)-[:IN]->(:Session)` | Who said what, in which conversation |
+| `(:Episode)-[:DERIVED]->(:Fact)`, `(:Episode)-[:RETIRED]->(:Fact)` | Which message a fact came from, or ended it |
+| `(:Fact)-[:ABOUT {role}]->(:Entity)` | A fact's subject and object |
+| `(:Fact)-[:SUPERSEDES]->(:Fact)` | A new value replacing an old one (the old one is kept, closed) |
+| `(:Customer)-[:LIVES_IN\|ON_PLAN\|HAS_TICKET\|…]->(:Entity)` | A typed edge mirroring each **current** fact, so traversals read like the domain; a fact that ends becomes a `WAS {predicate, valid_from, valid_to}` edge |
+| `(:Agent)-[:CONSULTED {count}]->(:Fact)` | Every read, so knowledge sharing between agents is measurable |
+| `(:Agent)-[:HANDED_OFF\|PICKED_UP]->(:Ticket)` | Handoffs as graph state, never as messages |
+| `(:Procedure)-[:FIRST]->(:ProcStep)-[:NEXT]->(:ProcStep)` | The order of steps in a fix that worked |
+| `(:Customer)-[:CONNECTED_VIA]->(:Ont)`, `(:NetNode)-[:UPLINK]->(:NetNode)` | The customer's line, home to backbone |
+
+**Two clocks on every fact.** `valid_from`/`valid_to` say when it was true in the world; `recorded_at`/`expired_at` say
+when we had it on file. Nothing is overwritten: "where did she live on the 5th?" and "what did we believe on the 5th?"
+are two filters on the same facts. The full model, every predicate and its conflict policy are in
+[`agent-relay/README.md`](agent-relay/README.md#graph-data-model) and [`relay/registry.py`](agent-relay/relay/registry.py).
+
+## 🧮 Cypher queries and graph algorithms
+
+What the product depends on, and where each one lives. The model never writes Cypher: every query below is fixed code.
+
+| The product needs to… | Cypher or algorithm | Code |
+|---|---|---|
+| Write a fact: create it, corroborate a repeat, or supersede what it contradicts, atomically | One `MERGE … FOREACH` statement per fact (shown below in *Remove FalkorDB and…*) | `WRITE_FACT` in [`relay/queries.py`](agent-relay/relay/queries.py) |
+| End a fact without a replacement | `SET f.valid_to, f.expired_at` + a `WAS` edge | `RETIRE` |
+| Answer "what was true on date X" / "what did we know then" | Filters on `valid_from`/`valid_to`, or `recorded_at`/`expired_at` | `WORLD_AT`, `BELIEF_AT`, `FACTS_AT` |
+| Find who a question is about, even misspelt | Full-text index (`db.idx.fulltext.queryNodes`) and vector index (`db.idx.vector.queryNodes`) on entities | `RECALL_LINK`, `FUZZY_CUSTOMERS` |
+| Recall what's relevant, with the path behind it | Vector search over episodes → `MENTIONS` → bounded 2-hop expansion over typed fact edges | `RECALL_LINK`, `NEIGHBORHOOD`, `EXPLAIN` |
+| Reuse an issue name without merging two customers' problems | Vector candidates over issue entities, filtered by place, time and device | `ALIAS_CANDIDATES` + [`relay/memory.py`](agent-relay/relay/memory.py) |
+| Keep disagreements and rank them | Every active claim for subject + predicate, ranked by agent trust then recency; a `Conflict` node between them | `CLAIMS`, `ACTIVE_CLAIMS`, `CONFLICT_OPEN` |
+| Hand a ticket over and pick it up | `HANDED_OFF` / `PICKED_UP` edges; the ticket's profile is recomputed from its facts | `HANDOFF`, `PICKUP`, `TICKET_PROFILE` |
+| Measure knowledge sharing | `MERGE (a)-[c:CONSULTED]->(f) SET c.count = c.count + 1`, then flows between agents | `CONSULT`, `SHARING_FLOWS` |
+| Suggest a fix that worked for a similar issue | Vector neighbours of the issue entity → facts `resolves` | `FIXES_FOR_SIMILAR`, [`relay/procedural.py`](agent-relay/relay/procedural.py) |
+| Find everyone an outage affects, and why | Variable-length `UPLINK*` traversal to a working backbone; `shortestPath` for the reason | [`relay/network.py`](agent-relay/relay/network.py) |
+| How much bandwidth can reach a home right now | **`algo.maxFlow`** over links that are up | `CAPACITY` in [`relay/network.py`](agent-relay/relay/network.py) |
+| The cheapest way to cable every site | **`algo.MSF`** (minimum spanning forest) weighted by km | `CABLE_PLAN` |
+| Which network nodes are most critical | **`algo.betweenness`** and **`algo.HarmonicCentrality`** | `CRITICALITY`, `HARMONIC` |
+| Which entities matter most, and which belong together | **`algo.pageRank`** (salience) and **`algo.labelPropagation`** (communities) | `SALIENCE`, `BUILD_COMMUNITY_NODES` |
+| Read facts as sentences inside Cypher | User-defined functions (`GRAPH.UDF`): our `relay.sentence()`, `relay.money()`, `relay.ago()`, plus FalkorDB's FLEX library ([`data/flex.js`](agent-relay/data/flex.js)) | [`relay/udf.py`](agent-relay/relay/udf.py) |
+| Operate it | `GRAPH.COPY` snapshots, `GRAPH.SLOWLOG`, `GRAPH.EXPLAIN` / `GRAPH.PROFILE`, `GRAPH.MEMORY`, one graph per tenant | [`relay/db.py`](agent-relay/relay/db.py) |
+
+```cypher
+// How much bandwidth can reach this customer's exchange right now (only through links that are up)
+MATCH (s:NetNode:Up {node_id:$n})
+MATCH (b:Backbone:Up)
+WITH s, collect(b) AS cores
+CALL algo.maxFlow({sourceNodes:[s], targetNodes:cores, capacityProperty:'capacity_gbps', nodeLabels:['Up'],
+                   relationshipTypes:['UPLINK']}) YIELD maxFlow
+RETURN maxFlow
+```
+
+```cypher
+// Why is this customer affected? The path from their home up to the failed node
+MATCH (c:Entity {name_key:$c}), (n:NetNode {node_id:$n})
+WITH shortestPath((c)-[:CONNECTED_VIA|UPLINK*1..5]->(n)) AS p
+RETURN [x IN nodes(p) | coalesce(x.node_id, x.name_key)]
+```
+
+More, with a FalkorDB Browser tour and saved queries: [`agent-relay/README.md`](agent-relay/README.md#key-cypher).
 
 ## 📊 Results
 
@@ -504,11 +594,44 @@ page draws the new agent.
 
 </div>
 
-## 🚀 Run it yourself
+## 🚀 Setup: run it yourself
 
-Setup, tests and the free deploy (Render + Vercel + FalkorDB Cloud) are in
-[`agent-relay/README.md`](agent-relay/README.md#setup), with the full graph model, every key query and a FalkorDB
-Browser tour. The API reference is [`agent-relay/api/CONTRACT.md`](agent-relay/api/CONTRACT.md).
+**Nothing to install to try it:** [wifight.vercel.app](https://wifight.vercel.app). To run your own copy you need
+Python 3.12, Node 20+, a FalkorDB (FalkorDB Cloud's free tier, or Docker) and a free Groq API key.
+
+```bash
+git clone https://github.com/tharunkumardeveloper/The-Final-Boss.git
+cd The-Final-Boss/agent-relay
+
+# 1. a FalkorDB to talk to (skip if you use FalkorDB Cloud)
+docker run -p 6379:6379 -it --rm falkordb/falkordb
+
+# 2. the API
+pip install -r requirements.txt
+cp .env.example .env              # set FALKOR_HOST/PORT/USER/PASS and GROQ_API_KEY (GEMINI_API_KEY optional)
+uvicorn api.main:app --port 8000  # region graphs and the catalogue are seeded on first use
+
+# 3. the web app (another terminal)
+cd web && npm install
+VITE_API_URL=http://localhost:8000 npm run dev   # open http://localhost:5173
+```
+
+On Windows, `install.bat` then `start.bat` do the same (`start.bat mock` runs the web app on canned data, no keys).
+Load the demo story into a region from the console's **Reset → story**, or play **Judge mode** on the home page.
+
+| Setting (`.env`) | What it does |
+|---|---|
+| `FALKOR_HOST`, `FALKOR_PORT`, `FALKOR_USER`, `FALKOR_PASS` | The FalkorDB instance (one graph per tenant is created in it) |
+| `GROQ_API_KEY` (+ `_2` … `_11`) | Extraction, answers and replies; each extra key is its own free quota, tried in turn |
+| `GEMINI_API_KEY` | Fallback model when every Groq key is out (optional) |
+| `OPENCAGE_API_KEY` | Places addresses our city list doesn't know (optional) |
+| `RELAY_RESET_KEY`, `RELAY_CHAT_PER_MIN`, `RELAY_WRITES_PER_MIN` | Public-demo protection: resets need the key, writes are rate-limited (all off when unset) |
+
+**Tests:** `cd agent-relay && python -m tests.test_core` (and the other `tests/test_*.py`; seven need no database or
+model: `test_value_checks`, `test_learned_trust`, `test_demo_guard`, `test_desk`, `test_alias_qualifiers`,
+`test_memory_kind`, `test_intake_close`), web: `cd web && npm test`. **Deploy** (free: Render + Vercel + FalkorDB
+Cloud, `render.yaml` included): [`agent-relay/README.md`](agent-relay/README.md#deploy-free). **API reference:**
+[`agent-relay/api/CONTRACT.md`](agent-relay/api/CONTRACT.md). **MCP:** [above](#-bring-your-own-agent-mcp).
 
 On the public demo, resets need a reset key and writes are rate-limited per visitor, so nobody can wipe it during
 judging; a scheduled ping keeps the free API awake. Geocoding is optional: set `OPENCAGE_API_KEY` (a free key) to place
@@ -536,6 +659,37 @@ addresses our city list doesn't know; without it, our list and the offline town 
 - Fewer round trips per chat turn, and a retention policy for old episodes.
 
 </details>
+
+## 🗂️ Repository layout
+
+```text
+.
+├── README.md                  this page
+├── render.yaml                the API's Render blueprint
+├── .github/workflows/         keep-awake ping for the free API
+├── docs/
+│   ├── diagrams/              the README's diagrams (draw.py draws them; *.mmd are Mermaid sources)
+│   ├── gifs/                  full-size GIFs; readme/ (light, autoplaying) and blog/ (dev.to) copies
+│   └── brand/                 wordmarks
+└── agent-relay/               Relay, and WiFight built on it
+    ├── api/                   FastAPI app (main.py) and the API contract (CONTRACT.md)
+    ├── relay/                 the memory engine and the agents
+    │   ├── queries.py         every Cypher query the product runs
+    │   ├── memory.py          write path: episodes in, facts out, two clocks
+    │   ├── retrieve.py        read path: entity linking, recall, answer paths
+    │   ├── registry.py        predicates, their types and conflict policies
+    │   ├── agents.py          intake, resolver, network ops; tickets and handoffs
+    │   ├── intake.py          Mr.Fix-It's turn planning
+    │   ├── lab.py, network.py the network lab, the access network graph and its algorithms
+    │   └── …                  kb (catalogue), geo (addresses), llm, embed, procedural, sharing, sim
+    ├── web/                   React + TypeScript + Vite: customer site and staff console
+    ├── mcp_server.py          Relay as an MCP server
+    ├── data/                  synthetic world, catalogue, benchmark scenario and questions
+    ├── eval/                  the benchmark (run_eval.py, results, components); archive/ holds its history
+    ├── tests/                 unit and integration tests
+    ├── scripts/               end-to-end probes run by hand against a live graph
+    └── demo_cache/            cached model replies, so the demo story replays without spending quota
+```
 
 ## 🤖 AI-use disclosure
 

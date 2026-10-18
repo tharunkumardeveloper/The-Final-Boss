@@ -1,8 +1,0 @@
-flowchart LR
-    C([👤 Customer]) -- chat --> I["🤖 Mr.Fix-It<br/><i>intake</i>"]
-    I -- "facts · ticket" --> G[("🧠 FalkorDB<br/>one graph per tenant")]
-    R["🔧 Resolver"] <-- "reads · acts · re-measures" --> G
-    N["📡 Network Ops"] <-- "traversal · warnings" --> G
-    M["🧩 Claude / any MCP client"] <-- MCP --> G
-    G --> S["🖥️ Staff console"]
-    style G fill:#14A39A,color:#fff,stroke:#0d6e68

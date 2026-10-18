@@ -1,5 +1,5 @@
 """Live probe against a running API: start a simulation, count WebSocket events for N seconds.
-Run: python -m tests.ws_probe http://127.0.0.1:8600 rss-test 60"""
+Run: python -m scripts.ws_probe http://127.0.0.1:8600 rss-test 60"""
 import asyncio
 import json
 import sys

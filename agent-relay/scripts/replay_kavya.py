@@ -1,5 +1,5 @@
 """Replay the conversation that went wrong, on the weakest model, and print Kavya's replies.
-Run: python -m tests.replay_kavya"""
+Run: python -m scripts.replay_kavya"""
 from fastapi.testclient import TestClient
 
 import tests.conftest  # noqa: F401  (tenant keys on every request)

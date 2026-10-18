@@ -1,5 +1,5 @@
 """The simulator's network incident: Baner OLT fails mid-run and Pune customers are warned. No LLM.
-Run: python -m tests.check_sim_noc"""
+Run: python -m scripts.check_sim_noc"""
 from relay import db, events, memory, sim
 
 T = "test-sim-noc"

@@ -1,5 +1,5 @@
 """When every extraction model is out of quota: chat still answers, the benchmark loader still raises.
-Run: python -m tests.check_outage"""
+Run: python -m scripts.check_outage"""
 from fastapi.testclient import TestClient
 
 import tests.conftest  # noqa: F401  (tenant keys on every request)

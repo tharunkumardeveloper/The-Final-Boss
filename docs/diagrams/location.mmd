@@ -1,9 +1,0 @@
-flowchart TB
-    A["📝 Any address<br/><i>suburb · PIN code · landmark</i>"] --> B{"WiFight's own list<br/>199 cities · 1,118 areas"}
-    B -- not listed --> C{"Offline town list<br/>GeoNames"}
-    C -- unknown or ambiguous --> D["🌐 OpenCage<br/>geocoding"]
-    B -- found --> E["📍 Nearest city & area we serve"]
-    C -- found --> E
-    D --> E
-    E --> F["🏢 Right desk · 🛰️ line · 🔧 resolver · Network lab"]
-    style E fill:#14A39A,color:#fff,stroke:#0d6e68

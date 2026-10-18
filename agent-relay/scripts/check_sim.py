@@ -1,5 +1,5 @@
 """Run the full persona simulation synchronously and check every planted demo moment landed in the graph.
-Run: python -m tests.check_sim   (LLM calls are cached; a second run is free)."""
+Run: python -m scripts.check_sim   (LLM calls are cached; a second run is free)."""
 import time
 
 from relay import agents, db, events, retrieve, sim
