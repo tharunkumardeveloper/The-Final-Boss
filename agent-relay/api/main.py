@@ -1172,12 +1172,26 @@ def benchmark():
     qs = config.ROOT / "data" / "questions.json"
     questions = [{k: q.get(k) for k in ("i", "type", "question", "gold", "expect_unknown", "expect_conflict", "asked_by")}
                  for q in json.loads(qs.read_text())] if qs.exists() else []
-    try:
-        live = "pml-bench" in db.tenants()
-    except Exception:
-        live = False
     return {"results": read("results.json"), "bench": read("bench.json"), "questions": questions,
-            "bench_graph": "pml-bench" if live else None}
+            "bench_graph": "pml-bench" if _bench_loaded() else None}
+
+
+_bench_state = {"at": 0.0, "ok": False}
+
+
+def _bench_loaded():
+    """The benchmark graph is offered for live re-runs only once its whole scenario is in (a graph that is still
+    loading would answer from half the customers). Checked at most once a minute."""
+    if time.time() - _bench_state["at"] < 60:
+        return _bench_state["ok"]
+    try:
+        events = len(json.loads((config.ROOT / "data" / "scenario.json").read_text())["events"])
+        n = db.run("pml-bench", "bench loaded?", "MATCH (e:Episode) RETURN count(e)", ro=True)[0][0]             if "pml-bench" in db.tenants() else 0
+        ok = n >= events
+    except Exception:
+        ok = False
+    _bench_state.update(at=time.time(), ok=ok)
+    return ok
 
 
 # ---------------------------------------------------------------- WebSocket
