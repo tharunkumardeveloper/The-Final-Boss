@@ -8,6 +8,7 @@ import { Feed } from '../components/console/Feed'
 import { GraphControls } from '../components/console/GraphControls'
 import { entityId } from '../lib/graph'
 import { Inspector } from '../components/console/Inspector'
+import { MemoryKindKey } from '../components/portal/MemoryPanel'
 import { KIND_COLOR, MemoryGraph } from '../components/console/MemoryGraph'
 import { Tickets } from '../components/console/Tickets'
 import { TopBar } from '../components/console/TopBar'
@@ -105,6 +106,7 @@ export default function Console() {
               <span className="flex items-center gap-1"><i className="w-4 border-t border-dashed border-old" />superseded</span>
               <span className="flex items-center gap-1"><i className="h-0.5 w-4 bg-conflict" />conflict</span>
               <span className="flex items-center gap-1"><i className="h-0.5 w-4 bg-signal" />answer path</span>
+              <MemoryKindKey className="w-full" />
             </div>
           </section>
           <section className="panel shrink-0" aria-label="Time">

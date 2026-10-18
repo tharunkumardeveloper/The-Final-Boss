@@ -4,6 +4,7 @@ import { predicateLabel, when } from '../../lib/format'
 import { emptyGraph, loadGraph } from '../../lib/graph'
 import { at, syncTo, type Edge } from '../../pages/Graph'
 import { MemoryGraph } from '../console/MemoryGraph'
+import { MemoryKindKey } from './MemoryPanel'
 import { Pause, Play, Rewind } from '../Icons'
 import type { Subscribe } from './SupportChat'
 
@@ -66,6 +67,7 @@ export default function MyGraph({ tenant, who, subscribe, onLine, hasCase, fresh
           <p className="eyebrow">What we remember</p>
           <h2 className="mt-1 font-display text-xl font-semibold tracking-[-0.01em]">How we know you, over time</h2>
           <p className="mt-1 text-sm text-ink-3">Grows while you chat. Faded lines used to be true.</p>
+          <MemoryKindKey className="mt-2" />
           {onLine && (
             <button onClick={onLine} className={`mt-2 inline-flex items-center gap-1.5 rounded-full bg-ink px-3 py-1 text-xs font-medium text-paper ${fresh ? 'animate-breathe' : ''}`}>
               <i className={`h-1.5 w-1.5 rounded-full ${hasCase ? 'bg-conflict' : 'bg-current'}`} />{hasCase ? 'Your case is open · see your line →' : 'Your line →'}

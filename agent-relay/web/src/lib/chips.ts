@@ -9,11 +9,16 @@ export type Phase = 'pending' | 'flying' | 'settled'
 // Staff bookkeeping (what intake is waiting for, what they couldn't say, ticket priority): in memory, not in the
 // customer's own panel.
 const INTERNAL = new Set(['awaiting', 'doesnt_know', 'has_priority', 'assigned_to', 'has_status'])
-export interface Chip { key: string; label: string; status: FactChange['status']; note?: string; phase: Phase; line?: string; at: number }
+export type MemoryKind = 'semantic' | 'episodic' | 'procedural'
+// A fix that was tried, fixed a ticket or resolves an issue is procedural memory (how to fix); any other fact is semantic.
+const PROCEDURAL = new Set(['tried_fix', 'fixed_by', 'resolves', 'worked_fix', 'playbook'])
+export const memoryKind = (predicate: string): MemoryKind => (PROCEDURAL.has(predicate) ? 'procedural' : 'semantic')
+
+export interface Chip { key: string; label: string; status: FactChange['status']; note?: string; phase: Phase; line?: string; at: number; kind?: MemoryKind }
 
 export function chipFor(f: { fact_id: string; predicate: string; object: string }, status: FactChange['status'], phase: Phase, note?: string): Chip {
   const obj = f.predicate === 'has_ticket' ? ticketLabel(f.object) : titleCase(f.object)
-  return { key: f.fact_id, status, note, phase, at: Date.now(),
+  return { key: f.fact_id, status, note, phase, at: Date.now(), kind: memoryKind(f.predicate),
     label: status === 'retired' ? `${retiredLabel(f.predicate)} ${obj}` : `${predicateLabel(f.predicate)} ${obj}` }
 }
 

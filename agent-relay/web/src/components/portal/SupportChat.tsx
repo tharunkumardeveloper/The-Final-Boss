@@ -9,7 +9,7 @@ import type { ConversationSession, Customer, Desk, RelayEvent, ChatImages, Hop }
 import { shortDate } from '../Hops'
 import { Close, Send, Ticket as TicketIcon } from '../Icons'
 import { KavyaAvatar, SPRING, Typing } from './Kavya'
-import { MemoryChip, MemoryPanel } from './MemoryPanel'
+import { MemoryChip, MemoryKindPill, MemoryPanel } from './MemoryPanel'
 import { TicketsPanel } from './TicketsPanel'
 
 // `local` lines (our echo / the POST reply) get confirmed by the socket's copy; `ep` is the episode id.
@@ -142,7 +142,7 @@ export function HowIKnow({ hops }: { hops: Hop[] }) {
   const who = (by?: string[]) => (by ?? []).map((a) => (a === 'intake' ? BOT : a === 'resolver' ? 'our resolver' : a)).join(' and ')
   return (
     <p className="mt-1 px-1 text-[11px] text-ink-3" aria-label="How I know">
-      How I know: {hops.map((h, i) => (
+      <MemoryKindPill kind="semantic" className="mr-1 align-[1px]" />How I know: {hops.map((h, i) => (
         <span key={i}>{i > 0 && '; '}you {verb(h.rel)} <span className="text-ink-2">{titleCase(h.to)}</span>
           {h.learned && <> · on file since {shortDate(h.learned)}</>}{h.by?.length ? <> · noted by {who(h.by)}</> : null}</span>
       ))}
@@ -167,6 +167,8 @@ function Bubble({ l, customer, flying, onRename }: { l: Line; customer: string; 
       <div className={`flex min-w-0 max-w-[78%] flex-col ${mine ? 'items-end' : 'items-start'}`}>
         <p className="mb-1 px-1 text-[11.5px] text-ink-3">
           <span className="font-medium text-ink-2">{name}</span><span className="num"> · {l.pending ? 'sending…' : when(l.at)}</span>
+          {/* stored as an Episode node once the server confirms it: that's episodic memory */}
+          {l.ep && !l.pending && <MemoryKindPill kind="episodic" className="ml-1.5 align-[1px] opacity-80" />}
         </p>
         <p className={`rounded-[1.25rem] px-4 py-2.5 text-[15px] leading-relaxed ${mine ? 'rounded-br-md bg-ink text-paper'
           : tool ? 'rounded-bl-md bg-sunk/70 font-mono text-[13px] text-ink-2'
@@ -502,7 +504,7 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
                 {loading && <p className="text-xs text-ink-3 animate-breathe">Pulling up your notes…</p>}
                 {history.length > 0 && (
                   <div className="space-y-2">
-                    <p className="eyebrow">Earlier conversations</p>
+                    <p className="eyebrow flex items-center gap-1.5">Earlier conversations <MemoryKindPill kind="episodic" className="normal-case tracking-normal" /></p>
                     {history.map((s) => <HistoryRow key={s.session_id} s={s} customer={who} />)}
                   </div>
                 )}

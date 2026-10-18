@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { api } from '../../lib/api'
 import type { Card } from '../../lib/types'
 import { KIND_COLOR } from './MemoryGraph'
+import { MemoryKindPill } from '../portal/MemoryPanel'
 
 export function Inspector({ tenant, id, version }: { tenant: string; id: string | null; version: number }) {
   const [card, setCard] = useState<Card>()
@@ -43,7 +44,7 @@ export function Inspector({ tenant, id, version }: { tenant: string; id: string 
       <div className="mt-3 space-y-1.5 text-sm leading-relaxed text-ink-2">{card.lines.map((l, i) => <p key={i}>{l}</p>)}</div>
       {card.sections.filter((s) => s.rows.length).map((s) => (
         <section key={s.title} className="mt-5">
-          <h4 className="eyebrow">{s.title}</h4>
+          <h4 className="eyebrow flex items-center gap-1.5">{s.title}{s.title === 'Sources' && <MemoryKindPill kind="episodic" className="normal-case tracking-normal" />}</h4>
           <dl className="mt-2 divide-y divide-line/[0.06]">
             {s.rows.map(([k, v], i) => (
               <div key={i} className="flex justify-between gap-4 py-1.5 text-sm">

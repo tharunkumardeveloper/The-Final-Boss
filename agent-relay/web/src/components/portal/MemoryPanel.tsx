@@ -3,7 +3,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { api } from '../../lib/api'
-import type { Chip } from '../../lib/chips'
+import type { Chip, MemoryKind } from '../../lib/chips'
 import { predicateLabel, retiredLabel, ticketLabel, titleCase, when } from '../../lib/format'
 import type { Card, Customer, HistoryRow } from '../../lib/types'
 import { ArrowUpRight, Sparkle } from '../Icons'
@@ -19,11 +19,35 @@ const TONE: Record<Chip['status'], string> = {
 const WORD: Record<Chip['status'], string> = { new: 'New', updated: 'Updated', corroborated: 'Confirmed', retired: 'No longer true' }
 
 /** The chip itself; the same layoutId is used in the chat bubble and in the panel, so it flies between them. */
+/** The three memory types, one colour each, the same everywhere they are flagged. */
+export const MEMORY_KINDS: Record<MemoryKind, { label: string; cls: string; what: string }> = {
+  semantic: { label: 'Semantic', cls: 'bg-current-tint text-current', what: 'Facts: what is true about you now (plan, city, devices), and what used to be' },
+  episodic: { label: 'Episodic', cls: 'bg-signal-tint text-signal-deep', what: 'Episodes: every message and reply, timestamped, which each fact can be traced back to' },
+  procedural: { label: 'Procedural', cls: 'bg-conflict-tint text-conflict', what: 'Know-how: fixes that worked before, tried first next time' },
+}
+
+export function MemoryKindPill({ kind, className = '' }: { kind: MemoryKind; className?: string }) {
+  const k = MEMORY_KINDS[kind]
+  return <span title={`${k.label} memory: ${k.what}`} className={`inline-flex shrink-0 items-center rounded-full px-1.5 py-px text-[9.5px] font-semibold uppercase tracking-wider ${k.cls} ${className}`}>{k.label}</span>
+}
+
+/** A one-line key for a memory graph: which part of the picture is which kind of memory. */
+export function MemoryKindKey({ className = '' }: { className?: string }) {
+  return (
+    <p className={`flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-ink-3 ${className}`} aria-label="Memory types">
+      <span className="flex items-center gap-1"><MemoryKindPill kind="semantic" />lines: facts</span>
+      <span className="flex items-center gap-1"><MemoryKindPill kind="procedural" />green nodes: fixes that worked</span>
+      <span className="flex items-center gap-1"><MemoryKindPill kind="episodic" />Replay and sources: the conversations behind them</span>
+    </p>
+  )
+}
+
 export function MemoryChip({ c, compact = false }: { c: Chip; compact?: boolean }) {
   return (
     <motion.span layoutId={`mem-${c.key}`} transition={SPRING}
       className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${TONE[c.status]}`}>
       <Sparkle className="h-3 w-3" />{c.label}{!compact && c.note && <span className="font-normal opacity-75">· {c.note}</span>}
+      {c.kind && <MemoryKindPill kind={c.kind} className="ml-0.5 bg-surface/70" />}
     </motion.span>
   )
 }
