@@ -3,7 +3,7 @@
 // flying   = attached to Kavya's reply bubble, about to fly into the memory panel (shared layoutId)
 // settled  = in the memory panel; `at` drives the arrival glow
 import { predicateLabel, retiredLabel, ticketLabel, titleCase } from './format'
-import type { FactChange, RelayEvent } from './types'
+import type { DerivedFact, FactChange, RelayEvent } from './types'
 
 export type Phase = 'pending' | 'flying' | 'settled'
 // Staff bookkeeping (what intake is waiting for, what they couldn't say, ticket priority): in memory, not in the
@@ -60,6 +60,10 @@ export function fromLearned(chips: Chip[], learned: FactChange[], phase: Phase):
   return learned.filter((f) => !INTERNAL.has(f.predicate)).reduce((cs, f) => upsert(cs, chipFor(f, f.status, phase, f.replaced?.length ? `was ${titleCase(f.replaced[0].object)}` : undefined),
     f.replaced?.map((r) => r.fact_id) ?? []), chips)
 }
+
+/** History: what one stored message produced, as landed chips (a fact no longer true reads "no longer ..."). */
+export const fromDerived = (derived?: DerivedFact[]): Chip[] =>
+  (derived ?? []).filter((f) => !INTERNAL.has(f.predicate)).map((f) => chipFor(f, f.active ? 'new' : 'retired', 'settled'))
 
 /** Reply is on screen: pending chips (and the reply's own) start flying from that bubble. */
 export const launch = (chips: Chip[], line: string, keys: string[]): Chip[] =>

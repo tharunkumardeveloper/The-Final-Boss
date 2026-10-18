@@ -57,7 +57,9 @@ export interface Sharing {
   top_shared: { fact_id: string; sentence: string; writer: string; readers: string[]; uses: number }[]
 }
 
-export interface ConversationMessage { episode_id: string; speaker: Speaker; text: string; at: string }
+export interface DerivedFact { fact_id: string; predicate: string; object: string; active: boolean }
+/** derived: the facts this message's episode produced (semantic, or procedural for fixes). */
+export interface ConversationMessage { episode_id: string; speaker: Speaker; text: string; at: string; derived?: DerivedFact[] }
 export interface ConversationSession { session_id: string; started_at?: string | null; summary?: string | null; messages: ConversationMessage[] }
 export interface Conversation { customer: string; sessions: ConversationSession[] }
 

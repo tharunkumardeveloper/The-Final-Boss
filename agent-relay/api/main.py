@@ -477,15 +477,22 @@ def install_order(tenant: str, order_id: str):
 def conversation(tenant: str, customer: str, limit: int = 400, include_actions: bool = False):
     """Everything said with one customer, grouped into sessions (oldest first). Internal action notes only on request."""
     T(tenant)
-    sessions = {}
-    for sid, started, summary, eid, speaker, agent, text, at in db.run(
+    sessions, carry = {}, {}  # carry: facts from hidden action notes, waiting for the next message in that session
+    for sid, started, summary, eid, speaker, agent, text, at, derived in db.run(
             tenant, "conversation", Q.CONVERSATION, {"c": norm(customer), "limit": min(limit, 2000)}, ro=True):
-        if speaker == "action" and not include_actions:
-            continue
+        facts = [{"fact_id": f, "predicate": p, "object": o, "active": bool(a)} for f, p, o, a in derived or []]
         s = sessions.setdefault(sid, {"session_id": sid, "started_at": events.iso(started), "summary": summary,
                                       "messages": []})
+        if speaker == "action" and not include_actions:
+            # a resolver's note (a fix tried, a fix saved) isn't shown to the customer, but what it wrote is: on the
+            # message before it, or the next one if it came first
+            if s["messages"]:
+                s["messages"][-1]["derived"] += facts
+            else:
+                carry.setdefault(sid, []).extend(facts)
+            continue
         s["messages"].append({"episode_id": eid, "speaker": agent if speaker == "agent" else speaker,
-                              "text": text, "at": events.iso(at)})
+                              "text": text, "at": events.iso(at), "derived": carry.pop(sid, []) + facts})
     return {"customer": norm(customer), "sessions": list(sessions.values())}
 
 

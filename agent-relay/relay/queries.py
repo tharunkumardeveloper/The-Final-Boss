@@ -150,9 +150,12 @@ RETURN DISTINCT f.fact_id, f.object_value
 """
 
 # Everything said with one customer, grouped into sessions by the caller.
+# Each message with the facts its episode DERIVED: episodic memory, and the semantic/procedural memory it produced.
 CONVERSATION = """
 MATCH (ep:Episode {customer:$c})-[:IN]->(s:Session)
-RETURN s.session_id, s.started_at, s.summary, ep.episode_id, ep.speaker, ep.source_agent, ep.text, ep.recorded_at
+OPTIONAL MATCH (ep)-[:DERIVED]->(f:Fact)
+WITH s, ep, collect(CASE WHEN f IS NULL THEN NULL ELSE [f.fact_id, f.predicate, f.object_value, f.active] END) AS derived
+RETURN s.session_id, s.started_at, s.summary, ep.episode_id, ep.speaker, ep.source_agent, ep.text, ep.recorded_at, derived
 ORDER BY ep.recorded_at, id(ep)
 LIMIT $limit
 """

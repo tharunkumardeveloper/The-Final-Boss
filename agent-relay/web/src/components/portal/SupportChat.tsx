@@ -3,7 +3,7 @@ import { BOT, BOT_TAGLINE, COMPANY } from '../../lib/brand'
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'framer-motion'
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { api } from '../../lib/api'
-import { fromEvent, fromLearned, launch, settle, type Chip } from '../../lib/chips'
+import { fromDerived, fromEvent, fromLearned, launch, settle, type Chip } from '../../lib/chips'
 import { speakerName, ticketLabel, titleCase, when } from '../../lib/format'
 import type { ConversationSession, Customer, Desk, RelayEvent, ChatImages, Hop } from '../../lib/types'
 import { shortDate } from '../Hops'
@@ -13,7 +13,7 @@ import { MemoryChip, MemoryKindPill, MemoryPanel } from './MemoryPanel'
 import { TicketsPanel } from './TicketsPanel'
 
 // `local` lines (our echo / the POST reply) get confirmed by the socket's copy; `ep` is the episode id.
-interface Line { id: string; ep?: string; speaker: string; text: string; at?: string; pending?: boolean; local?: boolean
+interface Line { id: string; ep?: string; saved?: Chip[]; speaker: string; text: string; at?: string; pending?: boolean; local?: boolean
   mark?: string; rename?: boolean; images?: ChatImages; how?: Hop[] }
 export type Subscribe = (fn: (e: RelayEvent) => void) => () => void
 
@@ -230,7 +230,7 @@ function HistoryRow({ s, customer }: { s: ConversationSession; customer: string 
           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.38, ease: [0.32, 0.72, 0, 1] }} className="overflow-hidden">
             <div className="space-y-3 px-4 pb-4 pt-1">
-              {s.messages.map((m) => <Bubble key={m.episode_id} l={{ id: m.episode_id, speaker: m.speaker, text: m.text, at: m.at }} customer={customer} flying={[]} />)}
+              {s.messages.map((m) => <Bubble key={m.episode_id} l={{ id: m.episode_id, ep: m.episode_id, speaker: m.speaker, text: m.text, at: m.at }} customer={customer} flying={[]} saved={fromDerived(m.derived)} />)}
             </div>
           </motion.div>
         )}
@@ -318,7 +318,7 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
       const current = c.sessions.find((s) => s.session_id === stored)
       setHistory(c.sessions.filter((s) => s !== current))
       setSession(current?.session_id)
-      setLines((current?.messages ?? []).map((m) => ({ id: m.episode_id, ep: m.episode_id, speaker: m.speaker, text: m.text, at: m.at })))
+      setLines((current?.messages ?? []).map((m) => ({ id: m.episode_id, ep: m.episode_id, saved: fromDerived(m.derived), speaker: m.speaker, text: m.text, at: m.at })))
     }).catch(() => live && setHistory([])).finally(() => { if (live) { setLoading(false); setLoadedFor(who); input.current?.focus({ preventScroll: true }) } })
     return () => { live = false }
   }, [tenant, who, visit]) // customers is read once at chat start on purpose
@@ -536,7 +536,7 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
                 )}
                 {lines.filter((l) => side === 'memory' || !l.speaker.startsWith('tool:')).map((l) => <Bubble key={l.id} l={l} customer={who}
                   flying={side !== 'tickets' ? chips.filter((c) => c.phase === 'flying' && c.line === l.id) : []}
-                  saved={chips.filter((c) => c.phase === 'settled' && c.line === l.id)} />)}
+                  saved={[...(l.saved ?? []), ...chips.filter((c) => c.phase === 'settled' && c.line === l.id && !l.saved?.some((x) => x.key === c.key))]} />)}
               </>
             )}
             <AnimatePresence>{busy && <Typing key="typing" step={step} />}</AnimatePresence>
