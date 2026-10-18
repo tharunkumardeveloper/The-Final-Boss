@@ -99,7 +99,7 @@ export default function MyGraph({ tenant, who, subscribe, onLine, hasCase, fresh
           value={mode === 'live' ? span.to : t} className="mt-1 w-full accent-[rgb(var(--signal))]" disabled={!edges.length}
           onChange={(e) => { const v = Number(e.target.value); if (mode === 'live') { replay.current = emptyGraph(); setMode('replay') } setPlaying(false); setT(v); show(v) }} />
         {latest.length > 0 && (
-          <ul className="mt-2 grid gap-1.5 sm:grid-cols-2">
+          <ul className="mt-2 grid grid-cols-1 gap-1.5 sm:grid-cols-2">
             {latest.map((e) => (
               <li key={e.id} className="truncate rounded-xl bg-paper/70 px-3 py-1.5 text-[12.5px]" title={`${label(sid(e.source))} ${predicateLabel(e.label).toLowerCase()} ${label(sid(e.target))}`}>
                 <span className="font-medium">{label(sid(e.source))}</span> {predicateLabel(e.label).toLowerCase()} <span className="font-medium">{label(sid(e.target))}</span>

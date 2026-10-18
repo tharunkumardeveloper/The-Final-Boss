@@ -147,9 +147,9 @@ export function HandoffReplay({ tenant, subscribe }: { tenant: string; subscribe
           <h2 className="font-display text-lg font-semibold">Watch a handoff</h2>
           {story && <p className="text-[11px] text-ink-3 num">{ticketLabel(story.ticket)} · {titleCase(story.issues[0] ?? 'issue')} · {story.status} · {writes} facts written, {reads} read by another agent</p>}
         </div>
-        <div className="flex items-center gap-1.5">
+        <div className="flex w-full min-w-0 items-center gap-1.5 sm:w-auto">
           <label htmlFor="case" className="sr-only">Case</label>
-          <select id="case" className="field !w-auto !py-1.5 text-xs" value={ticket ?? ''} onChange={(e) => setTicket(e.target.value)}>
+          <select id="case" className="field min-w-0 flex-1 !py-1.5 text-xs sm:!w-auto sm:flex-none" value={ticket ?? ''} onChange={(e) => setTicket(e.target.value)}>
             {tickets.map((t) => <option key={t.ticket} value={t.ticket}>{ticketLabel(t.ticket)} · {titleCase(t.customer)} · {t.status}</option>)}
             {!tickets.length && <option value="">No cases yet</option>}
           </select>
@@ -161,7 +161,7 @@ export function HandoffReplay({ tenant, subscribe }: { tenant: string; subscribe
       {!story ? (
         <p className="mt-6 rounded-2xl bg-sunk/50 p-6 text-center text-sm text-ink-3">No case yet. Press “Show me a handoff”, or report a problem in the customer chat.</p>
       ) : (
-        <div className="mt-2 grid min-h-0 flex-1 gap-3 md:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+        <div className="mt-2 grid grid-cols-1 min-h-0 flex-1 gap-3 md:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
           <div className="flex flex-col justify-center">
             <Stage events={events} cur={cur} />
             <input type="range" min={0} max={Math.max(0, n - 1)} value={cur} aria-label="Step"

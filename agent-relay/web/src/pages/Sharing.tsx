@@ -248,7 +248,7 @@ export default function SharingPage() {
           {error ? "Couldn't load sharing data. Is the API running?" : note}</p>
       )}
 
-      <main className="grid min-h-0 flex-1 gap-4 px-4 pb-4 sm:px-6 xl:grid-cols-[minmax(0,1fr)_400px]">
+      <main className="grid grid-cols-1 min-h-0 flex-1 gap-4 px-4 pb-4 sm:px-6 xl:grid-cols-[minmax(0,1fr)_400px]">
         <div className="flex min-h-0 flex-col gap-4">
           {data && (
             <section className="flex shrink-0 flex-col gap-2 rounded-[1.75rem] bg-surface p-3 hairline md:flex-row md:items-center" aria-label="The agent team">

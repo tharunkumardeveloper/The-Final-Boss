@@ -81,12 +81,13 @@ const STATE: Record<string, string> = {
 function ModelCard({ u, onSaved, now }: { u: Usage; onSaved: (p: UsagePayload) => void; now: number }) {
   const [edit, setEdit] = useState(false)
   const [checking, setChecking] = useState(false)
+  const [more, setMore] = useState(false)  // a phone shows the two meters; the rest is a tap away
   const live = u.live
   const state = u.state ?? (u.exhausted ? 'exhausted' : 'available')
   const backIn = u.back_at ? Math.max(0, Math.round((new Date(u.back_at).getTime() - now) / 1000)) : null
   const check = async () => { setChecking(true); try { onSaved(await api.checkModels(u.model)) } finally { setChecking(false) } }
   return (
-    <article className={`panel p-5 ${u.exhausted ? 'ring-1 ring-danger/30' : ''}`}>
+    <article className={`panel p-4 sm:p-5 ${u.exhausted ? 'ring-1 ring-danger/30' : ''}`}>
       <header className="flex flex-wrap items-center gap-2">
         <h3 className="font-mono text-sm font-medium text-ink">{short(u.model)}</h3>
         <span className="chip bg-sunk text-ink-2">{PROVIDER[u.provider] ?? u.provider}</span>
@@ -110,11 +111,11 @@ function ModelCard({ u, onSaved, now }: { u: Usage; onSaved: (p: UsagePayload) =
         <Meter label="Tokens today" used={u.used.tokens} limit={u.limits.tpd}
           hint={u.remaining.tokens != null ? `${n(u.remaining.tokens)} left (counted on this server)` : undefined} />
         {live?.remaining_tokens_minute != null && (
-          <p className="text-[11px] text-ink-3 num">This minute: {n(live.remaining_tokens_minute)} of {n(live.limit_tokens_minute)} tokens left, from Groq headers{live.reset_tokens ? ` · resets in ${live.reset_tokens}` : ''}</p>
+          <p className={`text-[11px] text-ink-3 num sm:block ${more ? '' : 'hidden'}`}>This minute: {n(live.remaining_tokens_minute)} of {n(live.limit_tokens_minute)} tokens left, from Groq headers{live.reset_tokens ? ` · resets in ${live.reset_tokens}` : ''}</p>
         )}
       </div>
 
-      <dl className="mt-4 grid grid-cols-2 gap-3 text-xs num sm:grid-cols-4">
+      <dl className={`mt-4 grid-cols-2 gap-3 text-xs num sm:grid sm:grid-cols-4 ${more ? 'grid' : 'hidden'}`}>
         {[['Tokens in', u.used.tokens_in], ['Tokens out', u.used.tokens_out], ['Cache hits', u.used.cache_hits], ['Rate-limit hits', u.used.rate_limited]].map(([k, v]) => (
           <div key={k as string}><dt className="text-ink-3">{k}</dt><dd className={`mt-0.5 font-display text-base font-semibold ${k === 'Rate-limit hits' && Number(v) > 0 ? 'text-conflict' : ''}`}>{n(v as number)}</dd></div>
         ))}
@@ -122,7 +123,12 @@ function ModelCard({ u, onSaved, now }: { u: Usage; onSaved: (p: UsagePayload) =
 
       {u.last_error && <p className="mt-3 break-words rounded-lg bg-danger-tint/60 px-2.5 py-1.5 font-mono text-[11px] text-danger">{u.last_error}</p>}
       {edit ? <LimitsForm u={u} onSaved={(p) => { onSaved(p); setEdit(false) }} onCancel={() => setEdit(false)} />
-        : <button className="btn-ghost -ml-3 mt-3 !py-1.5 text-xs" onClick={() => setEdit(true)}>Edit limits</button>}
+        : (
+          <div className="-ml-3 mt-3 flex items-center gap-1">
+            <button className={`btn-ghost !py-1.5 text-xs sm:inline-flex ${more ? '' : 'hidden'}`} onClick={() => setEdit(true)}>Edit limits</button>
+            <button className="btn-ghost !py-1.5 text-xs sm:hidden" onClick={() => setMore((m) => !m)} aria-expanded={more}>{more ? 'Less' : 'Details'}</button>
+          </div>
+        )}
     </article>
   )
 }
@@ -206,7 +212,7 @@ export default function UsagePage() {
 
         {data && (
           <>
-            <section className="mt-8 grid gap-4 lg:grid-cols-2">
+            <section className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-2">
               {data.models.map((u) => <ModelCard key={u.model} u={u} onSaved={setData} now={now} />)}
             </section>
             <section className="panel mt-6 p-6">

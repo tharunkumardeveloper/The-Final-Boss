@@ -86,7 +86,7 @@ function AskBoth() {
       </form>
       {err && <p className="mt-3 text-sm text-danger" role="alert">{err}</p>}
       {(res || busy) && (
-        <div className="mt-4 grid gap-3 md:grid-cols-2">
+        <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
           <Side title="Relay" sub="graph memory" s={res?.graph} tone="bg-signal-tint/60" />
           <Side title="Vector store" sub="top-10 messages, dated" s={res?.vector} tone="bg-sunk/70" />
         </div>
@@ -123,7 +123,7 @@ export default function Benchmark() {
 
         {data?.results && (
           <>
-            <section className="mt-4 grid gap-3 md:grid-cols-2">
+            <section className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
               <div className="rounded-2xl bg-surface p-5 hairline">
                 <p className="eyebrow">This run</p>
                 <p className="mt-2 text-sm text-ink-2">
@@ -175,9 +175,10 @@ export default function Benchmark() {
         )}
 
         {data?.bench && (
-          <section className="panel mt-4 overflow-x-auto p-6">
+          <section className="panel scroll-thin mt-4 overflow-x-auto p-5 sm:p-6">
             <h2 className="eyebrow">Concurrency and scale</h2>
             <p className="mt-1 text-sm text-ink-3">{data.bench.note}</p>
+            <p className="mt-3 text-[11px] text-ink-3 sm:hidden">Scroll sideways for every column →</p>
             <table className="mt-4 w-full min-w-[560px] text-sm num">
               <thead><tr className="text-left text-xs text-ink-3"><th className="py-2 font-medium">Graphs</th><th className="font-medium">Writers</th><th className="font-medium">Writes/s</th><th className="font-medium">Write p50 / p95</th><th className="font-medium">Read p50 / p95</th><th className="font-medium">Duplicates</th></tr></thead>
               <tbody className="divide-y divide-line/[0.06]">

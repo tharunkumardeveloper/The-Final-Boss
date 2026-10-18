@@ -106,7 +106,7 @@ export default function DatabasePage() {
           </div>
         </div>
 
-        <div className="mt-8 grid gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
+        <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
           <aside className="space-y-4">
             <section className="rounded-2xl bg-surface p-4 hairline">
               <h2 className="font-display text-base font-semibold">Graphs · {health ? `${health.memory_mb ?? 0} of ${health.limit_mb ?? 100} MB` : '…'}</h2>
@@ -192,13 +192,13 @@ export default function DatabasePage() {
               )}
             </section>
 
-            <div className="grid gap-6 xl:grid-cols-2">
+            <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
               <section className="rounded-2xl bg-surface p-5 hairline">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <h2 className="font-display text-lg font-semibold">Snapshots</h2>
                   <button className="btn-primary !py-1.5 text-sm" onClick={save} disabled={!!busy}>{busy === 'save' ? 'Saving…' : 'Save snapshot'}</button>
                 </div>
-                <p className="mt-1 text-xs text-ink-3"><code className="font-mono">GRAPH.COPY</code> of mem:{graph}. One is taken before every story reset; the newest 3 are kept.</p>
+                <p className="mt-1 text-xs text-ink-3"><code className="font-mono">GRAPH.COPY</code> of mem:{graph}. One per graph, taken before every story reset (skipped when the instance is over 60% full).</p>
                 {msg && <p className="mt-2 text-sm text-ink-2" role="status">{msg}</p>}
                 <ul className="mt-3 divide-y divide-ink/5 text-sm">
                   {(snaps ?? []).length === 0 && <li className="py-2 text-ink-3">No snapshots yet.</li>}

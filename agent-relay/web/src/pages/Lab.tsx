@@ -680,7 +680,7 @@ export default function LabPage() {
       </div>
 
       {map ? (
-        <main className="grid min-h-0 flex-1 gap-4 px-4 pb-4 sm:px-6 xl:grid-cols-[minmax(0,1fr)_400px]" role="tabpanel">
+        <main className="grid grid-cols-1 min-h-0 flex-1 gap-4 px-4 pb-4 sm:px-6 xl:grid-cols-[minmax(0,1fr)_400px]" role="tabpanel">
           <div className="min-h-0 xl:overflow-y-auto scroll-thin">
             {error && <p className="mb-4 rounded-xl bg-danger-tint px-4 py-2 text-sm text-danger" role="alert">{error}</p>}
             <NetworkMap tenant={tenant} subscribe={subscribe} onHub={openHub} hubCustomers={(city) => inCity(city).length} />
@@ -689,7 +689,7 @@ export default function LabPage() {
         </main>
       ) : (
       <main className="flex min-h-0 flex-1 flex-col gap-3 px-4 pb-4 sm:px-6" role="tabpanel">
-        <ol className="grid shrink-0 gap-1.5 sm:grid-cols-4" aria-label="What happens">
+        <ol className="grid grid-cols-2 shrink-0 gap-1.5 sm:grid-cols-4" aria-label="What happens">
           {STEPS.map(([t, d], i) => (
             <li key={t} aria-current={i === stage ? 'step' : undefined} title={d}
               className={`flex items-center gap-2 rounded-xl px-3 py-2 transition duration-300 ease-spring ${i === stage ? 'bg-ink text-paper shadow-lift' : i < stage ? 'bg-current-tint text-ink' : 'bg-surface text-ink-3 hairline'}`}>
@@ -701,7 +701,7 @@ export default function LabPage() {
         </ol>
         {error && <p className="shrink-0 rounded-xl bg-danger-tint px-4 py-2 text-sm text-danger" role="alert">{error}</p>}
 
-        <div className="grid min-h-0 flex-1 gap-4 xl:grid-cols-[300px_minmax(0,1fr)_380px]">
+        <div className="grid grid-cols-1 min-h-0 flex-1 gap-4 xl:grid-cols-[300px_minmax(0,1fr)_380px]">
           {/* faults */}
           <section aria-label="Faults" className="scroll-thin min-h-0 space-y-3 xl:overflow-y-auto xl:pr-1">
             <div className="rounded-2xl bg-surface p-3 hairline">

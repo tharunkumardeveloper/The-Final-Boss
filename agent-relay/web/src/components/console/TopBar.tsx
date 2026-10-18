@@ -60,12 +60,12 @@ export function TopBar({ tenant, setTenant, stats, sim, setSim, simTime, status,
   ]
 
   return (
-    <header className="flex flex-wrap items-center gap-x-5 gap-y-2 px-4 py-3">
+    <header className="flex flex-wrap items-center gap-x-5 gap-y-2.5 px-4 py-3">
       <Link to="/" aria-label="Customer portal"><Wordmark sub="Operations console" /></Link>
 
-      <div className="flex items-center gap-2 text-xs">
-        <label htmlFor="tenant" className="text-ink-3">Tenant</label>
-        <select id="tenant" className="rounded-full bg-surface px-2.5 py-1 font-mono text-[11.5px] text-ink hairline outline-none focus:ring-2 focus:ring-signal/40"
+      <div className="flex min-w-0 items-center gap-2 text-xs">
+        <label htmlFor="tenant" className="hidden text-ink-3 sm:inline">Tenant</label>
+        <select id="tenant" className="min-w-0 max-w-[11.5rem] rounded-full bg-surface px-2.5 py-1 font-mono sm:max-w-none text-[11.5px] text-ink hairline outline-none focus:ring-2 focus:ring-signal/40"
           value={tenant} onChange={(e) => setTenant(e.target.value)}>
           {tenants.map((t) => <option key={t} value={t}>{tenantLabel(t)}</option>)}
         </select>
@@ -75,14 +75,14 @@ export function TopBar({ tenant, setTenant, stats, sim, setSim, simTime, status,
         </span>
       </div>
 
-      <dl className="flex items-center gap-4 text-xs num">
+      <dl className="grid w-full grid-cols-4 gap-2 text-xs num sm:flex sm:w-auto sm:items-center sm:gap-4">
         {counters.map(([k, v, cls]) => (
-          <div key={k} className="flex items-baseline gap-1.5"><dd className={`font-display text-base font-semibold ${cls ?? ''}`}>{v ?? '–'}</dd><dt className="text-ink-3">{k}</dt></div>
+          <div key={k} className="flex flex-col gap-0 sm:flex-row sm:items-baseline sm:gap-1.5"><dd className={`font-display text-base font-semibold ${cls ?? ''}`}>{v ?? '–'}</dd><dt className="text-[11px] leading-tight text-ink-3 sm:text-xs">{k}</dt></div>
         ))}
       </dl>
 
-      <div className="ml-auto flex flex-wrap items-center gap-2">
-        <div className="flex items-center gap-1 rounded-full bg-surface p-1 hairline" role="group" aria-label="Simulation">
+      <div className="scroll-thin -mx-4 flex w-[calc(100%+2rem)] items-center gap-2 overflow-x-auto px-4 pb-0.5 sm:mx-0 sm:ml-auto sm:w-auto sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
+        <div className="flex shrink-0 items-center gap-1 rounded-full bg-surface p-1 hairline" role="group" aria-label="Simulation">
           <button className={`btn h-8 !px-3 !py-0 text-xs ${sim.running ? 'bg-ink text-paper hover:bg-ink/90' : 'text-ink hover:bg-sunk'}`}
             onClick={toggle} disabled={!!phase} aria-label={sim.running ? 'Pause simulation' : 'Start simulation'}>
             {sim.running ? <Pause /> : <Play />}{sim.running ? 'Running' : 'Simulate'}
@@ -94,7 +94,7 @@ export function TopBar({ tenant, setTenant, stats, sim, setSim, simTime, status,
             ))}
             <span className="px-1.5 text-[10px] text-ink-3">h/s</span>
           </div>
-          <span className="num flex items-center gap-1.5 px-2 text-xs text-ink-2" title="Simulated time (IST)">
+          <span className="num flex items-center gap-1.5 whitespace-nowrap px-2 text-xs text-ink-2" title="Simulated time (IST)">
             {sim.running && <i className="h-1.5 w-1.5 rounded-full bg-current animate-breathe" />}{simTime ? when(simTime) : 'Clock idle'}
           </span>
         </div>
@@ -103,19 +103,19 @@ export function TopBar({ tenant, setTenant, stats, sim, setSim, simTime, status,
             <i className="h-1.5 w-1.5 rounded-full bg-signal animate-breathe" />{PHASE[phase] ?? phase}
           </span>
         ) : (
-          <button className={`btn !py-1.5 text-xs hairline ${confirm ? 'bg-conflict-tint text-conflict' : 'bg-surface text-ink-2 hover:bg-sunk'}`} onClick={reset} disabled={busy}>
+          <button className={`btn shrink-0 whitespace-nowrap !py-1.5 text-xs hairline ${confirm ? 'bg-conflict-tint text-conflict' : 'bg-surface text-ink-2 hover:bg-sunk'}`} onClick={reset} disabled={busy}>
             <Rewind className="h-4 w-4" />{confirm ? 'Click again: wipes the graph' : 'Reset story'}
           </button>
         )}
         {quota.known && (
           <Link to="/console/usage" title="LLM quota by model"
-            className={`chip !py-1.5 transition duration-300 ease-spring ${quota.exhausted ? 'bg-danger-tint text-danger hover:bg-danger-tint/70'
+            className={`chip shrink-0 whitespace-nowrap !py-1.5 transition duration-300 ease-spring ${quota.exhausted ? 'bg-danger-tint text-danger hover:bg-danger-tint/70'
               : quota.near ? 'bg-conflict-tint text-conflict' : 'bg-surface text-ink-2 hairline hover:bg-sunk'}`}>
             <Pulse className="h-3.5 w-3.5" />LLM quota · {quota.exhausted ? `${quota.exhausted} model${quota.exhausted > 1 ? 's' : ''} exhausted`
               : quota.near ? `${quota.near} near limit` : 'all OK'}
           </Link>
         )}
-        <button className="btn-ghost !py-1.5 text-xs" onClick={openCypher}><Database className="h-4 w-4" />Cypher <span className="num text-ink-3">{cypherCount}</span></button>
+        <button className="btn-ghost shrink-0 !py-1.5 text-xs" onClick={openCypher}><Database className="h-4 w-4" />Cypher <span className="num text-ink-3">{cypherCount}</span></button>
         {!quota.known && <Link className="btn-ghost !py-1.5 text-xs" to="/console/usage" title="LLM quota by model"><Pulse className="h-4 w-4" />Usage</Link>}
       </div>
       <ConsoleNav className="w-full" />

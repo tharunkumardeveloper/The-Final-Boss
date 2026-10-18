@@ -34,11 +34,29 @@ const plansFrom = (kb?: Kb) => kb?.plans.length
 
 type Line = ReturnType<typeof useLine>
 
+// On a phone the three cards become one panel at a time, a screen tall, under a sticky section bar.
+const PANE_H = 'h-[calc(100dvh-132px)] min-h-[460px] max-h-[780px]'
+type Pane = 'chat' | 'case' | 'view'
+const PANES: [Pane, string][] = [['chat', 'Chat'], ['case', 'Your case'], ['view', 'Your graph']]
+
+/** True on screens of at least `px` wide; follows rotation and resizing. */
+function useWide(px: number) {
+  const q = `(min-width: ${px}px)`
+  const [wide, setWide] = useState(() => typeof window !== 'undefined' && window.matchMedia(q).matches)
+  useEffect(() => {
+    const m = window.matchMedia(q)
+    const on = () => setWide(m.matches)
+    m.addEventListener('change', on); on()
+    return () => m.removeEventListener('change', on)
+  }, [q])
+  return wide
+}
+
 /** Tickets and memory share one full-height panel, so each has room; it jumps to Tickets when one opens.
  *  The resolver's work shows under the ticket it's on. */
-function AccountPanel({ tenant, who, customer, chips, subscribe, onAsk, line, force }: { tenant: string; who: string | null; customer?: Customer
+function AccountPanel({ tenant, who, customer, chips, subscribe, onAsk, line, force, className = '' }: { tenant: string; who: string | null; customer?: Customer
   chips: Chip[]; subscribe: (fn: (e: RelayEvent) => void) => () => void; onAsk: (t: string) => void; line: Line
-  force?: { tab: 'tickets' | 'memory'; n: number } }) {
+  force?: { tab: 'tickets' | 'memory'; n: number }; className?: string }) {
   const [tab, setTab] = useState<'tickets' | 'memory'>('memory')
   const [fresh, setFresh] = useState<{ tickets: boolean; memory: boolean }>({ tickets: false, memory: false })
   useEffect(() => { if (force) setTab(force.tab) }, [force])  // Judge mode points at what to watch
@@ -51,11 +69,11 @@ function AccountPanel({ tenant, who, customer, chips, subscribe, onAsk, line, fo
   useEffect(() => { if (settled) setFresh((f) => ({ ...f, memory: true })) }, [settled])
   const pick = (t: 'tickets' | 'memory') => { setTab(t); setFresh((f) => ({ ...f, [t]: false })) }
   return (
-    <div className="flex h-[700px] min-h-0 flex-col gap-3 xl:h-auto">
+    <div className={`flex ${PANE_H} flex-col gap-3 lg:h-[700px] lg:min-h-0 xl:h-auto ${className}`}>
       <div className="flex rounded-full bg-surface p-1 hairline" role="tablist" aria-label="Your account">
         {([['tickets', 'Your tickets'], ['memory', 'What we remember']] as const).map(([k, label]) => (
           <button key={k} role="tab" aria-selected={tab === k} onClick={() => pick(k)}
-            className={`relative flex-1 rounded-full px-4 py-2 text-sm font-medium transition duration-300 ease-spring ${tab === k ? 'bg-ink text-paper shadow-soft' : 'text-ink-2 hover:bg-sunk'}`}>
+            className={`relative flex-1 rounded-full px-3 py-2 text-sm font-medium transition duration-300 ease-spring sm:px-4 ${tab === k ? 'bg-ink text-paper shadow-soft' : 'text-ink-2 hover:bg-sunk'}`}>
             {label}
             {fresh[k] && tab !== k && <i className="absolute right-3 top-2 h-2 w-2 rounded-full bg-signal animate-breathe" aria-label="new" />}
           </button>
@@ -98,7 +116,7 @@ function GraphOrLine({ tenant, who, subscribe, line, force }: { tenant: string; 
   useEffect(() => { if (tabs && !auto.current) { auto.current = true; setMode('line') } }, [tabs])
   const show = tabs ? mode : 'memory'
   return (
-    <div className="flex h-full min-h-[560px] flex-col gap-2 xl:min-h-0">
+    <div className="flex h-full min-h-[420px] flex-col gap-2 sm:min-h-[560px] xl:min-h-0">
       {tabs && (
         <div className="flex shrink-0 gap-1 self-start rounded-full bg-surface p-1 hairline" role="tablist" aria-label="Your graphs">
           {([['line', 'Network lab'], ['memory', 'What we remember']] as const).map(([k, label]) => (
@@ -166,10 +184,21 @@ export default function Portal() {
   const driveRef = useRef<ChatDriver | null>(null)
   const [forceTab, setForceTab] = useState<{ tab: 'tickets' | 'memory'; n: number }>()
   const [forceMode, setForceMode] = useState<{ mode: 'memory' | 'line'; n: number }>()
+  const [pane, setPane] = useState<Pane>('chat')
+  const [news, setNews] = useState<Partial<Record<Pane, boolean>>>({})
+  const panes = useRef<HTMLDivElement>(null)
+  const show = useCallback((p: Pane) => {
+    setPane(p); setNews((n) => ({ ...n, [p]: false }))
+    const top = panes.current?.getBoundingClientRect().top ?? 0
+    if (top < 0 || top > window.innerHeight * 0.6) panes.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [])
   const onStep = useCallback((n: number) => {
     if (n === 3) { setForceTab({ tab: 'tickets', n }); setForceMode({ mode: 'line', n }) }
     if (n === 4 || n === 5) { setForceTab({ tab: 'memory', n }); setForceMode({ mode: 'memory', n }) }
+    setPane(n === 3 ? 'view' : n === 4 ? 'case' : 'chat')  // a phone shows one card: the one the step is about
   }, [])
+  const wideCoverage = useWide(768)
+  const [allCities, setAllCities] = useState(false)
   const judge = useJudge({ drive: driveRef, run: line.run, tenant, setTenant, customers, onStep })
   // A customer whose address another region serves (Chennai on the Latin America desk) is moved to that desk, and
   // what they said is re-told there once its chat is ready: the line, the ticket, the resolver and the lab follow.
@@ -219,6 +248,12 @@ export default function Portal() {
       refetch.current = setTimeout(() => api.customers(tenant).then(setCustomers).catch(() => {}), 700)
     }
     listeners.current.forEach((fn) => fn(e))
+    const d = e.data as { customer?: string; subject?: string; speaker?: string }
+    const mine = !!who && (d?.customer ?? d?.subject)?.toLowerCase() === who
+    if (mine && (e.type === 'ticket_opened' || e.type === 'ticket_status' || e.type === 'fact_created' || e.type === 'fact_superseded'))
+      setNews((n) => (pane === 'case' ? n : { ...n, case: true }))
+    if (mine && (e.type === 'lab_run' || (e.type === 'message' && d.speaker === 'resolver')))
+      setNews((n) => (pane === 'view' ? n : { ...n, view: true }))
   }, refresh)
 
   // outages only mark cities as Degraded in Coverage (and Mr.Fix-It knows them); no site-wide banner
@@ -226,24 +261,25 @@ export default function Portal() {
 
   return (
     <div className="min-h-[100dvh]">
-      <header className="mx-auto flex max-w-[1360px] items-center justify-between px-4 py-4 sm:px-6">
+      <header className="mx-auto flex max-w-[1360px] flex-wrap items-center justify-between gap-x-2 gap-y-2 px-4 py-3 sm:px-6 sm:py-4">
         <Wordmark />
-        <nav className="flex flex-wrap items-center gap-1 text-sm" aria-label="Main">
+        <nav className="flex flex-wrap items-center justify-end gap-1 text-sm" aria-label="Main">
           {/* the staff side opens in its own tab, so the customer's chat stays where it was */}
-          <a href="/console" target="_blank" rel="noopener noreferrer" className="btn-ghost">Staff console <ArrowUpRight className="h-4 w-4" /></a>
+          <a href="/console" target="_blank" rel="noopener noreferrer" className="btn-ghost !px-2.5 sm:!px-4">
+            <span className="sm:hidden">Console</span><span className="hidden sm:inline">Staff console</span> <ArrowUpRight className="h-4 w-4" /></a>
           <a href="#plans" className="btn-ghost hidden sm:inline-flex">Plans</a>
           <a href="#coverage" className="btn-ghost hidden sm:inline-flex">Coverage</a>
           {regions.length > 0 && (
-            <label className="flex items-center gap-1.5 rounded-full bg-surface px-3 py-1.5 text-xs text-ink-2 hairline">
+            <label className="flex max-w-full items-center gap-1 rounded-full bg-surface px-2.5 py-1.5 sm:gap-1.5 sm:px-3 text-xs text-ink-2 hairline">
               <span className="sr-only">Region</span>
               {/* a one-country region (India) has no Country menu to carry the flag, so it sits by the region name */}
               {kb && kb.countries.length <= 1 && kb.country && <span aria-hidden className="text-sm leading-none">{flag(kb.country)}</span>}
-              <select aria-label="Region" className="bg-transparent outline-none" value={regions.find((r) => r.tenant === tenant)?.tenant ?? tenant}
+              <select aria-label="Region" className="min-w-0 max-w-[6.5rem] truncate bg-transparent outline-none sm:max-w-none" value={regions.find((r) => r.tenant === tenant)?.tenant ?? tenant}
                 onChange={(e) => setTenant(e.target.value)}>
                 {regions.map((r) => <option key={r.code} value={r.tenant}>{r.name}</option>)}
               </select>
               {kb && kb.countries.length > 1 && (
-                <select aria-label="Country" className="bg-transparent outline-none" value={kb.country} onChange={(e) => { setCountry(e.target.value); try { localStorage.setItem('wifight.place.v2', 'picked') } catch { /* private */ } }}>
+                <select aria-label="Country" className="min-w-0 max-w-[6rem] truncate bg-transparent outline-none sm:max-w-none" value={kb.country} onChange={(e) => { setCountry(e.target.value); try { localStorage.setItem('wifight.place.v2', 'picked') } catch { /* private */ } }}>
                   {kb.countries.map((c) => <option key={c.iso} value={c.iso}>{flag(c.iso)} {c.name}</option>)}
                 </select>
               )}
@@ -254,10 +290,10 @@ export default function Portal() {
 
       <main>
         <section className="mx-auto max-w-[1360px] px-4 pb-16 sm:px-6">
-          <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-2 pb-5 pt-2 animate-rise">
-            <h1 className="font-display text-[32px] font-semibold leading-[1.05] tracking-[-0.02em] sm:text-[40px]">{TAGLINE}</h1>
+          <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-2 pb-4 pt-1 animate-rise sm:pb-5 sm:pt-2">
+            <h1 className="font-display text-[28px] font-semibold leading-[1.08] tracking-[-0.02em] sm:text-[40px] sm:leading-[1.05]">{TAGLINE}</h1>
             <div className="flex max-w-xl flex-wrap items-end gap-4 pb-1">
-              <p className="max-w-md text-[15px] leading-relaxed text-ink-2">
+              <p className="max-w-md text-[14px] leading-relaxed text-ink-2 sm:text-[15px]">
                 Fiber broadband in {kb?.stats.countries ?? 39} countries, from {kb ? (kb.coverage[0]?.city ?? 'Pune') : 'Pune'} to wherever you move next.
                 Tell us once and we'll remember it, whoever you talk to next.
               </p>
@@ -269,19 +305,34 @@ export default function Portal() {
             </div>
           </div>
           <JudgeBar judge={judge} />
+          {/* a phone: one card at a time, picked here; Plans and Coverage are a tap away too */}
+          <nav aria-label="Sections" className="sticky top-0 z-30 -mx-4 mb-3 bg-paper/90 px-4 py-2 backdrop-blur-md sm:-mx-6 sm:px-6 lg:hidden">
+            <div className="scroll-thin flex items-center gap-1.5 overflow-x-auto" role="tablist">
+              {PANES.map(([k, label]) => (
+                <button key={k} role="tab" aria-selected={pane === k} onClick={() => show(k)}
+                  className={`relative shrink-0 rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors duration-200 ${pane === k ? 'bg-ink text-paper' : 'bg-surface text-ink-2 hairline'}`}>
+                  {label}
+                  {news[k] && pane !== k && <i className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-signal ring-2 ring-paper" aria-label="new" />}
+                </button>
+              ))}
+              <i aria-hidden className="mx-0.5 h-5 w-px shrink-0 bg-line/20" />
+              <a href="#plans" className="shrink-0 rounded-full px-3 py-1.5 text-sm text-ink-2">Plans</a>
+              <a href="#coverage" className="shrink-0 rounded-full px-3 py-1.5 text-sm text-ink-2">Coverage</a>
+            </div>
+          </nav>
           {/* chat | your tickets + what we remember | your graph */}
-          <div className="grid animate-rise gap-4 [animation-delay:100ms] lg:grid-cols-[380px_minmax(0,1fr)] xl:h-[calc(100dvh-210px)] xl:min-h-[660px] xl:max-h-[940px] xl:grid-cols-[380px_minmax(340px,1fr)_minmax(0,1fr)]">
-            <div className="h-[700px] min-h-0 xl:h-auto">
+          <div ref={panes} className="grid grid-cols-1 scroll-mt-14 animate-rise gap-4 [animation-delay:100ms] lg:grid-cols-[380px_minmax(0,1fr)] xl:h-[calc(100dvh-210px)] xl:min-h-[660px] xl:max-h-[940px] xl:grid-cols-[380px_minmax(340px,1fr)_minmax(0,1fr)]">
+            <div className={`${PANE_H} lg:block lg:h-[700px] lg:min-h-0 lg:max-h-none xl:h-auto ${pane === 'chat' ? '' : 'hidden'}`}>
               <SupportDesk tenant={tenant} customers={customers} subscribe={subscribe} side="none" onWho={setWho} onChips={setChips} typeRef={typeRef}
                 driveRef={driveRef} onDesk={onDesk} country={kb?.country} />
             </div>
             <AccountPanel tenant={tenant} who={who} customer={customers.find((c) => c.key === who)} chips={chips} subscribe={subscribe}
-              onAsk={(t) => typeRef.current?.(t)} line={line} force={forceTab} />
-            <div className="h-[600px] lg:col-span-2 xl:col-span-1 xl:h-auto xl:min-h-0">
+              onAsk={(t) => typeRef.current?.(t)} line={line} force={forceTab} className={`lg:flex lg:max-h-none ${pane === 'case' ? '' : 'hidden'}`} />
+            <div className={`${PANE_H} lg:col-span-2 lg:block lg:h-[600px] lg:max-h-none xl:col-span-1 xl:h-auto xl:min-h-0 ${pane === 'view' ? '' : 'hidden'}`}>
               <GraphOrLine tenant={tenant} who={who} subscribe={subscribe} line={line} force={forceMode} />
             </div>
           </div>
-          <dl className="mt-6 flex flex-wrap gap-x-10 gap-y-3 num">
+          <dl className="mt-6 grid grid-cols-2 gap-x-6 gap-y-3 num sm:flex sm:flex-wrap sm:gap-x-10">
             {[['24×7', 'AI desk, human backup'], ['0', 'times you repeat yourself'], [`${kb?.stats.countries ?? 39}`, 'countries'],
               [`${kb?.stats.cities ?? 199}`, 'cities on fiber']].map(([v, k]) => (
               <div key={k} className="flex items-baseline gap-2"><dt className="sr-only">{k}</dt><dd className="font-display text-xl font-semibold">{v}</dd><dd className="text-sm text-ink-3">{k}</dd></div>
@@ -289,14 +340,15 @@ export default function Portal() {
           </dl>
         </section>
 
-        <section id="plans" className="bg-surface py-20 md:py-24">
+        <section id="plans" className="scroll-mt-14 bg-surface py-14 md:py-24">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <p className="eyebrow">Plans</p>
-            <h2 className="mt-2 font-display text-3xl font-semibold tracking-[-0.015em]">Pick a speed. Keep the router.</h2>
+            <h2 className="mt-2 font-display text-[26px] font-semibold leading-tight tracking-[-0.015em] sm:text-3xl">Pick a speed. Keep the router.</h2>
             {kb && <p className="mt-2 text-sm text-ink-3">Prices in {kb.currency} for {kb.countries.find((c) => c.iso === kb.country)?.name}{kb.tax ? `, including ${kb.tax}` : ''}. Pay by {kb.payments.join(', ')}.</p>}
-            <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <p className="mt-6 text-xs text-ink-3 md:hidden">Swipe to compare plans →</p>
+            <div className="scroll-thin -mx-4 mt-3 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-3 md:mx-0 md:mt-10 md:grid md:snap-none md:grid-cols-2 md:gap-4 md:overflow-visible md:px-0 md:pb-0 xl:grid-cols-4">
               {plansFrom(kb).map((p) => (
-                <article key={p.name} className={`rounded-2xl p-6 ${p.featured ? 'bg-ink text-paper shadow-lift' : 'bg-paper hairline'}`}>
+                <article key={p.name} className={`w-[82%] shrink-0 snap-center rounded-2xl p-5 sm:w-[60%] md:w-auto md:p-6 ${p.featured ? 'bg-ink text-paper shadow-lift' : 'bg-paper hairline'}`}>
                   <div className="flex items-baseline justify-between">
                     <h3 className="font-display text-xl font-semibold">{p.name}</h3>
                     {p.featured && <span className="chip bg-signal text-white">Most picked</span>}
@@ -310,7 +362,7 @@ export default function Portal() {
               ))}
             </div>
             {kb && (
-              <div className="mt-14 grid gap-10 md:grid-cols-2">
+              <div className="mt-10 grid grid-cols-1 gap-10 md:mt-14 md:grid-cols-2">
                 <div>
                   <h3 className="font-display text-lg font-semibold">Services</h3>
                   <ul className="mt-4 divide-y divide-line text-sm">
@@ -339,29 +391,37 @@ export default function Portal() {
           </div>
         </section>
 
-        <section id="coverage" className="mx-auto max-w-6xl px-4 py-20 sm:px-6 md:py-24">
+        <section id="coverage" className="mx-auto max-w-6xl scroll-mt-14 px-4 py-14 sm:px-6 md:py-24">
           <p className="eyebrow">Network status</p>
-          <h2 className="mt-2 font-display text-3xl font-semibold tracking-[-0.015em]">Upfront about outages.</h2>
+          <h2 className="mt-2 font-display text-[26px] font-semibold leading-tight tracking-[-0.015em] sm:text-3xl">Upfront about outages.</h2>
           <p className="mt-2 text-sm text-ink-3">
             {kb ? `${kb.coverage.length} cities in ${kb.countries.find((c) => c.iso === kb.country)?.name}; ${kb.stats.cities} cities and ${kb.stats.areas.toLocaleString()} areas across ${kb.stats.countries} countries.` : ''}
           </p>
-          <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-4">
-            {cities.map((c) => (
-              <div key={c.key} className="rounded-2xl bg-surface px-5 py-4 hairline">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="flex min-w-0 items-center gap-2.5"><Wifi className="shrink-0 text-ink-3" /><span className="truncate">{c.city}</span></span>
-                  {down.has(c.key) || c.areas.some((a) => down.has(a.toLowerCase()))
-                    ? <span className="chip bg-conflict-tint text-conflict">Degraded</span>
-                    : <span className="chip bg-current-tint text-current">Normal</span>}
+          <div className="mt-6 grid grid-cols-2 gap-2 sm:mt-8 sm:gap-3 md:grid-cols-4">
+            {(wideCoverage || allCities ? cities : cities.slice(0, 8)).map((c) => {
+              const degraded = down.has(c.key) || c.areas.some((a) => down.has(a.toLowerCase()))
+              return (
+                <div key={c.key} className="rounded-2xl bg-surface px-3.5 py-3 hairline sm:px-5 sm:py-4">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="flex min-w-0 items-center gap-2 sm:gap-2.5"><Wifi className="hidden shrink-0 text-ink-3 sm:block" /><span className="truncate text-sm sm:text-base">{c.city}</span></span>
+                    {degraded
+                      ? <span className="chip bg-conflict-tint text-conflict"><span className="sm:hidden">Down</span><span className="hidden sm:inline">Degraded</span></span>
+                      : <span className="chip bg-current-tint text-current">Normal</span>}
+                  </div>
+                  {c.areas.length > 0 && <p className="mt-1.5 line-clamp-2 text-[11px] leading-relaxed text-ink-3 sm:mt-2 sm:line-clamp-none sm:text-xs">{c.areas.slice(0, 8).join(' · ')}</p>}
                 </div>
-                {c.areas.length > 0 && <p className="mt-2 text-xs leading-relaxed text-ink-3">{c.areas.slice(0, 8).join(' · ')}</p>}
-              </div>
-            ))}
+              )
+            })}
           </div>
+          {!wideCoverage && cities.length > 8 && (
+            <button onClick={() => setAllCities((v) => !v)} className="btn-ghost mt-3 w-full justify-center hairline">
+              {allCities ? 'Show fewer' : `Show all ${cities.length} cities`}
+            </button>
+          )}
         </section>
       </main>
 
-      <footer className="mx-auto flex max-w-6xl flex-col gap-2 px-4 pb-10 text-xs text-ink-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+      <footer className="mx-auto flex max-w-6xl flex-col gap-3 px-4 pb-10 text-xs text-ink-3 sm:flex-row sm:items-center sm:justify-between sm:gap-2 sm:px-6">
         <span className="flex flex-wrap items-center gap-2">
           © {COMPANY} · {kb?.stats.countries ?? 39} countries · place names © GeoNames (CC BY 4.0)
           <label htmlFor="portal-tenant" className="ml-2">Demo workspace</label>

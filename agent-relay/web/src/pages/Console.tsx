@@ -59,7 +59,7 @@ export default function Console() {
         onReset={() => { setSelected(null); setHighlight(new Set()); setCommunities(undefined); c.clearFeed(); c.refreshAll(true) }} />
 
       <div className="grid grid-cols-1 items-start gap-3 px-3 pb-3 lg:grid-cols-[280px_minmax(0,1fr)_380px] xl:grid-cols-[320px_minmax(0,1fr)_420px]">
-        <aside className={`panel order-3 flex h-[420px] flex-col overflow-hidden lg:order-none lg:h-[min(78vh,860px)] lg:min-h-[520px]`}>
+        <aside className={`panel order-3 flex h-[340px] flex-col overflow-hidden sm:h-[420px] lg:order-none lg:h-[min(78vh,860px)] lg:min-h-[520px]`}>
           {replaying
             ? <KnownList r={r} label={(id) => r.graph.nodes.get(id)?.label ?? c.store.nodes.get(id)?.label ?? id.replace(/^e:/, '')} onSelect={select} />
             : <Feed feed={c.feed} customers={c.customers} />}

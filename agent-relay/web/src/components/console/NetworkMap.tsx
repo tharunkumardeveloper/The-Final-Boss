@@ -109,7 +109,7 @@ export function NetworkMap({ tenant, subscribe, onHub, hubCustomers }: {
         </div>
         {error && <p className="mt-6 text-sm text-danger" role="alert">{error}</p>}
         {net && (
-          <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_320px]">
+          <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px]">
             <div className="lab-grid overflow-hidden rounded-[1.75rem] bg-ink p-3 text-white shadow-lift">
               <svg viewBox={`0 0 ${W} ${H}`} className="mx-auto block h-auto w-full max-w-[860px]" role="img" aria-label="Network map">
                 <defs>

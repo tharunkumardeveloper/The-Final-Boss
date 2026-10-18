@@ -266,7 +266,7 @@ export default function TenantsPage() {
           <button className="btn-primary !py-1.5 text-sm" disabled={busy || !regions?.length || !wordOk} onClick={run}>{busy ? 'Running…' : stage === 'done' ? 'Run it again' : 'Run the canary test'}</button>
         </div>
       </div>
-      <ol className="grid gap-1.5 px-4 pb-3 sm:grid-cols-6 sm:px-6" aria-label="Test stages">
+      <ol className="grid grid-cols-2 gap-1.5 px-4 pb-3 sm:grid-cols-6 sm:px-6" aria-label="Test stages">
         {STEPS.map(([k, label], i) => {
           const now = order.indexOf(stage), me = order.indexOf(k), skipped = k === 'verify' && !pause && stage !== 'idle'
           return (
@@ -278,7 +278,7 @@ export default function TenantsPage() {
       </ol>
       {error && <p className="mx-4 mb-2 rounded-xl bg-danger-tint px-4 py-2 text-sm text-danger sm:mx-6" role="alert">{error}</p>}
 
-      <main className="grid min-h-0 flex-1 gap-4 px-4 pb-4 sm:px-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+      <main className="grid grid-cols-1 min-h-0 flex-1 gap-4 px-4 pb-4 sm:px-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <section className="flex min-h-0 flex-col gap-3" aria-label="The instance and the verdict">
           <div className="min-h-0 shrink">
             {regions ? <Instance regions={regions} victim={victim} setVictim={setVictim} canary={canary} flying={flying} locked={busy} />
@@ -295,10 +295,11 @@ export default function TenantsPage() {
               {extra.map((x) => <span key={x.id} className={`chip ${x.ok ? 'bg-surface text-ink-2 hairline' : 'bg-danger text-white'}`} title={x.label}>{x.id === 'nokey' ? 'no key' : 'forged key'} → {x.got}</span>)}
             </div>
             {regions && (
-              <div className="mt-2 overflow-x-auto">
-                <table className="w-full border-separate border-spacing-1 text-xs">
+              <div className="scroll-thin mt-2 overflow-x-auto">
+                <p className="mb-1 text-[11px] text-ink-3 sm:hidden">Scroll sideways for every region →</p>
+                <table className="w-full min-w-[620px] border-separate border-spacing-1 text-xs">
                   <thead><tr>
-                    <th className="text-left font-medium text-ink-3">Check</th>
+                    <th className="w-[8.5rem] min-w-[8.5rem] text-left font-medium text-ink-3">Check</th>
                     {regions.map((r) => <th key={r.tenant} className={`px-1 text-center text-[11px] font-semibold ${r.tenant === victim ? 'text-[#B88A12]' : 'text-ink-2'}`}>{r.name}{r.tenant === victim && <span className="block text-[9px] font-normal">victim · control</span>}</th>)}
                   </tr></thead>
                   <tbody>
