@@ -401,11 +401,34 @@ def chat(tenant: str, body: ChatIn):
     retired = [{"fact_id": r["fact_id"], "subject": r["triple"][0], "predicate": r["triple"][1],
                 "object": r["triple"][2], "status": "retired"} for r in out.get("retired", [])]
     return {"reply": out["reply"], "speaker": speaker, "session_id": sid, "learned": fact_changes(out["facts"]) + retired,
+            "desk": _other_desk(tenant, out["facts"], body.text, body.country),
             "episode_id": out["episode_id"], "reply_episode_id": out.get("reply_episode_id"), "orders": out.get("orders", []),
             "ticket_opened": out["ticket_opened"].upper() if out["ticket_opened"] else None, "cypher": log,
             "how": _how(tenant, body.customer, out["reply"], at),
             "images": shown}
 
+
+
+def _other_desk(tenant, facts, text="", country=None):
+    """Where the address the customer just gave is served, when that isn't what the portal is showing.
+    Another region (Chennai on the Latin America desk): that desk has no network there, so no line, no resolver and no
+    network lab; the portal moves the case to it (move: true). Another country of this region (Manchester while the
+    Europe desk shows Germany): same graph, so the portal only switches the country, and prices follow (move: false).
+    None when it already matches, or isn't a place we serve. A suburb we don't list ("Pattabiram") falls back to the
+    place the message names ("Pattabiram, Chennai"), as the line itself does."""
+    for f in facts:
+        s, p, o = f["triple"]
+        if p in ("lives_in", "address"):
+            place = kb.resolve_place(o) or kb.resolve_place(text)
+            if not place:
+                continue
+            r = kb.world()["regions"][place["region"]]
+            desk = {"tenant": r["tenant"], "region": r["name"], "city": place["city"].title(), "country": place["country"]}
+            if place["region"] != kb.region_of(tenant):
+                return {**desk, "move": True}
+            if country and place["country"] != country.upper():
+                return {**desk, "move": False}
+    return None
 
 
 def _how(tenant, customer, reply, at):

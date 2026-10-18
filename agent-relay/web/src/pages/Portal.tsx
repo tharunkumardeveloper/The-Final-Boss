@@ -18,7 +18,7 @@ import { activeOutages, applyEvent, emptyGraph, loadGraph } from '../lib/graph'
 import { useLine } from '../lib/line'
 import { useRelayStream } from '../lib/stream'
 import { useTenant } from '../lib/tenant'
-import type { Customer, Kb, Region, RelayEvent } from '../lib/types'
+import type { Customer, Desk, Kb, Region, RelayEvent } from '../lib/types'
 
 const PLANS = [
   { name: 'Fiber 100', price: '₹599', speed: '100 Mbps', note: 'Streaming and work calls for a small home.', perks: ['PML Hub 6 router', 'Unlimited data'] },
@@ -145,7 +145,12 @@ export default function Portal() {
   // the browser test showed India prices under "North America" while the new region was still loading.
   const current = useRef(tenant)
   current.current = tenant
-  useEffect(() => { setCountry(undefined); setCustomers([]); graph.current = emptyGraph(); bump((n) => n + 1) }, [tenant])
+  // a desk the customer's address moved them to brings its country (Manchester -> GB); otherwise the region's default
+  const deskCountry = useRef<string>()
+  useEffect(() => {
+    setCountry(deskCountry.current); deskCountry.current = undefined
+    setCustomers([]); graph.current = emptyGraph(); bump((n) => n + 1)
+  }, [tenant])
   useEffect(() => {
     setKb(undefined)
     api.kb(tenant, country).then((k) => { if (current.current === tenant) setKb(k) }).catch(() => {})
@@ -167,6 +172,29 @@ export default function Portal() {
     if (n === 4 || n === 5) { setForceTab({ tab: 'memory', n }); setForceMode({ mode: 'memory', n }) }
   }, [])
   const judge = useJudge({ drive: driveRef, run: line.run, tenant, setTenant, customers, onStep })
+  // A customer whose address another region serves (Chennai on the Latin America desk) is moved to that desk, and
+  // what they said is re-told there once its chat is ready: the line, the ticket, the resolver and the lab follow.
+  const retell = useRef<string>()
+  const onDesk = useCallback((desk: Desk, text: string) => {
+    try { localStorage.setItem('wifight.place.v2', 'picked') } catch { /* private mode */ }
+    if (!desk.move) { setCountry(desk.country); return }  // same desk, another of its countries
+    retell.current = text
+    deskCountry.current = desk.country  // applied once the new desk is set (switching desks resets the country)
+    setTenant(desk.tenant)
+  }, [setTenant])
+  useEffect(() => {
+    if (!retell.current) return
+    const id = setInterval(() => {
+      const d = driveRef.current
+      if (!d?.ready() || !retell.current) return
+      const text = retell.current
+      retell.current = undefined
+      clearInterval(id)
+      d.say(text)
+    }, 400)
+    const stop = setTimeout(() => clearInterval(id), 30_000)
+    return () => { clearInterval(id); clearTimeout(stop) }
+  }, [tenant])
   const judgeStart = useRef(judge.start)
   judgeStart.current = judge.start
   useEffect(() => {  // ?judge=1 (the README's link) starts it on arrival
@@ -245,7 +273,7 @@ export default function Portal() {
           <div className="grid animate-rise gap-4 [animation-delay:100ms] lg:grid-cols-[380px_minmax(0,1fr)] xl:h-[calc(100dvh-210px)] xl:min-h-[660px] xl:max-h-[940px] xl:grid-cols-[380px_minmax(340px,1fr)_minmax(0,1fr)]">
             <div className="h-[700px] min-h-0 xl:h-auto">
               <SupportDesk tenant={tenant} customers={customers} subscribe={subscribe} side="none" onWho={setWho} onChips={setChips} typeRef={typeRef}
-                driveRef={driveRef} country={kb?.country} />
+                driveRef={driveRef} onDesk={onDesk} country={kb?.country} />
             </div>
             <AccountPanel tenant={tenant} who={who} customer={customers.find((c) => c.key === who)} chips={chips} subscribe={subscribe}
               onAsk={(t) => typeRef.current?.(t)} line={line} force={forceTab} />

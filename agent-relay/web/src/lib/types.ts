@@ -79,11 +79,15 @@ export interface Ticket {
   ticket: string; customer: string; status: string; assigned_to?: string | null; issues: string[]
   opened_at?: string | null; trail: TrailStep[]
 }
+/** Where a customer's address is served: Chennai -> { tenant: 'pml', region: 'India', city: 'Chennai', country: 'IN' }.
+ *  move: another region's desk (the case moves there); otherwise only the country of this region changes. */
+export interface Desk { tenant: string; region: string; city: string; country: string; move: boolean }
 export interface ChatResponse {
   reply: string; speaker?: string; session_id: string; learned: FactChange[]; ticket_opened?: string | null; cypher: CypherEntry[]
   episode_id?: string; reply_episode_id?: string | null
   images?: ChatImages | null  // games or streaming came up: pictures for the reply bubble
   how?: Hop[]  // "how I know": this customer's own earlier facts the reply rests on
+  desk?: Desk | null  // the address they just gave is served by another region's desk: the case moves there
 }
 export interface ChatImages { query: string; images: { src: string; title: string; link?: string | null }[] }
 export interface PickupResponse {

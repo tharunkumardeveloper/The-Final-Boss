@@ -5,7 +5,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { api } from '../../lib/api'
 import { fromEvent, fromLearned, launch, settle, type Chip } from '../../lib/chips'
 import { speakerName, ticketLabel, titleCase, when } from '../../lib/format'
-import type { ConversationSession, Customer, RelayEvent, ChatImages, Hop } from '../../lib/types'
+import type { ConversationSession, Customer, Desk, RelayEvent, ChatImages, Hop } from '../../lib/types'
 import { shortDate } from '../Hops'
 import { Close, Send, Ticket as TicketIcon } from '../Icons'
 import { KavyaAvatar, SPRING, Typing } from './Kavya'
@@ -176,9 +176,11 @@ function HistoryRow({ s, customer }: { s: ConversationSession; customer: string 
   )
 }
 
-export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, typeRef, driveRef, country, memoryWidth = 380, side = 'memory' }: { tenant: string; customers: Customer[]; subscribe: Subscribe
+export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, typeRef, driveRef, onDesk, country, memoryWidth = 380, side = 'memory' }: { tenant: string; customers: Customer[]; subscribe: Subscribe
   onWho?: (who: string | null) => void; onChips?: (chips: Chip[]) => void; memoryWidth?: number; side?: 'memory' | 'tickets' | 'none'
-  typeRef?: { current: ((text: string) => void) | null }; driveRef?: { current: ChatDriver | null }; country?: string }) {
+  typeRef?: { current: ((text: string) => void) | null }; driveRef?: { current: ChatDriver | null }; country?: string
+  onDesk?: (desk: Desk, retell: string) => void  // their address belongs to another region: move the case, re-telling what they said
+}) {
   const reduce = useReducedMotion()
   const [openedAt] = useState(() => new Date().toISOString())  // the on-screen greetings carry the time the chat opened
   // an old "talk as a customer" link lands here with ?customer=: continue them (their stored session id is read below)
@@ -225,7 +227,8 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
     setIntro((l) => [...l, { id: `ask-${Date.now()}`, speaker: 'intake', at: new Date().toISOString(), text: 'No problem. What should I call you?' }])
     input.current?.focus({ preventScroll: true })
   }
-  useEffect(clear, [tenant]) // a region is its own desk and graph: keep the person, load that desk's history for them
+  // a region is its own desk and graph: keep the person, load that desk's history for them (not ready until it has)
+  useEffect(() => { clear(); setLoadedFor(null) }, [tenant]) // eslint-disable-line react-hooks/exhaustive-deps
   // the cursor waits in the chat on arrival, without scrolling the page down to it (autoFocus would)
   useEffect(() => { if (!who) input.current?.focus({ preventScroll: true }) }, []) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { scroller.current?.scrollTo({ top: scroller.current.scrollHeight, behavior: reduce ? 'auto' : 'smooth' }) }, [lines, history, busy, chips.length, reduce])
@@ -374,6 +377,18 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
       // Chips ride on Kavya's reply, then fly into the memory panel.
       setChips((cs) => launch(fromLearned(cs, r.learned, 'pending'), replyId, r.learned.map((f) => f.fact_id)))
       setTimeout(() => { setChips((cs) => settle(cs, replyId)); setRipple((x) => x + 1) }, reduce ? 0 : FLY_MS)
+      if (r.desk && onDesk) {
+        const desk = r.desk
+        if (desk.move && desk.tenant !== tenant) {
+          // This desk has no network in their city, so no line and no resolver. Say so, then move the case to the desk
+          // that serves it, re-telling what they've said in this conversation so they don't have to repeat it.
+          const said = linesRef.current.filter((l) => l.speaker === 'customer').map((l) => l.text.trim().replace(/[.!?\s]+$/, ''))
+          const retell = [...new Set([...said, msg.trim().replace(/[.!?\s]+$/, '')])].filter(Boolean).join('. ') + '.'
+          setLines((ls) => [...ls, { id: `desk-${Date.now()}`, speaker: 'intake', at: new Date().toISOString(),
+            text: `${desk.city} is looked after by our ${desk.region} desk, so I'm moving your case there. You won't need to repeat anything.` }])
+          setTimeout(() => onDesk(desk, retell), reduce ? 300 : 2600)
+        } else if (!desk.move) onDesk(desk, '')  // same desk, another of its countries: prices and coverage follow
+      }
       return r.reply
     } catch {
       setLines((ls) => ls.filter((l) => l.id !== localId))

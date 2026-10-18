@@ -74,7 +74,9 @@ def _place_index():
 
 def resolve_place(text):
     """'hsr layout bangalore' -> {area: 'hsr layout', city: 'bengaluru', ...}; None if we don't serve it."""
-    t = f" {norm(text)} "
+    # a full stop ends a sentence, not a name: "...Pattabiram, Chennai." must still find Chennai (a dot after a single
+    # letter stays, it's part of a name: "T. Nagar")
+    t = f" {norm(re.sub(r'(\w{2,})\.+(?=\s|$)', r'\1', str(text)))} "
     found = None
     for phrase, (region, iso, city, area) in _place_index():
         if len(phrase) >= 3 and f" {phrase} " in t:
