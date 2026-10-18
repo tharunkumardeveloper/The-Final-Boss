@@ -83,6 +83,16 @@ export function nameFrom(input: string): string | null {
   return words.join(' ').toLowerCase()
 }
 
+// Small talk around a greeting: "hi there", "hello team", "hey, how are you?" carry nothing to answer later.
+const SMALL_TALK = new Set(['all', 'everyone', 'folks', 'guys', 'wifight', 'fix', 'it', 'how', 'are', 'you', 'doing', 'whats', 'up',
+  'sup', 'hope', 'well', 'day', 'nice', 'to', 'meet', 'please', 'thanks', 'thank', 'ok', 'okay', 'can', 'help'])
+
+/** Is a message sent before the name worth answering once we know it? (Not a greeting or small talk.) */
+export function asksSomething(input: string): boolean {
+  const words = input.toLowerCase().replace(/[’']/g, '').split(/[^a-z0-9]+/).filter(Boolean)
+  return words.filter((w) => !GREETING.test(w) && !SMALL_TALK.has(w)).length >= 2
+}
+
 /** Was there more in the message than the name? ("I'm Adit and my wifi drops" -> true: send it on.) */
 export function saysMore(input: string, name: string): boolean {
   const rest = input.toLowerCase().replace(name, ' ').split(/[^a-z0-9]+/)
@@ -330,7 +340,7 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
     const n = nameFrom(msg)
     const id = `intro-${Date.now()}`
     if (!n) {
-      const question = msg.split(/\s+/).length >= 2 && !/^\s*(hi+|hello+|hey+|hiya|namaste)\b[\s!.,]*$/i.test(msg)
+      const question = asksSomething(msg)
       if (question) setPendingAsk(msg)
       setIntro((l) => [...l, { id, speaker: 'customer', text: msg, at: new Date().toISOString() },
         { id: `${id}-k`, speaker: 'intake', at: new Date().toISOString(),

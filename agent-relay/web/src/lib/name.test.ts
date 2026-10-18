@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { nameFrom, saysMore } from '../components/portal/SupportChat'
+import { asksSomething, nameFrom, saysMore } from '../components/portal/SupportChat'
 
 describe('nameFrom', () => {
   it('ignores greetings', () => {
@@ -35,5 +35,14 @@ describe('names inside a normal chat message', () => {
     expect(saysMore("Hi, I'm Adit and my wifi keeps dropping", 'adit')).toBe(true)
     expect(saysMore('Adit Raj', 'adit raj')).toBe(false)
     expect(saysMore("hi, I'm Adit", 'adit')).toBe(false)
+  })
+})
+
+describe('a message sent before the name', () => {
+  it('is held and answered later only when it asks something', () => {
+    for (const hi of ['Hi there', 'hello there!', 'Hey team', 'hi, how are you?', 'Good morning', 'hello WiFight', 'hey there, can you help'])
+      expect(asksSomething(hi), hi).toBe(false)
+    for (const q of ['my wifi is slow', 'internet not working', 'Hi there, my internet keeps dropping', 'do you have fiber in Pune?'])
+      expect(asksSomething(q), q).toBe(true)
   })
 })
