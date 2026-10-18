@@ -249,7 +249,7 @@ def _do_reset(tenant, scenario):
             say("clearing", "Clearing the graph and re-seeding the catalogue and network")
             db.reset(tenant)  # re-seeds the schema, catalogue and network
             if scenario == "story":
-                say("story", "Playing the demo story through the real agents (about a minute)")
+                say("story", "Playing the demo story through the real agents (about two minutes)")
                 sim.load_story(tenant)
         say("done")
     except Exception as e:

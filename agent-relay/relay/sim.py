@@ -49,6 +49,39 @@ for _c in CASTS.values():  # each cast's back office: billing disagrees with wha
         WORLD["diagnostics"].setdefault(_n, "channel congestion on 2.4 ghz")
         WORLD["working_fixes"].setdefault(_n, ["change wifi channel"])
 
+# The rest of each region's neighbourhood, so every desk opens on a lived-in graph: (name, where, plan, case).
+# Cases: dns (slow pages, fixed after one failed try), cable (red light, a field fix), sales (an upgrade question),
+# billing (a double charge), tv (a new device that won't join; left open for the resolver's queue).
+RESIDENTS = {
+    "pml": [("Chitra Iyer", "Koramangala, Bengaluru", "1000", "sales"), ("Dev Malhotra", "Gachibowli, Hyderabad", "300", "cable"),
+            ("Esha Kulkarni", "Andheri, Mumbai", "100", "dns"), ("Farhan Shaikh", "Adyar, Chennai", "300", "tv")],
+    "pml-eu": [("Amelia Wright", "Camden, London", "300", "dns"), ("Harry Patel", "Coventry, Birmingham", "100", "cable"),
+               ("Grace Taylor", "Islington, London", "300", "billing"), ("Jack Wilson", "Bradford, Leeds", "100", "tv")],
+    "pml-na": [("Ava Martinez", "Brooklyn, New York City", "300", "dns"), ("Noah Kim", "Santa Monica, Los Angeles", "1000", "tv"),
+               ("Mia Johnson", "Lincoln Park, Chicago", "100", "sales"), ("Lucas Brown", "Pasadena, Los Angeles", "300", "cable")],
+    "pml-apac": [("Ruby Tan", "Bondi, Sydney", "300", "dns"), ("Jack Thompson", "Parramatta, Sydney", "100", "billing"),
+                 ("Isla Wong", "Surry Hills, Sydney", "1000", "tv"), ("Noah Singh", "Logan City, Brisbane", "300", "cable")],
+    "pml-mea": [("Fatima Al Mansoori", "Dubai Marina, Dubai", "1000", "tv"), ("Yusuf Rahman", "Deira, Dubai", "300", "cable"),
+                ("Noor Saleh", "Jumeirah, Dubai", "300", "dns"), ("Khalid Nasser", "Al Ain", "100", "sales")],
+    "pml-latam": [("Beatriz Costa", "Pinheiros, Sao Paulo", "300", "dns"), ("Lucas Pereira", "Contagem, Belo Horizonte", "100", "cable"),
+                  ("Ana Ribeiro", "Moema, Sao Paulo", "1000", "billing"), ("Gabriel Lima", "Colombo, Curitiba", "300", "tv")],
+}
+CASES = {  # what the resident says (session 1), the back office's diagnosis, and the fix that works (after a failed one)
+    "dns": (["Websites take ages to load, but YouTube and games are fine. It's been like this since yesterday."],
+            "dns timeouts", "switch dns to 1.1.1.1"),
+    "cable": (["No internet since this morning, and the light on the router is red.", "Every device, wifi and cable."],
+              "fiber patch cable damaged", "replace fiber patch cable"),
+    "sales": (["We both work from home now. Is it worth moving to a faster plan for video calls?"], None, None),
+    "billing": (["I was charged twice for this month. Can you check my bill?"], None, None),
+    "tv": (["My new smart TV in the living room can't find the wifi. Everything else works."], None, None),
+}
+for _rs in RESIDENTS.values():
+    for _n, _w, _plan, _case in _rs:
+        WORLD["billing"].setdefault(_n.lower(), f"fiber {_plan}")
+        if CASES[_case][1]:
+            WORLD["diagnostics"].setdefault(_n.lower(), CASES[_case][1])
+            WORLD["working_fixes"].setdefault(_n.lower(), [CASES[_case][2]])
+
 # (day offset, "HH:MM", session number, what the message must get across)
 PERSONAS = [
     {"name": "Alice Rao", "profile": "34, product designer, lives in Mumbai, on the Fiber 300 plan, has a PS5 and a work "
@@ -288,9 +321,32 @@ def _story(tenant, log=None):
     say(a, f"{a.split()[0].lower()}-s2", "2026-09-12T10:00:00", f"Quick update: I moved to {there} on the 10th.")
     a_t = agents.open_ticket_for(tenant, a, log)
     pick = resolver.pick_up(tenant, ticket=a_t, at=f"2026-09-13T10:00:00{tz}", log=log) if a_t else None
+    residents = _residents(tenant, intake, resolver, tz, log)
     converse.summarize_session(tenant, sa, log)
     converse.summarize_session(tenant, sb, log)
     agents.consolidate(tenant, log, summaries=True)
     from . import lab  # after the scripted story: live chats from here on get the street-level network
     lab.ensure(tenant, log)
-    return {"alice_ticket": a_t, "bob_ticket": b_t, "pickup": pick}  # keys kept: callers and tests read them
+    return {"alice_ticket": a_t, "bob_ticket": b_t, "pickup": pick,  # keys kept: callers and tests read them
+            "residents": residents}
+
+
+def _residents(tenant, intake, resolver, tz, log=None):
+    """The region's other customers, one case each, spread over the story's two weeks. Returns {name: ticket}."""
+    out = {}
+    for i, (name, where, plan, case) in enumerate(RESIDENTS.get(tenant, [])):
+        lines, _, fix = CASES[case]
+        day, sid = 2 + 3 * i, f"{name.split()[0].lower()}-s1"
+        first = (f"Hi, I'm {name.split()[0]}, I live in {where} and I'm on the Fiber {plan} plan. " + lines[0])
+        for k, text in enumerate([first] + lines[1:]):
+            intake.handle(tenant, customer=name, session_id=sid, text=text, at=f"2026-09-{day:02d}T1{k}:00:00{tz}",
+                          reply_llm=True, log=log)
+        t = agents.open_ticket_for(tenant, name, log) if case not in ("sales",) else None
+        if t and fix:
+            resolver.pick_up(tenant, ticket=t, at=f"2026-09-{day + 1:02d}T09:00:00{tz}", log=log)
+            resolver.try_fix(tenant, ticket=t, fix="restart router", worked=False, at=f"2026-09-{day + 1:02d}T10:00:00{tz}",
+                             log=log)
+            resolver.try_fix(tenant, ticket=t, fix=fix, worked=True, at=f"2026-09-{day + 1:02d}T13:00:00{tz}", log=log)
+        out[name] = t
+        converse.summarize_session(tenant, sid, log)
+    return out

@@ -12,7 +12,7 @@ import { quotaState } from './useConsole'
 const SPEEDS = [[0.5, '½'], [1, '1'], [3, '3'], [8, '8']] as const
 const PHASE: Record<string, string> = {
   starting: 'Starting the reset…', snapshot: 'Saving a snapshot first…', clearing: 'Clearing and re-seeding the graph…',
-  loading: 'Loading the benchmark…', story: 'Playing the demo story through the agents (about a minute)…',
+  loading: 'Loading the benchmark…', story: 'Playing the demo story through the agents (about two minutes)…',
 }
 
 export function TopBar({ tenant, setTenant, stats, sim, setSim, simTime, status, cypherCount, openCypher, onReset, usage }: {
