@@ -224,7 +224,7 @@ def _emit_fact(tenant, f, agent, episode_id, at_ms, valid_from, log):
     if not events.listening(tenant):
         return
     s, p, o = f["triple"]
-    base = {"fact_id": f["fact_id"], "subject": s, "predicate": p, "object": o, "agent": agent}
+    base = {"fact_id": f["fact_id"], "subject": s, "predicate": p, "object": o, "agent": agent, "memory": R.memory_kind(p)}
     events.emit(tenant, "fact_created" if f["status"] == "new" else "fact_corroborated",
                 base | {"episode_id": episode_id}, at_ms)
     for old in f["superseded"]:  # the old fact's two clocks close here: true until valid_to, on file until expired_at
@@ -267,7 +267,7 @@ def _retire(tenant, *, agent, episode_id, subject, predicate, obj, at, valid_to=
         network.attach(tenant, s, "", log)  # moved away: no line any more
     for fid, value in rows:
         events.emit(tenant, "fact_retired", {"fact_id": fid, "subject": s, "predicate": predicate, "object": value,
-                                             "agent": agent, "episode_id": episode_id, "valid_to": events.iso(vt),
+                                             "memory": R.memory_kind(predicate), "agent": agent, "episode_id": episode_id, "valid_to": events.iso(vt),
                                              "expired_at": events.iso(at_ms)}, at_ms)
     return [{"fact_id": fid, "triple": (s, predicate, value), "status": "retired"} for fid, value in rows]
 

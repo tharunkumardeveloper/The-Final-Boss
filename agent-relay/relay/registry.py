@@ -154,6 +154,18 @@ def subject_type(p):
     return _def(p)[0]
 
 
+def memory_kind(p):
+    """The kind of memory a fact is, as people read it. 'procedural': anything about handling a case (every ticket
+    fact, has_ticket, fixes tried, the fix that worked, and the know-how that a fix resolves an issue). 'semantic': a
+    fact about the world kept with two clocks ("lives in Pune"). Episodic memory is the episodes (messages) themselves.
+    The registry's own memory column is the storage policy; this is the label shown in the product."""
+    try:
+        s, o, cls = _def(p)[0], _def(p)[1], _def(p)[3]
+    except KeyError:
+        return "semantic"
+    return "procedural" if "ticket" in (s, o) or s == "fix" or o == "fix" or cls in ("procedural", "coordination") else "semantic"
+
+
 def object_type(p):
     return _def(p)[1]
 

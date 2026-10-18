@@ -138,7 +138,7 @@ def now_ms(tenant):
 
 def fact_changes(facts):
     return [{"fact_id": f["fact_id"], "subject": f["triple"][0], "predicate": f["triple"][1], "object": f["triple"][2],
-             "status": "updated" if f["superseded"] else f["status"],
+             "memory": R.memory_kind(f["triple"][1]), "status": "updated" if f["superseded"] else f["status"],
              **({"replaced": f["superseded"]} if f["superseded"] else {})} for f in facts]
 
 
@@ -480,7 +480,8 @@ def conversation(tenant: str, customer: str, limit: int = 400, include_actions: 
     sessions, carry = {}, {}  # carry: facts from hidden action notes, waiting for the next message in that session
     for sid, started, summary, eid, speaker, agent, text, at, derived in db.run(
             tenant, "conversation", Q.CONVERSATION, {"c": norm(customer), "limit": min(limit, 2000)}, ro=True):
-        facts = [{"fact_id": f, "predicate": p, "object": o, "active": bool(a)} for f, p, o, a in derived or []]
+        facts = [{"fact_id": f, "predicate": p, "object": o, "active": bool(a), "memory": R.memory_kind(p)}
+                 for f, p, o, a in derived or []]
         s = sessions.setdefault(sid, {"session_id": sid, "started_at": events.iso(started), "summary": summary,
                                       "messages": []})
         if speaker == "action" and not include_actions:
@@ -1037,7 +1038,8 @@ def clock(tenant: str, subject: str, at: str):
 def history(tenant: str, subject: str):
     T(tenant)
     return [{"fact_id": fid, "predicate": p, "value": v, "active": act, "valid_from": events.iso(vf),
-             "valid_to": events.iso(vt), "recorded_at": events.iso(rec), "expired_at": events.iso(exp), "agents": ags}
+             "valid_to": events.iso(vt), "recorded_at": events.iso(rec), "expired_at": events.iso(exp), "agents": ags,
+             "memory": R.memory_kind(p)}
             for fid, p, v, act, vf, vt, rec, exp, _by, ags in retrieve.history(tenant, subject)]
 
 

@@ -10,8 +10,12 @@ export interface GEdge { id: string; source: string; target: string; label: stri
 export interface Graph { nodes: GNode[]; edges: GEdge[] }
 
 export interface CypherEntry { name: string; query: string; params: Record<string, unknown>; rows: number; ms: number }
+/** How the product labels memory (decided on the server, registry.memory_kind): semantic facts, procedural case
+ *  handling (tickets and fixes), episodic messages. */
+export type MemoryKind = 'semantic' | 'episodic' | 'procedural'
+
 export interface FactChange {
-  fact_id: string; subject: string; predicate: string; object: string
+  fact_id: string; subject: string; predicate: string; object: string; memory?: MemoryKind
   status: 'new' | 'corroborated' | 'updated' | 'retired'; replaced?: { fact_id: string; object: string }[]
 }
 
@@ -25,7 +29,7 @@ export interface Customer {
 }
 export interface Card {
   id: string; kind: string; title: string; subtitle?: string; lines: string[]; summary?: string | null
-  active?: boolean
+  active?: boolean; memory?: MemoryKind
   sections: { title: string; rows: [string, string][] }[]
 }
 
@@ -57,7 +61,7 @@ export interface Sharing {
   top_shared: { fact_id: string; sentence: string; writer: string; readers: string[]; uses: number }[]
 }
 
-export interface DerivedFact { fact_id: string; predicate: string; object: string; active: boolean }
+export interface DerivedFact { fact_id: string; predicate: string; object: string; active: boolean; memory?: MemoryKind }
 /** derived: the facts this message's episode produced (semantic, or procedural for fixes). */
 export interface ConversationMessage { episode_id: string; speaker: Speaker; text: string; at: string; derived?: DerivedFact[] }
 export interface ConversationSession { session_id: string; started_at?: string | null; summary?: string | null; messages: ConversationMessage[] }
@@ -121,7 +125,7 @@ export interface Clock { world: ClockRow[]; belief: ClockRow[] }
 export interface HistoryRow {
   fact_id: string; predicate: string; value: string; active: boolean
   valid_from?: string | null; valid_to?: string | null; recorded_at?: string | null; expired_at?: string | null
-  agents: string[]
+  agents: string[]; memory?: MemoryKind
 }
 export interface Community { id: string | number; size: number; top: string[]; salience: number; summary?: string | null }
 export interface SimStatus { running: boolean; sim_time?: string | null; speed?: number; customers?: string[] }

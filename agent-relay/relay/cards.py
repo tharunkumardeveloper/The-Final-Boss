@@ -54,7 +54,17 @@ def card(tenant, node_id, log=None):
     kind, raw = _split(node_id)
     fn = {"f": _fact, "ep": _episode, "e": _entity, "s": _session, "a": _agent, "c": _community}.get(kind)
     out = fn(tenant, raw, log) if fn else None
-    return out and {"id": node_id, "summary": None, "sections": [], **out}
+    return out and {"id": node_id, "summary": None, "sections": [], "memory": _memory(kind, out), **out}
+
+
+def _memory(kind, out):
+    """Episodes and sessions are episodic; a fact is semantic or procedural (R.memory_kind); a ticket or a fix is
+    procedural; any other entity is described by its semantic facts."""
+    if kind in ("ep", "s"):
+        return "episodic"
+    if kind == "f":
+        return out.get("memory", "semantic")
+    return "procedural" if out.get("kind") in ("ticket", "fix", "playbook") else "semantic"
 
 
 def _fact(tenant, fid, log):
@@ -82,7 +92,7 @@ def _fact(tenant, fid, log):
         if len({c[1] for c in claims}) > 1:
             lines.append("Disputed: " + "; ".join(f"{c[2]} says {display(c[1], ot)} (trust {c[3]})" for c in claims)
                          + f". Preferred: {display(claims[0][1], ot)}.")
-    return {"kind": "fact", "active": active, "title": sentence(s, p, o, st, ot) + ".",
+    return {"kind": "fact", "memory": R.memory_kind(p), "active": active, "title": sentence(s, p, o, st, ot) + ".",
             "subtitle": f"{p} · {'current' if active else 'superseded' if replaced_by else 'no longer true'}",
             "lines": lines,
             "sections": [{"title": "Two clocks", "rows": [["true in the world", f"{day(vf)} → {day(vt) if vt else 'now'}"],
@@ -177,7 +187,7 @@ def _graph_from(rows):
         for k, t, sal, com in ((s, st, ssal, scom), (o, ot, osal, ocom)):
             nodes[f"e:{k}"] = {"id": f"e:{k}", "kind": t, "label": display(k, t), "salience": sal, "community": com}
         edges.append({"id": f"f:{fid}", "source": f"e:{s}", "target": f"e:{o}", "label": p, "active": active,
-                      "at": at, "until": until})
+                      "at": at, "until": until, "memory": R.memory_kind(p)})
         if active and R.is_single(p) and R.policy(p) == "trust":
             active_by_sp.setdefault((s, p), set()).add(o)
     for e in edges:

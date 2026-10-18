@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { api } from '../../lib/api'
 import type { Card } from '../../lib/types'
 import { KIND_COLOR } from './MemoryGraph'
-import { MemoryKindPill } from '../portal/MemoryPanel'
+import { MEMORY_KINDS, MemoryKindPill } from '../portal/MemoryPanel'
 
 export function Inspector({ tenant, id, version }: { tenant: string; id: string | null; version: number }) {
   const [card, setCard] = useState<Card>()
@@ -38,13 +38,16 @@ export function Inspector({ tenant, id, version }: { tenant: string; id: string 
       <div className="flex items-center gap-2">
         <span className="h-2.5 w-2.5 rounded-full" style={{ background: KIND_COLOR[card.kind] ?? '#7A8799' }} />
         <span className="eyebrow">{card.subtitle ?? card.kind}</span>
+        {card.memory && <MemoryKindPill kind={card.memory} className="ml-auto" />}
       </div>
+      {card.memory && <p className="mt-1.5 text-[11px] leading-snug text-ink-3">{MEMORY_KINDS[card.memory].label} memory: {MEMORY_KINDS[card.memory].what}.</p>}
       <h3 className={`mt-2 font-display text-xl font-semibold leading-tight tracking-[-0.01em] ${superseded ? 'text-ink-3 line-through decoration-1' : ''}`}>{card.title}</h3>
       {card.summary && <p className="mt-2 rounded-xl bg-signal-tint/60 px-3 py-2 text-sm text-ink-2">{card.summary}</p>}
       <div className="mt-3 space-y-1.5 text-sm leading-relaxed text-ink-2">{card.lines.map((l, i) => <p key={i}>{l}</p>)}</div>
       {card.sections.filter((s) => s.rows.length).map((s) => (
         <section key={s.title} className="mt-5">
-          <h4 className="eyebrow flex items-center gap-1.5">{s.title}{s.title === 'Sources' && <MemoryKindPill kind="episodic" className="normal-case tracking-normal" />}</h4>
+          <h4 className="eyebrow flex items-center gap-1.5">{s.title === 'Sources' ? 'Sources · the messages it came from' : s.title}
+            {s.title === 'Sources' && <MemoryKindPill kind="episodic" className="normal-case tracking-normal" />}</h4>
           <dl className="mt-2 divide-y divide-line/[0.06]">
             {s.rows.map(([k, v], i) => (
               <div key={i} className="flex justify-between gap-4 py-1.5 text-sm">

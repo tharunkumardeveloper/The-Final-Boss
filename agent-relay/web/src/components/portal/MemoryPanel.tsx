@@ -3,9 +3,9 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { api } from '../../lib/api'
-import type { Chip, MemoryKind } from '../../lib/chips'
+import { memoryKind, type Chip, type MemoryKind } from '../../lib/chips'
 import { predicateLabel, retiredLabel, ticketLabel, titleCase, when } from '../../lib/format'
-import type { Card, Customer, HistoryRow } from '../../lib/types'
+import type { Card, ConversationMessage, Customer, HistoryRow } from '../../lib/types'
 import { ArrowUpRight, Sparkle } from '../Icons'
 import { SPRING } from './Kavya'
 
@@ -21,9 +21,9 @@ const WORD: Record<Chip['status'], string> = { new: 'New', updated: 'Updated', c
 /** The chip itself; the same layoutId is used in the chat bubble and in the panel, so it flies between them. */
 /** The three memory types, one colour each, the same everywhere they are flagged. */
 export const MEMORY_KINDS: Record<MemoryKind, { label: string; cls: string; what: string }> = {
-  semantic: { label: 'Semantic', cls: 'bg-current-tint text-current', what: 'Facts: what is true about you now (plan, city, devices), and what used to be' },
-  episodic: { label: 'Episodic', cls: 'bg-signal-tint text-signal-deep', what: 'Episodes: every message and reply, timestamped, which each fact can be traced back to' },
-  procedural: { label: 'Procedural', cls: 'bg-conflict-tint text-conflict', what: 'Know-how: fixes that worked before, tried first next time' },
+  semantic: { label: 'Semantic', cls: 'bg-current-tint text-current', what: 'A fact in one sentence ("Lives in Pune"), kept with two clocks: when it was true, and when we had it on file' },
+  episodic: { label: 'Episodic', cls: 'bg-signal-tint text-signal-deep', what: 'What was said: every question and every answer, as it was said, with its time and session; facts point back to these' },
+  procedural: { label: 'Procedural', cls: 'bg-conflict-tint text-conflict', what: 'How a case is handled: the ticket and its details, its status and handoffs, fixes tried and the one that worked' },
 }
 
 export function MemoryKindPill({ kind, className = '' }: { kind: MemoryKind; className?: string }) {
@@ -35,9 +35,9 @@ export function MemoryKindPill({ kind, className = '' }: { kind: MemoryKind; cla
 export function MemoryKindKey({ className = '' }: { className?: string }) {
   return (
     <p className={`flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-ink-3 ${className}`} aria-label="Memory types">
-      <span className="flex items-center gap-1"><MemoryKindPill kind="semantic" />lines: facts</span>
-      <span className="flex items-center gap-1"><MemoryKindPill kind="procedural" />green nodes: fixes that worked</span>
-      <span className="flex items-center gap-1"><MemoryKindPill kind="episodic" />Replay and sources: the conversations behind them</span>
+      <span className="flex items-center gap-1"><MemoryKindPill kind="semantic" />facts like "lives in Pune", with two clocks</span>
+      <span className="flex items-center gap-1"><MemoryKindPill kind="procedural" />tickets and fixes</span>
+      <span className="flex items-center gap-1"><MemoryKindPill kind="episodic" />the messages behind them (click a line, see Sources)</span>
     </p>
   )
 }
@@ -137,7 +137,19 @@ const MEMORY_TYPE_PILL = 'rounded-full px-2 py-0.5 text-[10px] font-semibold upp
 export function MemoryPanel({ who, customer, chips, tenant }: { who: string | null; customer?: Customer; chips: Chip[]; tenant: string }) {
   const [memory, setMemory] = useState<HistoryRow[]>([])
   const [procedural, setProcedural] = useState<ProceduralFix[]>([])
+  const [talk, setTalk] = useState<{ sessions: number; said: ConversationMessage[]; total: number }>()
   const settledCount = chips.filter((c) => c.phase === 'settled').length
+  // Episodic memory: the conversations themselves, every question and answer as it was said
+  useEffect(() => {
+    if (!who) { setTalk(undefined); return }
+    let live = true
+    api.conversation(tenant, who).then((c) => {
+      if (!live) return
+      const all = c.sessions.flatMap((s) => s.messages)
+      setTalk({ sessions: c.sessions.length, total: all.length, said: all.filter((m) => m.speaker === 'customer').slice(-4).reverse() })
+    }).catch(() => {})
+    return () => { live = false }
+  }, [tenant, who, settledCount])
   // Semantic memory: facts about the customer from the graph (any agent, any session)
   useEffect(() => {
     if (!who) { setMemory([]); return }
@@ -153,7 +165,10 @@ export function MemoryPanel({ who, customer, chips, tenant }: { who: string | nu
     return () => { live = false }
   }, [tenant, who])
 
-  const active = memory.filter((r) => r.active)
+  const kindOf = (r: HistoryRow) => r.memory ?? memoryKind(r.predicate)
+  const facts = memory.filter((r) => kindOf(r) === 'semantic')
+  const caseRows = memory.filter((r) => kindOf(r) === 'procedural' && r.active)
+  const active = facts.filter((r) => r.active)
   const seen = new Map<string, HistoryRow[]>()
   const now = active.filter((r) => {
     if (!SINGLE.has(r.predicate)) return true
@@ -162,7 +177,7 @@ export function MemoryPanel({ who, customer, chips, tenant }: { who: string | nu
     seen.set(r.predicate, [])
     return true
   })
-  const before = memory.filter((r) => !r.active).slice(-6).reverse()
+  const before = facts.filter((r) => !r.active).slice(-6).reverse()
   const settled = chips.filter((c) => c.phase === 'settled').slice().reverse()
   const onFile: [string, string | null | undefined][] = customer ? [
     ['Lives in', customer.city && titleCase(customer.city)], ['Plan', customer.plan && titleCase(customer.plan)],
@@ -184,9 +199,9 @@ export function MemoryPanel({ who, customer, chips, tenant }: { who: string | nu
           <div className="rounded-2xl bg-sunk/40 p-4 space-y-2">
             <p className="text-xs font-semibold text-ink-2">Three memory types in this graph:</p>
             <div className="space-y-1.5 text-xs text-ink-3">
-              <p><span className={`${MEMORY_TYPE_PILL} bg-current-tint text-current mr-2`}>Semantic</span>Facts about you — plan, city, devices</p>
-              <p><span className={`${MEMORY_TYPE_PILL} bg-signal-tint text-signal-deep mr-2`}>Episodic</span>Every conversation, timestamped</p>
-              <p><span className={`${MEMORY_TYPE_PILL} bg-conflict-tint text-conflict mr-2`}>Procedural</span>Fixes that resolved issues before</p>
+              <p><span className={`${MEMORY_TYPE_PILL} bg-current-tint text-current mr-2`}>Semantic</span>Facts about you in one line ("lives in Pune"), with two clocks</p>
+              <p><span className={`${MEMORY_TYPE_PILL} bg-signal-tint text-signal-deep mr-2`}>Episodic</span>What you said: every answer, with its time</p>
+              <p><span className={`${MEMORY_TYPE_PILL} bg-conflict-tint text-conflict mr-2`}>Procedural</span>Your case: the ticket, its steps, and fixes that worked</p>
             </div>
           </div>
         </div>
@@ -199,7 +214,7 @@ export function MemoryPanel({ who, customer, chips, tenant }: { who: string | nu
                 <h3 className="eyebrow">Semantic Memory</h3>
                 <span className={`${MEMORY_TYPE_PILL} bg-current-tint text-current`}>Facts</span>
               </div>
-              <p className="mb-2 text-xs text-ink-3">What the desk knows about you — from you, our tools, and the resolver.</p>
+              <p className="mb-2 text-xs text-ink-3">Facts about you, one line each, kept with two clocks: when it was true, and when we knew it.</p>
               <ul className="space-y-1.5">{now.map((r) => <HowIKnow key={r.fact_id} tenant={tenant} row={r} also={seen.get(r.predicate) ?? []} />)}</ul>
               {customer?.last_seen && <p className="mt-1.5 text-[11px] text-ink-3">Last updated {when(customer.last_seen)}</p>}
             </section>
@@ -217,26 +232,49 @@ export function MemoryPanel({ who, customer, chips, tenant }: { who: string | nu
             </section>
           )}
 
-          {/* Episodic Memory — what changed over time */}
+          {/* Semantic, the other clock: facts that used to be true are kept, closed, not deleted */}
           {before.length > 0 && (
             <section>
               <div className="mb-2 flex items-center gap-2">
-                <h3 className="eyebrow">Episodic Memory</h3>
-                <span className={`${MEMORY_TYPE_PILL} bg-signal-tint text-signal-deep`}>History</span>
+                <h3 className="eyebrow">Used to be true</h3>
+                <span className={`${MEMORY_TYPE_PILL} bg-current-tint text-current`}>Semantic · history</span>
               </div>
-              <p className="mb-2 text-xs text-ink-3">Bi-temporal: memory knows what used to be true, and when it changed.</p>
+              <p className="mb-2 text-xs text-ink-3">Two clocks: when each fact stopped being true, and when we found out. Nothing is deleted.</p>
               <ul className="space-y-1.5">{before.map((r) => <HowIKnow key={r.fact_id} tenant={tenant} row={r} />)}</ul>
             </section>
           )}
 
-          {/* Procedural Memory — shared fixes */}
-          {procedural.length > 0 && (
+          {/* Episodic Memory: the conversations themselves */}
+          {talk && talk.total > 0 && (
+            <section>
+              <div className="mb-2 flex items-center gap-2">
+                <h3 className="eyebrow">Episodic Memory</h3>
+                <span className={`${MEMORY_TYPE_PILL} bg-signal-tint text-signal-deep`}>Conversations</span>
+              </div>
+              <p className="mb-2 text-xs text-ink-3">
+                Every question and answer, as it was said: {talk.total} message{talk.total === 1 ? '' : 's'} in {talk.sessions} conversation{talk.sessions === 1 ? '' : 's'}.
+                Each fact above points back to the message it came from.
+              </p>
+              <ul className="space-y-1.5">
+                {talk.said.map((m) => (
+                  <li key={m.episode_id} className="rounded-xl bg-paper/70 px-3 py-2 text-sm">
+                    <span className="text-ink">“{m.text.length > 90 ? `${m.text.slice(0, 90)}…` : m.text}”</span>
+                    <span className="ml-1.5 text-[11px] text-ink-3">you · {when(m.at)}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {/* Procedural Memory: this customer's case, and the fixes that worked for everyone */}
+          {(caseRows.length > 0 || procedural.length > 0) && (
             <section>
               <div className="mb-2 flex items-center gap-2">
                 <h3 className="eyebrow">Procedural Memory</h3>
-                <span className={`${MEMORY_TYPE_PILL} bg-conflict-tint text-conflict`}>Fixes</span>
+                <span className={`${MEMORY_TYPE_PILL} bg-conflict-tint text-conflict`}>Case · fixes</span>
               </div>
-              <p className="mb-2 text-xs text-ink-3">Fixes that resolved issues before — the resolver reads this before every pickup.</p>
+              <p className="mb-2 text-xs text-ink-3">How cases are handled: your tickets and their steps, and fixes that resolved issues before (the resolver reads these before every pickup).</p>
+              {caseRows.length > 0 && <ul className="mb-1.5 space-y-1.5">{caseRows.map((r) => <HowIKnow key={r.fact_id} tenant={tenant} row={r} />)}</ul>}
               <ul className="space-y-1.5">
                 {procedural.slice(0, 5).map((f) => (
                   <li key={`${f.fix}:${f.issue}`} className="rounded-xl bg-paper/70 px-3 py-2 text-sm">
