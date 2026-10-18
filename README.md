@@ -184,7 +184,36 @@ If every reading is healthy but the customer says it's broken, **the resolver do
 | 🧠 **What we remember** | Every fact the desk holds about you: who wrote it, when, and what it replaced | Say "I've moved to Pune" and watch the old fact close and the new one appear |
 | 🛰️ **Network lab** | Your own line, live: core → hub → exchange → cabinet → your home (neighbours stay anonymous) | Appears once you have a line and a case; faults glow, and a dispatched van drives out |
 | ▶️ **Watch it work** | Judge mode: the whole story through the real agents | One click; a caption bar says what to watch at each step |
-| 🌍 **Region · Plans · Coverage** | Six regional desks, local prices, which cities are degraded right now | Switch region at the top; everything comes from that region's graph |
+| 🌍 **Region · Plans · Coverage** | Six regional desks, local prices, which cities are degraded right now | Picked for you (below), or switch region at the top; everything comes from that region's graph |
+
+#### 📍 It works out where you are
+
+Customers don't know which regional desk serves them, so they never have to. On a first visit, the desk follows the
+browser's time zone, on whichever page they open first. Then, the moment they give an address, Relay places it with
+**one resolver** ([`relay/geo.py`](agent-relay/relay/geo.py)), used by the chat, the customer's line, desk routing and
+MCP alike:
+
+```mermaid
+flowchart LR
+    A["📝 Any address<br/><i>suburb · PIN code · landmark</i>"] --> B{"WiFight's own list<br/>199 cities · 1,118 areas"}
+    B -- not listed --> C{"Offline town list<br/>GeoNames"}
+    C -- unknown or ambiguous --> D["🌐 OpenCage<br/>geocoding"]
+    B -- found --> E["📍 Nearest city & area we serve"]
+    C -- found --> E
+    D --> E
+    E --> F["🏢 Right desk · 🛰️ line · 🔧 resolver · Network lab"]
+    style E fill:#14A39A,color:#fff,stroke:#0d6e68
+```
+
+| The customer says | What happens |
+|---|---|
+| "Navajeevan Nagar, Pattabiram" or PIN **600072** | OpenCage places it, 23 km from the Avadi area of **Chennai**: a line, a resolver and the Network lab follow |
+| "Chennai", while on the Latin America desk | *"Chennai is looked after by our India desk, so I'm moving your case there"*: the case moves, and what they said is re-told there, so they repeat nothing |
+| "Manchester", while the Europe desk shows Germany | Same desk, the country switches to the UK, and prices follow |
+| "Goa", a name India and the Philippines share | OpenCage picks Goa, India; it's 349 km from our nearest city, so the right desk but honestly no line |
+
+Our own list and the offline town list answer most addresses for free; OpenCage is asked only for what neither knows,
+at most once per address (results are cached and paced to the free tier).
 
 ### 🖥️ The staff console · [wifight.vercel.app/console](https://wifight.vercel.app/console)
 
@@ -250,6 +279,7 @@ fail to find it: through its live stream, its agent tools and raw Cypher. You ca
 | **A blind fault** (Network → random): the resolver doesn't know what broke | **Break something specific** and see whether the resolver gets it right |
 | **Replay** (Memory): scrub the graph back through time | **Settle a disagreement**: Memory → Show me → "This one is right" |
 | **Watch a handoff** (Agent team) | **Run the isolation test** (Tenants) with your own secret word |
+| **Your first visit**: the desk follows your time zone | **Give an address we don't list**: a suburb, a PIN code, or a city in another region, and watch it place you |
 
 ## 🧩 The five memory capabilities
 
@@ -455,7 +485,8 @@ page draws the new agent.
 <img src="https://cdn.simpleicons.org/python" width="18" alt=""> Python 3.12<br>
 <img src="https://cdn.simpleicons.org/fastapi" width="18" alt=""> FastAPI · WebSockets<br>
 <img src="https://cdn.simpleicons.org/pydantic" width="18" alt=""> Pydantic<br>
-<sub>Uvicorn</sub>
+<img src="https://cdn.simpleicons.org/opencage" width="18" alt=""> OpenCage (geocoding)<br>
+<sub>Uvicorn · GeoNames</sub>
 </td>
 <td valign="top">
 <img src="https://cdn.simpleicons.org/react" width="18" alt=""> React 18<br>
@@ -497,7 +528,8 @@ Setup, tests and the free deploy (Render + Vercel + FalkorDB Cloud) are in
 Browser tour. The API reference is [`agent-relay/api/CONTRACT.md`](agent-relay/api/CONTRACT.md).
 
 On the public demo, resets need a reset key and writes are rate-limited per visitor, so nobody can wipe it during
-judging; a scheduled ping keeps the free API awake.
+judging; a scheduled ping keeps the free API awake. Geocoding is optional: set `OPENCAGE_API_KEY` (a free key) to place
+addresses our city list doesn't know; without it, our list and the offline town list still place most of them.
 
 <details>
 <summary><b>🏷️ Names, once</b></summary>
@@ -529,7 +561,8 @@ model, queries and evaluation were directed, verified and tested by us, and we c
 models: Groq `gpt-oss-120b` for extraction, answers and replies, with `gpt-oss-20b` and `qwen3.8-27b` as fallbacks (qwen
 is also the benchmark's answer model), Gemini Flash-Lite last; `allam-2-7b` for simulated customers and summaries;
 embeddings by fastembed `bge-small-en-v1.5`, run locally. All customer data is synthetic; place names come from
-GeoNames (CC BY 4.0); the India outline is Natural Earth's 1:10m boundary from the India point of view (public domain).
+GeoNames (CC BY 4.0); the India outline is Natural Earth's 1:10m boundary from the India point of view (public domain); addresses our
+city list doesn't know are geocoded by OpenCage, with data © OpenStreetMap contributors (ODbL).
 
 <div align="center">
 <br>
