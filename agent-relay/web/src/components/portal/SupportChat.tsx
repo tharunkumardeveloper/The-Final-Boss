@@ -253,7 +253,8 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
   const [lines, setLines] = useState<Line[]>([])
   const [chips, setChips] = useState<Chip[]>([])
   const lastLine = useRef<string>()  // the latest message on screen: where a fact that arrives on its own is shown
-  lastLine.current = lines.filter((l) => !l.speaker.startsWith('tool:')).at(-1)?.id
+  const shown = lines.filter((l) => !l.speaker.startsWith('tool:'))
+  lastLine.current = shown[shown.length - 1]?.id
   const [text, setText] = useState('')
   const [busy, setBusy] = useState(false)
   const [step, setStep] = useState<string>()
