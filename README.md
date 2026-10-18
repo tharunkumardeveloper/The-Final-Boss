@@ -371,37 +371,52 @@ open in the resolver's queue. Europe, for example, is Camden, Islington, Coventr
 
 ## 🗺️ Graph data model
 
-<p align="center"><a href="docs/diagrams/data-model-light.svg"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/data-model-dark.svg"><img src="docs/diagrams/data-model-light.svg" alt="The graph data model: Agent WROTE Episode; Episode DERIVED or RETIRED Fact; Fact ABOUT Customer and the object; Fact SUPERSEDES Fact; Customer LIVES_IN City and other typed fact edges; Agent CONSULTED Fact; Agent HANDED_OFF or PICKED_UP Ticket; Conflict BETWEEN Facts; Procedure FIRST ProcStep NEXT ProcStep; Customer CONNECTED_VIA Olt UPLINK Pop UPLINK Backbone." width="860"></picture></a></p>
+The map below is the graph as it is: we read every node kind and every relationship from the live India graph
+(`mem:pml`) and drew all of them, in five bands by kind of memory. Every tenant has its own graph with the same shape.
 
-Every tenant is its own graph. Inside it, three layers share the same nodes:
+<p align="center"><a href="docs/diagrams/data-model-light.svg"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/data-model-dark.svg"><img src="docs/diagrams/data-model-light.svg" alt="The graph data model in five bands. Episodic: Agent WROTE Episode, Episode IN Session. Semantic: Episode DERIVED or RETIRED Fact, Episode MENTIONS Customer, Agent CONSULTED Fact and Fact WRITTEN_BY Agent, Conflict BETWEEN Facts, Fact ABOUT Customer, Customer has typed edges to City, Area, Plan, Device, Phone. Procedural: Customer HAS_TICKET Ticket, Technician VISITS TechVisit FOR_TICKET Ticket, Ticket TICKET_ABOUT Issue, Ticket TRIED_FIX Fix, Fix RESOLVES Issue, Procedure RESOLVES Issue, Procedure FIRST ProcStep. Network: Customer CONNECTED_VIA Olt, Olt UPLINK Pop UPLINK Backbone, Splitter PON Olt, Splitter DROP Ont. World and catalogue: Outage AFFECTS City, Area IN_CITY City, City IN_COUNTRY Country, Plan Service Addon PRICED_IN Country, Faq EXPLAINS them, Playbook FIRST_STEP Step." width="100%"></picture></a></p>
 
 | Node | What it is | Key properties |
 |---|---|---|
-| `Episode` | One message, reply, tool reading or internal note, as it happened (**episodic** memory). Extra label by kind: `CustomerMessage`, `AgentReply`, `ToolResult`, `InternalNote` | `episode_id`, `text`, `speaker`, `customer`, `recorded_at`, `embedding` (vector index) |
+| `Episode` | One message, reply, tool reading or internal note, as it happened (**episodic** memory). Kind label: `CustomerMessage`, `AgentReply`, `ToolResult`, `InternalNote` | `episode_id`, `text`, `speaker`, `customer`, `recorded_at`, `embedding` (vector index) |
+| `Session` | One conversation | `session_id`, `started_at`, `summary` |
 | `Fact` | One statement, subject · predicate · object (**semantic** memory). State label: `Current`, `Superseded` or `Retired` | `fact_id`, `predicate`, `subject`, `object_value`, `valid_from`/`valid_to`, `recorded_at`/`expired_at`, `asserted_by`, `active` |
-| `Entity` | Anything a fact is about, with a type label: `Customer`, `City`, `Area`, `Plan`, `Device`, `Issue`, `Fix`, `Ticket`, `Outage`, … | `name_key`, `type`, `embedding` (vector index), full-text index on names |
-| `Session`, `Agent` | A conversation, and the agent that wrote or read something | `session_id`, `summary`; `agent_id`, `trust` |
-| `Procedure`, `ProcStep` | A fix that worked, as a path of steps (**procedural** memory) | successes, failures, the readings it applies to |
-| `Conflict` | Two agents disagree about a single-valued fact; both claims stay | the two facts (`BETWEEN`) |
-| `NetNode` (`Backbone`, `Pop`, `Olt`), `LastMile` (`Splitter`, `Ont`) | The access network a customer's line runs through | `node_id`, `status`, `capacity_gbps`, `km` |
-| `Offering`, `Plan`, `Service`, `Addon`, `Faq`, `Guide`, `Technician`, … | The company's catalogue and staff, per region | prices, notes, coverage |
+| `Entity` | Anything a fact is about, with a type label: `Customer`, `City`, `Area`, `Plan`, `Device`, `Phone`, `Issue`, `Fix`, `Ticket`, `Outage`, `Technician`, … | `name_key`, `type`, `embedding` (vector index), full-text index on names |
+| `Agent` | intake, resolver, noc, mcp, simulator, operator | `agent_id`, `trust` (learns when a person settles a disagreement) |
+| `Conflict` | Two agents disagree about a single-valued fact; both claims stay | the two facts it is `BETWEEN` |
+| `Procedure`, `ProcStep` | A fix that worked, as an ordered path of steps (**procedural** memory) | successes, failures, the readings it applies to |
+| `TechVisit`, `Escalation` | A technician's home visit; a ticket raised in priority | when, outcome; reason |
+| `NetNode` (`Backbone`, `Pop`, `Olt`), `LastMile` (`Splitter`, `Ont`) | The access network a customer's line runs through | `node_id`, `status` (and an `Up` label), `capacity_gbps`, `km` |
+| `Offering`, `Plan`, `Service`, `Addon`, `Faq`, `Guide`, `Policy`, `Playbook` → `Step` | The company's catalogue and troubleshooting know-how, per region | prices per country, notes, coverage |
+| `Community` | A cluster of related entities from label propagation | size, salience |
 
 | Relationship | Meaning |
 |---|---|
-| `(:Agent)-[:WROTE]->(:Episode)-[:IN]->(:Session)` | Who said what, in which conversation |
-| `(:Episode)-[:DERIVED]->(:Fact)`, `(:Episode)-[:RETIRED]->(:Fact)` | Which message a fact came from, or ended it |
-| `(:Fact)-[:ABOUT {role}]->(:Entity)` | A fact's subject and object |
-| `(:Fact)-[:SUPERSEDES]->(:Fact)` | A new value replacing an old one (the old one is kept, closed) |
-| `(:Customer)-[:LIVES_IN\|ON_PLAN\|HAS_TICKET\|…]->(:Entity)` | A typed edge mirroring each **current** fact, so traversals read like the domain; a fact that ends becomes a `WAS {predicate, valid_from, valid_to}` edge |
+| `(:Agent)-[:WROTE]->(:Episode)-[:IN]->(:Session)` | Who said what, in which conversation; `(:Customer)-[:HAS_SESSION]->(:Session)-[:FOLLOWED_BY]->(:Session)` chains a customer's visits |
+| `(:Episode)-[:DERIVED]->(:Fact)`, `(:Episode)-[:RETIRED]->(:Fact)` | The message a fact came from, or the message that ended it |
+| `(:Episode)-[:MENTIONS]->(:Entity)` | What each message was about (the entry point for recall by meaning) |
+| `(:Fact)-[:ABOUT {role}]->(:Entity)`, `(:Fact)-[:WRITTEN_BY]->(:Agent)` | A fact's subject and object, and who asserted it |
+| `(:Fact)-[:SUPERSEDES]->(:Fact)` | A new value replacing an old one (the old one is kept, closed on both clocks) |
+| `(:Customer)-[:LIVES_IN\|ON_PLAN\|OWNS_DEVICE\|PHONE\|HAS_TICKET\|…]->(:Entity)` | A typed edge mirroring each **current** fact, so traversals read like the domain; a fact that ends becomes a `WAS {predicate, valid_from, valid_to}` edge |
 | `(:Agent)-[:CONSULTED {count}]->(:Fact)` | Every read, so knowledge sharing between agents is measurable |
-| `(:Agent)-[:HANDED_OFF\|PICKED_UP]->(:Ticket)` | Handoffs as graph state, never as messages |
-| `(:Procedure)-[:FIRST]->(:ProcStep)-[:NEXT]->(:ProcStep)` | The order of steps in a fix that worked |
-| `(:Customer)-[:CONNECTED_VIA]->(:Ont)`, `(:NetNode)-[:UPLINK]->(:NetNode)` | The customer's line, home to backbone |
+| `(:Conflict)-[:BETWEEN]->(:Fact)` | The two claims of a disagreement |
+| `(:Agent)-[:HANDED_OFF\|PICKED_UP]->(:Ticket)`, `(:Ticket)-[:RAISED_IN]->(:Session)` | Handoffs as graph state, never as messages; where a ticket was opened |
+| `(:Ticket)-[:TICKET_ABOUT]->(:Issue)`, `-[:HAS_STATUS\|HAS_PRIORITY\|SEVERITY\|ASSIGNED_TO\|…]->` | The case and its details |
+| `(:Ticket)-[:TRIED_FIX\|FIXED_BY]->(:Fix)-[:RESOLVES]->(:Issue)` | Every fix tried, the one that worked, and the know-how it leaves |
+| `(:Procedure)-[:FIRST]->(:ProcStep)-[:NEXT]->(:ProcStep)`, `(:Procedure)-[:RESOLVES\|LEARNED_FROM\|WORKED_AT]->` | A verified fix path: which issue it resolves, the ticket it was learned from, where it worked |
+| `(:Technician)-[:VISITS]->(:TechVisit)-[:FOR_TICKET]->(:Ticket)`, `(:Ticket)-[:ESCALATED]->(:Escalation)` | Field work and escalations, attached to the case |
+| `(:Customer)-[:CONNECTED_VIA]->(:Olt)`, `(:Customer)-[:HAS_ONT]->(:Ont)` | The customer's exchange and the box at home |
+| `(:Splitter)-[:PON]->(:Olt)-[:UPLINK]->(:Pop)-[:UPLINK]->(:Backbone)`, `(:Splitter)-[:DROP]->(:Ont)` | The line, from the street cabinet up to the core |
+| `(:Outage)-[:AFFECTS]->(:City)`, `(:Area)-[:IN_CITY]->(:City)-[:IN_COUNTRY]->(:Country)` | Where things are, and what a failure reaches |
+| `(:Plan\|Service\|Addon)-[:PRICED_IN]->(:Country)`, `(:Faq)-[:EXPLAINS]->`, `(:Playbook)-[:FIRST_STEP]->(:Step)-[:NEXT]->` | The catalogue and troubleshooting playbooks the agents quote from |
+| `(:Entity)-[:IN_COMMUNITY]->(:Community)` | Clusters written back by label propagation |
 
 **Two clocks on every fact.** `valid_from`/`valid_to` say when it was true in the world; `recorded_at`/`expired_at` say
 when we had it on file. Nothing is overwritten: "where did she live on the 5th?" and "what did we believe on the 5th?"
-are two filters on the same facts. The full model, every predicate and its conflict policy are in
-[`agent-relay/README.md`](agent-relay/README.md#graph-data-model) and [`relay/registry.py`](agent-relay/relay/registry.py).
+are two filters on the same facts. Every predicate, its types and its conflict policy are in
+[`relay/registry.py`](agent-relay/relay/registry.py); more on the model in
+[`agent-relay/README.md`](agent-relay/README.md#graph-data-model). The map is drawn by
+[`docs/diagrams/draw.py`](docs/diagrams/draw.py).
 
 ## 🧮 Cypher queries and graph algorithms the product depends on
 
@@ -705,7 +720,7 @@ addresses our city list doesn't know; without it, our list and the offline town 
 ├── render.yaml                the API's Render blueprint
 ├── .github/workflows/         keep-awake ping for the free API
 ├── docs/
-│   ├── diagrams/              the README's diagrams (draw.py draws them; *.mmd are Mermaid sources)
+│   ├── diagrams/              the README's diagrams (draw.py draws them; ticket-flow.mmd is Mermaid)
 │   ├── gifs/                  full-size GIFs; readme/ (smooth GIFs and stills for this page) and blog/ (dev.to)
 │   └── brand/                 wordmarks
 └── agent-relay/               Relay, and WiFight built on it

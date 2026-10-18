@@ -9,11 +9,11 @@ THEMES = {
     "light": {"bg": "#ffffff", "ink": "#0f1720", "sub": "#52606d", "line": "#8a97a6", "group": "#f4f6f8", "groupline": "#d6dde4",
               "box": "#ffffff", "boxline": "#c9d2db", "teal": "#14a39a", "tealbg": "#e3f6f4", "amber": "#b7791f",
               "amberbg": "#fdf3e1", "blue": "#2563eb", "bluebg": "#e8efff", "violet": "#7c5cc4", "violetbg": "#f0ebfb",
-              "labelbg": "#ffffff"},
+              "green": "#268554", "greenbg": "#e7f5ec", "labelbg": "#ffffff"},
     "dark": {"bg": "#0d1117", "ink": "#e6edf3", "sub": "#9aa7b4", "line": "#6e7c8a", "group": "#161b22", "groupline": "#30363d",
              "box": "#0d1117", "boxline": "#3a434d", "teal": "#2dd4bf", "tealbg": "#0f2f2c", "amber": "#f0b45a",
              "amberbg": "#2d2412", "blue": "#7aa2ff", "bluebg": "#16213d", "violet": "#b39cff", "violetbg": "#231c3a",
-             "labelbg": "#0d1117"},
+             "green": "#4ade80", "greenbg": "#10291a", "labelbg": "#0d1117"},
 }
 
 
@@ -97,7 +97,7 @@ class Svg:
             f'<path d="M0,0 L10,5 L0,10 z" fill="{t[k]}"/></marker>'
             f'<marker id="s-{k}" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">'
             f'<path d="M0,0 L10,5 L0,10 z" fill="{t[k]}"/></marker>'
-            for k in ("line", "teal", "amber", "blue", "violet"))
+            for k in ("line", "teal", "amber", "blue", "violet", "green"))
         return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{self.w}" height="{self.h}" viewBox="0 0 {self.w} {self.h}" '
                 f'font-family="{FONT}"><defs>{marks}</defs><rect width="{self.w}" height="{self.h}" fill="{t["bg"]}"/>'
                 + "".join(self.parts) + "</svg>\n")
@@ -208,8 +208,93 @@ def location(theme):
     return s.render()
 
 
+def datamodel(theme):
+    """The graph as it is (read from the live India graph): five bands, by kind of memory, left to right."""
+    s = Svg(1640, 1210, theme)
+    s.group(20, 20, 1600, 196, "Episodic memory · what was said", tone="teal")
+    s.box("agent", 60, 92, 220, 76, "Agent", ["intake · resolver · noc · mcp"])
+    s.box("ep", 400, 92, 260, 76, "Episode", ["a message, reply, tool reading", "or note, with its time"], tone="teal")
+    s.box("ses", 780, 92, 240, 76, "Session", ["HAS_SESSION from the customer", "FOLLOWED_BY the next one"])
+    for i, line in enumerate(["Every message is kept exactly as it was said.",
+                              "Kinds: CustomerMessage · AgentReply · ToolResult · InternalNote",
+                              "A vector index on the text: recall by meaning"]):
+        s.text(1080, 112 + i * 26, line, 16, tone="ink" if i == 0 else "sub", weight=600 if i == 0 else 400)
+
+    s.group(20, 236, 1600, 228, "Semantic memory · what is true, with two clocks", tone="green")
+    s.box("conf", 60, 318, 220, 80, "Conflict", ["two agents disagree;", "both claims are kept"], tone="amber")
+    s.box("fact", 400, 290, 280, 132, "Fact", ["subject · predicate · object", "valid_from → valid_to  (world)",
+                                              "recorded_at → expired_at  (on file)", "SUPERSEDES the one it replaced"],
+          tone="green")
+    s.box("cust", 790, 318, 210, 80, "Customer", ["an Entity"], tone="green")
+    s.box("things", 1100, 290, 500, 132, "City · Area · Plan · Device · Phone · …", ["one typed edge per current fact:",
+                                                                                   "LIVES_IN · ON_PLAN · OWNS_DEVICE · PHONE · …",
+                                                                                   "a fact that ends becomes a WAS edge"])
+    s.group(20, 484, 1600, 248, "Procedural memory · how a case is handled", tone="amber")
+    s.box("tech", 60, 584, 200, 76, "Technician", ["BASED_IN a city"])
+    s.box("visit", 330, 584, 200, 76, "TechVisit", ["a home visit"])
+    s.box("ticket", 620, 556, 250, 132, "Ticket", ["HANDED_OFF / PICKED_UP", "by agents · RAISED_IN a session",
+                                                  "status · priority · ESCALATED"], tone="amber")
+    s.box("issue", 1080, 528, 220, 70, "Issue", ["what went wrong"])
+    s.box("fix", 1080, 640, 220, 70, "Fix", ["tried; FIXED_BY = it worked"])
+    s.box("proc", 1380, 528, 220, 70, "Procedure", ["LEARNED_FROM a ticket"], tone="amber")
+    s.box("step", 1380, 640, 220, 70, "ProcStep", ["FIRST, then NEXT"])
+
+    s.group(20, 752, 1600, 200, "The network · the line a customer is on")
+    s.box("bb", 60, 832, 190, 76, "Backbone", ["core"])
+    s.box("pop", 330, 832, 190, 76, "Pop", ["city hub"])
+    s.box("olt", 860, 820, 240, 100, "Olt", ["the exchange", "UPLINK to the hub"], tone="blue")
+    s.box("split", 1170, 832, 190, 76, "Splitter", ["street cabinet"])
+    s.box("ont", 1410, 832, 190, 76, "Ont", ["the box at home", "(HAS_ONT)"])
+
+    s.group(20, 972, 1600, 218, "World and catalogue")
+    s.box("out", 60, 1036, 190, 64, "Outage", [], tone="amber")
+    s.box("city", 330, 1036, 190, 64, "City", [])
+    s.box("country", 600, 1036, 190, 64, "Country", [])
+    s.box("cat", 870, 1024, 260, 88, "Plan · Service · Addon", ["prices per country"])
+    s.box("faq", 1200, 1036, 150, 64, "Faq", [])
+    s.box("play", 1400, 1024, 200, 88, "Playbook", ["FIRST_STEP → Step", "FOR_ISSUE · FOR_ROUTER"])
+    s.box("area", 60, 1120, 190, 56, "Area", [])
+
+    # episodic
+    s.arrow(s.side("agent", "r"), s.side("ep", "l"), "WROTE", tone="teal")
+    s.arrow(s.side("ep", "r"), s.side("ses", "l"), "IN", tone="teal")
+    # episodic -> semantic
+    s.arrow(s.side("ep", "b", 0.4), s.side("fact", "t", 0.4), "DERIVED · RETIRED", tone="green", bend="v", label_dy=0)
+    s.arrow(s.side("ep", "b", 0.85), s.side("cust", "t", 0.3), "MENTIONS", tone="teal", bend="v", label_dy=0)
+    s.arrow(s.side("agent", "b", 0.5), s.side("fact", "l", 0.25), "CONSULTED · WRITTEN_BY", both=True, bend="v",
+            label_at=0.35, label_dy=0)
+    # semantic
+    s.arrow(s.side("conf", "r"), s.side("fact", "l", 0.72), "BETWEEN", tone="amber", label_dy=-14)
+    s.arrow(s.side("fact", "r"), s.side("cust", "l"), "ABOUT", tone="green")
+    s.arrow(s.side("cust", "r"), s.side("things", "l"), "typed edges", tone="green")
+    # semantic -> procedural
+    s.arrow(s.side("cust", "b", 0.25), s.side("ticket", "t", 0.65), "HAS_TICKET", tone="amber", bend="v", label_dy=0)
+    # procedural
+    s.arrow(s.side("tech", "r"), s.side("visit", "l"), "VISITS")
+    s.arrow(s.side("visit", "r"), s.side("ticket", "l", 0.6), "FOR_TICKET", label_dy=-14)
+    s.arrow(s.side("ticket", "r", 0.25), s.side("issue", "l"), "TICKET_ABOUT", tone="amber", label_at=0.3, label_dy=-14)
+    s.arrow(s.side("ticket", "r", 0.78), s.side("fix", "l"), "TRIED_FIX", tone="amber", label_at=0.3, label_dy=16)
+    s.arrow(s.side("fix", "t"), s.side("issue", "b"), "RESOLVES", tone="amber", bend="v", label_dy=0)
+    s.arrow(s.side("proc", "l"), s.side("issue", "r"), "RESOLVES", tone="amber", label_dy=-14)
+    s.arrow(s.side("proc", "b"), s.side("step", "t"), "FIRST", tone="amber", bend="v", label_dy=0)
+    # semantic -> network
+    s.arrow(s.side("cust", "b", 0.95), s.side("olt", "t", 0.55), "CONNECTED_VIA", tone="blue", bend="v", label_at=0.9, label_dy=0)
+    # network
+    s.arrow(s.side("olt", "l", 0.5), s.side("pop", "r"), "UPLINK", tone="blue")
+    s.arrow(s.side("pop", "l"), s.side("bb", "r"), "UPLINK", tone="blue")
+    s.arrow(s.side("split", "l"), s.side("olt", "r", 0.5), "PON", tone="blue")
+    s.arrow(s.side("split", "r"), s.side("ont", "l"), "DROP", tone="blue")
+    # world and catalogue
+    s.arrow(s.side("out", "r"), s.side("city", "l"), "AFFECTS", tone="amber")
+    s.arrow(s.side("area", "r"), s.side("city", "b", 0.3), "IN_CITY", bend="h", label_at=0.45, label_dy=8)
+    s.arrow(s.side("city", "r"), s.side("country", "l"), "IN_COUNTRY")
+    s.arrow(s.side("cat", "l"), s.side("country", "r"), "PRICED_IN")
+    s.arrow(s.side("faq", "l"), s.side("cat", "r"), "EXPLAINS")
+    return s.render()
+
+
 if __name__ == "__main__":
-    for name, fn in (("architecture", architecture), ("idea", idea), ("location", location)):
+    for name, fn in (("architecture", architecture), ("idea", idea), ("location", location), ("data-model", datamodel)):
         for theme in THEMES:
             (OUT / f"{name}-{theme}.svg").write_text(fn(theme), encoding="utf-8")
             print(f"{name}-{theme}.svg")
