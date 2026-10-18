@@ -1,0 +1,16 @@
+sequenceDiagram
+    autonumber
+    participant C as 👤 Customer
+    participant I as 🤖 Mr.Fix-It
+    participant G as 🧠 FalkorDB
+    participant R as 🔧 Resolver
+    C->>I: "my internet keeps dropping since this morning"
+    I->>G: facts: issue · since when · whole home · WiFi + cable · phone · area
+    I->>G: Ticket PML-2058-AAC0 · HANDED_OFF
+    R->>G: PICKED_UP · reads intake's facts (CONSULTED)
+    R->>G: measures the line (Cypher · algo.maxFlow)
+    R-->>C: "quick check: is the fibre cable clicked in?"
+    R->>G: act: send a technician · re-measure
+    R-->>C: "fixed. Is it working on your side?"
+    C->>R: "yes"
+    R->>G: Ticket resolved · fix saved as procedural memory

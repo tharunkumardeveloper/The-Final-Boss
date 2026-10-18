@@ -17,7 +17,7 @@
 
 <br>
 
-<img src="docs/gifs/readme/judge.gif" alt="Judge mode: a customer reports a fault, the resolver fixes it, the customer moves city and a new session remembers" width="720">
+<img src="docs/gifs/readme/judge.gif" alt="Judge mode: a customer reports a fault, the resolver fixes it, the customer moves city and a new session remembers" width="680">
 
 <sub><b>Judge mode</b>: one click plays the whole story through the real agents. Nobody types.</sub>
 
@@ -75,23 +75,14 @@ still has the old address, support asks the customer again, and a handoff loses 
 others find in the graph, with **who** wrote it, **when** it was true, **what** it replaced, and the **path** behind
 every answer.
 
-```mermaid
-flowchart LR
-    C([👤 Customer]) -- chat --> I["🤖 Mr.Fix-It<br/><i>intake</i>"]
-    I -- "facts · ticket" --> G[("🧠 FalkorDB<br/>one graph per tenant")]
-    R["🔧 Resolver"] <-- "reads · acts · re-measures" --> G
-    N["📡 Network Ops"] <-- "traversal · warnings" --> G
-    M["🧩 Claude / any MCP client"] <-- MCP --> G
-    G --> S["🖥️ Staff console"]
-    style G fill:#14A39A,color:#fff,stroke:#0d6e68
-```
+<p align="center"><a href="docs/diagrams/idea-light.svg"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/idea-dark.svg"><img src="docs/diagrams/idea-light.svg" alt="Relay's architecture: the customer chats with Mr.Fix-It (intake), which writes facts and tickets to one FalkorDB graph per tenant; the Resolver, Network Ops and any MCP client such as Claude read and write the same graph; the staff console shows it." width="760" loading="lazy"></picture></a></p>
 
 ## 🏢 Meet WiFight
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/brand/wordmark-dark.png">
-    <img src="agent-relay/web/public/brand/wordmark.png" alt="WiFight" height="72">
+    <source media="(prefers-color-scheme: dark)" srcset="docs/brand/wordmark-dark-readme.png">
+    <img src="docs/brand/wordmark-readme.png" alt="WiFight" height="72">
   </picture>
 </p>
 
@@ -109,7 +100,7 @@ flowchart LR
 <table>
 <tr>
 <td width="33%" valign="top" align="center">
-<img src="agent-relay/web/public/brand/mr-fix-it.gif" alt="Mr.Fix-It" width="88"><br>
+<img loading="lazy" src="agent-relay/web/public/brand/mr-fix-it.gif" alt="Mr.Fix-It" width="88"><br>
 <b>Mr.Fix-It</b> · intake<br>
 <sub>Chats with customers, picks up their name, asks only what's missing, writes each detail into the graph, opens
 tickets and hands them over</sub>
@@ -146,26 +137,9 @@ We wanted a domain where shared memory isn't a nice-to-have but **the whole job*
 A complaint goes from a sentence in the chat to a verified fix, and **the two agents never message each other**: the
 ticket and the facts in the graph are the only thing they share.
 
-<p align="center"><a href="docs/gifs/ticket.gif"><img src="docs/gifs/readme/ticket.gif" alt="A ticket from complaint to fix: chat, Your tickets stages, resolver steps, technician dispatched" width="600"></a></p>
+<p align="center"><a href="docs/gifs/ticket.gif"><img loading="lazy" src="docs/gifs/readme/ticket.gif" alt="A ticket from complaint to fix: chat, Your tickets stages, resolver steps, technician dispatched" width="560"></a></p>
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant C as 👤 Customer
-    participant I as 🤖 Mr.Fix-It
-    participant G as 🧠 FalkorDB
-    participant R as 🔧 Resolver
-    C->>I: "my internet keeps dropping since this morning"
-    I->>G: facts: issue · since when · whole home · WiFi + cable · phone · area
-    I->>G: Ticket PML-2058-AAC0 · HANDED_OFF
-    R->>G: PICKED_UP · reads intake's facts (CONSULTED)
-    R->>G: measures the line (Cypher · algo.maxFlow)
-    R-->>C: "quick check: is the fibre cable clicked in?"
-    R->>G: act: send a technician · re-measure
-    R-->>C: "fixed. Is it working on your side?"
-    C->>R: "yes"
-    R->>G: Ticket resolved · fix saved as procedural memory
-```
+<p align="center"><a href="docs/diagrams/ticket-flow-light.svg"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/ticket-flow-dark.svg"><img src="docs/diagrams/ticket-flow-light.svg" alt="How a ticket works: the customer reports a fault, Mr.Fix-It writes the facts and a ticket marked HANDED_OFF, the Resolver picks it up, reads intake's facts, measures the line with Cypher and algo.maxFlow, sends a technician, re-measures, and the customer confirms the fix." width="860" loading="lazy"></picture></a></p>
 
 <div align="center">
 
@@ -221,17 +195,7 @@ browser's time zone, on whichever page they open first. Then, the moment they gi
 **one resolver** ([`relay/geo.py`](agent-relay/relay/geo.py)), used by the chat, the customer's line, desk routing and
 MCP alike:
 
-```mermaid
-flowchart LR
-    A["📝 Any address<br/><i>suburb · PIN code · landmark</i>"] --> B{"WiFight's own list<br/>199 cities · 1,118 areas"}
-    B -- not listed --> C{"Offline town list<br/>GeoNames"}
-    C -- unknown or ambiguous --> D["🌐 OpenCage<br/>geocoding"]
-    B -- found --> E["📍 Nearest city & area we serve"]
-    C -- found --> E
-    D --> E
-    E --> F["🏢 Right desk · 🛰️ line · 🔧 resolver · Network lab"]
-    style E fill:#14A39A,color:#fff,stroke:#0d6e68
-```
+<p align="center"><a href="docs/diagrams/location-light.svg"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/location-dark.svg"><img src="docs/diagrams/location-light.svg" alt="How an address is placed: WiFight's own list of 199 cities and 1,118 areas first, then the offline GeoNames town list, then OpenCage geocoding for unknown or ambiguous names; the result is the nearest city and area served, which picks the desk, the line, the resolver and the Network lab." width="376" loading="lazy"></picture></a></p>
 
 | The customer says | What happens |
 |---|---|
@@ -251,7 +215,7 @@ per second), the **Cypher drawer** (every query the agents just ran, with Falkor
 
 #### 🧠 Memory: the graph, live and through time
 
-<p align="center"><a href="docs/gifs/memory.gif"><img src="docs/gifs/readme/memory.gif" alt="Console Memory screen: the live memory graph, replay through time, and Show me" width="600"></a></p>
+<p align="center"><a href="docs/gifs/memory.gif"><img loading="lazy" src="docs/gifs/readme/memory.gif" alt="Console Memory screen: the live memory graph, replay through time, and Show me" width="560"></a></p>
 
 The live memory graph and the agents' feed, plus a **Replay** with a time bar to scrub through history. Side tabs:
 **Ask** (a question, answered with the path behind it), **Inspect** (click any node), **Tickets** and **Two clocks**.
@@ -260,7 +224,7 @@ button: the conflict closes, and each agent's trust on that kind of fact learns 
 
 #### 🛰️ Network: one customer's line, live
 
-<p align="center"><a href="docs/gifs/network.gif"><img src="docs/gifs/readme/network.gif" alt="Console Network lab: pick a customer and see their line from the core to the street cabinet" width="600"></a></p>
+<p align="center"><a href="docs/gifs/network.gif"><img loading="lazy" src="docs/gifs/readme/network.gif" alt="Console Network lab: pick a customer and see their line from the core to the street cabinet" width="560"></a></p>
 
 **One line · lab** shows any customer's connection from the core to their street cabinet, with the eight faults you can
 inject on the left. **Whole region · map** shows every hub at its real location; for India, on a map of India
@@ -269,7 +233,7 @@ and Ladakh).
 
 #### 💥 Break it: the resolver, graded against the truth
 
-<p align="center"><a href="docs/gifs/break-it.gif"><img src="docs/gifs/readme/break-it.gif" alt="Break it: inject a fault, the customer complains, the resolver measures, acts and is graded against the hidden truth" width="600"></a></p>
+<p align="center"><a href="docs/gifs/break-it.gif"><img loading="lazy" src="docs/gifs/readme/break-it.gif" alt="Break it: inject a fault, the customer complains, the resolver measures, acts and is graded against the hidden truth" width="560"></a></p>
 
 Pick one of **eight real faults** (a frozen box, Wi-Fi interference, damaged home fibre, a cut street cable, a hub link
 down with or without backup, evening congestion, a failed payment), or a **blind random** one. The truth goes into a
@@ -278,7 +242,7 @@ the scoreboard counts right diagnoses and proven fixes.
 
 #### 🤝 Agent team: knowledge sharing, measured
 
-<p align="center"><a href="docs/gifs/agent-team.gif"><img src="docs/gifs/readme/agent-team.gif" alt="Agent team: facts flowing from writer to reader through shared memory" width="600"></a></p>
+<p align="center"><a href="docs/gifs/agent-team.gif"><img loading="lazy" src="docs/gifs/readme/agent-team.gif" alt="Agent team: facts flowing from writer to reader through shared memory" width="560"></a></p>
 
 The agents around one shared memory: dots fly from the agent that **wrote** a fact to the agent that **used** it.
 **Watch a handoff** replays a real case lane by lane, **Knowledge crossings** lists every fact that moved between
@@ -286,7 +250,7 @@ agents, and **Who has worked on this?** finds experts by graph.
 
 #### 🔒 Tenants: isolation you can verify yourself
 
-<p align="center"><a href="docs/gifs/tenants.gif"><img src="docs/gifs/readme/tenants.gif" alt="Tenants: a secret word written into one region is invisible to every other region" width="600"></a></p>
+<p align="center"><a href="docs/gifs/tenants.gif"><img loading="lazy" src="docs/gifs/readme/tenants.gif" alt="Tenants: a secret word written into one region is invisible to every other region" width="560"></a></p>
 
 Six regions, six separate FalkorDB graphs. Type a secret word, write it into one region, and watch every other region
 fail to find it: through its live stream, its agent tools and raw Cypher. You can check it yourself outside our UI too.
@@ -351,21 +315,7 @@ open in the resolver's queue. Europe, for example, is Camden, Islington, Coventr
 <details>
 <summary><b>🗺️ The graph data model</b></summary>
 
-```mermaid
-graph LR
-  Agent -- WROTE --> Episode
-  Episode -- IN --> Session
-  Episode -- DERIVED --> Fact
-  Episode -- RETIRED --> Fact
-  Fact -- "ABOUT {role}" --> Customer
-  Fact -- SUPERSEDES --> Fact
-  Customer -- "LIVES_IN · ON_PLAN · HAS_TICKET …" --> City
-  Agent -- "CONSULTED {count}" --> Fact
-  Agent -- "HANDED_OFF · PICKED_UP" --> Ticket
-  Conflict -- BETWEEN --> Fact
-  Procedure -- FIRST --> ProcStep -- NEXT --> ProcStep
-  Customer -- CONNECTED_VIA --> Olt -- UPLINK --> Pop -- UPLINK --> Backbone
-```
+<p align="center"><a href="docs/diagrams/data-model-light.svg"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/data-model-dark.svg"><img src="docs/diagrams/data-model-light.svg" alt="The graph data model: Agent WROTE Episode, Episode DERIVED or RETIRED Fact, Fact ABOUT Customer, Fact SUPERSEDES Fact, Customer LIVES_IN City and other typed fact edges, Agent CONSULTED Fact, Agent HANDED_OFF or PICKED_UP Ticket, Conflict BETWEEN Facts, Procedure FIRST ProcStep NEXT ProcStep, and Customer CONNECTED_VIA Olt UPLINK Pop UPLINK Backbone." width="860" loading="lazy"></picture></a></p>
 
 </details>
 
@@ -511,36 +461,36 @@ page draws the new agent.
 </tr>
 <tr>
 <td valign="top">
-<img src="https://github.com/FalkorDB.png" width="20" alt=""> <b>FalkorDB</b> (Cloud)<br>
+<img loading="lazy" src="https://github.com/FalkorDB.png?size=40" width="20" alt=""> <b>FalkorDB</b> (Cloud)<br>
 <sub>graph · Cypher · vector index · <code>algo.*</code></sub>
 </td>
 <td valign="top">
-<img src="https://cdn.simpleicons.org/python" width="18" alt=""> Python 3.12<br>
-<img src="https://cdn.simpleicons.org/fastapi" width="18" alt=""> FastAPI · WebSockets<br>
-<img src="https://cdn.simpleicons.org/pydantic" width="18" alt=""> Pydantic<br>
-<img src="https://cdn.simpleicons.org/opencage" width="18" alt=""> OpenCage (geocoding)<br>
+<img loading="lazy" src="https://cdn.simpleicons.org/python" width="18" alt=""> Python 3.12<br>
+<img loading="lazy" src="https://cdn.simpleicons.org/fastapi" width="18" alt=""> FastAPI · WebSockets<br>
+<img loading="lazy" src="https://cdn.simpleicons.org/pydantic" width="18" alt=""> Pydantic<br>
+<img loading="lazy" src="https://cdn.simpleicons.org/opencage" width="18" alt=""> OpenCage (geocoding)<br>
 <sub>Uvicorn · GeoNames</sub>
 </td>
 <td valign="top">
-<img src="https://cdn.simpleicons.org/react" width="18" alt=""> React 18<br>
-<img src="https://cdn.simpleicons.org/typescript" width="18" alt=""> TypeScript<br>
-<img src="https://cdn.simpleicons.org/vite" width="18" alt=""> Vite<br>
-<img src="https://cdn.simpleicons.org/tailwindcss" width="18" alt=""> Tailwind CSS<br>
-<img src="https://cdn.simpleicons.org/framer/000000/ffffff" width="18" alt=""> Framer Motion<br>
-<img src="https://cdn.simpleicons.org/reactrouter" width="18" alt=""> React Router
+<img loading="lazy" src="https://cdn.simpleicons.org/react" width="18" alt=""> React 18<br>
+<img loading="lazy" src="https://cdn.simpleicons.org/typescript" width="18" alt=""> TypeScript<br>
+<img loading="lazy" src="https://cdn.simpleicons.org/vite" width="18" alt=""> Vite<br>
+<img loading="lazy" src="https://cdn.simpleicons.org/tailwindcss" width="18" alt=""> Tailwind CSS<br>
+<img loading="lazy" src="https://cdn.simpleicons.org/framer/000000/ffffff" width="18" alt=""> Framer Motion<br>
+<img loading="lazy" src="https://cdn.simpleicons.org/reactrouter" width="18" alt=""> React Router
 </td>
 <td valign="top">
-<img src="https://github.com/groq.png" width="18" alt=""> Groq (gpt-oss, qwen)<br>
-<img src="https://cdn.simpleicons.org/googlegemini" width="18" alt=""> Gemini (fallback)<br>
-<img src="https://github.com/qdrant.png" width="18" alt=""> fastembed (local)<br>
-<img src="https://cdn.simpleicons.org/onnx" width="18" alt=""> ONNX Runtime<br>
-<img src="https://cdn.simpleicons.org/modelcontextprotocol/000000/ffffff" width="18" alt=""> MCP<br>
-<img src="https://cdn.simpleicons.org/claude" width="18" alt=""> Claude (MCP client)
+<img loading="lazy" src="https://github.com/groq.png?size=40" width="18" alt=""> Groq (gpt-oss, qwen)<br>
+<img loading="lazy" src="https://cdn.simpleicons.org/googlegemini" width="18" alt=""> Gemini (fallback)<br>
+<img loading="lazy" src="https://github.com/qdrant.png?size=40" width="18" alt=""> fastembed (local)<br>
+<img loading="lazy" src="https://cdn.simpleicons.org/onnx" width="18" alt=""> ONNX Runtime<br>
+<img loading="lazy" src="https://cdn.simpleicons.org/modelcontextprotocol/000000/ffffff" width="18" alt=""> MCP<br>
+<img loading="lazy" src="https://cdn.simpleicons.org/claude" width="18" alt=""> Claude (MCP client)
 </td>
 <td valign="top">
-<img src="https://cdn.simpleicons.org/vercel/000000/ffffff" width="18" alt=""> Vercel (web)<br>
-<img src="https://cdn.simpleicons.org/render/000000/ffffff" width="18" alt=""> Render (API)<br>
-<img src="https://cdn.simpleicons.org/githubactions" width="18" alt=""> GitHub Actions
+<img loading="lazy" src="https://cdn.simpleicons.org/vercel/000000/ffffff" width="18" alt=""> Vercel (web)<br>
+<img loading="lazy" src="https://cdn.simpleicons.org/render/000000/ffffff" width="18" alt=""> Render (API)<br>
+<img loading="lazy" src="https://cdn.simpleicons.org/githubactions" width="18" alt=""> GitHub Actions
 </td>
 </tr>
 </table>
