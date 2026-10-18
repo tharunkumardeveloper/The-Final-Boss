@@ -17,7 +17,7 @@
 
 <br>
 
-<img src="docs/gifs/judge.gif" alt="Judge mode: a customer reports a fault, the resolver fixes it, the customer moves city and a new session remembers" width="860">
+<img src="docs/gifs/readme/judge.gif" alt="Judge mode: a customer reports a fault, the resolver fixes it, the customer moves city and a new session remembers" width="860">
 
 <sub><b>Judge mode</b>: one click plays the whole story through the real agents. Nobody types.</sub>
 
@@ -146,7 +146,7 @@ We wanted a domain where shared memory isn't a nice-to-have but **the whole job*
 A complaint goes from a sentence in the chat to a verified fix, and **the two agents never message each other**: the
 ticket and the facts in the graph are the only thing they share.
 
-<p align="center"><img src="docs/gifs/ticket.gif" alt="A ticket from complaint to fix: chat, Your tickets stages, resolver steps, technician dispatched" width="860"></p>
+<p align="center"><a href="docs/gifs/ticket.gif"><img src="docs/gifs/readme/ticket.png" alt="Click to play: A ticket from complaint to fix: chat, Your tickets stages, resolver steps, technician dispatched" width="860"></a></p>
 
 ```mermaid
 sequenceDiagram
@@ -251,7 +251,7 @@ per second), the **Cypher drawer** (every query the agents just ran, with Falkor
 
 #### 🧠 Memory: the graph, live and through time
 
-<p align="center"><img src="docs/gifs/memory.gif" alt="Console Memory screen: the live memory graph, replay through time, and Show me" width="860"></p>
+<p align="center"><a href="docs/gifs/memory.gif"><img src="docs/gifs/readme/memory.png" alt="Click to play: Console Memory screen: the live memory graph, replay through time, and Show me" width="860"></a></p>
 
 The live memory graph and the agents' feed, plus a **Replay** with a time bar to scrub through history. Side tabs:
 **Ask** (a question, answered with the path behind it), **Inspect** (click any node), **Tickets** and **Two clocks**.
@@ -260,7 +260,7 @@ button: the conflict closes, and each agent's trust on that kind of fact learns 
 
 #### 🛰️ Network: one customer's line, live
 
-<p align="center"><img src="docs/gifs/network.gif" alt="Console Network lab: pick a customer and see their line from the core to the street cabinet" width="860"></p>
+<p align="center"><a href="docs/gifs/network.gif"><img src="docs/gifs/readme/network.png" alt="Click to play: Console Network lab: pick a customer and see their line from the core to the street cabinet" width="860"></a></p>
 
 **One line · lab** shows any customer's connection from the core to their street cabinet, with the eight faults you can
 inject on the left. **Whole region · map** shows every hub at its real location; for India, on a map of India
@@ -269,7 +269,7 @@ and Ladakh).
 
 #### 💥 Break it: the resolver, graded against the truth
 
-<p align="center"><img src="docs/gifs/break-it.gif" alt="Break it: inject a fault, the customer complains, the resolver measures, acts and is graded against the hidden truth" width="860"></p>
+<p align="center"><a href="docs/gifs/break-it.gif"><img src="docs/gifs/readme/break-it.png" alt="Click to play: Break it: inject a fault, the customer complains, the resolver measures, acts and is graded against the hidden truth" width="860"></a></p>
 
 Pick one of **eight real faults** (a frozen box, Wi-Fi interference, damaged home fibre, a cut street cable, a hub link
 down with or without backup, evening congestion, a failed payment), or a **blind random** one. The truth goes into a
@@ -278,7 +278,7 @@ the scoreboard counts right diagnoses and proven fixes.
 
 #### 🤝 Agent team: knowledge sharing, measured
 
-<p align="center"><img src="docs/gifs/agent-team.gif" alt="Agent team: facts flowing from writer to reader through shared memory" width="860"></p>
+<p align="center"><a href="docs/gifs/agent-team.gif"><img src="docs/gifs/readme/agent-team.png" alt="Click to play: Agent team: facts flowing from writer to reader through shared memory" width="860"></a></p>
 
 The agents around one shared memory: dots fly from the agent that **wrote** a fact to the agent that **used** it.
 **Watch a handoff** replays a real case lane by lane, **Knowledge crossings** lists every fact that moved between
@@ -286,7 +286,7 @@ agents, and **Who has worked on this?** finds experts by graph.
 
 #### 🔒 Tenants: isolation you can verify yourself
 
-<p align="center"><img src="docs/gifs/tenants.gif" alt="Tenants: a secret word written into one region is invisible to every other region" width="860"></p>
+<p align="center"><a href="docs/gifs/tenants.gif"><img src="docs/gifs/readme/tenants.png" alt="Click to play: Tenants: a secret word written into one region is invisible to every other region" width="860"></a></p>
 
 Six regions, six separate FalkorDB graphs. Type a secret word, write it into one region, and watch every other region
 fail to find it: through its live stream, its agent tools and raw Cypher. You can check it yourself outside our UI too.
