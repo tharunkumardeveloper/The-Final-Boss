@@ -92,15 +92,19 @@ def plan(tenant, query, params=None, profile=False):
 
 
 SNAP = "snap:"  # snapshots live outside mem:, so they never show up as tenants
-SNAPS_KEPT = 3  # per tenant: each copy counts against the free tier's 100 MB
+SNAPS_KEPT = 1  # per tenant: each copy (vector indexes included) counts against the free tier's 100 MB
+SNAP_MAX_USED = 0.6  # skip the copy above this share of maxmemory: a full instance refuses every write, demo included
 
 
 def snapshot(tenant, label="manual"):
     """GRAPH.COPY: a full clone (nodes, edges, indexes, constraints) of the tenant's graph, as of now."""
     name = f"{SNAP}{tenant}:{time.strftime('%Y%m%d-%H%M%S')}:{re.sub(r'[^a-z0-9-]', '', label.lower())[:20]}"
-    client().connection.execute_command("GRAPH.COPY", key(tenant), name)
-    for old in snapshots(tenant)[SNAPS_KEPT:]:
+    for old in snapshots(tenant)[SNAPS_KEPT - 1:]:  # make room first, so the copy never stacks on old ones
         client().select_graph(old["name"]).delete()
+    mem = client().connection.info("memory")
+    if mem.get("maxmemory") and mem["used_memory"] > SNAP_MAX_USED * mem["maxmemory"]:
+        raise MemoryError(f"snapshot skipped: {mem['used_memory_human']} of {mem['maxmemory_human']} in use")
+    client().connection.execute_command("GRAPH.COPY", key(tenant), name)
     return name
 
 

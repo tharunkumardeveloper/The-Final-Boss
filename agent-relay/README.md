@@ -331,7 +331,7 @@ RETURN flex.text.levenshtein('alise', 'alice'), flex.sim.jaccard(['fiber','5g'],
 ```
 
 The console's **Database** page shows `GRAPH.INFO`, memory against the free tier, server limits, `GRAPH.SLOWLOG`
-and `GRAPH.COPY` snapshots (one is taken before every story reset; restore is one click). The **Network** page adds
+and `GRAPH.COPY` snapshots (one per region, taken before every story reset and skipped when the instance is over 60% full; restore is one click). The **Network** page adds
 reach (harmonic centrality), capacity from a site (`algo.maxFlow` over `:Up` links) and the cheapest cable plan
 (`algo.MSF` on km).
 

@@ -715,8 +715,12 @@ class SnapshotIn(BaseModel):
 
 @app.post("/api/tenants/{tenant}/snapshots")
 def take_snapshot(tenant: str, body: SnapshotIn):
-    """GRAPH.COPY of the tenant's graph (the newest few are kept)."""
-    return {"name": db.snapshot(T(tenant), body.label), "snapshots": db.snapshots(tenant)}
+    """GRAPH.COPY of the tenant's graph (it replaces the previous one). 507 when the instance is too full to copy."""
+    try:
+        name = db.snapshot(T(tenant), body.label)
+    except MemoryError as e:
+        raise HTTPException(507, str(e))
+    return {"name": name, "snapshots": db.snapshots(tenant)}
 
 
 @app.post("/api/tenants/{tenant}/snapshots/{name}/restore")

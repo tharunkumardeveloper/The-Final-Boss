@@ -266,7 +266,7 @@ fail to find it: through its live stream, its agent tools and raw Cypher. You ca
 #### 🗄️ Database and 📊 Benchmark
 
 - **Database**: FalkorDB, live: memory against the free tier, node and edge counts, indexes, `GRAPH.SLOWLOG`, and
-  snapshots (one is taken before every reset; restore is one click).
+  snapshots (one per region, taken before every reset; restore is one click).
 - **Benchmark**: Relay vs a vector store on 160 questions, by question type, plus concurrency. **Ask both memories**
   the same question live and compare the answers and the evidence side by side.
 
