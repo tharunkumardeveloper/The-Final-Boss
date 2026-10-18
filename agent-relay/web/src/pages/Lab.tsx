@@ -6,6 +6,7 @@ import { ConsoleNav } from '../components/console/ConsoleNav'
 import { NetworkMap } from '../components/console/NetworkMap'
 import { ShowMe } from '../components/console/ShowMe'
 import { GuideCard, splitGuides } from '../components/Guides'
+import { MemoryKindPill } from '../components/portal/MemoryPanel'
 import { Check, Database, Pulse, Sparkle, Warning } from '../components/Icons'
 import { api } from '../lib/api'
 import { titleCase } from '../lib/format'
@@ -427,7 +428,11 @@ function Step({ s, live }: { s: LabStep; live: boolean }) {
     <motion.li layout initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={SPRING} className="relative pl-9">
       <span className={`absolute left-0 top-0.5 flex h-6 w-6 items-center justify-center rounded-full ${TONE[s.status]} ${pending ? 'animate-breathe' : ''}`}>{KIND[s.kind].icon}</span>
       <button type="button" disabled={!more} onClick={() => setOpen((o) => !o)} className="block w-full text-left disabled:cursor-default">
-        <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-ink-3">{KIND[s.kind].label}{s.kind === 'think' && s.data.by ? ` · ${s.data.by === 'rules' ? 'rule engine' : s.data.by.split('/').pop()}` : ''}</p>
+        <p className="flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.14em] text-ink-3">{KIND[s.kind].label}{s.kind === 'think' && s.data.by ? ` · ${s.data.by === 'rules' ? 'rule engine' : s.data.by.split('/').pop()}` : ''}
+          {/* which memory this step read or wrote: a fix path is procedural, facts about the customer are semantic */}
+          {s.kind === 'memory' && <MemoryKindPill kind={/procedural/i.test(`${s.title} ${s.detail ?? ''}`) ? 'procedural' : 'semantic'} className="normal-case tracking-normal" />}
+          {s.data.by === 'procedural memory' && s.kind !== 'memory' && <MemoryKindPill kind="procedural" className="normal-case tracking-normal" />}
+        </p>
         <p className="text-sm font-medium leading-snug text-ink">{s.title}</p>
         {s.detail && <p className="mt-0.5 text-xs leading-relaxed text-ink-2">{s.detail}</p>}
         {s.data.by === 'procedural memory' && <p className="mt-1"><ProcBadge /></p>}
@@ -508,7 +513,8 @@ export function Phone({ run }: { run?: LabRun }) {
       <div className="rounded-[1.8rem] bg-paper">
         <div className="flex items-center gap-2 border-b border-line/[0.06] px-4 py-3">
           <span className="flex h-7 w-7 items-center justify-center rounded-full bg-ink text-[10px] font-semibold text-paper">RS</span>
-          <div><p className="text-xs font-semibold">Support · resolver</p><p className="text-[10px] text-ink-3">{run ? `chatting with ${run.name.split(' ')[0]}` : 'what the customer sees'}</p></div>
+          <div className="min-w-0 flex-1"><p className="text-xs font-semibold">Support · resolver</p><p className="text-[10px] text-ink-3">{run ? `chatting with ${run.name.split(' ')[0]}` : 'what the customer sees'}</p></div>
+          <MemoryKindPill kind="episodic" className="ml-auto" />
         </div>
         <div ref={box} className="scroll-thin h-[300px] space-y-2 overflow-y-auto px-3 py-3">
           {!msgs.length && <p className="pt-24 text-center text-xs text-ink-3">Messages to the customer appear here, in plain words.</p>}

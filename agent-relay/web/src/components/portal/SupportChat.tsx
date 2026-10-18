@@ -150,7 +150,22 @@ export function HowIKnow({ hops }: { hops: Hop[] }) {
   )
 }
 
-function Bubble({ l, customer, flying, onRename }: { l: Line; customer: string; flying: Chip[]; onRename?: () => void }) {
+/** Under a reply, once its chips have landed: what that turn wrote, by memory type. Stays put, unlike the chips. */
+function SavedAs({ chips }: { chips: Chip[] }) {
+  const by = (['semantic', 'procedural'] as const).map((k) => [k, chips.filter((c) => (c.kind ?? 'semantic') === k)] as const)
+  return (
+    <div className="mt-1.5 space-y-1 px-1" aria-label="Saved to memory from this turn">
+      {by.filter(([, cs]) => cs.length).map(([k, cs]) => (
+        <p key={k} className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-[11px] text-ink-3">
+          <MemoryKindPill kind={k} />
+          <span>saved: {cs.map((c) => c.label).join(' · ')}</span>
+        </p>
+      ))}
+    </div>
+  )
+}
+
+function Bubble({ l, customer, flying, saved = [], onRename }: { l: Line; customer: string; flying: Chip[]; saved?: Chip[]; onRename?: () => void }) {
   const mine = l.speaker === 'customer'
   const kavya = l.speaker === 'intake'
   const tool = l.speaker.startsWith('tool:')
@@ -195,6 +210,7 @@ function Bubble({ l, customer, flying, onRename }: { l: Line; customer: string; 
         {flying.length > 0 && (
           <div className="mt-2 flex flex-wrap gap-1.5 px-1">{flying.map((c) => <MemoryChip key={c.key} c={c} />)}</div>
         )}
+        {saved.length > 0 && <SavedAs chips={saved} />}
       </div>
     </motion.div>
   )
@@ -236,6 +252,8 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
   const [history, setHistory] = useState<ConversationSession[]>([])
   const [lines, setLines] = useState<Line[]>([])
   const [chips, setChips] = useState<Chip[]>([])
+  const lastLine = useRef<string>()  // the latest message on screen: where a fact that arrives on its own is shown
+  lastLine.current = lines.filter((l) => !l.speaker.startsWith('tool:')).at(-1)?.id
   const [text, setText] = useState('')
   const [busy, setBusy] = useState(false)
   const [step, setStep] = useState<string>()
@@ -330,8 +348,10 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
       }
       if (e.type === 'ticket_opened' && e.data.customer === who) setToast({ ticket: e.data.ticket, issue: e.data.issue })
       const phase = busyRef.current ? 'pending' : 'settled'
-      const next = fromEvent(chipsRef.current, e, who, tickets.current, phase)
+      let next = fromEvent(chipsRef.current, e, who, tickets.current, phase)
       if (next === chipsRef.current) return
+      if (phase === 'settled' && lastLine.current)
+        next = next.map((c) => (c.line || chipsRef.current.some((x) => x.key === c.key) ? c : { ...c, line: lastLine.current }))
       chipsRef.current = next
       setChips(next)
       if (phase === 'settled') setRipple((r) => r + 1)
@@ -513,7 +533,9 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
                     ? `Welcome back, ${first(who)}! Last time: ${(last.summary ?? last.messages[last.messages.length - 1]?.text ?? '').replace(/\.$/, '')}. What's up today?`
                     : `Lovely to meet you, ${first(who)}. What's acting up today? Wifi sulking, a move, a plan question, I'm all ears.` }} />
                 )}
-                {lines.filter((l) => side === 'memory' || !l.speaker.startsWith('tool:')).map((l) => <Bubble key={l.id} l={l} customer={who} flying={side !== 'tickets' ? chips.filter((c) => c.phase === 'flying' && c.line === l.id) : []} />)}
+                {lines.filter((l) => side === 'memory' || !l.speaker.startsWith('tool:')).map((l) => <Bubble key={l.id} l={l} customer={who}
+                  flying={side !== 'tickets' ? chips.filter((c) => c.phase === 'flying' && c.line === l.id) : []}
+                  saved={chips.filter((c) => c.phase === 'settled' && c.line === l.id)} />)}
               </>
             )}
             <AnimatePresence>{busy && <Typing key="typing" step={step} />}</AnimatePresence>
