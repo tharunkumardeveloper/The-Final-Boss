@@ -9,6 +9,7 @@
 [![Graph Hacks](https://img.shields.io/badge/Graph_Hacks-WeMakeDevs_×_FalkorDB-0B5FFF?style=for-the-badge)](https://wifight.vercel.app)
 [![Track 02](https://img.shields.io/badge/Track_02-Agent_Memory_&_Coordination-7C5CC4?style=for-the-badge)](#-the-five-memory-capabilities)
 [![Benchmark](https://img.shields.io/badge/Benchmark-99.4%25_vs_61.3%25-2E9E5B?style=for-the-badge)](#-results)
+[![CI](https://img.shields.io/github/actions/workflow/status/tharunkumardeveloper/The-Final-Boss/ci.yml?branch=master&style=for-the-badge&label=tests)](https://github.com/tharunkumardeveloper/The-Final-Boss/actions/workflows/ci.yml)
 
 [![Demo video](https://img.shields.io/badge/Demo_video-YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=CvykcxFdh4c)
 [![Live demo](https://img.shields.io/badge/▶_Judge_mode-Watch_it_work-14A39A?style=for-the-badge)](https://wifight.vercel.app/?judge=1)

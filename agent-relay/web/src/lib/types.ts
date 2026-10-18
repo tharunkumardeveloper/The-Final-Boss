@@ -133,9 +133,14 @@ export interface SimStatus { running: boolean; sim_time?: string | null; speed?:
 export interface BenchRow {
   i: number; type: string; question: string; gold: string[]; values: string[]; correct: boolean
   evidence?: boolean | null; retrieval_ms?: number; error?: boolean
+  question_id?: string; answer?: string; unknown?: boolean; conflict?: boolean; expect_unknown?: boolean; cited_ids?: string[]; model?: string
 }
+/** One benchmark question as written (data/questions.json): what it expects, so it can be graded with the same rule. */
+export interface BenchQuestion { i: number; type: string; question: string; gold: string[]; expect_unknown?: boolean; expect_conflict?: boolean; asked_by?: string }
 export interface Benchmark {
-  results?: { systems?: Record<string, { rows: BenchRow[] }>; n_questions?: number; dataset?: string; answer_model?: string; pending?: unknown[] }
+  results?: { systems?: Record<string, { rows: BenchRow[] }>; n_questions?: number; dataset?: string; answer_model?: string; pending?: unknown[]; run_id?: string }
+  questions?: BenchQuestion[]
+  bench_graph?: string | null
   bench?: {
     note?: string
     concurrency?: { graphs: number; writer_threads: number; writes_per_s: number; write_p50_ms: number; write_p95_ms: number;
@@ -220,7 +225,7 @@ export interface Crossing { reader: string; writer: string; fact_id: string; sub
 export interface QueryResult { columns: string[]; rows: unknown[][]; count: number; ms: number }
 export interface Schema { labels: { label: string; count: number }[]; relationships: { type: string; count: number }[]
   indexes: { label: string; properties: string[]; types: Record<string, string[]>; entity: string; status: string }[] }
-export interface CompareSide { answer: string | null; unknown: boolean; conflict: boolean; evidence: string[]; ms: number }
+export interface CompareSide { answer: string | null; values?: string[]; unknown: boolean; conflict: boolean; evidence: string[]; ms: number }
 export interface Compare { question: string; graph: CompareSide; vector: CompareSide }
 export interface CaseFact { id: string; predicate: string; value: string; writer?: string }
 export interface CaseEvent { kind: 'say' | 'write' | 'handoff' | 'read'; who: string; to?: string; note?: string; text?: string; at: string | null; id: string; facts?: CaseFact[] }

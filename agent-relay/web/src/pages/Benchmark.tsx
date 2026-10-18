@@ -5,6 +5,7 @@ import { ConsoleNav } from '../components/console/ConsoleNav'
 import { api, ApiError } from '../lib/api'
 import { pct, wilson } from '../lib/format'
 import { useTenant } from '../lib/tenant'
+import { BenchQuestions } from '../components/console/BenchQuestions'
 import type { Benchmark as B, BenchRow, Compare } from '../lib/types'
 
 const SYSTEMS: [string, string][] = [
@@ -128,15 +129,15 @@ export default function Benchmark() {
               <div className="rounded-2xl bg-surface p-5 hairline">
                 <p className="eyebrow">This run</p>
                 <p className="mt-2 text-sm text-ink-2">
-                  {rowsOf('FULL').length} of {data.results.dataset?.match(/(\d+) questions/)?.[1] ?? '160'} questions scored for Relay
-                  {rowsOf('B1').length ? `, ${rowsOf('B1').length} for the vector baseline.` : '. The vector baseline hasn\'t been scored in this run yet.'}
+                  {data.results.dataset ?? '160 questions'}. Both memories answer every question with the same model and
+                  prompt; only the memory differs.
                 </p>
-                <p className="mt-2 text-xs text-ink-3">Continue it on the API host: <code className="font-mono">python -m eval.run_eval --tenant pml</code> (it resumes, and waits out the free model quota).</p>
+                <p className="mt-2 text-xs text-ink-3 num">Run <code className="font-mono">{data.results.run_id ?? 'run-20261016-073654'}</code>, raw results in <code className="font-mono">eval/results.json</code>.</p>
               </div>
               <div className="rounded-2xl bg-surface p-5 hairline">
-                <p className="eyebrow">First run (in the README)</p>
-                <p className="mt-2 font-display text-2xl font-semibold num">93% <span className="text-base font-normal text-ink-3">vs</span> 43%</p>
-                <p className="text-xs text-ink-3">Relay vs vector store with dates, 74 questions over 8 customers (91% vs 43% on the 46 both answered).</p>
+                <p className="eyebrow">Check it yourself</p>
+                <p className="mt-2 text-sm text-ink-2">Below: every question with both answers. Re-grade them all in your browser, or ask any question again, live.</p>
+                <p className="mt-2 text-xs text-ink-3">Or rebuild the report from the raw results, no keys needed: <code className="font-mono">python -m eval.run_eval --report</code></p>
               </div>
             </section>
             <section className="panel mt-4 p-6">
@@ -172,6 +173,7 @@ export default function Benchmark() {
                 ))}
               </div>
             </section>
+            {data.questions && data.questions.length > 0 && <BenchQuestions data={data} />}
           </>
         )}
 

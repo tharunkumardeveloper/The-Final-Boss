@@ -1157,7 +1157,8 @@ def compare(tenant: str, body: AskIn):
         (g, g_s), ((v, lines), v_s) = g_job.result(), v_job.result()
     t0, t1, t2 = 0.0, g_s, g_s + v_s  # each side's own time, as before
     strip = lambda ln: re.sub(r"^\[[^\]]+\]\s*", "", ln)
-    pack = lambda a, ev, ms: {"answer": a.get("answer"), "unknown": a.get("unknown"), "conflict": a.get("conflict"),
+    pack = lambda a, ev, ms: {"answer": a.get("answer"), "values": a.get("values") or [], "unknown": a.get("unknown"),
+                              "conflict": a.get("conflict"),
                               "evidence": [strip(x) for x in ev][:8], "ms": round(ms * 1000)}
     return {"question": body.question, "graph": pack(g, g["recall"]["lines"], t1 - t0), "vector": pack(v, lines, t2 - t1),
             "model": g.get("_model")}
@@ -1165,8 +1166,18 @@ def compare(tenant: str, body: AskIn):
 
 @app.get("/api/benchmark")
 def benchmark():
+    """The published run, its questions (with what each one expects, so a browser can grade with the same rule), and
+    whether the benchmark graph is loaded here, so a question can be asked again live."""
     read = lambda name: json.loads(p.read_text()) if (p := config.ROOT / "eval" / name).exists() else None
-    return {"results": read("results.json"), "bench": read("bench.json")}
+    qs = config.ROOT / "data" / "questions.json"
+    questions = [{k: q.get(k) for k in ("i", "type", "question", "gold", "expect_unknown", "expect_conflict", "asked_by")}
+                 for q in json.loads(qs.read_text())] if qs.exists() else []
+    try:
+        live = "pml-bench" in db.tenants()
+    except Exception:
+        live = False
+    return {"results": read("results.json"), "bench": read("bench.json"), "questions": questions,
+            "bench_graph": "pml-bench" if live else None}
 
 
 # ---------------------------------------------------------------- WebSocket

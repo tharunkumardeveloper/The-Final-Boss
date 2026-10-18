@@ -1,0 +1,51 @@
+name: CI
+
+# On every push and pull request: the tests that need no database or model keys, the web app's tests and build, and
+# the benchmark report rebuilt from the raw per-question results (it must come out byte for byte the same).
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  api:
+    name: API tests + benchmark reproduction
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: agent-relay
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: agent-relay/requirements.txt
+      - run: pip install -r requirements.txt
+      - name: Tests (no database, no model keys)
+        run: |
+          for t in test_value_checks test_learned_trust test_demo_guard test_desk test_alias_qualifiers test_memory_kind test_intake_close; do
+            echo "::group::$t"; python -m tests.$t; echo "::endgroup::"
+          done
+      - name: Rebuild the benchmark report from eval/results.json and check it is unchanged
+        run: |
+          python -m eval.run_eval --report
+          git diff --exit-code eval/results.md
+
+  web:
+    name: Web tests + build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: agent-relay/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: agent-relay/web/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
