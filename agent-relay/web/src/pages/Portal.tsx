@@ -1,6 +1,5 @@
 import { COMPANY, TAGLINE } from '../lib/brand'
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { Wordmark } from '../components/Brand'
 import { ArrowUpRight, Check, Wifi } from '../components/Icons'
 import { MemoryPanel } from '../components/portal/MemoryPanel'
@@ -230,6 +229,10 @@ export default function Portal() {
       <header className="mx-auto flex max-w-[1360px] items-center justify-between px-4 py-4 sm:px-6">
         <Wordmark />
         <nav className="flex flex-wrap items-center gap-1 text-sm" aria-label="Main">
+          {/* the staff side opens in its own tab, so the customer's chat stays where it was */}
+          <a href="/console" target="_blank" rel="noopener noreferrer" className="btn-ghost">Staff console <ArrowUpRight className="h-4 w-4" /></a>
+          <a href="#plans" className="btn-ghost hidden sm:inline-flex">Plans</a>
+          <a href="#coverage" className="btn-ghost hidden sm:inline-flex">Coverage</a>
           {regions.length > 0 && (
             <label className="flex items-center gap-1.5 rounded-full bg-surface px-3 py-1.5 text-xs text-ink-2 hairline">
               <span className="sr-only">Region</span>
@@ -246,9 +249,6 @@ export default function Portal() {
               )}
             </label>
           )}
-          <a href="#plans" className="btn-ghost hidden sm:inline-flex">Plans</a>
-          <a href="#coverage" className="btn-ghost hidden sm:inline-flex">Coverage</a>
-          <Link to="/console" className="btn-ghost">Staff console <ArrowUpRight className="h-4 w-4" /></Link>
         </nav>
       </header>
 

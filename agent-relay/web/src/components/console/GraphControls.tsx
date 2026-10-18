@@ -78,19 +78,18 @@ export function GraphControls({ customers, view, setView, following }: {
           ))}
         </div>
       )}
-      <button onClick={() => setView({ follow: !view.follow })} aria-pressed={view.follow}
-        className={`flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-medium shadow-soft hairline transition duration-300 ease-spring ${view.follow ? 'bg-signal-deep text-white' : 'bg-surface text-ink-2 hover:bg-sunk'}`}
-        title="Switch focus to whichever customer is talking">
-        <span className={`relative h-3.5 w-6 rounded-full transition-colors duration-300 ${view.follow ? 'bg-white/30' : 'bg-ink/15'}`}>
-          <span className={`absolute top-0.5 h-2.5 w-2.5 rounded-full bg-white shadow transition-transform duration-300 ease-spring ${view.follow ? 'translate-x-3' : 'translate-x-0.5'}`} />
+      {/* one button that says what it's doing: no chip popping in beside it and nudging the line below */}
+      <button onClick={() => setView({ follow: !view.follow })} role="switch" aria-checked={view.follow}
+        className={`flex select-none items-center gap-2 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium shadow-soft hairline transition-colors duration-200 ${view.follow ? 'bg-signal-deep text-white' : 'bg-surface text-ink-2 hover:bg-sunk'}`}
+        title="Show whichever customer is talking (stays on each one for a few seconds)">
+        <span className={`relative h-3.5 w-6 shrink-0 rounded-full transition-colors duration-200 ${view.follow ? 'bg-white/30' : 'bg-ink/15'}`}>
+          <span className={`absolute left-0.5 top-0.5 h-2.5 w-2.5 rounded-full bg-white shadow transition-transform duration-200 ease-out ${view.follow ? 'translate-x-2.5' : 'translate-x-0'}`} />
         </span>
-        Follow live
+        <span role="status" aria-live="polite">
+          {view.follow ? (following ? `Following ${titleCase(following.split(' ')[0])}` : 'Waiting for a chat…') : 'Follow live'}
+        </span>
+        {view.follow && <i aria-hidden className="h-1.5 w-1.5 rounded-full bg-white/90 animate-breathe" />}
       </button>
-      {view.follow && following && (
-        <span className="chip animate-rise bg-signal-tint text-signal-deep" role="status">
-          <i className="h-1.5 w-1.5 rounded-full bg-signal animate-breathe" />following {titleCase(following.split(' ')[0])}
-        </span>
-      )}
     </div>
   )
 }

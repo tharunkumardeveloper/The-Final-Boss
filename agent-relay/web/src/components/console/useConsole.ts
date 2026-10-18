@@ -26,6 +26,7 @@ const TICKET_TYPES = new Set(['ticket_opened', 'handoff', 'pickup', 'ticket_stat
 export interface GraphView { focus: string | null; depth: 1 | 2; follow: boolean }
 const VIEW_KEY = 'pml.console.graph.v1'
 const FOLLOW_MS = 1500
+const FOLLOW_DWELL_MS = 8000 // stay on a customer this long before following the next one: each switch re-lays out the graph
 function readView(): GraphView {
   try {
     const v = JSON.parse(localStorage.getItem(VIEW_KEY) ?? 'null')
@@ -40,13 +41,19 @@ export function useConsole(tenant: string) {
   const viewRef = useRef(view)
   viewRef.current = view
   const followTimer = useRef<ReturnType<typeof setTimeout>>()
+  const lastTalker = useRef<string | null>(null) // the latest customer to speak, followed or not
+  const lastSwitch = useRef(0)
   const setView = useCallback((patch: Partial<GraphView>, byFollow = false) => {
+    // switching Follow live on jumps straight to whoever spoke last, so the toggle visibly does something
+    const jump = patch.follow && !viewRef.current.follow && lastTalker.current ? lastTalker.current : null
+    if (jump) patch = { ...patch, focus: jump }
     setViewState((v) => {
       const next = { ...v, ...patch }
       try { localStorage.setItem(VIEW_KEY, JSON.stringify(next)) } catch { /* private mode */ }
       return next
     })
-    if (!byFollow && 'focus' in patch) setFollowing(null)
+    if (jump) { setFollowing(jump); lastSwitch.current = Date.now() }
+    else if (!byFollow && 'focus' in patch) setFollowing(null)
     if ('follow' in patch && !patch.follow) { clearTimeout(followTimer.current); setFollowing(null) }
   }, [])
   useEffect(() => () => clearTimeout(followTimer.current), [])
@@ -100,10 +107,19 @@ export function useConsole(tenant: string) {
     const v = viewRef.current
     // In focus mode only events about the shown neighbourhood (or the focused customer and their tickets) apply.
     if (relevantToFocus(store.current, e, v.focus) && applyEvent(store.current, e)) setVersion((n) => n + 1)
-    const talker = v.follow ? speakerCustomer(e) : null
+    const spoke = speakerCustomer(e)
+    if (spoke) lastTalker.current = spoke
+    const talker = v.follow ? spoke : null
     if (talker && talker !== v.focus) {
-      clearTimeout(followTimer.current) // debounce: a burst of messages settles on the latest speaker
-      followTimer.current = setTimeout(() => { setView({ focus: talker }, true); setFollowing(talker) }, FOLLOW_MS)
+      // debounce a burst onto the latest speaker, and stay on the current one for a while: no ping-pong between chats
+      clearTimeout(followTimer.current)
+      const wait = Math.max(FOLLOW_MS, lastSwitch.current + FOLLOW_DWELL_MS - Date.now())
+      followTimer.current = setTimeout(() => {
+        const next = lastTalker.current
+        if (!viewRef.current.follow || !next || next === viewRef.current.focus) return
+        lastSwitch.current = Date.now()
+        setView({ focus: next }, true); setFollowing(next)
+      }, wait)
     }
     if (FEED_TYPES.has(e.type)) setFeed((f) => [...f, e].slice(-400))
     if (e.type === 'clock') setSimTime(e.data.sim_time)
