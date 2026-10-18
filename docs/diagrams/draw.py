@@ -104,7 +104,7 @@ class Svg:
 
 
 def architecture(theme):
-    s = Svg(1560, 760, theme)
+    s = Svg(1560, 884, theme)
     s.group(20, 20, 250, 720, "People")
     s.box("cust", 42, 120, 206, 96, "Customer", ["chats in plain words"])
     s.box("staff", 42, 300, 206, 96, "Staff", ["watches and tests"])
@@ -158,6 +158,15 @@ def architecture(theme):
     s.arrow(s.side("mcp", "r", 0.4), s.side("algo", "l", 0.5), tone="teal", both=True)
     s.text(820, 528, "The agents never message each other:", 16, "middle", "ink", 600)
     s.text(820, 552, "every handoff is state in the graph.", 16, "middle", "sub")
+    # the work the graph does (the hackathon's five), as one band under the whole system
+    s.group(20, 760, 1520, 110, "Work the graph does", tone="teal")
+    jobs = ["Follows connections across data", "Remembers across sessions", "Shares state between agents",
+            "Connects people, cases and decisions", "Shows the path behind every answer"]
+    x, gap = 42, 12
+    width = (1520 - 44 - gap * (len(jobs) - 1)) / len(jobs)
+    for j in jobs:
+        s.box("job:" + j, x, 808, width, 46, j, size=15)
+        x += width + gap
     return s.render()
 
 

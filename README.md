@@ -96,6 +96,21 @@ every answer.
 The agents never call each other. A handoff is graph state (`HANDED_OFF` / `PICKED_UP` edges on a ticket), and what one
 agent learned, the next one reads from the graph and records that it did (`CONSULTED`).
 
+### The work the graph does
+
+Graph Hacks asks the graph to do five jobs. Relay does each one, and you can watch it happen:
+
+| The graph has to… | How Relay does it | See it |
+|---|---|---|
+| **Follow connections across data** | Multi-hop recall over typed fact edges (customer → city ← outage); who an outage reaches is an `UPLINK` traversal, *why* is a `shortestPath`, and capacity to a home is `algo.maxFlow` | Benchmark multi-hop: **100% vs 22%**; Network page |
+| **Remember across sessions** | Every message is an `Episode` in a `Session`; facts keep two clocks and are never overwritten, so a new visit starts from what is already known | Judge mode step 5; *Earlier conversations* in the chat |
+| **Share state between agents** | The agents never message each other: handoffs are `HANDED_OFF` / `PICKED_UP` edges, every read is a `CONSULTED` edge, and any MCP client joins the same graph | Agent team page; Your tickets |
+| **Connect people, projects and decisions** | Customers, agents and technicians are linked to their cases (tickets) and to the decisions made on them: fixes tried and the one that worked, disagreements settled by a person, the handoff trail | Tickets; Show me → *This one is right*; *Who has worked on this?* |
+| **Show the path behind an answer** | Every answer returns the hops that found it, down to the message each fact came from | *How I know* under replies; Memory → Ask; Inspect → Sources |
+
+It is one agent problem whose answer depends on how things connect: an internet provider's support desk, where a
+customer, their line, the network and their history all live in one graph. Track 02: agent memory and coordination.
+
 
 ## 🏢 Meet WiFight
 
