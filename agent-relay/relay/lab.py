@@ -901,6 +901,8 @@ def _collect_details(run):
     for _ in range(2):  # intake keeps asking for whatever is still missing; the resolver checks after each answer
         deadline = time.time() + 300
         while time.time() < deadline:
+            if run.data.get("withdrawn"):
+                return None
             d = _visit_details(run)
             if not d["need"]:
                 with _lock:
@@ -911,6 +913,8 @@ def _collect_details(run):
                 return d
             if _wait_for(run, "details", "Street address, mobile number and a visit slot", timeout=60) is None:
                 continue
+        if run.data.get("withdrawn"):
+            return None
         run.tell("Whenever you're ready, just send me " + "; ".join(d["need"]) + ", and I'll book the visit.")
     with _lock:
         _awaiting.pop((run.tenant, run.customer), None)
@@ -987,11 +991,19 @@ def investigate(run):
                      f"is the thin cable at the back of the box clicked in properly and not bent sharply? "
                      f"Push it in gently, then tell me once you've looked. [guide:fibre_cable]")
             _wait_for(run, "guided", "Checking the fibre cable at the back of the box", timeout=240)
+            if run.data.get("withdrawn"):
+                run.step("verify", "Called off by the customer", "They said it's fine now and asked to close the case.", "ok")
+                run.data["status"] = "closed by customer"
+                return
             m2 = _read(run, verify=True)
             if not problems(m2):
                 m, last = m2, "guided_check"
                 break
             visit = _collect_details(run)
+            if visit is None and run.data.get("withdrawn"):
+                run.step("verify", "Called off by the customer", "No visit: they said it's fine now and asked to close the case.", "ok")
+                run.data["status"] = "closed by customer"
+                return
             if visit is None:
                 run.step("wait", "Paused: waiting for the customer's visit details", "The case stays open.", "pending")
                 run.tell("No rush. I'll book the visit as soon as you send those details.")
@@ -1085,6 +1097,10 @@ def _healthy(run, m, network_issue):
              f"Meanwhile, a restart of the box sometimes helps: unplug it, wait 10 seconds and plug it back in. "
              f"[guide:restart_box]")
     visit = _collect_details(run)
+    if visit is None and run.data.get("withdrawn"):
+        run.step("verify", "Called off by the customer", "No visit: they said it's fine now and asked to close the case.", "ok")
+        run.data["status"] = "closed by customer"
+        return
     if visit is None:
         run.step("wait", "Paused: waiting for the customer's visit details", "The line stays marked faulty and the case "
                  "stays open.", "pending")
@@ -1410,7 +1426,9 @@ def home(tenant, customer):
 # ---------------------------------------------------------------- the customer closes the loop
 
 _awaiting: dict = {}  # (tenant, customer) -> {"run", "ticket"}
-_YES = re.compile(r"\b(yes|yeah|yep|yup|ya|works|working|fixed|perfect|great|all good|it'?s (fine|good|back)|back online|sorted)\b", re.I)
+_YES = re.compile(r"\b(yes|yeah|yep|yup|ya|works|working|fixed|perfect|great|all good|it'?s (fine|good|back)|back online|sorted)\b"
+                  r"|\b(everything|all|connection|internet|net|wifi|wi-fi|it)('?s| is| seems)? (fine|good|ok|okay|alright|back)\b"
+                  r"|\bfine now\b", re.I)
 _NO = re.compile(r"^\s*(no|nope|nah|not really)\b|\b(not|isn'?t|doesn'?t|didn'?t|still)\s+(work\w*|fixed|good|better|ok|okay|right)"
                  r"|\bstill\b.{0,30}\b(drop\w*|slow|down|broken|same|cutting|going off|lag\w*)|\bsame (problem|issue|thing)\b"
                  r"|\b(again|worse)\b", re.I)
@@ -1579,6 +1597,49 @@ def _busy_reply(tenant, customer, said):
         return ("While I test your line, one safe thing to try: restart the box. Unplug it, wait 10 seconds, plug it "
                 "back in. [guide:restart_box] I'll message you here as soon as the test is done.")
     return "I'm still on it, checking your line right now. I'll message you here in a moment."
+
+
+_ADDRESSY = re.compile(r"\b(street|road|st|rd|nagar|flat|house|apartment|apt|block|lane|avenue|colony|sector|cross|"
+                       r"floor|door|no\.?)\b", re.I)
+
+
+def owns_reply(kind, text):
+    """Is this message for the resolver, given what it is waiting on? Anything else (a plan question mid-case) is
+    intake's to answer: one voice per message, but never a question left unanswered."""
+    t = text or ""
+    if kind == "guided":
+        return True  # "I looked, it's clicked in": any reply to the one check it asked for
+    if kind == "details":  # a slot, an address, or a phone number; "fiber 1000" is a plan, not a house number
+        if _slot(t) or _ADDRESSY.search(t) or len(re.sub(r"\D", "", t)) >= 7:
+            return True
+        return bool(re.search(r"\d", t)) and not re.search(r"\b(plan|fiber|fibre|mbps|gbps|upgrade|downgrade|price|cost|bill)\b", t, re.I)
+    if kind == "busy":
+        return bool(_NETTALK.search(t) or _BETTER.search(t) or _ASKS.search(t) or _NO.search(t) or _YES.search(t))
+    if kind == "confirm":
+        return bool(_YES.search(t) or _NO.search(t))
+    return False
+
+
+def withdraw(tenant, customer):
+    """The customer calls the case off while the resolver waits on them ("it's fine now, close it"): the wait stops
+    and the run ends without a visit. Returns True if there was a case to call off."""
+    c = norm(customer)
+    with _lock:
+        w = _awaiting.pop((tenant, c), None)
+        busy = (tenant, c) in _busy
+        _busy.discard((tenant, c))  # released now, so intake can close the tickets in this same turn
+        _expected.discard((tenant, c))
+    if not w and not busy:
+        return False
+    r = _run(tenant, w["run"]) if w else next((x for x in _runs.get(tenant, []) if x["customer"] == c
+                                               and x["status"] == "running"), None)
+    if r:
+        r["withdrawn"] = True
+        r["awaiting"] = False
+    if w and w.get("event"):
+        w["event"].set()  # wake the run so it sees the case was called off
+    events.emit(tenant, "lab_state", {"why": "withdrawn"})
+    return True
 
 
 def waiting_kind(tenant, customer):

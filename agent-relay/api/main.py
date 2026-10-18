@@ -15,7 +15,7 @@ from fastapi import Body, FastAPI, Header, HTTPException, WebSocket, WebSocketDi
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, field_validator
 
-from relay import agents, cards, config, db, events, experts, images, kb, lab, network, orders, tenancy, queries as Q, registry as R, retrieve, sharing, sim, tools_catalog, usage
+from relay import agents, cards, config, db, events, experts, images, intake, kb, lab, network, orders, tenancy, queries as Q, registry as R, retrieve, sharing, sim, tools_catalog, usage
 from relay.memory import norm, to_ms
 
 app = FastAPI(title="Relay API", description=f"Shared graph memory for {config.BRAND['company']}'s AI support desk")
@@ -381,22 +381,37 @@ def chat(tenant: str, body: ChatIn):
     log = []
     at = to_ms(body.at) if body.at else now_ms(tenant)
     sid = body.session_id or f"{norm(body.customer).replace(' ', '-')}-web-{datetime.fromtimestamp(at / 1000):%Y%m%d}"
-    owner = lab.waiting_kind(tenant, body.customer)  # the resolver is mid-case: only it answers (one voice at a time)
+    owner = lab.waiting_kind(tenant, body.customer)  # the resolver is mid-case: it answers what's about its case
+    takes = bool(owner) and lab.owns_reply(owner, body.text)  # anything else (a plan question) is intake's to answer
+    # "it's fine now, close my ticket" while the resolver waits on them: the case is called off, the tickets closed
+    if owner and owner != "confirm" and intake.CLOSE_ASK.search(body.text) and lab.withdraw(tenant, body.customer):
+        owner = takes = None
+    quiet = takes
     try:  # before intake replies: the resolver claims a fresh complaint, so the two agents don't talk over each other
         lab.before_chat(tenant, body.customer, body.text)
     except Exception as e:
         print(f"lab before_chat: {e}")
     out = agents.Intake().handle(tenant, customer=body.customer, session_id=sid, text=body.text, at=at,
-                                 reply_llm=True, greeted=body.greeted, country=body.country, speak=not owner, log=log)
+                                 reply_llm=True, greeted=body.greeted, country=body.country, speak=not quiet, log=log)
     handled = None
     try:  # the resolver hears this too: a yes/no to "is it working now?", or a complaint about a broken line
         handled = lab.on_chat(tenant, body.customer, body.text, out.get("ticket_opened"))
     except Exception as e:
         print(f"lab on_chat: {e}")
     speaker = "intake"
-    if owner:
+    if takes and (owner != "confirm" or handled):
         out["reply"], out["reply_episode_id"] = lab.resolver_turn(tenant, body.customer, owner, handled, sid, body.text)
         speaker = "resolver"
+        if handled == "confirmed" and intake.CLOSE_ASK.search(body.text):  # "it's fine, close my tickets": the rest too
+            _, pick = intake.close_tickets(tenant, norm(body.customer), body.text, log)
+            if pick:
+                relay_memory.remember(tenant, agent="intake", session_id=sid, customer=norm(body.customer), at=at,
+                                facts=[(t["ticket"], "has_status", "resolved") for t in pick],
+                                text=f"intake closed {', '.join(t['ticket'].upper() for t in pick)} at the customer's request")
+                for t in pick:
+                    db.run(tenant, "ticket profile", Q.TICKET_PROFILE, {"t": t["ticket"]}, log)
+                out["reply"] += " I've also closed " + "; ".join(
+                    f"{t['ticket'].upper()} ({', '.join(t['issues']) or 'your request'})" for t in pick) + " as you asked."
     shown = None  # instruction pictures travel as [guide:...] markers in the messages instead
     retired = [{"fact_id": r["fact_id"], "subject": r["triple"][0], "predicate": r["triple"][1],
                 "object": r["triple"][2], "status": "retired"} for r in out.get("retired", [])]
@@ -485,15 +500,15 @@ def conversation(tenant: str, customer: str, limit: int = 400, include_actions: 
         s = sessions.setdefault(sid, {"session_id": sid, "started_at": events.iso(started), "summary": summary,
                                       "messages": []})
         if speaker == "action" and not include_actions:
-            # a resolver's note (a fix tried, a fix saved) isn't shown to the customer, but what it wrote is: on the
-            # message before it, or the next one if it came first
-            if s["messages"]:
-                s["messages"][-1]["derived"] += facts
-            else:
-                carry.setdefault(sid, []).extend(facts)
+            # an agent's note (a ticket opened, a fix tried, a fix saved) isn't shown to the customer, but what it wrote
+            # is: on the next message, which is the agent's reply about it (the last message if nothing follows)
+            carry.setdefault(sid, []).extend(facts)
             continue
         s["messages"].append({"episode_id": eid, "speaker": agent if speaker == "agent" else speaker,
                               "text": text, "at": events.iso(at), "derived": carry.pop(sid, []) + facts})
+    for sid, facts in carry.items():
+        if facts and sessions[sid]["messages"]:
+            sessions[sid]["messages"][-1]["derived"] += facts
     return {"customer": norm(customer), "sessions": list(sessions.values())}
 
 

@@ -169,6 +169,49 @@ def ticket_facts(tenant, ticket, log=None):
     return {p for _, p, _, active, *_ in retrieve.history(tenant, ticket, log) if active} if ticket else set()
 
 
+# Words every connectivity complaint shares: they don't make two problems the same one.
+_GENERIC = {"issue", "issues", "problem", "problems", "internet", "network", "wifi", "connection", "service", "request",
+            "with", "from", "they", "their", "about", "since", "today", "not", "the", "and", "for", "my"}
+
+
+def same_problem(a, b):
+    """Is past issue `a` the same problem as current issue `b`? Shared meaningful words, or close in meaning.
+    "evening wifi drops" / "wifi drops at night": yes. "network difficulties" / "plan upgrade": no."""
+    wa = {w for w in re.findall(r"[a-z]{3,}", a.lower())} - _GENERIC
+    wb = {w for w in re.findall(r"[a-z]{3,}", b.lower())} - _GENERIC
+    if wa & wb:
+        return True
+    from . import embed
+    import math
+    va, vb = embed.embed([a, b])
+    cos = sum(x * y for x, y in zip(va, vb)) / (math.sqrt(sum(x * x for x in va)) * math.sqrt(sum(y * y for y in vb)) or 1)
+    return 1 - cos <= config.SIMILAR_ISSUE_MAX_DIST
+
+
+def repeat_of(tenant, customer, ticket, log=None):
+    """A past ticket of theirs about the same problem as this one (a repeat contact), or None."""
+    if not ticket:
+        return None
+    rows = db.run(tenant, "kavya: past tickets", Q.PAST_TICKETS, {"c": customer}, log, ro=True)
+    now = next((iss for t, _, iss, _ in rows if t == ticket), [])
+    return next((t for t, _, iss, _ in rows if t != ticket and any(same_problem(p, c) for p in iss for c in now)), None)
+
+
+def close_tickets(tenant, customer, text, log=None):
+    """The customer's open tickets this message asks to close: the ones it names, or all of them."""
+    from . import agents
+    mine = [t for t in agents.tickets(tenant, log) if t["customer"] == customer and t["status"] != "resolved"]
+    named = {m.lower() for m in re.findall(r"\b[a-z]{2,5}-\d{4}-[0-9a-f]{4}\b", text, re.I)}
+    return mine, [t for t in mine if not named or t["ticket"] in named]
+
+
+# "resolve the tickets, everything is fine", "close my ticket", "cancel the complaint", "mark it as resolved"
+CLOSE_ASK = re.compile(r"\b(close|resolve|withdraw)\w*\b.{0,30}\b(tickets?|cases?|requests?|complaints?|it|them)\b|"
+                       r"\bcancel\w*\b.{0,20}\b(tickets?|cases?|complaints?)\b|"
+                       r"\b(mark|consider)\b.{0,20}\b(resolved|closed|done|sorted)\b|"
+                       r"\b(close|resolve|cancel)\w*\b.{0,15}\b[a-z]{2,5}-\d{4}-[0-9a-f]{4}\b", re.I)
+
+
 # ---------------------------------------------------------------- the turn plan
 
 @dataclass
@@ -278,6 +321,22 @@ def plan_turn(tenant, *, customer, text, learned, ticket, history, first_turn, p
         now = now + [{"predicate": got[0], "object": got[1], "active": True, "subject": customer}]
     plan.mode = _mode(text, now, ticket)  # what this message settled (a purchase) can change the mode
 
+    # they ask us to close their tickets: close the open ones they mean (the named ones, or all of them) and say so.
+    # While the resolver is testing their line it owns the case and reads "it's working" itself.
+    from . import agents, lab  # lazy: lab and agents import this module
+    if CLOSE_ASK.search(text) and not lab.claimed(tenant, customer):
+        mine, pick = close_tickets(tenant, customer, text, log)
+        if pick:
+            plan.writes += [(t["ticket"], "has_status", "resolved") for t in pick]
+            said = "; ".join(f"{t['ticket'].upper()} ({', '.join(t['issues']) or 'your request'})" for t in pick)
+            plan.fixed = (f"Done, {_first(customer)}: I've closed {said} as you asked. If anything comes back, just tell "
+                          "me here and I'll pick it up again.")
+            return plan
+        if not mine:
+            plan.fixed = (f"You don't have any open tickets with us right now, {_first(customer)}, so there's nothing to "
+                          "close. If something comes up, just tell me here.")
+            return plan
+
     # who is this? identity match through a shared phone/email/account node (never reveals another customer's name)
     owners = db.run(tenant, "kavya: identifier owner", Q.IDENTIFIER_OWNER, {"c": customer}, log, ro=True)
     calling_for = next((f["object"] for f in now if f["predicate"] == "calling_for"), None)
@@ -368,7 +427,7 @@ def plan_turn(tenant, *, customer, text, learned, ticket, history, first_turn, p
 
     # repeat contact or frustration (spec state 5): apologise once, raise the ticket's priority
     tfacts = ticket_facts(tenant, ticket, log)
-    repeat = _known(now, ("previous_contact",)) or FRUSTRATED.search(text) or any(n.startswith("Past ticket") for n in notes)
+    repeat = _known(now, ("previous_contact",)) or FRUSTRATED.search(text) or repeat_of(tenant, customer, ticket, log)
     said_before = any("flagged it as a priority" in tx for sp, tx in history if sp != "customer")
     if ticket and repeat and "has_priority" not in tfacts and not said_before:
         plan.writes.append((ticket, "has_priority", "high"))

@@ -158,7 +158,7 @@ function SavedAs({ chips }: { chips: Chip[] }) {
       {by.filter(([, cs]) => cs.length).map(([k, cs]) => (
         <p key={k} className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-[11px] text-ink-3">
           <MemoryKindPill kind={k} />
-          <span>saved: {cs.map((c) => c.label).join(' · ')}</span>
+          <span>saved: {cs.map((c) => (c.note ? `${c.label} (${c.note})` : c.label)).join(' · ')}</span>
         </p>
       ))}
     </div>
@@ -216,13 +216,17 @@ function Bubble({ l, customer, flying, saved = [], onRename }: { l: Line; custom
   )
 }
 
+// System lines (an outage feed, a billing lookup) are records, not the conversation: never a preview or a recap.
+const said = (s: ConversationSession) => s.messages.filter((m) => !m.speaker.startsWith('tool:') && m.speaker !== 'noc')
+const preview = (s: ConversationSession) => s.summary ?? said(s).find((m) => m.speaker === 'customer')?.text ?? said(s)[0]?.text ?? s.session_id
+
 function HistoryRow({ s, customer }: { s: ConversationSession; customer: string }) {
   const [open, setOpen] = useState(false)
   return (
     <div className="rounded-2xl bg-sunk/50">
       <button className="flex w-full items-baseline gap-3 px-4 py-2.5 text-left text-sm" onClick={() => setOpen((o) => !o)} aria-expanded={open}>
         <span className="num shrink-0 text-xs text-ink-3">{when(s.started_at ?? s.messages[0]?.at)}</span>
-        <span className="min-w-0 flex-1 truncate text-ink-2">{s.summary ?? s.messages[0]?.text ?? s.session_id}</span>
+        <span className="min-w-0 flex-1 truncate text-ink-2">{preview(s)}</span>
         <motion.span animate={{ rotate: open ? 90 : 0 }} transition={SPRING} className="text-ink-3">›</motion.span>
       </button>
       <AnimatePresence initial={false}>
@@ -283,7 +287,10 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
   const customer = customers.find((c) => c.key === who)
   useEffect(() => { onWho?.(who) }, [who, onWho])
   useEffect(() => { onChips?.(chips) }, [chips, onChips])
-  const last = history[history.length - 1]
+  // the last real conversation (the customer said something), not a session that only holds a system notice
+  const talks = history.filter((s) => said(s).some((m) => m.speaker === 'customer'))
+  const last = talks[talks.length - 1]
+  const lastSaid = last && said(last).filter((m) => m.speaker === 'customer').pop()?.text
 
   const clear = () => { setLines([]); setHistory([]); setChips([]); setSession(undefined); setToast(undefined) }
   const reset = () => { setWho(null); clear(); setIntro([]); setPendingAsk(undefined) }
@@ -523,15 +530,15 @@ export function SupportDesk({ tenant, customers, subscribe, onWho, onChips, type
             {who && (
               <>
                 {loading && <p className="text-xs text-ink-3 animate-breathe">Pulling up your notes…</p>}
-                {history.length > 0 && (
+                {talks.length > 0 && (
                   <div className="space-y-2">
                     <p className="eyebrow flex items-center gap-1.5">Earlier conversations <MemoryKindPill kind="episodic" className="normal-case tracking-normal" /></p>
-                    {history.map((s) => <HistoryRow key={s.session_id} s={s} customer={who} />)}
+                    {talks.map((s) => <HistoryRow key={s.session_id} s={s} customer={who} />)}
                   </div>
                 )}
                 {!loading && (
                   <Bubble customer={who} flying={[]} onRename={rename} l={{ id: 'greet', speaker: 'intake', at: openedAt, mark: first(who), rename: true, text: last
-                    ? `Welcome back, ${first(who)}! Last time: ${(last.summary ?? last.messages[last.messages.length - 1]?.text ?? '').replace(/\.$/, '')}. What's up today?`
+                    ? `Welcome back, ${first(who)}! ${last.summary ? `Last time: ${last.summary.replace(/\.$/, '')}.` : lastSaid ? `Last time you told us: “${lastSaid.length > 80 ? `${lastSaid.slice(0, 80)}…` : lastSaid}”` : ''} What's up today?`
                     : `Lovely to meet you, ${first(who)}. What's acting up today? Wifi sulking, a move, a plan question, I'm all ears.` }} />
                 )}
                 {lines.filter((l) => side === 'memory' || !l.speaker.startsWith('tool:')).map((l) => <Bubble key={l.id} l={l} customer={who}

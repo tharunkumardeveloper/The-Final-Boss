@@ -64,9 +64,11 @@ export function fromLearned(chips: Chip[], learned: FactChange[], phase: Phase):
     f.replaced?.map((r) => r.fact_id) ?? []), chips)
 }
 
-/** History: what one stored message produced, as landed chips (a fact no longer true reads "no longer ..."). */
+/** History: what one stored message produced, as it was said then ("lives in Mumbai"), marked if it has since
+ *  stopped being true (the two clocks closed it later; it was true when this message said it). */
 export const fromDerived = (derived?: DerivedFact[]): Chip[] =>
-  (derived ?? []).filter((f) => !INTERNAL.has(f.predicate)).map((f) => chipFor(f, f.active ? 'new' : 'retired', 'settled'))
+  (derived ?? []).filter((f) => !INTERNAL.has(f.predicate))
+    .map((f) => (f.active ? chipFor(f, 'new', 'settled') : { ...chipFor(f, 'new', 'settled'), status: 'retired' as const, note: 'no longer true' }))
 
 /** Reply is on screen: pending chips (and the reply's own) start flying from that bubble. */
 export const launch = (chips: Chip[], line: string, keys: string[]): Chip[] =>

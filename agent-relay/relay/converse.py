@@ -374,6 +374,8 @@ def intake_reply(tenant, *, customer, session_id, text, learned, ticket, opened,
         db.run(tenant, "escalate", Q.ESCALATE, {"t": tk, "id": _id("esc"), "reason": plan.escalation, "by": "intake",
                                                 "at": to_ms(at), "at_dt": dt(at)}, log)
     for s, p, o in plan.writes:
+        if p == "has_status":  # a ticket intake closed at the customer's request: its profile and queue follow
+            db.run(tenant, "ticket profile", Q.TICKET_PROFILE, {"t": s}, log)
         if p == "wants_to_buy":
             od = orders.place(tenant, customer=s, plan=o, at=at, episode_id=eid, log=log)
             plan.prefix.insert(0, f"Done, your {o.title()} order {od['order_id']} is placed. A technician installs it "

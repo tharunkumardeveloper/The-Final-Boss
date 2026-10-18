@@ -111,7 +111,7 @@ class Intake:
                             text=f"intake noted a problem the model didn't extract: {issues[0]}", log=log)
         opened = None
         c = norm(customer)
-        if issues and not ticket:
+        if issues and not ticket and not intake.CLOSE_ASK.search(text):  # "close my tickets" isn't a new problem
             opened = norm(ticket_id or next_ticket_id(tenant, log))
             kind = next((o for p, o, _ in held if p == "issue_type"),
                         next(iter(new("service_request")), None))
