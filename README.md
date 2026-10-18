@@ -45,7 +45,7 @@ piece you set up yourself is the optional MCP connection for Claude ([below](#-b
 | Graph Hacks asks for | Where it is |
 |---|---|
 | A public source-code repository | This repository |
-| A README with setup instructions and the graph data model | [Setup: run it yourself](#-setup-run-it-yourself) · [Graph data model](#-graph-data-model) |
+| A README with setup instructions and the graph data model | [Setup: run it yourself](#-setup-run-it-yourself) · [Graph data model](#%EF%B8%8F-graph-data-model) |
 | The Cypher queries or graph algorithms the product depends on | [Cypher queries and graph algorithms the product depends on](#-cypher-queries-and-graph-algorithms-the-product-depends-on) |
 | A demo video showing the working project | [YouTube](https://www.youtube.com/watch?v=CvykcxFdh4c) |
 | A live deployment | [wifight.vercel.app](https://wifight.vercel.app) (web) · API on Render · FalkorDB Cloud |
@@ -68,23 +68,23 @@ piece you set up yourself is the optional MCP connection for Claude ([below](#-b
 <summary><b>📑 Contents</b></summary>
 
 - [The idea](#-the-idea)
-- [Architecture](#-architecture)
+- [Architecture](#%EF%B8%8F-architecture)
 - [Meet WiFight](#-meet-wifight)
 - [Why we chose an ISP](#-why-we-chose-an-isp)
 - [How a ticket works](#-how-a-ticket-works)
 - [A tour of every screen](#-a-tour-of-every-screen)
 - [Watch it, or take part](#-watch-it-or-take-part)
 - [The five memory capabilities](#-the-five-memory-capabilities)
-- [Graph data model](#-graph-data-model)
+- [Graph data model](#%EF%B8%8F-graph-data-model)
 - [Cypher queries and graph algorithms the product depends on](#-cypher-queries-and-graph-algorithms-the-product-depends-on)
 - [Results](#-results)
 - [What's new, and what isn't](#-whats-new-and-what-isnt)
 - [Remove FalkorDB and…](#-remove-falkordb-and)
 - [Bring your own agent (MCP)](#-bring-your-own-agent-mcp)
-- [Tech stack](#-tech-stack)
+- [Tech stack](#%EF%B8%8F-tech-stack)
 - [Team](#-team-the-final-boss)
 - [Setup: run it yourself](#-setup-run-it-yourself)
-- [Repository layout](#-repository-layout)
+- [Repository layout](#%EF%B8%8F-repository-layout)
 - [AI-use disclosure (AI coding assistants)](#-ai-use-disclosure-ai-coding-assistants)
 
 </details>
