@@ -16,7 +16,7 @@ The demo is **WiFight** (*"Fiber fast. Game hard. Binge harder."*), a fictional 
 
 A **persona simulator** plays customers on a simulated clock (weeks in minutes). Each persona has a hidden schedule of life events (a backdated move, a plan dispute, evening wifi drops, an outage), so every key moment happens while the LLM chooses the words. You can also chat as a customer yourself in the portal.
 
-**Live:** [wifight.vercel.app](https://wifight.vercel.app) · **[▶ Judge mode](https://wifight.vercel.app/?judge=1)** plays the whole story through the real agents in about two minutes, nobody typing.
+**Live:** [wifight.vercel.app](https://wifight.vercel.app) · **[▶ Judge mode](https://wifight.vercel.app/?judge=1)** plays the whole story through the real agents in about two minutes, nobody typing. · **[Blog post](https://dev.to/tharun_kumar_ad80f494347f/we-built-an-internet-company-with-a-graph-memory-heres-what-we-learnt-14l8)**: how we built it and what we learnt.
 
 *Names:* **Relay** is the memory layer (this folder). **WiFight** is the demo company and **Mr.Fix-It** its intake agent (both set in [`brand.json`](brand.json)). The `pml` prefix on tenant graphs (`mem:pml`, `mem:pml-eu`, …) and ticket ids (`PML-2057-EB25`) is left from the first prototype's name. Code names from earlier brands remain in a few internal identifiers (`Kavya.tsx` draws Mr.Fix-It's avatar).
 

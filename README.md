@@ -13,6 +13,7 @@
 [![Live demo](https://img.shields.io/badge/▶_Judge_mode-Watch_it_work-14A39A?style=for-the-badge)](https://wifight.vercel.app/?judge=1)
 [![Site](https://img.shields.io/badge/WiFight-wifight.vercel.app-0F1B2D?style=for-the-badge)](https://wifight.vercel.app)
 [![Console](https://img.shields.io/badge/Staff_console-Open-0F1B2D?style=for-the-badge)](https://wifight.vercel.app/console)
+[![Blog post](https://img.shields.io/badge/Blog_post-The_story_behind_it-0A0A0A?style=for-the-badge&logo=devdotto&logoColor=white)](https://dev.to/tharun_kumar_ad80f494347f/we-built-an-internet-company-with-a-graph-memory-heres-what-we-learnt-14l8)
 
 <br>
 
@@ -27,6 +28,8 @@
 > **Built for Graph Hacks (WeMakeDevs × FalkorDB), Track 02: Agent Memory and Coordination, by team _The Final Boss_.**
 > To prove Relay works, we built a whole company on top of it: **WiFight**, a fiber internet provider whose AI support
 > desk runs on one shared FalkorDB graph.
+>
+> The story behind it, what we researched and what we learnt: **[our blog post on dev.to](https://dev.to/tharun_kumar_ad80f494347f/we-built-an-internet-company-with-a-graph-memory-heres-what-we-learnt-14l8)**.
 
 **Nothing to install.** Everything runs live: open the site and either **watch** (Judge mode plays the whole story in
 about two minutes) or **take part** (chat as yourself, break the network, settle an argument between agents). The only
